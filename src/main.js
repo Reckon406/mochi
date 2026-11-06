@@ -298,6 +298,9 @@ async function init() {
 
   // ── loop ──
   let lastNow = performance.now(); let t = 0, frames = 0, skyTimer = 0; const head = new THREE.Vector3(); const fogCol = new THREE.Color();
+  const debugEl = params.get('debug') === '1' ? Object.assign(document.createElement('div'), { id: 'mochi-debug' }) : null;
+  let debugAcc = 0, debugN = 0, debugPeak = 0;
+  if (debugEl) { debugEl.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;font:11px/1.35 ui-monospace,Menlo,monospace;background:rgba(0,0,0,.7);color:#9f9;padding:6px 8px;border-radius:6px;pointer-events:none;white-space:pre;max-width:46vw'; document.body.appendChild(debugEl); }
   sky.update(0);
   function frame() {
     const now = performance.now(); const dt = Math.min((now - lastNow) / 1000, 0.05); lastNow = now; t += dt; ENV.uTime.value = t;
@@ -376,11 +379,22 @@ async function init() {
     composer.render(dt);
     frames++;
     if (frames === 3) { document.getElementById('loading').classList.add('gone'); window.__mochiReady = true; }
+    if (debugEl) {
+      debugAcc += dt; debugN++;
+      if (debugAcc >= 0.5) {
+        const fps = debugN / debugAcc; debugN = 0; debugAcc = 0;
+        const mem = renderer.info.memory, ren = renderer.info.render;
+        let objs = 0; scene.traverse(() => { objs++; });
+        if (objs > debugPeak) debugPeak = objs;
+        const heap = performance.memory ? `${(performance.memory.usedJSHeapSize / 1048576).toFixed(0)}MB` : '—';
+        debugEl.textContent = `fps ${fps.toFixed(0)}  heap ${heap}\ngeo ${mem.geometries}  tex ${mem.textures}\ncalls ${ren.calls}  tris ${ren.triangles}\nscene ${objs} (peak ${debugPeak})  wild ${wild.live.length}\naudioLive ${music.liveNodes}  song ${music.current?.title || '—'}`;
+      }
+    }
     requestAnimationFrame(frame);
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   requestAnimationFrame(frame);
-  window.__mochi = { wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel };
+  window.__mochi = { wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

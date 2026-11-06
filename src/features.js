@@ -37,6 +37,7 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
     return { i, crop, stage, x, z, g, plant, grow: 0, watered: 0 };
   });
   function drawPlot(p) {
+    p.plant.traverse((o) => { if (!o.isMesh) return; if (o.userData.tag) { o.material?.map?.dispose?.(); o.material?.dispose?.(); o.geometry?.dispose?.(); } });
     p.plant.clear(); const c = CROPS[p.crop]; if (!c || p.stage === 0) { if (p.crop) add(p.plant, new THREE.SphereGeometry(0.2, 10, 6, 0, 6.29, 0, 1.2), mat(0x5a3a24), [0, -0.05, 0], [0, 0, 0], [1, 0.3, 1]); return; }
     if (p.stage === 1) { for (let k = 0; k < 5; k++) add(p.plant, new THREE.SphereGeometry(0.025, 5, 4), mat(0xd8c090), [Math.sin(k * 2.4) * 0.22, 0.01, Math.cos(k * 2.4) * 0.22], [0, 0, 0], null, false); return; }
     const lm = mat(c.leaf); const n = p.stage === 2 ? 3 : 6; const h = p.stage === 2 ? 0.12 : p.crop === 'huckleberry' ? 0.55 : 0.32;
@@ -172,7 +173,18 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
       add(tg, new THREE.CylinderGeometry(0.045, 0.07, 0.62, 10), mat(0xc9a14a, { metalness: 0.7, roughness: 0.3 }), [0, 0.62, 0.12], [1.05, 0, 0]); }
     if (parts.has('hammock')) { const a = T.cabinA + 1.5; const [x1, , z1] = P(a, T.radiusAt(1.2) - 0.05), [x2, , z2] = P(a, 3.9); const y2 = groundY(T.x + x2, T.z + z2) - T.y;
       add(th, new THREE.CylinderGeometry(0.06, 0.07, 1.6, 6), dark, [x2, y2 + 0.8, z2]); const mid = new THREE.Vector3((x1 + x2) / 2, 0.75, (z1 + z2) / 2); const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(x1, 1.25, z1), mid.clone().setY(0.35), new THREE.Vector3(x2, y2 + 1.5, z2));
-      add(th, new THREE.TubeGeometry(curve, 16, 0.16, 6), mat(0x4aa8ff, { side: THREE.DoubleSide }), [0, 0, 0], [0, 0, 0], [1, 1, 1]); }
+      // fabric sling (flat ribbon), not a blue tube
+      { const segs = 28, W = 0.72; const pos = [], uv = [], idx = [], nrm = []; const up = new THREE.Vector3(0, 1, 0), side = new THREE.Vector3(), tan = new THREE.Vector3(), p = new THREE.Vector3(), a2 = new THREE.Vector3(), b2 = new THREE.Vector3();
+        for (let i = 0; i <= segs; i++) { const u = i / segs; curve.getPoint(u, p); curve.getTangent(u, tan).normalize(); side.crossVectors(tan, up); if (side.lengthSq() < 1e-6) side.set(1, 0, 0); side.normalize().multiplyScalar(W * 0.5);
+          a2.copy(p).add(side); b2.copy(p).sub(side); pos.push(a2.x, a2.y, a2.z, b2.x, b2.y, b2.z); uv.push(0, u, 1, u); nrm.push(0, 1, 0, 0, 1, 0);
+          if (i < segs) { const i0 = i * 2; idx.push(i0, i0 + 1, i0 + 2, i0 + 1, i0 + 3, i0 + 2); } }
+        const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.setAttribute('normal', new THREE.Float32BufferAttribute(nrm, 3)); geo.setIndex(idx); geo.computeVertexNormals();
+        const tex = (() => { const c = document.createElement('canvas'); c.width = 128; c.height = 64; const g = c.getContext('2d'); g.fillStyle = '#4aa8ff'; g.fillRect(0, 0, 128, 64); for (let i = 0; i < 8; i++) { g.fillStyle = i % 2 ? '#3a90e8' : '#6bbcff'; g.fillRect(i * 16, 0, 16, 64); } g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(0, 28, 128, 8); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; return t; })();
+        add(th, geo, new THREE.MeshStandardMaterial({ map: tex, side: THREE.DoubleSide, roughness: 0.95, metalness: 0 }), [0, 0, 0], [0, 0, 0], null, false);
+        // thin ropes at each end
+        add(th, new THREE.CylinderGeometry(0.012, 0.012, 0.35, 4), rope, [x1, 1.35, z1], [0.4, 0, 0], null, false);
+        add(th, new THREE.CylinderGeometry(0.012, 0.012, 0.35, 4), rope, [x2, y2 + 1.55, z2], [-0.3, 0, 0], null, false);
+      } }
     if (parts.has('zipline') && stage >= 2) { const a = Math.atan2(-T.z, -T.x); const s0 = new THREE.Vector3(...P(a, R * 0.9, H + 1.2)); const ex = T.x + Math.cos(a) * 11, ez = T.z + Math.sin(a) * 11; const e = new THREE.Vector3(ex - T.x, groundY(ex, ez) - T.y + 1.0, ez - T.z);
       add(th, new THREE.CylinderGeometry(0.03, 0.035, 1.25, 5), dark, [s0.x, H + 0.6, s0.z]); add(th, new THREE.CylinderGeometry(0.06, 0.07, 1.3, 6), dark, [e.x, e.y - 0.4, e.z]);
       const d = e.clone().sub(s0); const c = add(th, new THREE.CylinderGeometry(0.008, 0.008, d.length(), 3), mat(0x9a9a9a, { metalness: 0.6 }), s0.clone().addScaledVector(d, 0.5).toArray(), [0, 0, 0], null, false); c.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.clone().normalize());

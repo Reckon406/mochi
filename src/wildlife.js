@@ -158,7 +158,13 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     }
     return made;
   }
-  function despawn(a) { group.remove(a.m); live.splice(live.indexOf(a), 1); }
+  function despawn(a) {
+    const u = a.m.userData || {};
+    try { u.eyeM?.dispose?.(); } catch {}
+    try { u.glow?.material?.dispose?.(); } catch {}
+    group.remove(a.m);
+    const i = live.indexOf(a); if (i >= 0) live.splice(i, 1);
+  }
 
   function eligible(k) { const sp = SPECIES[k]; if (PRED[k]) return false; if (sp.months && !sp.months(month)) return false; if (winter && (k === 'beaver' || k === 'skunk')) return false; const t = tod(); return sp.when.includes(t); }
   function ambientSpawn() {
