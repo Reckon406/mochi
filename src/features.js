@@ -144,7 +144,7 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
       for (const sx of [-0.24, 0.24]) add(lad, new THREE.CylinderGeometry(0.018, 0.018, H + 0.3, 4), rope, [sx, (H + 0.3) / 2 - 0.15, 0], [0, 0, 0], null, false);
       for (let i = 0; i < Math.floor(H / 0.3); i++) add(lad, new THREE.BoxGeometry(0.52, 0.04, 0.07), plankM, [0, 0.25 + i * 0.3, 0], [0, 0, (i % 2 ? 1 : -1) * 0.03], null, false); }
     // NO SQUIRRELS plank on the trunk by the ladder (always — it's a policy, not a building stage)
-    { const pk = plank(['NO SQUIRRELS'], { width: 0.8, icon: '🚫', tone: 'cream', seed: 13 }); const [px, , pz] = P(T.ladderA + 0.45, T.radiusAt(1.5) + 0.06); pk.position.set(px, 1.5, pz); pk.rotation.set(0, Math.PI / 2 - T.ladderA - 0.45, 0.06); th.add(pk); }
+    { const pk = plank(['NO SQUIRRELS'], { width: 0.8, icon: '🚫', tone: 'cream', seed: 13 }); const [px, , pz] = P(T.ladderA + 0.45, T.radiusAt(1.5) + 0.22); pk.position.set(px, 1.5, pz); pk.rotation.set(0, Math.PI / 2 - T.ladderA - 0.45, 0.06); th.add(pk); }
     // decorations (stage 6): lantern, sock banner, pulley bucket, flag on the roof
     let lantern = null;
     if (stage >= 6) {
