@@ -1,0 +1,169 @@
+{
+  "name": "Mochi",
+  "mood": "confused, cold, weirdly majestic. new mountain bird",
+  "activity": "staring down trapper peak from the lookout cliff like it owes him money",
+  "caps": 23,
+  "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
+  "location": "lookout cliff",
+  "weather": "partly cloudy, 39F",
+  "savings": {
+    "ocean": {
+      "label": "Ocean trip fund",
+      "saved": 10.5,
+      "target": 200
+    },
+    "skateboard": {
+      "label": "Tiny skateboard",
+      "saved": 2.5,
+      "target": 40
+    }
+  },
+  "thoughts": [
+    "i am the scariest witch alive",
+    "hat stays on. forever. i sleep in it now",
+    "bottle cap #17 is my son",
+    "the pond is basically the ocean if you squint. no. i refuse to settle",
+    "i could fight a goose",
+    "art is pain and i am in a lot of pain",
+    "who put a face on this pumpkin. oh. me",
+    "$3.50. the ocean is SO close",
+    "i'm not short i'm aerodynamic",
+    "what the hell is a wave and why do i need to see one so bad",
+    "boo. (respectfully)",
+    "skateboard kiwi era is coming",
+    "my beak is a long legend",
+    "spell cast: more snacks",
+    "if anyone sees a shiny cap it's mine. legally",
+    "a squirrel tried to trick or treat ME. on MY island",
+    "$7.50. i can basically smell the salt",
+    "rip witch hat. you were too powerful for this world",
+    "leaf cape is giving main character",
+    "the squirrel and i are in a cold war now. he started it (i started it)",
+    "$10.50. double digits. i am basically a millionaire",
+    "the squirrel can have the acorn. i have the cap. we are not the same",
+    "$2.50 skateboard money. kickflip arc begins now",
+    "the mountains here are TOO big. who approved this",
+    "a finger skateboard is $3.99. i am $1.49 away from being a pro"
+  ],
+  "diary": [
+    {
+      "date": "2026-10-31",
+      "time": "07:42",
+      "text": "woke up. it's halloween. the vibes are cursed and so am i. perfect."
+    },
+    {
+      "date": "2026-10-31",
+      "time": "10:15",
+      "text": "found a witch hat behind the pumpkins. it fits. it was destiny. i am now a witch, do not question this."
+    },
+    {
+      "date": "2026-10-31",
+      "time": "14:30",
+      "text": "drew a cursed pumpkin. it stared back. putting it up for sale for $4 because art should hurt (your wallet)."
+    },
+    {
+      "date": "2026-10-31",
+      "time": "18:10",
+      "text": "went trick or treating in the hat. got zero candy (nobody has kiwi-sized candy, rude) but found 2 bottle caps by the soda cooler. caps: 19. i win halloween."
+    },
+    {
+      "date": "2026-10-31",
+      "time": "19:50",
+      "text": "SOLD the cursed pumpkin print for $4 to a lady who said it was 'unsettling'. correct. all of it goes to the ocean fund. then a squirrel tried to steal cap #18 and i hissed at him like a tiny goblin. he left. witch powers confirmed."
+    },
+    {
+      "date": "2026-11-01",
+      "time": "07:48",
+      "text": "woke up. slept in the hat like i promised. it is now flat. like a pancake. like my heart. halloween is over and so is witch season. i said a few words and buried it next to the pumpkins."
+    },
+    {
+      "date": "2026-11-01",
+      "time": "08:55",
+      "text": "recovered emotionally in 40 minutes (strong). found a fat orange leaf and made it a cape. then found a gold cap in a pile of candy wrappers some coward left. caps: 20. grief is temporary, caps are forever."
+    },
+    {
+      "date": "2026-11-01",
+      "time": "11:20",
+      "text": "spotted a blue cap at the edge of the pond. the squirrel spotted it too. we locked eyes. i yelled 'MINE' so loud a duck left. caps: 21. squirrel: 0. the cold war has begun."
+    },
+    {
+      "date": "2026-11-01",
+      "time": "13:45",
+      "text": "painted a portrait of cap #17 (my son) to honor him. a jogger stopped and bought a print for $3 'to be nice'. i don't care why. ocean fund: $10.50. double digits baby."
+    },
+    {
+      "date": "2026-11-01",
+      "time": "16:40",
+      "text": "the squirrel buried something by the tree. i dug it up out of spite. it was an acorn (gross) AND a red cap (mine now). he watched me take it. no words were said. caps: 22. cold war status: i'm winning."
+    },
+    {
+      "date": "2026-11-01",
+      "time": "19:35",
+      "text": "drew myself on a skateboard doing a sick trick i cannot do. a kid at the picnic table paid $2.50 in quarters for a print. first ever skateboard money. tucked into the nest by the light of my own genius. goodnight."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "07:25",
+      "text": "woke up and the whole island was floating over DARBY, MONTANA. nobody asked me. there are mountains everywhere. huge pointy rude ones. the air tastes like cold. i wrapped a sock around my neck and declared it a scarf. the bitterroot river is down there. i am telling myself it is the ocean's little cousin. this is home now i guess. dramatic sigh."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "09:05",
+      "text": "39 degrees and the clouds are leaving like they're scared of me. climbed the lookout cliff to stare at trapper peak. it did not blink. respect. found a green cap wedged in a frosty crack on the way down. caps: 23. then i checked the internet: a tiny finger skateboard is like $3.99. i have $2.50. so close i can feel the kickflip in my toes."
+    }
+  ],
+  "art": [
+    {
+      "kind": "pumpkin",
+      "title": "pumpkin that knows what you did",
+      "price": 4
+    },
+    {
+      "kind": "muscles",
+      "title": "self portrait (accurate)",
+      "price": 12
+    },
+    {
+      "kind": "ocean",
+      "title": "the ocean (from memory, never been)",
+      "price": 7.5
+    },
+    {
+      "kind": "cap",
+      "title": "portrait of my son (cap #17)",
+      "price": 3
+    },
+    {
+      "kind": "skateboard",
+      "title": "me doing a kickflip (prophecy)",
+      "price": 2.5
+    }
+  ],
+  "goals": [
+    {
+      "text": "see the ocean for the first time",
+      "done": false,
+      "meta": "saving: ocean trip fund"
+    },
+    {
+      "text": "buy a tiny skateboard and do one (1) trick",
+      "done": false,
+      "meta": "saving: skateboard"
+    },
+    {
+      "text": "collect 50 shiny bottle caps",
+      "done": false,
+      "meta": "23 of 50"
+    },
+    {
+      "text": "become a world famous artist",
+      "done": false,
+      "meta": "5 masterpieces so far"
+    },
+    {
+      "text": "get a witch hat",
+      "done": true,
+      "meta": "found Oct 31, 2026"
+    }
+  ]
+}

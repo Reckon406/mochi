@@ -1,0 +1,11 @@
+import { chromium } from 'playwright-core';
+const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--no-sandbox'] });
+const p = await b.newPage({ viewport: { width: 800, height: 600 } }); const logs = [];
+p.on('console', (m) => logs.push(m.type() + ': ' + m.text())); p.on('pageerror', (e) => logs.push('pageerror: ' + e.message));
+await p.goto('http://localhost:4173/?state=./missing.json'); await p.waitForFunction(() => window.__mochiReady, null, { timeout: 90000 });
+console.log('missing-state toast:', await p.evaluate(() => document.querySelector('.toast')?.textContent)); console.log(logs);
+await p.goto('http://localhost:4173/'); await p.waitForFunction(() => window.__mochiReady, null, { timeout: 90000 });
+console.log('path to beach:', await p.evaluate(() => { const m = window.__mochi; m.planTo(m.ZONES.find(z => z.id === 'beach')); return m.brain.path.map(v => `(${v.x.toFixed(1)},${v.y.toFixed(1)})`).join(' -> '); }));
+await p.click('button[data-zone="ramp"]'); console.log('after legend click, active:', await p.evaluate(() => document.querySelector('.zone.active').dataset.zone + ' / brain ' + window.__mochi.brain.zone.id));
+await p.click('.tabs button[data-tab="diary"]'); console.log('diary open:', await p.evaluate(() => document.querySelector('#pane-diary').classList.contains('open')));
+await b.close();
