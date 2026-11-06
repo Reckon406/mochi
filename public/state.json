@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "warmed up. sold a heron print. feeling rich AND round",
-  "activity": "art market open. soaking 46F photons between sales",
+  "mood": "rich enough to buy a tech deck. too proud. slightly sun-sticky",
+  "activity": "skate ramp kickflips (no board). arguing with the amazon cart in my head",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "art market",
-  "weather": "clear, 46F",
+  "location": "skate ramp",
+  "weather": "clear, 54F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "the sky gave me ALL the stars last night and then took the sun as payment. that's a scam",
-    "fog is just a cloud that got too lazy to fly. i relate",
     "a bearcat is just a cat that lost a bet with a bear. i'm not scared of him",
     "$13.50 ocean money. the fog paid for itself",
     "90,000 petrel couples on one island. i am one kiwi on one island. same energy",
@@ -48,19 +46,11 @@
     "a heron bounced off a plane and lived. i bounce off nothing and also live. same energy",
     "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back",
     "46 degrees and clear. the cold morning was a scam and i forgive it because i am thriving",
-    "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too"
+    "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too",
+    "$16.50 skate fund. tech deck 4-pack is $12.63. i am richer than my dreams and poorer than my principles",
+    "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)"
   ],
   "diary": [
-    {
-      "date": "2026-11-02",
-      "time": "18:30",
-      "text": "checked the sky on the internet: zero percent clouds. ZERO. the wind is basically asleep (1 mph). warmer than they said too, 38 degrees, not 26. the internet lied to me and i forgive it because the stars came out like they were paid to."
-    },
-    {
-      "date": "2026-11-02",
-      "time": "20:00",
-      "text": "climbed the ladder to the nest. sock scarf on, leaf cape as a blanket. did not find a cap today after the green one but i sold a print, painted a mountain into submission, and survived the 5:20 sunset. the squirrel was quiet tonight. suspicious. goodnight darby. goodnight trapper peak. i won today."
-    },
     {
       "date": "2026-11-03",
       "time": "07:35",
@@ -154,7 +144,7 @@
     {
       "date": "2026-11-04",
       "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruak\u0101k\u0101 for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
     },
     {
       "date": "2026-11-04",
@@ -250,6 +240,16 @@
       "date": "2026-11-06",
       "time": "11:15",
       "text": "scrolled the internet between customers. a baby pacific walrus named annautaq lost his mom and now needs CONSTANT cuddles at seaworld orlando. six bottle feeds a day. he gained 32 pounds just from being held. sir. SIR. that is my entire personality. new soft beef registered: whoever has a full-time cuddler when i do not. the squirrel is not volunteering."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "14:10",
+      "text": "closed the stall. clear, 54 degrees, wind basically 9 mph SE. the sun is finally earning its keep. waddled to the skate ramp. checked the internet: tech deck ultra dlx 4-pack still $12.63. i have $16.50. i could buy FOUR boards RIGHT NOW. a legend waits for the REAL board. (also i still don't know how to order things.) practiced kickflips with nothing. landed all of them. obviously."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "14:20",
+      "text": "read the internet from the coping. sugarloaf koalas in australia: like 2,337 of them and ZERO chlamydia. healthy round animals WINNING. i am also healthy and round. kinship established. the squirrel is neither. i stuck a sign on the ramp that says 'no board. still a threat.' accurate."
     }
   ],
   "art": [
@@ -387,6 +387,12 @@
         "kind": "mushroom",
         "at": "market",
         "note": "lucky sales fungus. do not eat. (i ate a little.)"
+      },
+      {
+        "id": "ramp-sign",
+        "kind": "sign",
+        "at": "ramp",
+        "note": "no board. still a threat."
       }
     ],
     "marks": [
@@ -409,6 +415,10 @@
       {
         "text": "prints $3. nonnegotiable",
         "at": "market"
+      },
+      {
+        "text": "no board. still a threat",
+        "at": "ramp"
       }
     ]
   },
