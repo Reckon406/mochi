@@ -279,8 +279,10 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const mk = hangs.market.filter(Boolean);
     mk.forEach((it, i) => { const n = mk.length; const px = (i - (n - 1) / 2) * 0.48; framed(st, it, { w: 0.37, h: 0.46, pos: [px, 1.42, -0.165], style: 1, clickables }); });
     // string lights
-    const bulbs = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffc46b, emissiveIntensity: 0.4 }); glow.push({ m: bulbs, day: 0.4, night: 5 });
+    const bulbs = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffc46b, emissiveIntensity: 0.4 }); glow.push({ m: bulbs, day: 0.5, night: 3.5 });
     for (let i = 0; i < 11; i++) { const u = i / 10; add(st, new THREE.SphereGeometry(0.045, 8, 6), bulbs, [-1.25 + u * 2.5, 2.05 - Math.sin(u * Math.PI) * 0.18, 1.02], [0, 0, 0], null, false); }
+    // real light from the string: a few warm point lights spread along it so the booth, prints and easel actually get lit
+    for (const u of [0.15, 0.5, 0.85]) { const sl = new THREE.PointLight(0xffc46b, 0, 4.2, 1.4); sl.position.set(-1.25 + u * 2.5, 1.9 - Math.sin(u * Math.PI) * 0.18, 0.85); st.add(sl); lights.push({ l: sl, day: 0.15, night: 1.4 }); }
     // easel with work-in-progress
     const ez = new THREE.Group(); ez.position.set(1.85, 0, 1.0); ez.rotation.y = -0.6; st.add(ez); const em = mat(0x8a5a32);
     add(ez, new THREE.CylinderGeometry(0.03, 0.03, 1.8, 5), em, [-0.3, 0.88, 0], [0.12, 0, -0.15]); add(ez, new THREE.CylinderGeometry(0.03, 0.03, 1.8, 5), em, [0.3, 0.88, 0], [0.12, 0, 0.15]); add(ez, new THREE.CylinderGeometry(0.03, 0.03, 1.8, 5), em, [0, 0.85, -0.38], [-0.32, 0, 0]);
@@ -563,7 +565,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   function update(t, dt, night) { nightNow = night;
     for (const f of anim) f(t, dt); for (const f of sways) f(t);
     for (const gl of glow) gl.m.emissiveIntensity = gl.day + (gl.night - gl.day) * night;
-    for (const L of lights) L.l.intensity = L.night * night;
+    for (const L of lights) { const d = L.day || 0; L.l.intensity = d + (L.night - d) * night; }
   }
   return { world, update, grass, ground, pondMat, clickables, music, hangs };
 }
