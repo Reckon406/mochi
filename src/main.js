@@ -19,6 +19,7 @@ import { seasonOf } from './season.js';
 import { buildFeatures } from './features.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
+import { createWildlife } from './wildlife.js';
 import { FISH } from './fish.js';
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 import { buildWorldState } from './worldstate.js';
@@ -178,7 +179,7 @@ async function init() {
   const bubbleEl = document.createElement('div'); bubbleEl.className = 'bubble'; document.getElementById('bubbles').appendChild(bubbleEl);
   const thoughts = (state.thoughts || []).filter(Boolean);
   let bubbleT = 2.0, bubbleShow = 0, lastThought = -1;
-  function say(text, dur = 5.5) { bubbleEl.textContent = text; bubbleEl.classList.remove('pop'); void bubbleEl.offsetWidth; bubbleEl.classList.add('show', 'pop'); bubbleShow = dur; }
+  function say(text, dur = 5.5) { bubbleT = Math.max(bubbleT, dur + 2); bubbleEl.textContent = text; bubbleEl.classList.remove('pop'); void bubbleEl.offsetWidth; bubbleEl.classList.add('show', 'pop'); bubbleShow = dur; }
   function randomThought() { if (!thoughts.length) return; let i; do { i = Math.floor(Math.random() * thoughts.length); } while (thoughts.length > 1 && i === lastThought); lastThought = i; say(thoughts[i]); }
   if (params.has('say')) { const i = parseInt(params.get('say')); if (!isNaN(i) && thoughts[i]) { bubbleT = 999; setTimeout(() => say(thoughts[i], 999), 400); } }
 
@@ -225,6 +226,10 @@ async function init() {
   life = createLife({ state, mochi, features, say: (s, d) => say(s, d), music, sky, feel, onChange: (inv, log, label) => { if (label !== undefined) ui.setDoing(label, bagText(inv)); else ui.setDoing(life?.label || '', bagText(inv)); lifeDirty = 1; } });
   ui.setDoing('', bagText(life.inv));
   const critters = createCritters(scene, { lights: island.lights || [], life, say: (s, d) => say(s, d), music, season });
+  if (Array.isArray(state.encounters)) life.encounters.push(...state.encounters.filter((e) => e && e.animal).slice(-30));
+  const wild = createWildlife(scene, { state, mochi, life, features, say: (s, d) => say(s, d), music, sky, brain, settings, season, encounters: life.encounters,
+    go: (id, act) => { const z = ZONES.find((q) => q.id === id); if (!z) return; planTo(z); if (act) life.interact(id); }, onChange: () => { lifeDirty = 1; } });
+  if (params.get('event')) setTimeout(() => wild.startEvent(params.get('event').toLowerCase(), params.get('at') || 'bank'), 4000);
   const wish = Array.isArray(state.wishlist) ? state.wishlist : [];
   function lifeHtml() {
     const inv = life.inv; const kv = (o, fmt = (k) => k) => Object.entries(o).filter(([, v]) => v > 0).map(([k, v]) => `<span>${esc(fmt(k))} ×${v}</span>`).join('') || '<span>—</span>';
@@ -237,6 +242,8 @@ async function init() {
       <h5>Fish log · Bitterroot</h5>${life.fishLog.slice(-8).reverse().map((f) => `<div class="row2">${esc(FISH[f.species]?.name || f.species)}${f.inches ? ` · ${f.inches}"` : ''}<em>${esc(f.kept ? 'kept' : 'released')}${f.date ? ' · ' + esc(f.date) : ''}</em></div>`).join('') || '<div class="row2">no fish yet<em>worms → dock</em></div>'}
       <h5>Laptop</h5><div class="row2">${esc(lap.site || lap.browsing?.[lap.browsing.length - 1] || 'off')}<em>${esc(lap.screen || lap.last || '')}</em></div>
       <h5>Mail</h5>${mail.slice(-5).reverse().map((m) => `<div class="row2">${m.unread || m.read === false ? '🔴 ' : ''}${esc(m.from || 'someone')}<em>${esc(m.subject || m.text || '')}</em></div>`).join('') || '<div class="row2">mailbox empty<em>flag down</em></div>'}
+      <h5>Courage</h5><div class="row2">🦸 ${wild.courage}/100<em>${wild.courage >= 70 ? 'ranger energy' : wild.courage >= 45 ? 'steady' : 'a little shaky'}</em></div>
+      <h5>Wildlife encounters</h5>${life.encounters.slice(-6).reverse().map((e) => `<div class="row2">${esc(e.animal)}${e.at ? ' · ' + esc(e.at) : ''}<em>${esc(e.outcome || '')}${e.date ? ' · ' + esc(e.date) : ''}</em></div>`).join('') || '<div class="row2">none yet<em>keep an eye on the far bank</em></div>'}
       ${wish.length ? `<h5>Wishlist</h5>${wish.map((w) => `<div class="row2">${esc(w.item || w.name || w)}<span class="st ${esc(w.status || '')}">${esc(w.status || 'wish')}</span></div>`).join('')}` : ''}</div>`;
   }
   // E key in walk mode: send Mochi to do the nearest thing
@@ -288,7 +295,12 @@ async function init() {
 
     // brain
     let moving = 0;
-    if (brain.busy > 0) brain.busy -= dt;
+    const WL = wild.lock;
+    if (WL) { // wildlife standoff: stop, face it, watch nervously
+      if (life.current) life.cancel(); brain.path = [];
+      let dh = WL.face - brain.heading; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); brain.heading += dh * Math.min(1, dt * 4); brain.wait = Math.max(brain.wait, 4); brain.acted = true;
+    }
+    else if (brain.busy > 0) brain.busy -= dt;
     else if (life.current) {
       // doing an activity: life moves/poses him; face where it says
       const p0x = mochi.root.position.x, p0z = mochi.root.position.z; life.update(dt, t);
@@ -316,7 +328,7 @@ async function init() {
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); critters.update(t, dt, night, sky.state.golden || 0);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
@@ -342,7 +354,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   requestAnimationFrame(frame);
-  window.__mochi = { ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel };
+  window.__mochi = { wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel };
 }
 
 init().catch((e) => {

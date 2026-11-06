@@ -59,7 +59,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 1.1, start() { pose.sway = 0; P.bobber.visible = false; if (!this.catch) { say('nothing. the fish are in a meeting', 2); return; } const f = this.catch; this.mesh = fishMesh(f.species); this.mesh.scale.setScalar(0.25 + f.inches * 0.022); features.group.add(this.mesh); mochi.flap(1); },
       tick(u) { if (!this.mesh) return; const a = this.bob, b = M(); this.mesh.position.set(a.x + (b.x - a.x) * u, WATER_Y + Math.sin(u * Math.PI) * 1.6 + u * 0.9, a.z + (b.z - a.z) * u); this.mesh.rotation.set(Math.sin(u * 20) * 0.6, u * 6, 0); } },
     { d: 2.6, start() { P.line.visible = false; if (!this.mesh) { drop(); return; } features.group.remove(this.mesh); const f = this.catch, F = FISH[f.species]; hold(this.mesh, [0, Math.PI / 2, 0.2], 0.2 + f.inches * 0.016);
-        fishLog.push({ species: F.name, inches: f.inches, kept: F.keep, at: 'dock', date: new Date().toISOString().slice(0, 10) });
+        fishLog.push({ species: F.name, inches: f.inches, kept: F.keep, at: 'dock', date: new Date().toLocaleDateString('en-CA') });
         say(`${F.name}! ${f.inches} in. ${F.keep ? 'into the bucket 🪣' : F.why}`, 3.2); changed(); } },
     { d: 1.2, start() { if (!this.catch) return; const F = FISH[this.catch.species]; if (F.keep) { inv.fish[this.catch.species] = (inv.fish[this.catch.species] || 0) + 1; } else { mochi.flap(0.8); fx.rings(this.bob.x, this.bob.z); } drop(); changed(); },
       end() { drop(); face = null; } } ] };
@@ -159,6 +159,6 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   function cancel() { if (!cur) return; const s = cur.steps[cur.k]; try { s?.end?.call(s); } catch (e) { /* ignore */ } drop(); P.line.visible = false; P.bobber.visible = false; mochi.root.remove(P.board);
     for (const c of [...P.skewer.children]) if (c.userData.food) P.skewer.remove(c); P.skewer.visible = false; liftTarget = 0; face = null; pose.peck = pose.sway = pose.sleep = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); }
   function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); return true; }
-  function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toISOString().slice(0, 10) }); return FISH[k].name; }
+  function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toLocaleDateString('en-CA') }); return FISH[k].name; }
   return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, liftTo(v) { liftTarget = v; } };
 }

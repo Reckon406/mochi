@@ -16,7 +16,7 @@ To keep the site in sync, write the same STATE object as JSON to `state.json` ne
 
 ## URL params (handy for previews)
 `?weather=heavy snow` · `?hour=17.5` (local hour) · `?location=pond` · `?outfit=witch hat` · `?elk=1` · `?cam=mochi` (follow cam) · `?walk=1` (walk mode)
-· `&camyaw=2.4` · `?az=72&el=10&dist=46` (wide camera) · `?rotate=0` · `?stay=1` · `?say=<thought index>` · `?ui=0` · `?state=./other.json` · `?season=winter|spring|summer|fall` · `?act=0` (no activities)
+· `&camyaw=2.4` · `?az=72&el=10&dist=46` (wide camera) · `?rotate=0` · `?stay=1` · `?say=<thought index>` · `?ui=0` · `?state=./other.json` · `?season=winter|spring|summer|fall` · `?act=0` (no activities) · `?event=bear|grizzly|lion|wolf|coyote|fox&at=bank|island|dock` (force a wildlife event)
 
 ## Controls
 - **Orbit** (default): drag to look around, scroll to zoom, tap Mochi to make him hop, tap a zone to send him there. `🎥 follow` keeps the camera on him.
@@ -73,7 +73,7 @@ Weather and mood nudge Mochi:
 
 ## ⚙️ Settings
 The ⚙️ button (top right) holds settings that are saved in `localStorage` (`mochi.settings.v1`):
-- **Live:** quality (pixel ratio and shadow-map size), shadows on/off, bloom on/off.
+- **Live:** quality (pixel ratio and shadow-map size), shadows on/off, bloom on/off, and wildlife density (off / a few / normal / lots).
 - **On reload:** quality's anti-aliasing (MSAA) level, rain/snow amount, and grass & flower density.
 - **Sound:** master, music, effects and river volume, mute, play songs, and pick a song. The river starts low (30% of the old level) and fades in over about 2.5 s when audio first starts. Saved sliders are kept.
 - **Camera:** auto-rotate, walk-mode hint, start camera (orbit / follow / walk), and mouse-look speed.
@@ -119,3 +119,48 @@ Mochi follows cute versions of the real rules. Bull trout (threatened) are alway
 - A raccoon that sneaks up to the dock bucket and can steal a fish.
 
 Bats and moths sit out the winter.
+
+## Bitterroot wildlife (v4)
+Most animals live on the **other** side of the river: the far banks, the valley floor and the slopes. They walk out of the treeline, drink at the water's edge, then wander off again. Some birds fly overhead or float down the river. Only magpies and Steller's jays hop around the island itself.
+
+**When and where they show up:**
+- **Deer:** mostly at dawn and dusk.
+- **Owls and bats:** at night (see the night critters above).
+- **Eagles and osprey:** soar during the day, and the osprey sometimes dives for a fish.
+- **Black bears and grizzlies:** absent Dec–Mar (hibernating).
+- **Osprey:** only here Apr–Sep.
+- **Skunks:** absent in deep winter.
+- **Snowshoe hares:** turn white in winter.
+- **Bucks and moose:** grow antlers in fall.
+- **Bighorn sheep:** on the slopes.
+- **Mountain goats:** up high on the Bitterroot Range side (Trapper Peak). Both are scaled up so you can actually spot them.
+
+**Predators (no gore, just cute):**
+1. A black bear (grizzly, rarely), mountain lion or gray wolf first shows up **across the river**. Mochi spots it, puffs up nervously and watches.
+2. Usually it wanders off ("watched it from across the river").
+3. Sometimes it wades or swims over to the island. Mochi then defends himself in one of these ways:
+   - puffs up big and flaps his cape
+   - bangs a pot
+   - uses a puff of bear spray
+   - hides in the hut
+   - climbs to the treehouse
+4. The predator backs off and swims home, and Mochi feels proud or a bit shaken.
+
+**Fish thieves:** at dusk and night a coyote or red fox may sneak to the dock bucket. Mochi shoos it off, or it gets a fish. The raccoon still raids at night too.
+
+| field | shape | what it does |
+|---|---|---|
+| `encounters` | `[{animal, at, outcome, date}]` | his encounter history. New ones get added during the session and show in the 🎒 Life tab |
+| `courage` | number 0–100 (default 50) | braver Mochi stands his ground more often. Standing firm goes +4, watching +1, hiding/climbing −1 |
+| `event` | `{animal: "bear"\|"grizzly"\|"lion"\|"wolf"\|"coyote"\|"fox", at: "bank"\|"island"\|"dock"}` | forces an event about 5 s after load. `at: "island"` means it will cross |
+
+Bird and mammal list, and the sources it was checked against:
+- **Mammals:** mule deer, white-tailed deer, moose, bighorn sheep, mountain goat, black bear, grizzly bear (rare: no confirmed resident Bitterroot population, but dispersers can turn up anywhere in western Montana), mountain lion, gray wolf, coyote, red fox, beaver (with a lodge on the west bank), river otter, raccoon, striped skunk, porcupine, snowshoe hare.
+- **Birds:** bald eagle, osprey (summer), great blue heron, Canada geese, mallards, great horned owl, black-billed magpie, Steller's jay.
+- **Sources:**
+  - Bitterroot NF, About the Area: https://www.fs.usda.gov/r01/bitterroot/about-area
+  - FWP, Bears in Montana / Bitterroot recovery zone: https://fwp.mt.gov/conservation/wildlife-management/grizzly-bears
+  - FWP grizzly occurrence: https://fwp.mt.gov/conservation/wildlife-management/wildlife-migration/tracking/furbearer-carnivore/grizzly-bear
+  - FWP wolves: https://fwp.mt.gov/conservation/wildlife-management/wolf
+  - Lee Metcalf NWR (Ravalli County: osprey, bald eagle, heron rookery, beaver, otter, porcupine, coyote, raccoon, white-tailed deer, moose, black bear): https://www.fws.gov/refuge/lee-metcalf/about-us and https://visitmt.com/listing/lee-metcalf-national-wildlife-refuge-723
+  - Montana Field Guide (raccoon, fox, skunk, porcupine, hare): https://fieldguide.mt.gov/speciesDetail.aspx?elcode=+AMAJE02010

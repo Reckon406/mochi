@@ -499,5 +499,7 @@
       "item": "night critters: owl, bats, moths, raccoon",
       "status": "built"
     }
-  ]
+  ],
+  "encounters": [],
+  "courage": 50
 }
