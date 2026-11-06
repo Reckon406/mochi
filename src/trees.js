@@ -19,6 +19,10 @@ function tex(key, w, h, draw, { srgb = true, wrap = true, mag = THREE.LinearFilt
   return (TEX[key] = t);
 }
 function mat(key, make) { return MATS[key] || (MATS[key] = make()); }
+/** lite = Low/mobile: fewer cards + lower-detail volumes, shared silhouette still full. */
+function dens(opts) { return opts.lite ? 0.35 : 1; }
+function volSeg(opts) { return opts.lite ? 0 : 1; } // icosa detail
+
 
 // ── bark ──
 export function barkTex(kind = 'pine') {
@@ -180,8 +184,9 @@ function addCyl(parent, matl, rTop, rBot, h, pos, dir, segs = 6) {
 }
 function cardGeo() { return mat('_cardGeo', () => new THREE.PlaneGeometry(1, 1)); }
 
-function addFoliageBlob(parent, matl, x, y, z, rx, ry, rz, segs = 7) {
-  const g = new THREE.IcosahedronGeometry(1, 2);
+function addFoliageBlob(parent, matl, x, y, z, rx, ry, rz, detail = 1) {
+  const g = new THREE.IcosahedronGeometry(1, detail);
+
   g.scale(rx, ry, rz);
   // nudge verts for irregular silhouette
   const p = g.attributes.position;
@@ -207,7 +212,7 @@ function placeCluster(im, k, N, p, s, yaw0, pitch0 = 0) {
 
 // ── close-up species ──
 export function makePonderosa(opts = {}) {
-  const { scale = 1, seed = 1, snowy = false } = opts;
+  const { scale = 1, seed = 1, snowy = false, lite = false } = opts; const D = dens(opts); const VD = volSeg(opts);
   const r = rng(seed + 100); const g = new THREE.Group(); g.name = 'ponderosa';
   const H = (7 + r() * 3) * scale; const trunkR = (0.22 + r() * 0.08) * scale;
   const bm = barkMat('ponderosa');
@@ -227,12 +232,12 @@ export function makePonderosa(opts = {}) {
     [-0.8 * scale, H * 0.8, 0.35 * scale, 0.95 * scale, 0.85 * scale, 0.9 * scale],
     [0, H * 0.98, 0, 0.7 * scale, 0.85 * scale, 0.7 * scale],
   ];
-  for (const b of blobs) addFoliageBlob(g, vm, b[0], b[1], b[2], b[3] * 0.95, b[4] * 0.95, b[5] * 0.95);
+  for (const b of (lite ? blobs.filter((_, i) => i % 2 === 0 || i < 3) : blobs)) addFoliageBlob(g, vm, b[0], b[1], b[2], b[3] * 0.95, b[4] * 0.95, b[5] * 0.95, VD);
 
   const nm = needleMat('pine', snowy);
-  const N = Math.round(480 * scale + 200);
+  const N = Math.round((480 * scale + 200) * D);
   const im = new THREE.InstancedMesh(cardGeo(), nm, N); let k = 0;
-  const nLimbs = 12 + Math.floor(r() * 5);
+  const nLimbs = (lite ? 6 : 12) + Math.floor(r() * (lite ? 3 : 5));
   for (let i = 0; i < nLimbs; i++) {
     const t = i / nLimbs; const y = crownY0 + t * (H - crownY0) * 0.92; const a = r() * 6.28 + i * 1.7;
     const len = (0.7 + (1 - t) * 1.5) * scale;
@@ -263,25 +268,25 @@ export function makePonderosa(opts = {}) {
 }
 
 export function makeFir(opts = {}) {
-  const { scale = 1, seed = 2, snowy = false } = opts;
+  const { scale = 1, seed = 2, snowy = false, lite = false } = opts; const D = dens(opts); const VD = volSeg(opts);
   const r = rng(seed + 200); const g = new THREE.Group(); g.name = 'fir';
   const H = (6.5 + r() * 2.5) * scale; const trunkR = (0.16 + r() * 0.05) * scale;
   const bm = barkMat('fir'); addCyl(g, bm, trunkR * 0.4, trunkR, H * 0.95, new THREE.Vector3(), UP, 7);
   const vm = foliageVolMat('fir', 'summer', snowy);
 
   // layered solid conical masses covering most of trunk height
-  const layers = 9 + Math.floor(r() * 2);
+  const layers = (lite ? 5 : 9) + Math.floor(r() * (lite ? 1 : 2));
   for (let i = 0; i < layers; i++) {
     const t = i / (layers - 1); const y = H * (0.12 + t * 0.82);
     const rad = (2.05 - t * 1.7) * scale * (0.92 + r() * 0.12);
-    addFoliageBlob(g, vm, (r() - 0.5) * 0.12 * scale, y, (r() - 0.5) * 0.12 * scale, rad * 0.95, rad * 0.52, rad * 0.95, 6);
+    addFoliageBlob(g, vm, (r() - 0.5) * 0.12 * scale, y, (r() - 0.5) * 0.12 * scale, rad * 0.95, rad * 0.52, rad * 0.95, VD);
     const a1 = i * 1.7, a2 = a1 + 2.1;
-    addFoliageBlob(g, vm, Math.cos(a1) * rad * 0.4, y - 0.08 * scale, Math.sin(a1) * rad * 0.4, rad * 0.62, rad * 0.4, rad * 0.62, 5);
-    addFoliageBlob(g, vm, Math.cos(a2) * rad * 0.35, y + 0.05 * scale, Math.sin(a2) * rad * 0.35, rad * 0.55, rad * 0.36, rad * 0.55, 5);
+    addFoliageBlob(g, vm, Math.cos(a1) * rad * 0.4, y - 0.08 * scale, Math.sin(a1) * rad * 0.4, rad * 0.62, rad * 0.4, rad * 0.62, VD);
+    if (!lite) addFoliageBlob(g, vm, Math.cos(a2) * rad * 0.35, y + 0.05 * scale, Math.sin(a2) * rad * 0.35, rad * 0.55, rad * 0.36, rad * 0.55, VD);
   }
 
   const nm = needleMat('fir', snowy);
-  const N = Math.round(520 * scale + 200);
+  const N = Math.round((520 * scale + 200) * D);
   const im = new THREE.InstancedMesh(cardGeo(), nm, N); let k = 0;
   for (let i = 0; i < layers; i++) {
     const t = i / (layers - 1); const y = H * (0.16 + t * 0.78); const rad = (1.85 - t * 1.55) * scale;
@@ -310,7 +315,8 @@ export function makeFir(opts = {}) {
   return g;
 }
 
-function deciduousCanopy(g, { scale, r, season, snowy, kind, H, trunkR, bm, limbs, bare }) {
+function deciduousCanopy(g, { scale, r, season, snowy, kind, H, trunkR, bm, limbs, bare, lite = false }) {
+  const D = lite ? 0.35 : 1; const VD = lite ? 0 : 1;
   const vm = foliageVolMat(kind, season, snowy);
   const clusters = [];
   // solid volume blobs at limb tips + crown
@@ -330,10 +336,10 @@ function deciduousCanopy(g, { scale, r, season, snowy, kind, H, trunkR, bm, limb
   }
   // central fill so canopy is one solid mass
   clusters.push({ x: 0, y: H * 0.72, z: 0, rx: 1.35 * scale, ry: 1.05 * scale, rz: 1.35 * scale });
-  if (!bare) for (const C of clusters) addFoliageBlob(g, vm, C.x, C.y, C.z, C.rx * 1.0, C.ry * 0.9, C.rz * 1.0);
+  if (!bare) for (const C of (lite ? clusters.filter((_, i) => i % 2 === 0) : clusters)) addFoliageBlob(g, vm, C.x, C.y, C.z, C.rx * 1.0, C.ry * 0.9, C.rz * 1.0, VD);
 
   const lm = leafMat(kind, season, snowy);
-  const N = bare ? Math.round(24 * scale) : Math.round((kind === 'aspen' ? 420 : 560) * scale + 160);
+  const N = bare ? Math.round(24 * scale * D) : Math.round(((kind === 'aspen' ? 420 : 560) * scale + 160) * D);
   const im = new THREE.InstancedMesh(cardGeo(), lm, N); let k = 0;
   for (let i = 0; i < N && k < N - 3; i++) {
     const C = clusters[i % clusters.length];
@@ -348,7 +354,7 @@ function deciduousCanopy(g, { scale, r, season, snowy, kind, H, trunkR, bm, limb
 }
 
 export function makeCottonwood(opts = {}) {
-  const { scale = 1, seed = 3, season = 'fall', snowy = false, h = null } = opts;
+  const { scale = 1, seed = 3, season = 'fall', snowy = false, h = null, lite = false } = opts;
   const r = rng(seed + 300); const g = new THREE.Group(); g.name = 'cottonwood';
   const H = (h || (5.5 + r() * 2.2)) * (h ? 1 : scale); const trunkR = (0.2 + r() * 0.08) * scale;
   const bm = barkMat('cotton'); addCyl(g, bm, trunkR * 0.55, trunkR * 1.15, H * 0.72, new THREE.Vector3(), UP, 8);
@@ -365,13 +371,13 @@ export function makeCottonwood(opts = {}) {
     limbs.push({ base: tip, dir: d2, len: len * 0.5 });
   }
   const bare = season === 'winter';
-  const im = deciduousCanopy(g, { scale, r, season, snowy, kind: 'cotton', H, trunkR, bm, limbs, bare });
+  const im = deciduousCanopy(g, { scale, r, season, snowy, kind: 'cotton', H, trunkR, bm, limbs, bare, lite });
   const ph = r() * 6; g.userData.sway = (t) => { const w = 0.3 + ENV.uWind.value * 2; im.rotation.z = Math.sin(t * 1.05 + ph) * 0.02 * w; im.rotation.x = Math.sin(t * 0.8 + ph * 2) * 0.015 * w; };
   return g;
 }
 
 export function makeAspen(opts = {}) {
-  const { scale = 1, seed = 4, season = 'fall', snowy = false } = opts;
+  const { scale = 1, seed = 4, season = 'fall', snowy = false, lite = false } = opts;
   const r = rng(seed + 400); const g = new THREE.Group(); g.name = 'aspen';
   const H = (4.5 + r() * 2) * scale; const trunkR = (0.1 + r() * 0.04) * scale;
   const bm = barkMat('aspen'); addCyl(g, bm, trunkR * 0.7, trunkR, H * 0.88, new THREE.Vector3(), UP, 7);
@@ -391,13 +397,13 @@ export function makeAspen(opts = {}) {
     limbs.push({ base, dir, len });
   }
   const bare = season === 'winter';
-  const im = deciduousCanopy(g, { scale, r, season, snowy, kind: 'aspen', H, trunkR, bm, limbs, bare });
+  const im = deciduousCanopy(g, { scale, r, season, snowy, kind: 'aspen', H, trunkR, bm, limbs, bare, lite });
   const ph = r() * 6; g.userData.sway = (t) => { const w = 0.4 + ENV.uWind.value * 2.5; im.rotation.y = Math.sin(t * 4.5 + ph) * 0.04 * w; im.rotation.z = Math.sin(t * 1.3 + ph) * 0.02 * w; };
   return g;
 }
 
 export function makeWillow(opts = {}) {
-  const { scale = 1, seed = 5, season = 'fall', snowy = false } = opts;
+  const { scale = 1, seed = 5, season = 'fall', snowy = false, lite = false } = opts; const D = dens(opts); const VD = volSeg(opts);
   const r = rng(seed + 500); const g = new THREE.Group(); g.name = 'willow';
   const H = (3.2 + r() * 1.2) * scale; const trunkR = (0.12 + r() * 0.04) * scale;
   const bm = barkMat('cotton');
@@ -405,12 +411,11 @@ export function makeWillow(opts = {}) {
   const bare = season === 'winter';
   const vm = foliageVolMat('willow', season, snowy);
   if (!bare) {
-    addFoliageBlob(g, vm, 0, H * 0.7, 0, 1.35 * scale, 0.9 * scale, 1.35 * scale);
-    addFoliageBlob(g, vm, 0.4 * scale, H * 0.55, 0.2 * scale, 0.9 * scale, 0.7 * scale, 0.9 * scale);
-    addFoliageBlob(g, vm, -0.35 * scale, H * 0.5, -0.25 * scale, 0.85 * scale, 0.65 * scale, 0.85 * scale);
+    addFoliageBlob(g, vm, 0, H * 0.7, 0, 1.35 * scale, 0.9 * scale, 1.35 * scale, VD);
+    if (!lite) { addFoliageBlob(g, vm, 0.4 * scale, H * 0.55, 0.2 * scale, 0.9 * scale, 0.7 * scale, 0.9 * scale, VD); addFoliageBlob(g, vm, -0.35 * scale, H * 0.5, -0.25 * scale, 0.85 * scale, 0.65 * scale, 0.85 * scale, VD); }
   }
   const lm = leafMat('willow', season, snowy);
-  const N = bare ? 22 : Math.round(360 * scale + 100);
+  const N = bare ? 22 : Math.round((360 * scale + 100) * D);
   const im = new THREE.InstancedMesh(cardGeo(), lm, N); let k = 0;
   for (let i = 0; i < N && k < N - 3; i++) {
     const a = r() * 6.28; const rad = (0.5 + r() * 1.4) * scale; const y = H * 0.4 + r() * H * 0.45;
@@ -422,7 +427,7 @@ export function makeWillow(opts = {}) {
   return g;
 }
 
-export function makeBigCottonwood(T, { season = 'fall', snowy = false, seed = 3 } = {}) {
+export function makeBigCottonwood(T, { season = 'fall', snowy = false, seed = 3, lite = false } = {}) { const D = lite ? 0.4 : 1; const VD = lite ? 0 : 1;
   const r = rng(seed); const g = new THREE.Group(); g.name = 'big-cottonwood';
   const bm = barkMat('cotton');
   const h = T.h; const tg = new THREE.CylinderGeometry(T.topR, T.trunkR, h, 16, 14);
@@ -451,10 +456,10 @@ export function makeBigCottonwood(T, { season = 'fall', snowy = false, seed = 3 
     clusters.push([tip.x, tip.y - h + 0.35, tip.z, 1.25]);
   });
   const vm = foliageVolMat('cotton', season, snowy);
-  if (!bare) for (const C of clusters) addFoliageBlob(canopy, vm, C[0], C[1], C[2], C[3] * 0.95, C[3] * 0.75, C[3] * 0.95);
+  if (!bare) for (const C of (lite ? clusters.filter((_, i) => i % 2 === 0) : clusters)) addFoliageBlob(canopy, vm, C[0], C[1], C[2], C[3] * 0.95, C[3] * 0.75, C[3] * 0.95, VD);
 
   const lm = leafMat('cotton', season, snowy);
-  const N = bare ? 120 : 1100;
+  const N = bare ? 120 : Math.round(1100 * D);
   const im = new THREE.InstancedMesh(cardGeo(), lm, N); let k = 0;
   for (let i = 0; i < N && k < N - 3; i++) {
     const C = clusters[i % clusters.length];
@@ -511,8 +516,8 @@ function lobedSphere(x, y, z, rx, ry, rz, segs = 7) {
   s.computeVertexNormals(); s.translate(x, y, z); return s;
 }
 
-export function lodPineGeo() {
-  return mat('_lodPine3', () => {
+export function lodPineGeo(lite = false) {
+  return mat(lite ? '_lodPineLite' : '_lodPine3', () => {
     const parts = [];
     const trunk = new THREE.CylinderGeometry(0.12, 0.24, 3.4, 7); trunk.translate(0, 1.7, 0); trunk.userData = { trunk: true }; parts.push(trunk);
     // dense conical stack of flattened lobes (fir habit) covering most of height
@@ -520,18 +525,23 @@ export function lodPineGeo() {
       [1.7, 0.65, 1.15], [1.55, 0.6, 1.6], [1.35, 0.55, 2.05], [1.15, 0.52, 2.5],
       [0.95, 0.5, 2.9], [0.75, 0.48, 3.3], [0.52, 0.45, 3.65], [0.32, 0.42, 3.95], [0.18, 0.4, 4.2],
     ];
-    for (const [rad, hh, yy] of layers) {
-      parts.push(lobedSphere(0, yy, 0, rad, hh, rad, 8));
-      parts.push(lobedSphere(rad * 0.4, yy - 0.1, 0, rad * 0.65, hh * 0.75, rad * 0.65, 6));
-      parts.push(lobedSphere(-rad * 0.3, yy - 0.05, rad * 0.35, rad * 0.55, hh * 0.7, rad * 0.55, 6));
-      parts.push(lobedSphere(rad * 0.15, yy + 0.08, -rad * 0.35, rad * 0.5, hh * 0.65, rad * 0.5, 6));
+    const L = lite ? layers.filter((_, i) => i % 2 === 0) : layers;
+    for (const [rad, hh, yy] of L) {
+      parts.push(lobedSphere(0, yy, 0, rad, hh, rad, lite ? 6 : 8));
+      if (!lite) {
+        parts.push(lobedSphere(rad * 0.4, yy - 0.1, 0, rad * 0.65, hh * 0.75, rad * 0.65, 6));
+        parts.push(lobedSphere(-rad * 0.3, yy - 0.05, rad * 0.35, rad * 0.55, hh * 0.7, rad * 0.55, 6));
+        parts.push(lobedSphere(rad * 0.15, yy + 0.08, -rad * 0.35, rad * 0.5, hh * 0.65, rad * 0.5, 6));
+      } else {
+        parts.push(lobedSphere(rad * 0.35, yy - 0.08, 0, rad * 0.5, hh * 0.65, rad * 0.5, 5));
+      }
     }
     return mergeGeos(parts);
   });
 }
 
-export function lodCottonwoodGeo() {
-  return mat('_lodCotton3', () => {
+export function lodCottonwoodGeo(lite = false) {
+  return mat(lite ? '_lodCottonLite' : '_lodCotton3', () => {
     const parts = [];
     const trunk = new THREE.CylinderGeometry(0.14, 0.28, 3.3, 7); trunk.translate(0, 1.65, 0); trunk.userData = { trunk: true }; parts.push(trunk);
     for (const [a, y, len, ang] of [[0.3, 2.4, 1.55, 0.9], [2.5, 2.65, 1.35, 0.85], [4.4, 2.35, 1.45, 0.95], [1.4, 2.85, 1.15, 1.0], [5.5, 2.7, 1.2, 0.9]]) {
@@ -547,13 +557,14 @@ export function lodCottonwoodGeo() {
       [0.1, 3.5, -0.1, 1.25, 0.95, 1.2], [0.0, 4.0, 0.0, 1.1, 0.85, 1.05],
       [1.0, 3.7, 0.9, 0.7, 0.58, 0.68], [-0.95, 3.75, -0.85, 0.7, 0.58, 0.68],
     ];
-    for (const [x, y, z, rx, ry, rz] of blobs) parts.push(lobedSphere(x, y, z, rx, ry, rz, 8));
+    const BB = lite ? blobs.filter((_, i) => i % 2 === 0).slice(0, 8) : blobs;
+    for (const [x, y, z, rx, ry, rz] of BB) parts.push(lobedSphere(x, y, z, rx, ry, rz, lite ? 6 : 8));
     return mergeGeos(parts, { plain: true });
   });
 }
 
-export function lodAspenGeo() {
-  return mat('_lodAspen3', () => {
+export function lodAspenGeo(lite = false) {
+  return mat(lite ? '_lodAspenLite' : '_lodAspen3', () => {
     const parts = [];
     const trunk = new THREE.CylinderGeometry(0.08, 0.13, 3.1, 6); trunk.translate(0, 1.55, 0); trunk.userData = { trunk: true }; parts.push(trunk);
     // denser rounded crown (not a tiny top knot)
@@ -563,13 +574,14 @@ export function lodAspenGeo() {
       [0.65, 3.55, 0.4, 0.5, 0.42, 0.48], [-0.6, 3.5, -0.45, 0.5, 0.42, 0.48], [0, 3.1, 0.55, 0.52, 0.45, 0.5],
       [0.2, 3.75, -0.55, 0.48, 0.4, 0.46], [-0.15, 3.8, 0.5, 0.48, 0.4, 0.46],
     ];
-    for (const [x, y, z, rx, ry, rz] of blobs) parts.push(lobedSphere(x, y, z, rx, ry, rz, 7));
+    const BB = lite ? blobs.filter((_, i) => i % 2 === 0) : blobs;
+    for (const [x, y, z, rx, ry, rz] of BB) parts.push(lobedSphere(x, y, z, rx, ry, rz, lite ? 5 : 7));
     return mergeGeos(parts, { plain: true });
   });
 }
 
-export function lodWillowGeo() {
-  return mat('_lodWillow3', () => {
+export function lodWillowGeo(lite = false) {
+  return mat(lite ? '_lodWillowLite' : '_lodWillow3', () => {
     const parts = [];
     const trunk = new THREE.CylinderGeometry(0.1, 0.16, 1.7, 6); trunk.translate(0, 0.85, 0); trunk.userData = { trunk: true }; parts.push(trunk);
     parts.push(lobedSphere(0, 1.85, 0, 1.35, 1.0, 1.35, 10));

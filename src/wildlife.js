@@ -126,7 +126,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
   const month = (() => { const s = season; const m = new Date().getMonth(); if (s === 'winter' && !(m === 11 || m <= 1)) return 0; if (s === 'summer' && !(m >= 5 && m <= 7)) return 6; if (s === 'spring' && !(m >= 2 && m <= 4)) return 3; if (s === 'fall' && !(m >= 8 && m <= 10)) return 9; return m; })();
   const winter = season === 'winter';
   let courage = Number.isFinite(+state.courage) ? Math.max(0, Math.min(100, +state.courage)) : 50;
-  const live = []; let lock = null, spawnT = 2, eventT = rnd(50, 110), ev = null;
+  const live = []; const MAX_LIVE = 18; let lock = null, spawnT = 2, eventT = rnd(50, 110), ev = null;
   const mpos = () => mochi.root.position;
   const tod = () => { const n = sky.state.night, gl = sky.state.golden; return n > 0.6 ? 'night' : gl > 0.25 || (n > 0.2 && n <= 0.6) ? (isDawnish() ? 'dawn' : 'dusk') : 'day'; };
   const isDawnish = () => { const h = new Date().getHours(); return h < 12; };
@@ -142,7 +142,8 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     add(lodge, S.sph, mat(0x4a3826), [0, 0.2, 0], [0, 0, 0], [1.7, 1.0, 1.7]); }
 
   function spawn(key, opts = {}) {
-    const sp = SPECIES[key]; const n = sp.flock ? Math.max(1, Math.round(sp.flock * rnd(0.6, 1.3))) : 1; const made = [];
+    const sp = SPECIES[key]; const room = Math.max(0, MAX_LIVE - live.length); if (room <= 0 && !opts.event) return [];
+    const n = sp.flock ? Math.min(room, Math.max(1, Math.round(sp.flock * rnd(0.5, 1.0)))) : 1; const made = [];
     const side = opts.side ?? (Math.random() < 0.7 ? -1 : 1); const z0 = opts.z ?? rnd(-45, 45);
     for (let i = 0; i < n; i++) {
       const m = sp.make({ antlers: month >= 8 || month <= 0 ? Math.random() < 0.5 : false, winter: winter || month >= 10 || month <= 2, i });
@@ -162,13 +163,18 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     const u = a.m.userData || {};
     try { u.eyeM?.dispose?.(); } catch {}
     try { u.glow?.material?.dispose?.(); } catch {}
+    // unique per-animal geos (horns torus etc.) — shared S.* left alone
+    a.m.traverse((o) => {
+      if (!o.isMesh) return;
+      const g = o.geometry; if (g && g !== S.sph && g !== S.cyl && g !== S.cone) { try { g.dispose(); } catch {} }
+    });
     group.remove(a.m);
     const i = live.indexOf(a); if (i >= 0) live.splice(i, 1);
   }
 
   function eligible(k) { const sp = SPECIES[k]; if (PRED[k]) return false; if (sp.months && !sp.months(month)) return false; if (winter && (k === 'beaver' || k === 'skunk')) return false; const t = tod(); return sp.when.includes(t); }
   function ambientSpawn() {
-    const want = density(); const amb = live.filter((a) => !a.event).length; if (amb >= want) return;
+    const want = Math.min(density(), MAX_LIVE - 2); const amb = live.filter((a) => !a.event).length; if (amb >= want || live.length >= MAX_LIVE) return;
     const keys = Object.keys(SPECIES).filter(eligible); if (!keys.length) return; let tot = keys.reduce((s, k) => s + SPECIES[k].w, 0), r = Math.random() * tot; let k = keys[0]; for (const q of keys) { r -= SPECIES[q].w; if (r <= 0) { k = q; break; } }
     if (live.some((a) => a.key === k) && Math.random() < 0.6) return; spawn(k);
   }

@@ -94,7 +94,8 @@ export function rockBump() {
 // ── quality tiers (auto picks one for the device) ──
 export function autoQuality() {
   const coarse = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
-  const cores = navigator.hardwareConcurrency || 4; const small = Math.min(innerWidth, innerHeight) < 500;
-  if (coarse || small) return cores >= 8 && !small ? 'medium' : 'low';
+  const cores = navigator.hardwareConcurrency || 4; const small = Math.min(innerWidth, innerHeight) < 700;
+  // Phones / tablets: always Low. Even "flagship" mobile GPUs choke on our tree/geo budget.
+  if (coarse || small) return 'low';
   return cores <= 4 ? 'medium' : 'high';
 }

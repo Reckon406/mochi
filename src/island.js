@@ -46,7 +46,8 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
   return g;
 }
 
-export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall' }) {
+export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall', lite = false } = {}) {
+  const treeLite = lite || mobile;
   const world = new THREE.Group(); scene.add(world);
   const anim = []; // per-frame updaters (t, dt)
   const sways = []; // tree canopy wind
@@ -182,7 +183,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── Bitterroot trees (procedural: cottonwood / ponderosa / fir / aspen) ──
   // Big treehouse cottonwood keeps BIGTREE limb anchors (swing, owl, feeder, cabin).
-  { const big = makeBigCottonwood(BIGTREE, { season, snowy, seed: 3 }); big.position.set(BIGTREE.x, BIGTREE.y - 0.05, BIGTREE.z); world.add(big); bindSway(sways, big); }
+  { const big = makeBigCottonwood(BIGTREE, { season, snowy, seed: 3, lite: treeLite }); big.position.set(BIGTREE.x, BIGTREE.y - 0.05, BIGTREE.z); world.add(big); bindSway(sways, big); }
   // swing hanging from the big north-west limb
   { const hk = BIGTREE.limbPoint(BIGTREE.swingA, 2.5); const L = hk.y - 0.1 - groundY(hk.x, hk.z) - 0.55; const sw = new THREE.Group(); sw.position.copy(hk).y -= 0.1; sw.rotation.y = Math.PI / 2 - BIGTREE.swingA; world.add(sw);
     for (const s of [-0.3, 0.3]) add(sw, new THREE.CylinderGeometry(0.014, 0.014, L, 3), mat(0xc9a66b), [s, -L / 2, 0], [0, 0, 0], null, false);
@@ -190,7 +191,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 1.7 + R0() * 2.2; const x = BIGTREE.x + Math.cos(a) * rr, z = BIGTREE.z + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
   function plantTree(maker, x, z, opts = {}) {
-    const y = topH(x, z); const g = maker({ ...opts, season, snowy }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
+    const y = topH(x, z); const g = maker({ ...opts, season, snowy, lite: treeLite }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
   }
   // island conifers: mix of ponderosa + Douglas fir
   [[-9.5, -7.5, 1.15, 'fir'], [-11, -4.5, 0.95, 'pine'], [-7.8, -10.3, 1.05, 'fir'], [12.4, -1.5, 0.85, 'pine'], [-12.5, 7.5, 0.9, 'fir'], [-9.2, 9.6, 1.05, 'pine'], [11.8, 9.0, 0.85, 'fir'], [1.5, 12.8, 0.85, 'pine'], [-13.8, 0.5, 0.8, 'fir'], [-10, 0.8, 0.75, 'pine'],
@@ -381,7 +382,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── wind-swaying grass (instanced, cheap) ──
   const grass = (() => {
-    const N = Math.round((mobile ? 7000 : 17000) * detail); const bg = new THREE.PlaneGeometry(0.06, 0.26, 1, 3); bg.translate(0, 0.13, 0);
+    const N = Math.round((mobile || lite ? 3500 : 17000) * detail); const bg = new THREE.PlaneGeometry(0.06, 0.26, 1, 3); bg.translate(0, 0.13, 0);
     const p = bg.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i) / 0.26; p.setX(i, p.getX(i) * (1 - yy * 0.85)); }
     const nrm = bg.attributes.normal; for (let i = 0; i < nrm.count; i++) nrm.setXYZ(i, 0, 1, 0);
     const gm = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, side: THREE.DoubleSide });
@@ -421,7 +422,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     for (const [x, z, yaw] of dw) { const y = groundOrShore(x, z); const g = new THREE.Group(); g.position.set(x, y + 0.12, z); g.rotation.y = yaw; world.add(g); add(g, new THREE.CylinderGeometry(0.13, 0.18, 2.4, 8), mat(0xb8a890), [0, 0, 0], [0, 0, Math.PI / 2 + 0.05]); add(g, new THREE.CylinderGeometry(0.05, 0.07, 0.8, 5), mat(0xb8a890), [0.6, 0.15, 0.2], [0.6, 0, 1.0]); }
   }
   function plantShore(maker, x, z, opts = {}) {
-    const y = groundOrShore(x, z); const g = maker({ ...opts, season, snowy }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
+    const y = groundOrShore(x, z); const g = maker({ ...opts, season, snowy, lite: treeLite }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
   }
   // willows / alders along the water
   [[-6.5, -13.2, 1.0], [-10.5, -11.5, 0.85], [12.6, 4.6, 0.9], [-2, 14.2, 0.95], [9.5, 11.6, 0.8], [-13.8, -6.8, 0.75], [4, -13.6, 0.9], [13.4, -3, 0.8], [-12, 10, 0.85]].map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 3)).forEach(([x, z, s], i) => plantShore(makeWillow, x, z, { scale: s, seed: 50 + i }));

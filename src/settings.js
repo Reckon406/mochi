@@ -8,7 +8,7 @@ export const DEFAULTS = {
   master: 0.7, music: 0.6, sfx: 0.7, river: 0.3, mute: false, musicOn: true,
   autoRotate: true, walkHint: true, startCam: 'orbit', lookSens: 1, wildlife: 'normal',
 };
-export const QUALITY = { low: { pr: 1, msaa: 0, shadow: 1024, tier: 0 }, medium: { pr: 1.5, msaa: 2, shadow: 2048, tier: 1 }, high: { pr: 2, msaa: 4, shadow: 3072, tier: 2 }, ultra: { pr: 2, msaa: 4, shadow: 4096, tier: 3, ao: true } };
+export const QUALITY = { low: { pr: 1, msaa: 0, shadow: 512, tier: 0 }, medium: { pr: 1.25, msaa: 0, shadow: 1024, tier: 1 }, high: { pr: 2, msaa: 4, shadow: 3072, tier: 2 }, ultra: { pr: 2, msaa: 4, shadow: 4096, tier: 3, ao: true } };
 QUALITY.auto = QUALITY[autoQuality()];
 export function createSettings() {
   let s = { ...DEFAULTS };

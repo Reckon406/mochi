@@ -74,7 +74,8 @@ function terrainMesh(size, seg, cx, cz, snowy, hFn) {
 }
 
 export const NEAR = 170; // half-size of the high-res terrain patch around the island
-export function buildLandscape(scene, { snowy = false, mobile = false, season = 'fall' } = {}) {
+export function buildLandscape(scene, { snowy = false, mobile = false, season = 'fall', lite = false } = {}) {
+  const L = lite || mobile;
   const group = new THREE.Group(); scene.add(group);
   // far terrain (sunk under the near patch so they don't fight)
   const far = terrainMesh(3800, mobile ? 170 : 240, 0, 0, snowy, (x, z) => terrainH(x, z) - (Math.max(Math.abs(x), Math.abs(z)) < NEAR - 12 ? 6 : 0));
@@ -95,8 +96,8 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
 
   const r = rng(3); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(); const pc = new THREE.Color();
   // ── foothill pines (LOD ponderosa/fir silhouette, instanced) ──
-  const pineGeo = lodPineGeo();
-  const N = mobile ? 2800 : 6500;
+  const pineGeo = lodPineGeo(L);
+  const N = L ? 900 : mobile ? 1800 : 6500;
   const pines = new THREE.InstancedMesh(pineGeo, new THREE.MeshStandardMaterial({ color: snowy ? 0xb9c8bd : 0xffffff, roughness: 1, vertexColors: true }), N);
   let placed = 0, tries = 0;
   while (placed < N && tries < N * 30) {
@@ -109,8 +110,8 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   pines.count = placed; pines.castShadow = !mobile; group.add(pines);
 
   // ── bank trees: cottonwoods, aspens, willows (LOD + wind sway on canopies) ──
-  const NC = mobile ? 180 : 380, NA = mobile ? 100 : 220, NWl = mobile ? 120 : 260;
-  const cwGeo = lodCottonwoodGeo(), asGeo = lodAspenGeo(), wlGeo = lodWillowGeo();
+  const NC = L ? 90 : mobile ? 140 : 380, NA = L ? 50 : mobile ? 80 : 220, NWl = L ? 60 : mobile ? 90 : 260;
+  const cwGeo = lodCottonwoodGeo(L), asGeo = lodAspenGeo(L), wlGeo = lodWillowGeo(L);
   const canopyM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, vertexColors: true });
   const aspenM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, vertexColors: true });
   const wlM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, side: THREE.DoubleSide, vertexColors: true });
@@ -137,7 +138,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   // ── tiny Darby, Montana on the east bench, lights on at night ──
   const houseGeo = new THREE.BoxGeometry(1, 1, 1); houseGeo.translate(0, 0.5, 0);
   const roofGeo = new THREE.ConeGeometry(0.85, 0.6, 4); roofGeo.rotateY(Math.PI / 4); roofGeo.translate(0, 1.3, 0);
-  const NH = 70; const houses = new THREE.InstancedMesh(houseGeo, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 }), NH);
+  const NH = L ? 35 : 70; const houses = new THREE.InstancedMesh(houseGeo, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 }), NH);
   const roofs = new THREE.InstancedMesh(roofGeo, new THREE.MeshStandardMaterial({ color: snowy ? 0xf0f4ff : 0x8a3b2e, roughness: 0.9 }), NH);
   const winMat = new THREE.MeshBasicMaterial({ color: 0xffc46b }); const wins = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.3, 0.3), winMat, NH);
   let hk = 0;

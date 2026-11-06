@@ -126,10 +126,18 @@ export function createMusic(state, settings) {
   // browsers only allow audio after a user gesture
   const kick0 = () => { if (started) return; started = true; if (!ensure()) return; ctx.resume(); if (settings.get().musicOn && songs.length) playSong(cur); };
   ['pointerdown', 'keydown', 'touchstart'].forEach((e) => addEventListener(e, kick0, { once: true, passive: true }));
+  function suspend() { clearTimeout(timer); timer = null; try { ctx?.suspend?.(); } catch {} if (audioEl) try { audioEl.pause(); } catch {} }
+  function resume() {
+    if (!ctx) return;
+    try { ctx.resume(); } catch {}
+    const s = settings.get();
+    if (s.musicOn && started && songs.length && !timer && !audioEl) playSong(cur);
+  }
   return {
     songs, get started() { return started; }, get current() { return songs[cur] || null; }, get playing() { return !!(timer || audioEl); },
     get liveNodes() { return liveNodes; },
     next() { started = true; playSong(cur + 1); }, play(i = cur) { started = true; ctx?.resume(); playSong(i); }, stop() { stopSong(); onChange(null); },
+    suspend, resume,
     onChange(fn) { onChange = fn; }, applyLevels, sfx,
     setEnabled(on) { if (on && started && !this.playing) playSong(cur); if (!on) { stopSong(); onChange(null); } },
   };

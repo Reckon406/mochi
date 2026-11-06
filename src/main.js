@@ -50,6 +50,8 @@ async function loadState() {
 }
 
 const isMobile = matchMedia('(pointer: coarse)').matches || Math.min(innerWidth, innerHeight) < 600;
+let paused = false;
+const audioCtl = { suspend() {}, resume() {} };
 
 async function init() {
   const { state, error } = await loadState();
@@ -61,18 +63,32 @@ async function init() {
   const hour = params.has('hour') ? parseFloat(params.get('hour')) : null;
   const weather = parseWeather(state.weather);
   await loadSignFonts();
-  const settings = createSettings(); const S0 = settings.get(); const Q = QUALITY[params.get('quality')] || QUALITY[S0.quality] || QUALITY.auto;
+  const settings = createSettings(); const S0 = settings.get();
+  const qName = params.get('quality') || S0.quality || 'auto';
+  const Q = QUALITY[qName] || QUALITY.auto;
+  const lite = isMobile || (Q.tier ?? 2) <= 0; // Low / phone: cut tree & bank geo hard
+  const dprCap = Math.min(Q.pr, isMobile ? 1.5 : Q.pr);
 
   // ── renderer ──
   const canvas = document.getElementById('scene');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, Q.pr));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, dprCap));
   renderer.setSize(innerWidth, innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap; // r18x: PCFSoftShadowMap was folded into PCF + shadow.radius (soft Vogel-disk filtering)
   const TM = { aces: THREE.ACESFilmicToneMapping, agx: THREE.AgXToneMapping, neutral: THREE.NeutralToneMapping };
   renderer.toneMapping = TM[params.get('tm')] ?? THREE.AgXToneMapping;
   const EXPO = renderer.toneMapping === THREE.AgXToneMapping ? 1.25 : 1.0; renderer.toneMappingExposure = EXPO;
+  // iOS Safari / memory pressure: don't silently freeze — ask for a tap-reload
+  canvas.addEventListener('webglcontextlost', (e) => {
+    e.preventDefault();
+    paused = true;
+    try { audioCtl.suspend(); } catch {}
+    const l = document.getElementById('loading');
+    if (l) { l.classList.remove('gone'); l.innerHTML = `<div class="egg">🥚</div><div>phone got tired (graphics memory). <a href="#" id="mochi-reload" style="color:#9f9">tap to reload</a></div>`;
+      l.querySelector('#mochi-reload')?.addEventListener('click', (ev) => { ev.preventDefault(); location.reload(); }); }
+  }, false);
+  canvas.addEventListener('webglcontextrestored', () => { location.reload(); }, false);
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(isMobile && innerWidth < innerHeight ? 55 : 42, innerWidth / innerHeight, 0.1, 9000);
@@ -80,7 +96,7 @@ async function init() {
   // ── world ──
   const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0 });
   const sun = sky.sun;
-  const S = isMobile ? Math.min(1024, Q.shadow) : Q.shadow;
+  const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min(768, Q.shadow) : Q.shadow;
   sun.shadow.mapSize.set(S, S); sun.shadow.radius = Q.tier >= 2 ? 5 : 3; sun.shadow.blurSamples = Q.tier >= 2 ? 16 : 8; sun.castShadow = S0.shadows;
   Object.assign(sun.shadow.camera, { left: -46, right: 46, top: 46, bottom: -46, near: 1, far: 160 });
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.04;
@@ -89,8 +105,8 @@ async function init() {
   scene.fog = new MistFog(0xc6dcec, fogBase);
   const season = seasonOf(new Date(), params.get('season'));
   const snowy = weather.snow || season === 'winter';
-  const land = buildLandscape(scene, { snowy, mobile: isMobile, season });
-  const island = buildIsland(scene, { snowy, mobile: isMobile, state, detail: S0.detail, season });
+  const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite });
+  const island = buildIsland(scene, { snowy, mobile: isMobile, state, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
   const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile });
   const worldState = buildWorldState(scene, state);
   const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
@@ -105,7 +121,7 @@ async function init() {
   if (params.get('elk') === '1') elk.start(0.35);
 
   // ── post ──
-  const rt = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: isMobile ? 0 : Q.msaa });
+  const rt = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: lite ? THREE.UnsignedByteType : THREE.HalfFloatType, samples: lite ? 0 : (isMobile ? 0 : Q.msaa) });
   const composer = new EffectComposer(renderer, rt);
   composer.addPass(new RenderPass(scene, camera));
   let ao = null; if (Q.ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.addPass(ao); }
@@ -209,13 +225,14 @@ async function init() {
   });
   // ── music + settings ──
   const music = createMusic(state, settings);
+  audioCtl.suspend = () => music.suspend(); audioCtl.resume = () => music.resume();
   music.onChange((song) => { ui.setSong(song); island.music.setPlaying(!!song); });
   const setPanel = buildSettingsPanel(document.getElementById('ui'), settings, { music });
   settings.on((st, patch) => {
     if ('quality' in patch && QUALITY[st.quality]?.ao && !ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.insertPass(ao, 1); }
     if ('quality' in patch && ao) ao.enabled = !!QUALITY[st.quality]?.ao;
-    if ('quality' in patch) { const q = QUALITY[st.quality]; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, q.pr)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, q.pr)); composer.setSize(innerWidth, innerHeight);
-      const sz = isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
+    if ('quality' in patch) { const q = QUALITY[st.quality]; const cap = Math.min(q.pr, isMobile ? 1.5 : q.pr); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, cap)); composer.setSize(innerWidth, innerHeight);
+      const sz = (q.tier ?? 2) <= 0 || isMobile ? Math.min(512, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('shadows' in patch) sun.castShadow = st.shadows;
     if ('bloom' in patch) bloom.enabled = st.bloom;
     if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();
@@ -297,12 +314,23 @@ async function init() {
   });
 
   // ── loop ──
-  let lastNow = performance.now(); let t = 0, frames = 0, skyTimer = 0; const head = new THREE.Vector3(); const fogCol = new THREE.Color();
+  let lastNow = performance.now(); let t = 0, frames = 0, skyTimer = 0; let raf = 0;
+  const head = new THREE.Vector3(); const fogCol = new THREE.Color();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      paused = true; try { audioCtl.suspend(); } catch {}
+    } else {
+      paused = false; lastNow = performance.now(); try { audioCtl.resume(); } catch {}
+      if (!raf) raf = requestAnimationFrame(frame);
+    }
+  });
   const debugEl = params.get('debug') === '1' ? Object.assign(document.createElement('div'), { id: 'mochi-debug' }) : null;
   let debugAcc = 0, debugN = 0, debugPeak = 0;
   if (debugEl) { debugEl.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;font:11px/1.35 ui-monospace,Menlo,monospace;background:rgba(0,0,0,.7);color:#9f9;padding:6px 8px;border-radius:6px;pointer-events:none;white-space:pre;max-width:46vw'; document.body.appendChild(debugEl); }
   sky.update(0);
   function frame() {
+    raf = 0;
+    if (paused || document.hidden) { raf = 0; return; }
     const now = performance.now(); const dt = Math.min((now - lastNow) / 1000, 0.05); lastNow = now; t += dt; ENV.uTime.value = t;
     skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; }
     const night = sky.state.night;
@@ -390,10 +418,10 @@ async function init() {
         debugEl.textContent = `fps ${fps.toFixed(0)}  heap ${heap}\ngeo ${mem.geometries}  tex ${mem.textures}\ncalls ${ren.calls}  tris ${ren.triangles}\nscene ${objs} (peak ${debugPeak})  wild ${wild.live.length}\naudioLive ${music.liveNodes}  song ${music.current?.title || '—'}`;
       }
     }
-    requestAnimationFrame(frame);
+    raf = requestAnimationFrame(frame);
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
-  requestAnimationFrame(frame);
+  raf = requestAnimationFrame(frame);
   window.__mochi = { wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
