@@ -131,6 +131,7 @@ export function createMusic(state, settings) {
     if (!ctx) return;
     try { ctx.resume(); } catch {}
     const s = settings.get();
+    // only restart a song if nothing is already playing/scheduling
     if (s.musicOn && started && songs.length && !timer && !audioEl) playSong(cur);
   }
   return {

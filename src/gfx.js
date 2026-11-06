@@ -92,10 +92,26 @@ export function rockBump() {
 }
 
 // ── quality tiers (auto picks one for the device) ──
+/** Read UNMASKED_RENDERER once (ephemeral context). Empty string if blocked. */
+export function gpuRendererString() {
+  try {
+    const c = document.createElement('canvas');
+    const gl = c.getContext('webgl', { powerPreference: 'high-performance' }) || c.getContext('experimental-webgl');
+    if (!gl) return '';
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    const s = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) || '') : String(gl.getParameter(gl.RENDERER) || '');
+    try { gl.getExtension('WEBGL_lose_context')?.loseContext(); } catch {}
+    return s;
+  } catch { return ''; }
+}
+/** Adreno 7xx, Mali-G7xx / Immortalis, Apple GPU → flagship-ish for Auto Medium. */
+export function isFlagshipGpu(renderer = gpuRendererString()) {
+  const g = String(renderer || '').toLowerCase();
+  return /adreno[^0-9]*7\d{2}|adreno \(tm\) 7\d{2}|mali-g7\d|immortalis|apple gpu|apple a1[5-9]|apple a[2-9]\d|apple m[1-9]/.test(g);
+}
 export function autoQuality() {
   const coarse = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
   const cores = navigator.hardwareConcurrency || 4; const small = Math.min(innerWidth, innerHeight) < 700;
-  // Phones / tablets: always Low. Even "flagship" mobile GPUs choke on our tree/geo budget.
-  if (coarse || small) return 'low';
+  if (coarse || small) return isFlagshipGpu() ? 'medium' : 'low';
   return cores <= 4 ? 'medium' : 'high';
 }

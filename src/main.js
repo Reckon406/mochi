@@ -66,7 +66,7 @@ async function init() {
   const settings = createSettings(); const S0 = settings.get();
   const qName = params.get('quality') || S0.quality || 'auto';
   const Q = QUALITY[qName] || QUALITY.auto;
-  const lite = isMobile || (Q.tier ?? 2) <= 0; // Low / phone: cut tree & bank geo hard
+  const lite = (Q.tier ?? 2) <= 0; // Low only — flagship phones on Medium keep fuller trees
   const dprCap = Math.min(Q.pr, isMobile ? 1.5 : Q.pr);
 
   // ── renderer ──
@@ -96,7 +96,7 @@ async function init() {
   // ── world ──
   const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0 });
   const sun = sky.sun;
-  const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min(768, Q.shadow) : Q.shadow;
+  const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min(1024, Q.shadow) : Q.shadow;
   sun.shadow.mapSize.set(S, S); sun.shadow.radius = Q.tier >= 2 ? 5 : 3; sun.shadow.blurSamples = Q.tier >= 2 ? 16 : 8; sun.castShadow = S0.shadows;
   Object.assign(sun.shadow.camera, { left: -46, right: 46, top: 46, bottom: -46, near: 1, far: 160 });
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.04;
@@ -232,7 +232,7 @@ async function init() {
     if ('quality' in patch && QUALITY[st.quality]?.ao && !ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.insertPass(ao, 1); }
     if ('quality' in patch && ao) ao.enabled = !!QUALITY[st.quality]?.ao;
     if ('quality' in patch) { const q = QUALITY[st.quality]; const cap = Math.min(q.pr, isMobile ? 1.5 : q.pr); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, cap)); composer.setSize(innerWidth, innerHeight);
-      const sz = (q.tier ?? 2) <= 0 || isMobile ? Math.min(512, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
+      const sz = (q.tier ?? 2) <= 0 ? Math.min(512, q.shadow) : isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('shadows' in patch) sun.castShadow = st.shadows;
     if ('bloom' in patch) bloom.enabled = st.bloom;
     if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();
@@ -308,18 +308,30 @@ async function init() {
     camera.position.copy(controls.target).addScaledVector(f, 4.4).add(new THREE.Vector3(-f.z * 1.9, 1.2, f.x * 1.9));
   }
 
-  window.addEventListener('resize', () => {
-    camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); bloom.resolution.set(innerWidth / 2, innerHeight / 2);
-  });
+  // Android Chrome fires resize often when the URL bar shows/hides — only reallocate when size actually changes, debounced.
+  let rzW = innerWidth, rzH = innerHeight, rzT = 0;
+  function applySize() {
+    const w = Math.max(1, innerWidth | 0), h = Math.max(1, innerHeight | 0);
+    if (w === rzW && h === rzH) return;
+    rzW = w; rzH = h;
+    camera.aspect = w / h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+    composer.setSize(w, h);
+    bloom.resolution.set(w / 2, h / 2);
+  }
+  const onRz = () => { clearTimeout(rzT); rzT = setTimeout(applySize, 180); };
+  window.addEventListener('resize', onRz);
+  try { visualViewport?.addEventListener('resize', onRz); visualViewport?.addEventListener('scroll', onRz); } catch {}
 
   // ── loop ──
   let lastNow = performance.now(); let t = 0, frames = 0, skyTimer = 0; let raf = 0;
   const head = new THREE.Vector3(); const fogCol = new THREE.Color();
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
-      paused = true; try { audioCtl.suspend(); } catch {}
-    } else {
+      paused = true;
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
+      try { audioCtl.suspend(); } catch {}
+    } else if (paused) {
       paused = false; lastNow = performance.now(); try { audioCtl.resume(); } catch {}
       if (!raf) raf = requestAnimationFrame(frame);
     }

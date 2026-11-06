@@ -47,7 +47,7 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
 }
 
 export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall', lite = false } = {}) {
-  const treeLite = lite || mobile;
+  const treeLite = !!lite; // Medium phones keep fuller trees; Low still lite
   const world = new THREE.Group(); scene.add(world);
   const anim = []; // per-frame updaters (t, dt)
   const sways = []; // tree canopy wind
