@@ -50,18 +50,19 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 2.4, start() { const p = plots.find((q) => q.crop && q.stage >= 4); this.p = p; if (p) posTarget = new THREE.Vector3(p.x, 0, p.z + 0.9); pose.peck = 1; },
       end() { pose.peck = 0; const p = this.p; if (!p) return; const c = p.crop; const n = c === 'huckleberry' ? 6 : c === 'pumpkin' ? 1 : 3; inv.crops[c] = (inv.crops[c] || 0) + n; inv.seeds[c] = (inv.seeds[c] || 0) + 1;
         if (c === 'huckleberry') p.stage = 3; else { p.stage = 0; p.crop = c; } features.drawPlot(p); say(`harvested ${n} ${c}${n > 1 ? 's' : ''} ${CROPS[c].emoji}  montana grown baby`, 3); fx.spark(p.x, topH(p.x, p.z) + 0.4, p.z); changed(); } } ] };
+  const fz = {}; // shared across fishing steps (each step has its own `this`)
   A.fish = { zone: 'dock', label: '🎣 fishing', steps: [
     { d: 1.2, start() { posTarget = new THREE.Vector3(DOCK.x1 - DOCK.dx * 0.7, 0, DOCK.z1 - DOCK.dz * 0.7); face = Math.atan2(DOCK.dx, DOCK.dz); hold(P.rod, [-0.9, 0, 0]); mochi.flap(0.6);
-        if (inv.worms > 0) { inv.worms--; this.bait = true; say('worm on. casting. respectfully', 1.6); } else { this.bait = false; say('no worms. fishing with pure vibes', 1.6); } changed();
-        const d = 3 + Math.random() * 1.5; this.bob = new THREE.Vector3(DOCK.x1 + DOCK.dx * d, WATER_Y + 0.02, DOCK.z1 + DOCK.dz * d + (Math.random() - 0.5)); P.bobber.visible = true; P.line.visible = true; } },
-    { d: 4 + Math.random() * 4, tick(u, dt, t) { P.bobber.position.copy(this.bob).setY(WATER_Y + 0.03 + Math.sin(t * 2.2) * 0.015); pose.sway = 0.3; } },
-    { d: 0.9, start() { this.catch = this.bait || Math.random() < 0.35 ? rollFish() : null; }, tick(u, dt, t) { P.bobber.position.y = WATER_Y - (this.catch ? 0.08 * Math.abs(Math.sin(t * 16)) : 0); if (this.catch && Math.random() < 0.2) fx.rings(this.bob.x, this.bob.z); } },
-    { d: 1.1, start() { pose.sway = 0; P.bobber.visible = false; if (!this.catch) { say('nothing. the fish are in a meeting', 2); return; } const f = this.catch; this.mesh = fishMesh(f.species); this.mesh.scale.setScalar(0.25 + f.inches * 0.022); features.group.add(this.mesh); mochi.flap(1); },
-      tick(u) { if (!this.mesh) return; const a = this.bob, b = M(); this.mesh.position.set(a.x + (b.x - a.x) * u, WATER_Y + Math.sin(u * Math.PI) * 1.6 + u * 0.9, a.z + (b.z - a.z) * u); this.mesh.rotation.set(Math.sin(u * 20) * 0.6, u * 6, 0); } },
-    { d: 2.6, start() { P.line.visible = false; if (!this.mesh) { drop(); return; } features.group.remove(this.mesh); const f = this.catch, F = FISH[f.species]; hold(this.mesh, [0, Math.PI / 2, 0.2], 0.2 + f.inches * 0.016);
+        if (inv.worms > 0) { inv.worms--; fz.bait = true; say('worm on. casting. respectfully', 1.6); } else { fz.bait = false; say('no worms. fishing with pure vibes', 1.6); } changed();
+        const d = 3 + Math.random() * 1.5; fz.bob = new THREE.Vector3(DOCK.x1 + DOCK.dx * d, WATER_Y + 0.02, DOCK.z1 + DOCK.dz * d + (Math.random() - 0.5)); P.bobber.position.copy(fz.bob); P.bobber.visible = true; P.line.visible = true; } },
+    { d: 4 + Math.random() * 4, tick(u, dt, t) { P.bobber.position.copy(fz.bob).setY(WATER_Y + 0.03 + Math.sin(t * 2.2) * 0.015); pose.sway = 0.3; } },
+    { d: 0.9, start() { fz.catch = fz.bait || Math.random() < 0.35 ? rollFish() : null; }, tick(u, dt, t) { P.bobber.position.y = WATER_Y - (fz.catch ? 0.08 * Math.abs(Math.sin(t * 16)) : 0); if (fz.catch && Math.random() < 0.2) fx.rings(fz.bob.x, fz.bob.z); } },
+    { d: 1.1, start() { pose.sway = 0; P.bobber.visible = false; if (!fz.catch) { say('nothing. the fish are in a meeting', 2); return; } const f = fz.catch; fz.mesh = fishMesh(f.species); fz.mesh.scale.setScalar(0.25 + f.inches * 0.022); features.group.add(fz.mesh); mochi.flap(1); },
+      tick(u) { if (!fz.mesh) return; const a = fz.bob, b = M(); fz.mesh.position.set(a.x + (b.x - a.x) * u, WATER_Y + Math.sin(u * Math.PI) * 1.6 + u * 0.9, a.z + (b.z - a.z) * u); fz.mesh.rotation.set(Math.sin(u * 20) * 0.6, u * 6, 0); } },
+    { d: 2.6, start() { P.line.visible = false; if (!fz.mesh) { drop(); return; } features.group.remove(fz.mesh); const f = fz.catch, F = FISH[f.species]; hold(fz.mesh, [0, Math.PI / 2, 0.2], 0.2 + f.inches * 0.016);
         fishLog.push({ species: F.name, inches: f.inches, kept: F.keep, at: 'dock', date: new Date().toLocaleDateString('en-CA') });
         say(`${F.name}! ${f.inches} in. ${F.keep ? 'into the bucket 🪣' : F.why}`, 3.2); changed(); } },
-    { d: 1.2, start() { if (!this.catch) return; const F = FISH[this.catch.species]; if (F.keep) { inv.fish[this.catch.species] = (inv.fish[this.catch.species] || 0) + 1; } else { mochi.flap(0.8); fx.rings(this.bob.x, this.bob.z); } drop(); changed(); },
+    { d: 1.2, start() { if (!fz.catch) return; const F = FISH[fz.catch.species]; if (F.keep) { inv.fish[fz.catch.species] = (inv.fish[fz.catch.species] || 0) + 1; } else { mochi.flap(0.8); fx.rings(fz.bob.x, fz.bob.z); } drop(); changed(); },
       end() { drop(); face = null; } } ] };
   A.cook = { zone: 'campfire', label: '🔥 cooking', steps: [
     { d: 1.2, start() { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); const crop = !k && Object.keys(inv.crops).find((c) => ['potato', 'carrot', 'kale', 'garlic', 'pumpkin'].includes(c) && inv.crops[c] > 0);
@@ -148,9 +149,9 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   let queued = initial;
   function begin(zid) {
     const id = choose(zid, queued); if (id === queued) queued = null; if (!id) return false; const def = A[id];
-    cur = { id, def, k: -1, el: 0, steps: def.steps.map((s) => ({ ...s })) }; face = null; posTarget = null; last = def.label; next(); onChange(inv, fishLog, def.label); return true;
+    cur = { id, def, k: -1, el: 0, steps: def.steps.map((s) => ({ ...s })), bag: {} }; face = null; posTarget = null; last = def.label; next(); onChange(inv, fishLog, def.label); return true;
   }
-  function next() { const c = cur; if (c.k >= 0) c.steps[c.k].end?.call(c.steps[c.k]); c.k++; c.el = 0; if (c.k >= c.steps.length) { c.def.end?.(); drop(); pose.peck = pose.sway = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); return; } c.steps[c.k].start?.call(c.steps[c.k]); }
+  function next() { const c = cur; if (c.k >= 0) c.steps[c.k].end?.call(c.bag); c.k++; c.el = 0; if (c.k >= c.steps.length) { c.def.end?.(); drop(); pose.peck = pose.sway = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); return; } c.steps[c.k].start?.call(c.bag); }
   function update(dt, t) {
     ctx.t = t;
     // garden grows while you watch (slower in the cold)
@@ -163,9 +164,9 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     if (P.line.visible) { const tip = new THREE.Vector3(0, 1.55, 0); P.rod.localToWorld(tip); const pa = P.lineGeo.attributes.position; pa.setXYZ(0, tip.x, tip.y, tip.z); pa.setXYZ(1, P.bobber.position.x, P.bobber.position.y + 0.05, P.bobber.position.z); pa.needsUpdate = true; }
     lift += (liftTarget - lift) * Math.min(1, dt * 4);
     if (posTarget) { const p = M(); const dx = posTarget.x - p.x, dz = posTarget.z - p.z; const d = Math.hypot(dx, dz); if (d > 0.05) { const st = Math.min(d, dt * 1.8); p.x += (dx / d) * st; p.z += (dz / d) * st; if (face == null) mochi.root.userData.faceTo = Math.atan2(dx, dz); } }
-    if (!cur) return; cur.el += dt; const s = cur.steps[cur.k]; s.tick?.call(s, Math.min(1, cur.el / s.d), dt, t); if (cur.el >= s.d) next();
+    if (!cur) return; try { cur.el += dt; const s = cur.steps[cur.k]; s.tick?.call(cur.bag, Math.min(1, cur.el / s.d), dt, t); if (cur.el >= s.d) next(); } catch (e) { console.warn('activity crashed, cancelling', e); cancel(); } // one broken activity must never stop the render loop
   }
-  function cancel() { if (!cur) return; const s = cur.steps[cur.k]; try { s?.end?.call(s); } catch (e) { /* ignore */ } drop(); P.line.visible = false; P.bobber.visible = false; mochi.root.remove(P.board);
+  function cancel() { if (!cur) return; const s = cur.steps[cur.k]; try { s?.end?.call(cur.bag); } catch (e) { /* ignore */ } drop(); P.line.visible = false; P.bobber.visible = false; mochi.root.remove(P.board);
     for (const c of [...P.skewer.children]) if (c.userData.food) P.skewer.remove(c); P.skewer.visible = false; liftTarget = 0; face = null; pose.peck = pose.sway = pose.sleep = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); }
   function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); return true; }
   function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toLocaleDateString('en-CA') }); return FISH[k].name; }

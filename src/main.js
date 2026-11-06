@@ -343,6 +343,10 @@ async function init() {
   function frame() {
     raf = 0;
     if (paused || document.hidden) { raf = 0; return; }
+    try { frameBody(); } catch (e) { console.warn('frame error (skipped)', e); }
+    if (!raf && !paused && !document.hidden) raf = requestAnimationFrame(frame);
+  }
+  function frameBody() {
     const now = performance.now(); const dt = Math.min((now - lastNow) / 1000, 0.05); lastNow = now; t += dt; ENV.uTime.value = t;
     skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; }
     const night = sky.state.night;
