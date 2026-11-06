@@ -14,6 +14,7 @@ import { createSquirrel, createElk } from './creatures.js';
 import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF } from './layout.js';
 import { buildUI } from './ui.js';
+import { createWalk } from './controls.js';
 
 const params = new URLSearchParams(location.search);
 const FALLBACK = {
@@ -156,9 +157,18 @@ async function init() {
   const ui = buildUI(state, weather, {
     error,
     onZone: (id) => { const z = ZONES.find((q) => q.id === id); if (z) { planTo(z); say(`omw to the ${z.name.toLowerCase()}`, 2.5); } },
-    onFollow: (on) => { follow = on; if (on) controls.autoRotate = false; },
+    onFollow: (on) => { if (on && walk.on) walk.set(false); follow = on; if (on) controls.autoRotate = false; },
+    onWalk: () => walk.toggle(),
+    canWalk: !matchMedia('(pointer: coarse)').matches,
     favoredId: favored.id,
   });
+  // ── walk mode (WASD + mouse look); orbit/follow come back when it's off ──
+  const walk = createWalk({ camera, dom: renderer.domElement, isOpen: () => !document.getElementById('lightbox')?.hidden,
+    onChange: (on) => {
+      ui.setWalk(on); controls.enabled = !on; controls.autoRotate = false; lastInteract = performance.now();
+      if (on) { follow = false; ui.setFollow(false); }
+      else { const d = new THREE.Vector3(); camera.getWorldDirection(d); d.y = Math.max(d.y, -0.35); controls.target.copy(camera.position).addScaledVector(d.normalize(), 7); clampTarget(); camera.up.set(0, 1, 0); controls.update(); }
+    } });
   ui.setActiveZone(favored.id); ui.setFollow(follow);
   if (params.get('ui') === '0') document.getElementById('ui').style.display = 'none';
 
@@ -168,7 +178,7 @@ async function init() {
   renderer.domElement.addEventListener('pointerup', (e) => {
     if (!downAt) return; const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]); const dt = performance.now() - downAt[2]; downAt = null;
     if (moved > 8 || dt > 500) return;
-    ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+    if (document.pointerLockElement === renderer.domElement) ndc.set(0, 0); else ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
     if (ray.intersectObject(mochi.hit, false).length) { mochi.hop(0.85); brain.busy = 0.7; if (Math.random() < 0.8) randomThought(); }
   });
 
@@ -225,16 +235,20 @@ async function init() {
     bubbleEl.style.visibility = behind ? 'hidden' : 'visible';
 
     // camera
-    if (follow) { const p = mochi.root.position; controls.target.lerp(new THREE.Vector3(p.x, p.y + 0.7, p.z), Math.min(1, dt * 3)); }
-    if (!follow && performance.now() - lastInteract > 9000 && params.get('rotate') !== '0') controls.autoRotate = true;
-    clampTarget(); controls.update(dt);
+    if (walk.on) walk.update(dt);
+    else {
+      if (follow) { const p = mochi.root.position; controls.target.lerp(new THREE.Vector3(p.x, p.y + 0.7, p.z), Math.min(1, dt * 3)); }
+      if (!follow && performance.now() - lastInteract > 9000 && params.get('rotate') !== '0') controls.autoRotate = true;
+      clampTarget(); controls.update(dt);
+    }
     composer.render(dt);
     frames++;
     if (frames === 3) { document.getElementById('loading').classList.add('gone'); window.__mochiReady = true; }
     requestAnimationFrame(frame);
   }
+  if (params.get('walk') === '1') walk.set(true);
   requestAnimationFrame(frame);
-  window.__mochi = { brain, mochi, planTo, ZONES, say, controls, camera, sky };
+  window.__mochi = { brain, mochi, planTo, ZONES, say, controls, camera, sky, walk };
 }
 
 init().catch((e) => {

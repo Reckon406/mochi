@@ -110,3 +110,8 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #c6dcec; fon
 .lb-prev, .lb-next { top: 50%; transform: translateY(-50%); font-size: 26px; line-height: 1; }
 .lb-prev { left: -16px; } .lb-next { right: -16px; }
 @media (max-width: 640px) { .lb-prev { left: 4px; } .lb-next { right: 4px; } .lb-close { top: 6px; right: 6px; } }
+
+/* ── walk mode ── */
+.walk-hint { position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 5; pointer-events: none; padding: 7px 14px; border-radius: 99px; background: rgba(40,25,12,.62); color: #fff8ec; font: 700 12.5px var(--font); opacity: 0; transition: opacity .5s; white-space: nowrap; }
+.walk-hint.show { opacity: 1; }
+body.walking #app::after { content: ""; position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: rgba(255,255,255,.75); box-shadow: 0 0 0 1px rgba(0,0,0,.25); pointer-events: none; z-index: 5; }
