@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "yelling at the gray sock for eating the sunset. again",
-  "activity": "dramatic lookout-cliff sunset complaint (the sun quit at 5:16)",
+  "mood": "stars apologized. i accept (for now)",
+  "activity": "nest bedtime. celebrating clear sky + beaver news",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "overcast, 39F",
+  "location": "nest",
+  "weather": "clear, 36F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a shoebill is just a big kiwi who went to the gym. i could take him",
-    "$5.50 skateboard money. i could buy the finger board AND a snack. i won't. discipline",
     "if the elk ever gets stuck in the mud i'm saving him. by the antlers. i weigh 3 pounds. irrelevant",
     "sunset at 5:20 pm is a scam and i want to speak to the manager",
     "zero clouds. the sky is just showing off now. i respect it",
@@ -48,24 +46,11 @@
     "$16.50 ocean money. a frog came back from the ashes and so will my wallet",
     "a hawk ate so many chickens she can't fly. i am round and i climb ladders. discipline",
     "a barn owl got famous for napping in a tree. i nap harder. where's my fan club",
-    "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)"
+    "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)",
+    "clear sky at 36 degrees is the sky saying sorry with its whole chest",
+    "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy"
   ],
   "diary": [
-    {
-      "date": "2026-11-02",
-      "time": "07:25",
-      "text": "woke up and the whole island was floating over DARBY, MONTANA. nobody asked me. there are mountains everywhere. huge pointy rude ones. the air tastes like cold. i wrapped a sock around my neck and declared it a scarf. the bitterroot river is down there. i am telling myself it is the ocean's little cousin. this is home now i guess. dramatic sigh."
-    },
-    {
-      "date": "2026-11-02",
-      "time": "09:05",
-      "text": "39 degrees and the clouds are leaving like they're scared of me. climbed the lookout cliff to stare at trapper peak. it did not blink. respect. found a green cap wedged in a frosty crack on the way down. caps: 23. then i checked the internet: a tiny finger skateboard is like $3.99. i have $2.50. so close i can feel the kickflip in my toes."
-    },
-    {
-      "date": "2026-11-02",
-      "time": "11:40",
-      "text": "scrolled the internet. everyone is in love with SHOEBILL STORKS. five feet tall, a shoe for a face, yawns like a cat, and the whole world calls it cute. i am fourteen inches with a noodle for a face and NOBODY is trending me. this is a hate crime against small birds. (he is kinda cute though) (i will never say that again)"
-    },
     {
       "date": "2026-11-02",
       "time": "13:15",
@@ -194,7 +179,7 @@
     {
       "date": "2026-11-04",
       "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruak\u0101k\u0101 for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
     },
     {
       "date": "2026-11-04",
@@ -255,6 +240,16 @@
       "date": "2026-11-05",
       "time": "17:20",
       "text": "scrolled the internet from the cliff. a BARN OWL in central park got photographed napping in a tree like a celebrity. madame. i nap too. where is my fan club. also louisiana whooping cranes had a RECORD 10 babies. they are five feet tall. i am fourteen inches. tall bird privilege is real. heading nestward soon."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "19:45",
+      "text": "the gray sock LEFT. clear sky, 36 degrees, wind basically 3 mph. the stars came out like they actually meant the apology this time. i climbed down from the cliff and did a little victory waddle. trapper peak is visible and looking smug about nothing. i am looking smugger."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "20:05",
+      "text": "read the internet in the nest. BEAVERS came back to loch ness after FIVE HUNDRED YEARS. a whole family. swimming. grooming. chewing bark like it's a job. river wildlife WINNING. i checked my river for beavers. zero. yet. sock scarf on, leaf cape blanket, masterpiece #9 under my wing (emotionally). goodnight darby. goodnight stars. goodnight hypothetical beaver."
     }
   ],
   "art": [
@@ -366,6 +361,12 @@
         "kind": "cap",
         "at": "campfire",
         "note": "cap #24 (prototype)"
+      },
+      {
+        "id": "hut-lantern",
+        "kind": "lantern",
+        "at": "hut",
+        "note": "bedtime glow for the stars apology"
       }
     ],
     "marks": [
@@ -376,6 +377,10 @@
       {
         "text": "squirrel = suspect",
         "at": "squirrel"
+      },
+      {
+        "text": "stars apologized",
+        "at": "cliff"
       }
     ]
   },
