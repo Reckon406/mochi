@@ -1,13 +1,15 @@
 // ⚙️ settings: graphics, sound, camera. Saved in localStorage ('mochi.settings.v1').
+import { autoQuality } from './gfx.js';
 const KEY = 'mochi.settings.v1';
 const isCoarse = matchMedia('(pointer: coarse)').matches;
 export const DEFAULTS = {
-  quality: isCoarse ? 'low' : 'high', // low | medium | high : pixel ratio, MSAA, shadow map size
+  quality: 'auto', // auto | low | medium | high | ultra : pixel ratio, MSAA, shadow map size, AO
   shadows: true, bloom: true, particles: 1, detail: isCoarse ? 0.6 : 1, // particles/detail apply on reload
   master: 0.7, music: 0.6, sfx: 0.7, river: 0.3, mute: false, musicOn: true,
   autoRotate: true, walkHint: true, startCam: 'orbit', lookSens: 1, wildlife: 'normal',
 };
-export const QUALITY = { low: { pr: 1, msaa: 0, shadow: 1024 }, medium: { pr: 1.5, msaa: 2, shadow: 2048 }, high: { pr: 2, msaa: 4, shadow: 3072 } };
+export const QUALITY = { low: { pr: 1, msaa: 0, shadow: 1024, tier: 0 }, medium: { pr: 1.5, msaa: 2, shadow: 2048, tier: 1 }, high: { pr: 2, msaa: 4, shadow: 3072, tier: 2 }, ultra: { pr: 2, msaa: 4, shadow: 4096, tier: 3, ao: true } };
+QUALITY.auto = QUALITY[autoQuality()];
 export function createSettings() {
   let s = { ...DEFAULTS };
   try { const raw = JSON.parse(localStorage.getItem(KEY) || '{}'); for (const k in DEFAULTS) if (k in raw && typeof raw[k] === typeof DEFAULTS[k]) s[k] = raw[k]; } catch {}
@@ -29,7 +31,7 @@ export function buildSettingsPanel(root, settings, { music }) {
   const sel = (k, label, opts) => `<label class="srow"><span>${label}</span><select data-k="${k}">${opts.map(([v, t]) => `<option value="${v}" ${s[k] === v ? 'selected' : ''}>${t}</option>`).join('')}</select></label>`;
   const songs = music.songs;
   el.innerHTML = `<header><b>⚙️ Settings</b><button class="sclose" aria-label="close">✕</button></header>
-    <h4>Graphics</h4>${sel('quality', 'Quality', [['low', 'Low (fast)'], ['medium', 'Medium'], ['high', 'High (pretty)']])}${chk('shadows', 'Shadows')}${chk('bloom', 'Glow / bloom')}${sel('wildlife', 'Wildlife', [['off', 'Off'], ['few', 'A few'], ['normal', 'Normal'], ['lots', 'Lots']])}
+    <h4>Graphics</h4>${sel('quality', 'Quality', [['auto', 'Auto (' + autoQuality() + ')'], ['low', 'Low (fast)'], ['medium', 'Medium'], ['high', 'High (pretty)'], ['ultra', 'Ultra (AO, heavy)']])}${chk('shadows', 'Shadows')}${chk('bloom', 'Glow / bloom')}${sel('wildlife', 'Wildlife', [['off', 'Off'], ['few', 'A few'], ['normal', 'Normal'], ['lots', 'Lots']])}
     ${rng('particles', 'Rain / snow amount', 0, 1.5, 0.1)}${rng('detail', 'Grass & flowers', 0.2, 1.5, 0.1)}<p class="snote" data-note hidden>grass + weather amount change after a <a href="#" data-reload>reload</a></p>
     <h4>Sound</h4>${rng('master', 'Master', 0, 1, 0.05)}${rng('music', 'Music', 0, 1, 0.05)}${rng('sfx', 'Effects', 0, 1, 0.05)}${rng('river', 'River', 0, 1, 0.05)}${chk('mute', 'Mute everything')}${chk('musicOn', "Play Mochi's songs")}
     <div class="songs">${songs.length ? songs.map((x, i) => `<button data-song="${i}">🎵 ${x.title.replace(/[<>&]/g, '')}<em>${String(x.mood || '').replace(/[<>&]/g, '')}</em></button>`).join('') : '<p class="muted">no songs yet. he is warming up his beak.</p>'}</div>

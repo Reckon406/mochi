@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { ZONES, groundY, ISLAND_R, islandRadius } from './layout.js';
 import { signTex, stripes } from './textures.js';
+import { plank } from './signs.js';
 
 const M = {}; const mat = (c, o = {}) => M[c + JSON.stringify(o)] ||= new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...o });
 function add(p, g, m, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, m); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; x.receiveShadow = true; p.add(x); return x; }
@@ -21,8 +22,7 @@ export function resolveSpot(o, i = 0) {
 const BUILD = {
   lantern(g, o, ctx) { add(g, new THREE.CylinderGeometry(0.03, 0.04, 1.1, 6), mat(0x3a2a1a), [0, 0.55, 0]); add(g, new THREE.BoxGeometry(0.4, 0.04, 0.04), mat(0x3a2a1a), [0.15, 1.08, 0]);
     const m = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: new THREE.Color(o.color || 0xffb04a), emissiveIntensity: 0.4 }); ctx.glow.push(m); add(g, new THREE.BoxGeometry(0.16, 0.22, 0.16), m, [0.3, 0.92, 0]); },
-  sign(g, o) { add(g, new THREE.CylinderGeometry(0.035, 0.04, 0.9, 6), mat(0x7a5232), [0, 0.45, 0]); const t = signTex(wrap(o.note || o.text || 'hi'), { w: 384, h: 192, sizes: [44, 40, 36] });
-    add(g, new THREE.BoxGeometry(0.8, 0.42, 0.04), mat(0x8a5a32), [0, 0.9, 0]); add(g, new THREE.PlaneGeometry(0.74, 0.37), new THREE.MeshStandardMaterial({ map: t }), [0, 0.9, 0.025]); },
+  sign(g, o) { add(g, new THREE.BoxGeometry(0.07, 0.95, 0.07), mat(0x6b4a33), [0, 0.47, -0.04]); const pk = plank(wrap(o.note || o.text || 'hi'), { width: 0.8, hand: true, twoSided: true, tone: 'pine', seed: String(o.note || '').length + 3 }); pk.position.set(0, 0.9, 0); pk.rotation.z = 0.03; g.add(pk); },
   flowers(g, o) { const cols = [0xff9aa2, 0xfff07a, 0xc9b6ff, 0xffffff, 0xffb347]; for (let i = 0; i < 9; i++) { const a = i * 2.4, r = 0.12 + (i % 3) * 0.12; add(g, new THREE.CylinderGeometry(0.01, 0.01, 0.3, 3), mat(0x5a8a2a), [Math.cos(a) * r, 0.15, Math.sin(a) * r]); add(g, new THREE.SphereGeometry(0.06, 8, 6), mat(o.color ? new THREE.Color(o.color).getHex() : cols[i % 5]), [Math.cos(a) * r, 0.31, Math.sin(a) * r]); } },
   cairn(g) { [0.26, 0.21, 0.17, 0.13, 0.09].reduce((y, r, i) => { add(g, new THREE.DodecahedronGeometry(r, 1), mat([0x9a948e, 0x8a8580, 0xb0a89e][i % 3]), [Math.sin(i) * 0.03, y + r * 0.6, 0], [i, i * 2, 0], [1, 0.62, 1]); return y + r * 1.2; }, 0); },
   sockflag(g) { add(g, new THREE.CylinderGeometry(0.02, 0.02, 1.6, 5), mat(0xdddddd), [0, 0.8, 0]); const t = stripes(['#e8463c', '#fff4e0'], 6, false, 32, 128);
@@ -52,9 +52,8 @@ export function buildWorldState(scene, state) {
   (Array.isArray(world.marks) ? world.marks : []).slice(0, 16).forEach((m, i) => {
     if (!m || !m.text) return; const p = resolveSpot(m, i + 7); if (!p) return;
     const g = new THREE.Group(); g.position.set(p[0], groundY(p[0], p[1]) - 0.02, p[1]); g.rotation.y = Math.atan2(-p[0], -p[1]) + Math.sin(i) * 0.4; group.add(g);
-    const t = signTex(wrap(m.text), { w: 384, h: 192, sizes: [42, 38, 34], bg: '#fff3c9' });
-    add(g, new THREE.BoxGeometry(0.06, 0.8, 0.06), mat(0x7a5232), [0, 0.4, -0.02], [0.15, 0, 0]); add(g, new THREE.BoxGeometry(0.7, 0.38, 0.03), mat(0xb98a5a), [0, 0.72, 0.03], [-0.15, 0, 0.04]);
-    add(g, new THREE.PlaneGeometry(0.66, 0.34), new THREE.MeshStandardMaterial({ map: t }), [0, 0.72, 0.05], [-0.15, 0, 0.04]);
+    add(g, new THREE.BoxGeometry(0.07, 0.8, 0.07), mat(0x6b4a33), [0, 0.4, -0.03], [0.15, 0, 0]);
+    { const pk = plank(wrap(m.text), { width: 0.75, hand: true, twoSided: true, tone: i % 2 ? 'cream' : 'pine', seed: i + 21 }); pk.position.set(0, 0.74, 0.03); pk.rotation.set(-0.15, 0, Math.sin(i * 1.7) * 0.06); g.add(pk); }
     placed.push({ id: `mark-${i}`, kind: 'mark', x: p[0], z: p[1], note: m.text });
   });
   return { group, placed, update(night) { for (const m of ctx.glow) m.emissiveIntensity = 0.4 + night * 4.5; } };

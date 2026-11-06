@@ -17,6 +17,7 @@ To keep the site in sync, write the same STATE object as JSON to `state.json` ne
 ## URL params (handy for previews)
 `?weather=heavy snow` · `?hour=17.5` (local hour) · `?location=pond` · `?outfit=witch hat` · `?elk=1` · `?cam=mochi` (follow cam) · `?walk=1` (walk mode)
 · `&camyaw=2.4` · `?az=72&el=10&dist=46` (wide camera) · `?rotate=0` · `?stay=1` · `?say=<thought index>` · `?ui=0` · `?state=./other.json` · `?season=winter|spring|summer|fall` · `?act=0` (no activities) · `?event=bear|grizzly|lion|wolf|coyote|fox&at=bank|island|dock` (force a wildlife event)
+· `?quality=low|medium|high|ultra` (override the quality tier) · `?tm=agx|aces|neutral` (tone mapping; AgX is the default) · `?treehouse=0-6&thparts=telescope,hammock` (preview a treehouse stage; never saved)
 
 ## Controls
 - **Orbit** (default): drag to look around, scroll to zoom, tap Mochi to make him hop, tap a zone to send him there. `🎥 follow` keeps the camera on him.
@@ -73,6 +74,7 @@ Weather and mood nudge Mochi:
 
 ## ⚙️ Settings
 The ⚙️ button (top right) holds settings that are saved in `localStorage` (`mochi.settings.v1`):
+- **Quality:** Auto (the default: low on phones and small screens, medium on 4-core-or-less desktops, high otherwise), Low, Medium, High and Ultra. Ultra adds 4096 shadows and ambient occlusion (GTAO, desktop only). Ground detail (pebbles, ferns, reeds, flowers, paths, pollen) scales with the tier and the grass & flowers slider.
 - **Live:** quality (pixel ratio and shadow-map size), shadows on/off, bloom on/off, and wildlife density (off / a few / normal / lots).
 - **On reload:** quality's anti-aliasing (MSAA) level, rain/snow amount, and grass & flower density.
 - **Sound:** master, music, effects and river volume, mute, play songs, and pick a song. The river starts low (30% of the old level) and fades in over about 2.5 s when audio first starts. Saved sliders are kept.
@@ -164,3 +166,19 @@ Bird and mammal list, and the sources it was checked against:
   - FWP wolves: https://fwp.mt.gov/conservation/wildlife-management/wolf
   - Lee Metcalf NWR (Ravalli County: osprey, bald eagle, heron rookery, beaver, otter, porcupine, coyote, raccoon, white-tailed deer, moose, black bear): https://www.fws.gov/refuge/lee-metcalf/about-us and https://visitmt.com/listing/lee-metcalf-national-wildlife-refuge-723
   - Montana Field Guide (raccoon, fox, skunk, porcupine, hare): https://fieldguide.mt.gov/speciesDetail.aspx?elcode=+AMAJE02010
+
+## Treehouse (STATE.treehouse)
+The big cottonwood has a treehouse that Mochi builds up over time. The page draws whatever stage STATE says. It never advances the stage itself; the bot does that in `state.json`.
+
+| field | shape | what it does |
+|---|---|---|
+| `treehouse.stage` | number 0–6 (default **2** if the field is missing) | 0 nothing · 1 rope ladder + a few planks · 2 full platform · 3 railings · 4 cabin walls · 5 roof, door and window · 6 decorations (lantern, sock banner, pulley bucket, roof flag) |
+| `treehouse.parts` | optional `["telescope", "hammock", "zipline", "bird feeder"]` | extras added on top of the stage (the telescope and zipline need stage 2 or more) |
+
+When Mochi visits the Big Tree he climbs the ladder and stands on the platform. Below stage 6 he hammers a plank there, with sawdust puffs and thunks. At stage 6 he just hangs out.
+
+## Graphics notes
+- Tone mapping is AgX with height fog, plus valley mist at dawn and dusk. The sun's shadow box follows the camera or Mochi.
+- The sky has a gradient, sunset colours, clouds and twinkling stars. Water has soft reflections, shoreline foam and capped glints.
+- Animals get a soft rim light at night, and their eyes shine when they're far away.
+- Signs are carved wooden planks drawn on a canvas. They use **Fredoka** and **Gochi Hand** (both SIL Open Font License; see `public/fonts/OFL-NOTE.txt`). Mochi's `world.marks` and built signs use the hand-lettered style.

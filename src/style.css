@@ -153,3 +153,4 @@ body.walking #app::after { content: ""; position: fixed; left: 50%; top: 50%; wi
 .life .st { font-size: 10.5px; font-weight: 800; padding: 1px 7px; border-radius: 99px; background: #ffe9b8; }
 .life .st.built { background: #c9efc0; } .life .st.building { background: #ffd8a8; }
 @media (max-width: 640px) { .doing { top: auto; bottom: calc(max(8px, env(safe-area-inset-bottom)) + 104px); font-size: 11px; } .eprompt { display: none; } }
+

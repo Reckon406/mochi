@@ -1,16 +1,19 @@
 // The river island: ground, gravel skirt, islet, bridge, grass + every zone's props
 import * as THREE from 'three';
 import { noise, fbm, smoothstep, rng, clamp } from './noise.js';
-import { ISLAND_R, islandRadius, topH, isletH, CLIFF, POND, POND_Y, ISLET, LAGOON_Y, WATER_Y, ISLET_D, skirtD as islandSkirtD, skirtY as islandSkirtY, RIVER_ROCKS, BRIDGE, bridgeYt, bridgePoint, ZONES, groundY, K, mv, SHOP, MUSIC, DOCK, OBSTACLES } from './layout.js';
+import { ISLAND_R, islandRadius, topH, isletH, CLIFF, POND, POND_Y, ISLET, LAGOON_Y, WATER_Y, ISLET_D, skirtD as islandSkirtD, skirtY as islandSkirtY, RIVER_ROCKS, BRIDGE, bridgeYt, bridgePoint, ZONES, BIGTREE, groundY, K, mv, SHOP, MUSIC, DOCK, OBSTACLES } from './layout.js';
 import { planHangs, framed } from './hang.js';
 import { canopy as seasonCanopy } from './season.js';
+import { barkBump, rockBump } from './gfx.js';
+import { plank, signpost } from './signs.js';
+const BARK = new Set([0x6b4a33, 0x5a3a24, 0x6a4a30]); const ROCK = new Set([0x9a948e, 0x8f8a84, 0x8a8580, 0x8a8490, 0x7a7670]);
 import { makeWaterMaterial, ENV } from './water.js';
-import { woodTex, thatchTex, signTex, artTex, stripes, canvasTex } from './textures.js';
+import { woodTex, thatchTex, signTex, artTex, stripes, canvasTex, shingleTex } from './textures.js';
 import { TRAPPER_DIR } from './landscape.js';
 import { applyArtFile } from './artfiles.js';
 
 const MAT = {};
-function mat(color, o = {}) { const k = color + JSON.stringify(o); return MAT[k] || (MAT[k] = new THREE.MeshStandardMaterial({ color, roughness: 0.85, ...o })); }
+function mat(color, o = {}) { const k = color + JSON.stringify(o); if (MAT[k]) return MAT[k]; const extra = BARK.has(color) ? { bumpMap: barkBump(), bumpScale: 2.5 } : ROCK.has(color) ? { bumpMap: rockBump(), bumpScale: 3, roughness: 0.95 } : {}; return (MAT[k] = new THREE.MeshStandardMaterial({ color, roughness: 0.85, ...extra, ...o })); }
 function add(parent, geo, material, p = [0, 0, 0], r = [0, 0, 0], s = null, shadow = true) {
   const m = new THREE.Mesh(geo, material); m.position.set(...p); m.rotation.set(...r); if (s) (typeof s === 'number' ? m.scale.setScalar(s) : m.scale.set(...s));
   m.castShadow = shadow; m.receiveShadow = true; parent.add(m); return m;
@@ -177,31 +180,47 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── big autumn tree ──
   const sways = [];
-  function tree(x, z, { h = 2.6, r = 1.8, colors = [0xe58a2f, 0xf0b53a, 0xd4652c, 0xc7a03a], seed = 1 } = {}) {
+  // big old cottonwood: flared, lumpy trunk, buttress roots, thick limbs (low-poly, bark bump via mat())
+  function bigTrunk(g, T, h, seed) {
+    const tg = new THREE.CylinderGeometry(T.topR, T.trunkR, h, 16, 14); const p = tg.attributes.position; const v = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i); const yy = v.y + h / 2; const a = Math.atan2(v.z, v.x); const rad = Math.hypot(v.x, v.z);
+      const k = (T.radiusAt(yy) + noise(a * 1.6 + seed, yy * 0.7) * 0.12 + Math.sin(a * 5 + yy * 0.6) * 0.05) / Math.max(1e-3, rad ? rad : 1);
+      if (rad > 1e-3) { v.x *= k; v.z *= k; } v.x += Math.sin(yy * 0.55) * 0.18; p.setXYZ(i, v.x, v.y, v.z); }
+    tg.computeVertexNormals(); add(g, tg, mat(0x5e412c), [0, h / 2, 0]);
+    for (let i = 0; i < 7; i++) { const a = i / 7 * 6.283 + 0.4; const rg = new THREE.CylinderGeometry(0.1, 0.42, 1.5, 7); rg.translate(0, 0.75, 0);
+      add(g, rg, mat(0x5e412c), [Math.cos(a) * T.trunkR * 0.7, 0.35, Math.sin(a) * T.trunkR * 0.7]).quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(Math.cos(a), -0.32, Math.sin(a)).normalize()); }
+    T.limbs.forEach((a, i) => { const st = T.limbStart(a, i).sub(new THREE.Vector3(T.x, T.y - 0.05, T.z)); const len = 3.0 + (i % 2) * 0.5; const lg = new THREE.CylinderGeometry(0.1, 0.24, len, 8); lg.translate(0, len / 2, 0);
+      const m = add(g, lg, mat(0x5e412c), st.toArray()); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), T.limbDir(a));
+      const tw = new THREE.CylinderGeometry(0.04, 0.09, 1.1, 6); tw.translate(0, 0.55, 0); const tm = add(g, tw, mat(0x5e412c), st.clone().addScaledVector(T.limbDir(a), len * 0.7).toArray()); tm.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(Math.cos(a + 0.8), 0.9, Math.sin(a + 0.8)).normalize()); });
+  }
+  function tree(x, z, { h = 2.6, r = 1.8, colors = [0xe58a2f, 0xf0b53a, 0xd4652c, 0xc7a03a], seed = 1, big = null } = {}) {
     colors = seasonCanopy(season, colors);
     const rr = rng(seed); const y = topH(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); world.add(g);
+    if (big) bigTrunk(g, big, h, seed); else {
     const trunkG = new THREE.CylinderGeometry(0.22, 0.42, h, 10, 4); { const p = trunkG.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i); p.setX(i, p.getX(i) + Math.sin(yy * 1.5) * 0.08); } trunkG.computeVertexNormals(); }
     add(g, trunkG, mat(0x6b4a33), [0, h / 2, 0]);
-    for (const a of [0.6, 2.6, 4.4]) add(g, new THREE.CylinderGeometry(0.06, 0.12, 1.1, 6), mat(0x6b4a33), [Math.cos(a) * 0.35, h * 0.75, Math.sin(a) * 0.35], [Math.sin(a) * 0.8, 0, -Math.cos(a) * 0.8]);
+    for (const a of [0.6, 2.6, 4.4]) add(g, new THREE.CylinderGeometry(0.06, 0.12, 1.1, 6), mat(0x6b4a33), [Math.cos(a) * 0.35, h * 0.75, Math.sin(a) * 0.35], [Math.sin(a) * 0.8, 0, -Math.cos(a) * 0.8]); }
     const canopy = new THREE.Group(); canopy.position.y = h; g.add(canopy);
     const blobs = [[0, 0.6, 0, 1.1], [0.8, 0.3, 0.2, 0.85], [-0.75, 0.35, -0.1, 0.9], [0.1, 0.35, 0.8, 0.8], [-0.1, 0.4, -0.8, 0.85], [0.2, 1.25, 0.1, 0.8], [0.6, 0.9, -0.5, 0.65], [-0.6, 1.0, 0.45, 0.65]];
+    if (big) for (let i = 0; i < 9; i++) { const a = i / 9 * 6.283 + 0.3; blobs.push([Math.cos(a) * 1.45, 0.05 + (i % 3) * 0.18, Math.sin(a) * 1.45, 0.62 + (i % 2) * 0.12]); }
     blobs.forEach(([bx, by, bz, br], i) => {
       const geo = new THREE.IcosahedronGeometry(br * r * 0.62, 3); const p = geo.attributes.position; const v = new THREE.Vector3();
       for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k); const n = noise(v.x * 2 + seed, v.y * 2 + v.z * 2) * 0.08 * r; v.multiplyScalar(1 + n); p.setXYZ(k, v.x, v.y, v.z); } geo.computeVertexNormals();
       const c = new THREE.Color(colors[i % colors.length]); if (snowy) c.lerp(snowC, 0.25);
-      add(canopy, geo, new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }), [bx * r * 0.62, by * r * 0.62, bz * r * 0.62]);
+      { const vc = new Float32Array(p.count * 3); for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k); const l = 0.78 + 0.3 * THREE.MathUtils.clamp(v.y / (br * r * 0.62) * 0.5 + 0.5, 0, 1) + noise(v.x * 3 + 7, v.z * 3) * 0.12; vc[k * 3] = l * 1.02; vc[k * 3 + 1] = l; vc[k * 3 + 2] = l * 0.96; } geo.setAttribute('color', new THREE.BufferAttribute(vc, 3)); }
+      add(canopy, geo, new THREE.MeshStandardMaterial({ color: c, roughness: 0.8, vertexColors: true }), [bx * r * 0.62, by * r * 0.62, bz * r * 0.62]);
       if (snowy) add(canopy, new THREE.SphereGeometry(br * r * 0.5, 16, 8, 0, 6.29, 0, 1.0), mat(0xf6f8ff), [bx * r * 0.62, by * r * 0.62 + br * r * 0.2, bz * r * 0.62], [0, 0, 0], null, false);
     });
     const ph = rr() * 6; sways.push((t) => { const w = 0.3 + ENV.uWind.value * 2; canopy.rotation.z = Math.sin(t * 1.1 + ph) * 0.025 * w; canopy.rotation.x = Math.sin(t * 0.8 + ph * 2) * 0.02 * w; });
     return g;
   }
-  const TREE = mv(4.4, -9.0); tree(TREE[0], TREE[1], { h: 2.8, r: 2.1, seed: 3 });
-  // swing on the big tree
-  { const [x, y, z] = at(...TREE); const sw = new THREE.Group(); sw.position.set(x + 1.2, y + 2.8, z + 0.3); world.add(sw);
-    for (const s of [-0.3, 0.3]) add(sw, new THREE.CylinderGeometry(0.012, 0.012, 2.1, 3), mat(0xc9a66b), [s, -1.05, 0], [0, 0, 0], null, false);
-    add(sw, new THREE.BoxGeometry(0.75, 0.06, 0.3), mat(0x8a5a32), [0, -2.1, 0]); anim.push((t) => { sw.rotation.x = Math.sin(t * 1.4) * 0.12 * (0.4 + ENV.uWind.value * 2); }); }
+  tree(BIGTREE.x, BIGTREE.z, { h: BIGTREE.h, r: 3.3, seed: 3, big: BIGTREE });
+  // swing hanging from the big north-west limb
+  { const hk = BIGTREE.limbPoint(BIGTREE.swingA, 2.5); const L = hk.y - 0.1 - groundY(hk.x, hk.z) - 0.55; const sw = new THREE.Group(); sw.position.copy(hk).y -= 0.1; sw.rotation.y = Math.PI / 2 - BIGTREE.swingA; world.add(sw);
+    for (const s of [-0.3, 0.3]) add(sw, new THREE.CylinderGeometry(0.014, 0.014, L, 3), mat(0xc9a66b), [s, -L / 2, 0], [0, 0, 0], null, false);
+    add(sw, new THREE.BoxGeometry(0.75, 0.06, 0.3), mat(0x8a5a32), [0, -L, 0]); anim.push((t) => { sw.rotation.x = Math.sin(t * 1.4) * 0.12 * (0.4 + ENV.uWind.value * 2); }); }
   // falling-leaf pile under it (fall only)
-  if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 0.6 + R0() * 2.2; const x = TREE[0] + Math.cos(a) * rr, z = TREE[1] + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
+  if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 1.7 + R0() * 2.2; const x = BIGTREE.x + Math.cos(a) * rr, z = BIGTREE.z + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
   // ── island pines ──
   function pine(x, z, s = 1) { const y = topH(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); g.scale.setScalar(s); world.add(g);
@@ -257,8 +276,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     add(ramp, eg, new THREE.MeshStandardMaterial({ map: wt, roughness: 0.7, color: snowy ? 0xeef2ff : 0xffffff }));
     for (const sx of [-1, 1]) add(ramp, new THREE.CylinderGeometry(0.06, 0.06, W * 2, 10), mat(0xb8c0c8, { metalness: 0.8, roughness: 0.3 }), [sx * (flatW / 2 + Rr), Rr + 0.1, 0], [Math.PI / 2, 0, 0]);
     // stencilled sign + tiny practice board
-    const st = signTex(['KICKFLIP', 'ARC'], { bg: '#2f9be0', fg: '#ffffff', border: '#1a5f8a', w: 256, h: 128, sizes: [44, 44] });
-    add(ramp, new THREE.PlaneGeometry(1.1, 0.55), new THREE.MeshStandardMaterial({ map: st, roughness: 0.6 }), [0, 0.55, W + 0.005]);
+    { const pk = plank(['KICKFLIP ARC', 'skate at own risk'], { width: 1.15, icon: '🛹', tone: 'blue', seed: 4 }); pk.position.set(0, 0.55, W + 0.03); ramp.add(pk); }
     const board = new THREE.Group(); board.position.set(-0.1, 0.06, 0.4); board.rotation.y = 0.4; ramp.add(board);
     add(board, new THREE.CapsuleGeometry(0.12, 0.45, 4, 10), mat(0xff5a5a), [0, 0.05, 0], [0, 0, Math.PI / 2], [1, 0.18, 1]);
     for (const a of [-0.24, 0.24]) for (const b of [-0.08, 0.08]) add(board, new THREE.CylinderGeometry(0.035, 0.035, 0.03, 10), mat(0xffee88), [a, 0.0, b], [Math.PI / 2, 0, 0]);
@@ -275,7 +293,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     // scalloped awning edge
     for (let i = 0; i < 10; i++) add(st, new THREE.CircleGeometry(0.145, 12, Math.PI, Math.PI), new THREE.MeshStandardMaterial({ color: i % 2 ? 0xfff3e0 : 0xff6f6f, side: THREE.DoubleSide }), [-1.305 + i * 0.29, 2.11, 1.05], [0, 0, 0], null, false);
     // sign
-    add(st, new THREE.PlaneGeometry(1.6, 0.4), new THREE.MeshStandardMaterial({ map: signTex(["MOCHI'S ART", 'original masterpieces'], { w: 512, h: 128, sizes: [56, 30] }) }), [0, 1.95, -0.22]);
+    { const pk = plank(["MOCHI'S ART", 'original masterpieces'], { width: 1.6, icon: '🎨', tone: 'pine', seed: 5 }); pk.position.set(0, 1.95, -0.2); st.add(pk); }
     // prints from STATE.art on a back board + counter
     add(st, new THREE.BoxGeometry(2.5, 0.95, 0.05), mat(0x8a5a32), [0, 1.42, -0.2]);
     const mk = hangs.market.filter(Boolean);
@@ -307,7 +325,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     for (const sx of [-1, 1]) add(mu, new THREE.BoxGeometry(0.08, Hh, D), wm, [sx * W / 2, Hh / 2, 0]);
     for (let r2 = 0; r2 <= rows; r2++) add(mu, new THREE.BoxGeometry(W, 0.06, D), wm, [0, 0.15 + r2 * ((Hh - 0.2) / rows), 0]);
     add(mu, new THREE.BoxGeometry(W + 0.3, 0.12, D + 0.2), mat(0x7a4a2a), [0, Hh + 0.05, 0]);
-    add(mu, new THREE.PlaneGeometry(1.9, 0.5), new THREE.MeshStandardMaterial({ map: signTex(['CAP MUSEUM', `${caps} shiny caps · est. 2026`], { w: 512, h: 136, sizes: [60, 28], bg: '#fff3c9' }) }), [0, Hh + 0.42, 0.02]);
+    { const pk = plank(['CAP MUSEUM', `${caps} shiny caps · est. 2026`], { width: 1.9, icon: '🧢', tone: 'cream', seed: 6 }); pk.position.set(0, Hh + 0.42, 0.04); mu.add(pk); }
     add(mu, new THREE.BoxGeometry(0.06, 0.4, 0.06), mat(0x7a4a2a), [-0.6, Hh + 0.25, 0]); add(mu, new THREE.BoxGeometry(0.06, 0.4, 0.06), mat(0x7a4a2a), [0.6, Hh + 0.25, 0]);
     // bottle caps (crimped)
     const capGeo = new THREE.CylinderGeometry(0.085, 0.085, 0.035, 21, 1); { const p = capGeo.attributes.position; for (let i = 0; i < p.count; i++) { const a = Math.atan2(p.getZ(i), p.getX(i)); const rr = Math.hypot(p.getX(i), p.getZ(i)); if (rr > 0.05) { const k = 1 + 0.08 * Math.cos(a * 21); p.setX(i, p.getX(i) * k); p.setZ(i, p.getZ(i) * k); } } capGeo.computeVertexNormals(); }
@@ -459,11 +477,11 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
       add(sh, new THREE.BoxGeometry(W / 2 - 1.0, H, 0.12), wall, [sx * (W / 4 + 0.5), H / 2, D / 2]); }
     add(sh, new THREE.BoxGeometry(2.0, 0.35, 0.14), wall, [0, H - 0.17, D / 2]); // lintel
     // gable roof
-    const rl = Math.hypot(W / 2 + 0.35, 1.0); const ra = Math.atan2(1.0, W / 2 + 0.35); const roofM = new THREE.MeshStandardMaterial({ color: snowy ? 0xf3f6ff : 0xc0563a, roughness: 0.8 });
+    const rl = Math.hypot(W / 2 + 0.35, 1.0); const ra = Math.atan2(1.0, W / 2 + 0.35); const roofM = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#eef2fa' : '#c0563a', 10), roughness: 0.85 }); roofM.map = roofM.map.clone(); roofM.map.wrapS = roofM.map.wrapT = THREE.RepeatWrapping; roofM.map.repeat.set(2.5, 1.6); roofM.map.needsUpdate = true;
     for (const sx of [-1, 1]) add(sh, new THREE.BoxGeometry(rl, 0.1, D + 0.7), roofM, [sx * (W / 4 + 0.09), H + 0.5, 0], [0, 0, -sx * ra]);
     const gab = new THREE.Shape(); gab.moveTo(-W / 2, 0); gab.lineTo(W / 2, 0); gab.lineTo(0, 1.0); gab.closePath();
     for (const sz of [-1, 1]) add(sh, new THREE.ShapeGeometry(gab), new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), side: THREE.DoubleSide }), [0, H, sz * D / 2]);
-    add(sh, new THREE.PlaneGeometry(2.2, 0.5), new THREE.MeshStandardMaterial({ map: signTex(["MOCHI'S ART SHOP", 'originals · no refunds · yes hugs'], { w: 512, h: 116, sizes: [52, 24], bg: '#ffe9b8' }) }), [0, H + 0.42, D / 2 + 0.02], [0, 0, 0], null, false);
+    { const pk = plank(["MOCHI'S ART SHOP", 'originals · no refunds · yes hugs'], { width: 2.2, icon: '🖼️', tone: 'oak', seed: 7 }); pk.position.set(0, H + 0.42, D / 2 + 0.04); sh.add(pk); }
     // pictures: back wall 3, side walls 2 each, outside front 2
     const sl = (k) => hangAt('shop', k); let k = 0; const ins = 0.09;
     [-1.4, 0, 1.4].forEach((px) => { const it = sl(k++); if (it) framed(sh, it, { w: 0.82, h: 1.02, pos: [px, 1.45, -D / 2 + ins], style: k, clickables }); });
@@ -572,12 +590,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   return { world, update, grass, ground, pondMat, clickables, music, hangs, lights };
 }
 
+const SIGN_ICON = { OCEAN: '🌊', 'RIP HAT': '🎩', 'NO KIWIS': '🚫', 'TRAPPER PK': '🏔️', BEES: '🐝', 'MUSIC CORNER': '🎵' };
 function sign(parent, lines, [x, y, z], yaw = 0, s = 1) {
-  const g = new THREE.Group(); g.position.set(x, y, z); g.rotation.y = yaw; g.scale.setScalar(s); parent.add(g);
-  add(g, new THREE.CylinderGeometry(0.04, 0.05, 1.0, 6), mat(0x7a5232), [0, 0.5, 0]);
-  add(g, new THREE.BoxGeometry(1.1, 0.55, 0.06), mat(0x8a5a32), [0, 1.0, 0]);
-  const tex = signTex(lines, { w: 512, h: 256, sizes: lines.length > 1 ? [76, 48] : [80] });
-  add(g, new THREE.PlaneGeometry(1.02, 0.48), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.8 }), [0, 1.0, 0.035], [0, 0, 0], null, false);
-  add(g, new THREE.PlaneGeometry(1.02, 0.48), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.8 }), [0, 1.0, -0.035], [0, Math.PI, 0], null, false);
-  return g;
+  return signpost(parent, lines, [x, y, z], yaw, s, { icon: SIGN_ICON[lines[0]] || '', tone: lines[0] === 'RIP HAT' ? 'walnut' : 'oak' });
 }

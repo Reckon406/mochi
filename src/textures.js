@@ -161,3 +161,19 @@ export function cloudSprite() {
     g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
   });
 }
+
+// overlapping roof shingles (rows with staggered tabs, darker gaps and a little colour jitter)
+const SHINGLE = {};
+export function shingleTex(base = '#7a4a2a', rows = 8) {
+  if (SHINGLE[base + rows]) return SHINGLE[base + rows];
+  const r = rng(11); const c = new THREE.Color(base);
+  return (SHINGLE[base + rows] = canvasTex(256, 256, (g, w, h) => {
+    g.fillStyle = '#' + c.clone().multiplyScalar(0.55).getHexString(); g.fillRect(0, 0, w, h);
+    const rh = h / rows, tw = w / 6;
+    for (let j = 0; j < rows; j++) for (let i = -1; i < 7; i++) {
+      const x = i * tw + (j % 2) * tw / 2, y = j * rh; const k = 0.82 + r() * 0.3;
+      g.fillStyle = '#' + c.clone().multiplyScalar(k).getHexString(); g.beginPath(); g.moveTo(x + 2, y); g.lineTo(x + tw - 2, y); g.lineTo(x + tw - 2, y + rh - 4); g.quadraticCurveTo(x + tw / 2, y + rh + 2, x + 2, y + rh - 4); g.closePath(); g.fill();
+      g.fillStyle = 'rgba(255,240,210,0.12)'; g.fillRect(x + 2, y, tw - 4, 3);
+    }
+  }, { repeat: [1, 1] }));
+}

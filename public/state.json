@@ -501,5 +501,8 @@
     }
   ],
   "encounters": [],
-  "courage": 50
+  "courage": 50,
+  "treehouse": {
+    "stage": 2
+  }
 }

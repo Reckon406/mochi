@@ -91,6 +91,7 @@ export function createMusic(state, settings) {
     else if (kind === 'hoot') { [0, 0.35, 0.55].forEach((d, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(i ? 360 : 330, t + d); o.frequency.exponentialRampToValueAtTime(300, t + d + 0.25); g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.18, t + d + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.3); o.connect(g); g.connect(sfxBus); o.start(t + d); o.stop(t + d + 0.35); }); }
     else if (kind === 'clang') { [880, 1320, 1760].forEach((f) => tone(f, t, 0.5, { wave: 'square', vol: 0.05, bus: sfxBus, cutoff: 5000 })); }
     else if (kind === 'spray') noiseHit(t, 0.6, 0.12, 2000, sfxBus);
+    else if (kind === 'thunk') { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.09); g.gain.setValueAtTime(0.22, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.14); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + 0.16); noiseHit(t, 0.04, 0.06, 1800, sfxBus); }
   }
   // browsers only allow audio after a user gesture
   const kick0 = () => { if (started) return; started = true; if (!ensure()) return; ctx.resume(); if (settings.get().musicOn && songs.length) playSong(cur); };

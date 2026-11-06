@@ -76,13 +76,22 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   A.mail = { zone: 'hut', label: '📬 checking the mail', steps: [{ d: 3.5, start() { const m = features.mailbox.unread[0]; say(m ? `mail from ${m.from || 'someone'}: "${String(m.subject || m.text || '...').slice(0, 50)}"` : 'no mail. not even a bill', 3.5); if (m) { m.unread = false; features.mailbox.unread.shift(); if (!features.mailbox.unread.length) features.mailbox.flag.rotation.z = -Math.PI / 2; } pose.peck = 0.5; }, end() { pose.peck = 0; } }] };
   A.skip = { zone: 'pond', label: '🪨 skipping rocks', steps: [0, 1, 2].map(() => ({ d: 1.8, start() { mochi.flap(0.6); this.a = ahead(0.5); this.b = ahead(2.6 + Math.random()); P.stone.visible = true; }, tick(u) { const a = this.a, b = this.b; const k = Math.min(1, u * 1.3); P.stone.position.set(a.x + (b.x - a.x) * k, -0.3 + Math.abs(Math.sin(k * Math.PI * 3)) * 0.35 * (1 - k) + 0.6 * (1 - k), a.z + (b.z - a.z) * k); if (k > 0.33 && !this.r1) { this.r1 = 1; fx.rings(P.stone.position.x, P.stone.position.z, -0.3); } }, end() { P.stone.visible = false; this.r1 = 0; } }))
     .concat([{ d: 1.5, start() { say(`${3 + Math.floor(Math.random() * 6)} skips. olympic`, 1.8); } }]) };
-  A.treehouse = { zone: 'tree', label: '🌳 hanging in the treehouse', steps: [
-    { d: 1.6, start() { posTarget = features.treehouse.ladder.clone(); face = Math.PI / 2; } },
-    { d: 2.6, tick(u) { liftTarget = u * features.treehouse.H; pose.sway = 0.5; } },
-    { d: 1.2, start() { posTarget = features.treehouse.deck.clone(); pose.sway = 0; face = 0; } },
-    { d: 8, start() { say(['treehouse inspection: passed', 'i can see the squirrel from here. he can see me', 'the owl lives upstairs. we do not talk'][Math.floor(Math.random() * 3)], 3); }, tick(u, dt) { if (Math.random() < dt * 0.3) mochi.hop(0.3); } },
-    { d: 1.2, start() { posTarget = features.treehouse.ladder.clone(); } },
-    { d: 2.2, tick(u) { liftTarget = (1 - u) * features.treehouse.H; } } ], end() { liftTarget = 0; face = null; } };
+  // treehouse: climb the rope ladder, stand on the deck; below the top stage Mochi hammers away (STATE.treehouse.stage only changes when the bot sets it)
+  const TH = () => features.treehouse; const upY = () => TH().deckY - groundY(M().x, M().z);
+  const faceTrunk = () => { const p = TH().ladder, c = TH().group.position; face = Math.atan2(c.x - p.x, c.z - p.z); };
+  const STAGE_TALK = ['treehouse: step 0. it is a vibe right now', 'ladder: done. floor: some of it', 'the platform holds a kiwi. tested', 'railings, so nobody falls. mostly me', 'walls going up. very structural', 'roof, door, window. architect energy', 'treehouse: complete. accepting visitors (not squirrels)'];
+  A.treehouse = { zone: 'tree', get label() { const st = features.treehouse.stage; return st < 6 ? `🔨 building the treehouse (${st}/6)` : '🌳 hanging in the treehouse'; }, steps: [
+    { d: 1.6, start() { posTarget = TH().ladder.clone(); faceTrunk(); } },
+    { d: 2.6, tick(u) { if (TH().stage < 1) return; liftTarget = u * (TH().top.y - TH().ladder.y); pose.sway = 0.5; if (Math.random() < 0.04) music?.sfx?.('step'); } },
+    { d: 1.4, start() { pose.sway = 0; if (TH().stage < 1) return; posTarget = TH().top.clone(); }, tick() { if (TH().stage >= 1) liftTarget = upY(); } },
+    { d: 1.4, start() { if (TH().stage < 2) return; posTarget = TH().deck.clone(); }, tick() { if (TH().stage >= 1) liftTarget = upY(); }, end() { const c = TH().group.position; if (TH().stage >= 2) face = Math.atan2(M().x - c.x, M().z - c.z); } },
+    { d: 8, start() { const st = TH().stage; this.k = 0; if (st < 6) { hold(P.plank, [0, 0.3, 0.2]); say(STAGE_TALK[st], 3); } else say(['treehouse inspection: passed', 'i can see the squirrel from here. he can see me', 'the owl lives upstairs. we do not talk'][Math.floor(Math.random() * 3)], 3); },
+      tick(u, dt, t) { if (TH().stage >= 1) liftTarget = upY(); if (TH().stage >= 6) { if (Math.random() < dt * 0.3) mochi.hop(0.3); return; }
+        pose.peck = 0.5 + 0.5 * Math.sin(t * 9); this.k = (this.k || 0) + dt; if (this.k > 0.45) { this.k = 0; const p = ahead(0.45); fx.puff(p.x, M().y + 0.15, p.z, 0xe8c890); music?.sfx?.('thunk'); } },
+      end() { pose.peck = 0; drop(); } },
+    { d: 1.4, start() { if (TH().stage < 1) return; posTarget = TH().top.clone(); }, tick() { if (TH().stage >= 1) liftTarget = upY(); } },
+    { d: 1.0, start() { if (TH().stage < 1) return; posTarget = TH().ladder.clone(); faceTrunk(); }, tick() { if (TH().stage >= 1) liftTarget = upY(); } },
+    { d: 2.2, tick(u) { if (TH().stage < 1) return; liftTarget = (1 - u) * (TH().top.y - TH().ladder.y); pose.sway = 0.5; } } ], end() { liftTarget = 0; face = null; pose.sway = 0; pose.peck = 0; } };
   A.skate = { zone: 'ramp', label: '🛹 skate session', steps: [{ d: 9, start() { const [rx, rz] = mv(9.6, 6.0); this.c = new THREE.Vector3(rx, 0, rz); this.ax = new THREE.Vector3(Math.cos(-0.55), 0, -Math.sin(-0.55)); hold(P.board, [0, 0, 0]); P.board.position.set(0, -0.33, -1.2); P.board.rotation.set(0, 0, 0); mochi.root.add(P.board); held = null; say('KICKFLIP ARC: chapter 1', 2.5); this.base = topH(rx, rz); },
     tick(u, dt, t) { const x = 1.5 * Math.sin(t * 1.8); const p = this.c.clone().addScaledVector(this.ax, x); M().x = p.x; M().z = p.z; posTarget = null; const ex = Math.max(0, Math.abs(x) - 0.6); liftTarget = (ex > 0 ? 1.1 - Math.sqrt(Math.max(0, 1.21 - ex * ex)) : 0) + Math.max(0, this.base - groundY(p.x, p.z)); face = Math.atan2(this.ax.x, this.ax.z) * (Math.cos(t * 1.8) > 0 ? 1 : -1) + (Math.cos(t * 1.8) > 0 ? 0 : Math.PI) * 0; if (Math.abs(x) > 1.45 && Math.random() < 0.1) mochi.hop(0.4); },
     end() { mochi.root.remove(P.board); liftTarget = 0; face = null; say('landed it (mentally)', 2); } }] };

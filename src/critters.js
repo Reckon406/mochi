@@ -1,7 +1,7 @@
 // Night critters of the Bitterroot (no fireflies here!): great horned owl in the big tree, bats over the river at dusk,
 // moths around the lights, and a raccoon that sneaks to the dock bucket for Mochi's fish.
 import * as THREE from 'three';
-import { mv, topH, DOCK, WATER_Y, groundY, islandRadius } from './layout.js';
+import { mv, topH, DOCK, WATER_Y, groundY, islandRadius, BIGTREE } from './layout.js';
 
 const m = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...o });
 function add(p, g, mat, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, mat); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; p.add(x); return x; }
@@ -9,8 +9,7 @@ function add(p, g, mat, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x =
 export function createCritters(scene, { lights = [], life, say, music, season }) {
   const group = new THREE.Group(); group.name = 'night-critters'; scene.add(group);
   // ── great horned owl on a branch of the big tree ──
-  const [tx, tz] = mv(4.4, -9.0); const owl = new THREE.Group(); owl.position.set(tx + 1.25, topH(tx, tz) + 2.35, tz - 0.55); owl.rotation.y = 0.9; group.add(owl);
-  add(group, new THREE.CylinderGeometry(0.05, 0.07, 1.2, 6), m(0x6b4a33), [tx + 0.95, topH(tx, tz) + 2.28, tz - 0.4], [0, 0.9, Math.PI / 2 - 0.15]);
+  const perch = BIGTREE.limbPoint(BIGTREE.owlA, 2.0); const owl = new THREE.Group(); owl.position.set(perch.x, perch.y + 0.12, perch.z); owl.rotation.y = Math.atan2(Math.cos(BIGTREE.owlA), Math.sin(BIGTREE.owlA)) - 0.5; group.add(owl);
   const fe = m(0x7a6248), pale = m(0xd8c8a8);
   add(owl, new THREE.SphereGeometry(0.2, 14, 10), fe, [0, 0.22, 0], [0, 0, 0], [1, 1.35, 0.95]); add(owl, new THREE.SphereGeometry(0.13, 12, 8), pale, [0, 0.18, 0.1], [0, 0, 0], [1, 1.3, 0.6]);
   const head = new THREE.Group(); head.position.y = 0.5; owl.add(head); add(head, new THREE.SphereGeometry(0.15, 14, 10), fe, [0, 0, 0], [0, 0, 0], [1.1, 0.95, 1]);

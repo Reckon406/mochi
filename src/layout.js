@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 // Island layout + walkable ground height
 import { fbm, noise, smoothstep, clamp } from './noise.js';
 
@@ -148,7 +149,7 @@ export function matchZone(location) {
 // circles Mochi (and the walker) go around. mochiOnly = coarse blob for Mochi's planner; WALLS = fine circles only the walker uses
 const ob = (x, z, r) => { const [a, b] = mv(x, z); return { x: a, z: b, r }; };
 export const OBSTACLES = [
-  ob(-4.2, -8.0, 2.1), { x: POND.x, z: POND.z, r: POND.r + 0.2 }, ob(4.4, -9.0, 1.0),
+  ob(-4.2, -8.0, 2.1), { x: POND.x, z: POND.z, r: POND.r + 0.2 }, ob(4.4, -9.0, 1.5),
   ob(10.0, -4.6, 0.9), ob(9.6, 6.0, 1.9), ob(-1.0, 9.9, 1.6), ob(-8.5, -3.8, 1.3),
   ob(-3.2, 1.6, 1.3), ob(5.6, 9.4, 1.5), ob(-7.0, 6.6, 1.3),
   { x: 12.5, z: 1.5, r: 0.9 }, { x: -1.5 - 1.2, z: -7.5 - 1.0, r: 0.5 }, { x: MUSIC.x, z: MUSIC.z, r: 1.3 }, { x: VEND.x, z: VEND.z, r: 0.75 },
@@ -161,3 +162,14 @@ export const WALLS = [];
   for (let lz = -SHOP.d / 2; lz <= SHOP.d / 2 + 1e-3; lz += 0.4) { W(-SHOP.w / 2, lz); W(SHOP.w / 2, lz); }
   for (let lx = 1.1; lx <= SHOP.w / 2 + 1e-3; lx += 0.4) { W(lx, SHOP.d / 2); W(-lx, SHOP.d / 2); }
 }
+
+// ── the big treehouse tree (shared by island.js trunk/canopy, features.js treehouse, critters.js owl, OBSTACLES) ──
+// angles are atan2(dz, dx) around the trunk: cabin faces the default camera (east), ladder faces the zone spot.
+export const BIGTREE = (() => { const [x, z] = mv(4.4, -9.0); const y = topH(x, z);
+  const T = { x, z, y, h: 6.2, trunkR: 1.0, topR: 0.55, deckH: 3.1, deckR: 2.2, cabinA: -0.32, ladderA: 2.03, standA: 0.75, limbs: [-1.9, 3.64, 0.95, 2.45, -2.75], owlA: 3.64, swingA: -1.9, feederA: 0.95 };
+  T.radiusAt = (hh) => T.topR + (T.trunkR - T.topR) * Math.max(0, 1 - hh / T.h) + 0.45 * T.trunkR * Math.exp(-hh * 2.2);
+  T.limbStart = (a, i = 0) => new THREE.Vector3(x + Math.cos(a) * T.radiusAt(3.9) * 0.6, y + 3.9 + (i % 3) * 0.35, z + Math.sin(a) * T.radiusAt(3.9) * 0.6);
+  T.limbDir = (a) => new THREE.Vector3(Math.cos(a), 0.5, Math.sin(a)).normalize();
+  T.limbPoint = (a, t) => { const i = T.limbs.indexOf(a); return T.limbStart(a, Math.max(0, i)).addScaledVector(T.limbDir(a), t); };
+  T.ring = (a, r, hh = 0) => new THREE.Vector3(x + Math.cos(a) * r, y + hh, z + Math.sin(a) * r);
+  return T; })();

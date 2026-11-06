@@ -5,16 +5,18 @@
 import * as THREE from 'three';
 import { riverX, riverW, WATER_Y, groundY, islandRadius, ZONES, DOCK, mv } from './layout.js';
 import { terrainH } from './landscape.js';
+import { addRim } from './gfx.js';
 
-const mat = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, flatShading: true, ...o });
+const MATS = {}; const mat = (c, o = {}) => { const k = c + JSON.stringify(o); return MATS[k] || (MATS[k] = addRim(new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, flatShading: true, ...o }))); };
 function add(p, g, m, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, m); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; p.add(x); return x; }
 const rnd = (a, b) => a + Math.random() * (b - a);
+let GT = null; function glowTex() { if (GT) return GT; const c = document.createElement('canvas'); c.width = c.height = 32; const g = c.getContext('2d'); const gr = g.createRadialGradient(16, 16, 0, 16, 16, 16); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(255,255,255,0.6)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 32, 32); return (GT = new THREE.CanvasTexture(c)); }
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const S = { sph: new THREE.IcosahedronGeometry(1, 1), cyl: new THREE.CylinderGeometry(1, 0.8, 1, 6), cone: new THREE.ConeGeometry(1, 1, 5) };
 
 // ── low-poly quadruped ──
 function quad(o) {
-  const { len = 1, h = 1, body = 0x8a7560, belly = null, head = null, legC = null, neck = 0.35, ears = 'deer', tail = 'short', tailC = null, hump = false, horns = null, beard = false, stripe = null, spines = false, mask = false, lf = 0.55, gf = 0.24, lt = 0.045 } = o;
+  const { len = 1, h = 1, body = 0x8a7560, belly = null, head = null, legC = null, neck = 0.35, ears = 'deer', tail = 'short', tailC = null, hump = false, horns = null, beard = false, stripe = null, spines = false, mask = false, lf = 0.55, gf = 0.24, lt = 0.045, feline = false, muzzle = null } = o;
   const g = new THREE.Group(), B = mat(body), H = head != null ? mat(head) : B, L = legC != null ? mat(legC) : B;
   const legH = h * lf, bodyR = h * gf;
   const torso = new THREE.Group(); torso.position.y = legH + bodyR * 0.6; g.add(torso);
@@ -28,15 +30,23 @@ function quad(o) {
   const nk = new THREE.Group(); nk.position.set(0, bodyR * 0.4, len * 0.45); torso.add(nk); nk.rotation.x = -0.5;
   add(nk, S.cyl, B, [0, neck * h * 0.5, 0], [0, 0, 0], [h * 0.09, neck * h, h * 0.09]);
   const hd = new THREE.Group(); hd.position.y = neck * h; nk.add(hd); hd.rotation.x = 0.5;
+  if (feline) { // round cat head: short muzzle with whisker pads, pink nose
+    add(hd, S.sph, H, [0, 0, h * 0.05], [0, 0, 0], [h * 0.155, h * 0.14, h * 0.15]);
+    for (const sx of [-1, 1]) add(hd, S.sph, mat(muzzle ?? 0xf0e6d6), [sx * h * 0.035, -h * 0.045, h * 0.165], [0, 0, 0], [h * 0.05, h * 0.042, h * 0.045]);
+    add(hd, S.sph, mat(muzzle ?? 0xf0e6d6), [0, -h * 0.08, h * 0.14], [0, 0, 0], [h * 0.045, h * 0.03, h * 0.04]);
+    add(hd, S.sph, mat(0xd88a8a), [0, -h * 0.015, h * 0.2], [0, 0, 0], [h * 0.028, h * 0.02, h * 0.018]);
+  } else {
   add(hd, S.sph, H, [0, 0, h * 0.06], [0, 0, 0], [h * 0.12, h * 0.12, h * 0.17]); add(hd, S.sph, H, [0, -h * 0.03, h * 0.2], [0, 0, 0], [h * 0.07, h * 0.07, h * 0.1]);
-  add(hd, S.sph, mat(0x111111), [0, -h * 0.01, h * 0.29], [0, 0, 0], [h * 0.025, h * 0.022, h * 0.02]);
+  add(hd, S.sph, mat(0x111111), [0, -h * 0.01, h * 0.29], [0, 0, 0], [h * 0.025, h * 0.022, h * 0.02]); }
   if (mask) add(hd, S.sph, mat(0x1a1716), [0, h * 0.03, h * 0.12], [0, 0, 0], [h * 0.125, h * 0.04, h * 0.08]);
   const eyeM = new THREE.MeshStandardMaterial({ color: 0x111111, emissive: 0xffe680, emissiveIntensity: 0 });
   for (const s of [-1, 1]) add(hd, S.sph, eyeM, [s * h * 0.07, h * 0.04, h * 0.14], [0, 0, 0], [h * 0.022, h * 0.022, h * 0.022]);
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex(), color: 0xffd27a, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false })); glow.position.set(0, h * 0.04, h * 0.2); glow.scale.setScalar(0.32 / Math.max(0.4, h)); glow.visible = false; hd.add(glow);
   for (const s of [-1, 1]) {
     if (ears === 'deer') add(hd, S.cone, H, [s * h * 0.1, h * 0.12, 0], [0, 0, -s * 0.9], [h * 0.05, h * 0.14, h * 0.025]);
     else if (ears === 'mule') add(hd, S.cone, H, [s * h * 0.12, h * 0.13, 0], [0, 0, -s * 1.0], [h * 0.08, h * 0.2, h * 0.03]);
     else if (ears === 'round') add(hd, S.sph, H, [s * h * 0.09, h * 0.11, -h * 0.02], [0, 0, 0], [h * 0.04, h * 0.04, h * 0.02]);
+    else if (ears === 'cat') { add(hd, S.sph, H, [s * h * 0.1, h * 0.12, -h * 0.01], [0, 0, 0], [h * 0.04, h * 0.042, h * 0.018]); add(hd, S.sph, mat(0x2a221c), [s * h * 0.1, h * 0.125, -h * 0.025], [0, 0, 0], [h * 0.03, h * 0.032, h * 0.01]); }
     else if (ears === 'pointy') add(hd, S.cone, H, [s * h * 0.07, h * 0.14, 0], [0, 0, -s * 0.15], [h * 0.04, h * 0.1, h * 0.025]);
     else if (ears === 'hare') add(hd, S.cone, H, [s * h * 0.05, h * 0.24, -h * 0.03], [-0.25, 0, -s * 0.12], [h * 0.04, h * 0.32, h * 0.025]);
   }
@@ -55,7 +65,7 @@ function quad(o) {
   else if (tail === 'bushy') { tl.rotation.x = 0.6; add(tl, S.sph, B, [0, 0, -len * 0.22], [0, 0, 0], [h * 0.08, h * 0.08, len * 0.25]); if (tailC != null) add(tl, S.sph, TC, [0, 0, -len * 0.45], [0, 0, 0], [h * 0.06, h * 0.06, h * 0.07]); }
   else if (tail === 'plume') { tl.rotation.x = -1.2; add(tl, S.sph, B, [0, 0, -len * 0.2], [0, 0, 0], [h * 0.14, h * 0.12, len * 0.28]); if (tailC != null) add(tl, S.sph, TC, [0, h * 0.04, -len * 0.2], [0, 0, 0], [h * 0.05, h * 0.13, len * 0.25]); }
   else if (tail === 'flat') { add(tl, S.sph, mat(0x2a2018), [0, -h * 0.05, -len * 0.18], [0, 0, 0], [h * 0.12, h * 0.025, len * 0.2]); }
-  g.userData = { legs, torso, nk, hd, tl, eyeM, h, len, legH };
+  g.userData = { legs, torso, nk, hd, tl, eyeM, glow, h, len, legH };
   return g;
 }
 // ── birds ──
@@ -94,7 +104,7 @@ export const SPECIES = {
   porcupine: { name: 'porcupine', hab: 'bank', when: ['night', 'dusk'], w: 3, slow: 0.4, make: () => quad({ len: 0.6, h: 0.5, body: 0x3a2c22, spines: true, ears: 'round', neck: 0.1, lf: 0.3, gf: 0.34, lt: 0.07 }) },
   blackbear: { name: 'black bear', hab: 'bank', when: ['dawn', 'dusk', 'day'], months: M(3, 10), w: 4, make: () => quad({ len: 1.25, h: 1.2, body: Math.random() < 0.25 ? 0x6a4028 : 0x1f1a18, head: null, ears: 'round', tail: 'short', neck: 0.14, lf: 0.36, gf: 0.36, lt: 0.1 }) },
   grizzly: { name: 'grizzly bear', hab: 'bank', when: ['dawn', 'dusk'], months: M(3, 10), w: 0.4, make: () => quad({ len: 1.45, h: 1.4, body: 0x8a6a48, legC: 0x4a3626, ears: 'round', tail: 'short', hump: true, neck: 0.14, lf: 0.36, gf: 0.37, lt: 0.11 }) },
-  lion: { name: 'mountain lion', hab: 'bank', when: ['dusk', 'night', 'dawn'], w: 1.5, make: () => quad({ len: 1.35, h: 0.85, body: 0xc49a6a, belly: 0xeadfca, ears: 'round', tail: 'long', tailC: 0x2a221c, neck: 0.14, lf: 0.46, gf: 0.27, lt: 0.07 }) },
+  lion: { name: 'mountain lion', hab: 'bank', when: ['dusk', 'night', 'dawn'], w: 1.5, make: () => quad({ len: 1.35, h: 0.85, body: 0xc49a6a, belly: 0xeadfca, ears: 'cat', feline: true, tail: 'long', tailC: 0x2a221c, neck: 0.12, lf: 0.46, gf: 0.27, lt: 0.07 }) },
   wolf: { name: 'gray wolf', hab: 'bank', when: ['dawn', 'dusk', 'night'], w: 1.2, make: () => quad({ len: 1.05, h: 0.95, body: 0x86827c, belly: 0xd6d2ca, legC: 0x9c968c, ears: 'pointy', tail: 'bushy', tailC: 0x3a3632 }) },
   beaver: { name: 'beaver', hab: 'water', when: ['dusk', 'night', 'dawn'], w: 4, swim: true, make: () => quad({ len: 0.6, h: 0.42, body: 0x5a3a22, ears: 'round', tail: 'flat', neck: 0.1, lf: 0.3, gf: 0.32, lt: 0.08 }) },
   otter: { name: 'river otter', hab: 'water', when: ['day', 'dusk', 'dawn'], w: 4, swim: true, porpoise: true, make: () => quad({ len: 0.8, h: 0.35, body: 0x4a3222, belly: 0x8a6a4a, ears: 'round', tail: 'long', neck: 0.2, lf: 0.3, gf: 0.3, lt: 0.08 }) },
@@ -220,7 +230,8 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
 
   function updateAgent(a, dt, t, night) {
     a.t += dt; const u = a.m.userData; const sp = a.sp;
-    if (u.eyeM) u.eyeM.emissiveIntensity = night > 0.5 && (a.pred || a.key === 'coyote' || a.key === 'fox' || a.key === 'lion') ? 1.6 : 0;
+    if (u.eyeM) { u.eyeM.emissiveIntensity = night > 0.4 ? (a.pred || SNEAK[a.key] ? 2.2 : 1.4) : 0; if (night > 0.4 && !a.pred && !SNEAK[a.key]) u.eyeM.emissive.setHex(0xb8ff9a); } // eye shine
+    if (u.glow) { u.glow.visible = night > 0.4 && a.m.position.length() > 20; if (u.glow.visible) { u.glow.material.color.setHex(a.pred || SNEAK[a.key] ? 0xffc860 : 0xc8ffa0); u.glow.material.opacity = 0.75 + 0.25 * Math.sin(a.t * 0.7 + a.i); } }
     if (sp.hab === 'sky') { // soaring circles; osprey sometimes dives for a fish
       a.ang += dt * (18 / a.r) * 0.25; const p = a.m.position; let y = a.c.y + Math.sin(a.t * 0.3) * 2;
       if (sp.dive && !a.dv && Math.random() < dt * 0.03) a.dv = { t: 0 };

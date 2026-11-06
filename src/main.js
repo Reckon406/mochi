@@ -20,6 +20,11 @@ import { buildFeatures } from './features.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
+import { installHeightFog, MistFog } from './gfx.js';
+import { loadSignFonts, zoneSigns, updateSigns } from './signs.js';
+import { buildDetails } from './details.js';
+import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
+installHeightFog();
 import { FISH } from './fish.js';
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 import { buildWorldState } from './worldstate.js';
@@ -50,10 +55,13 @@ async function init() {
   const { state, error } = await loadState();
   if (params.get('weather')) state.weather = params.get('weather');
   if (params.get('location')) state.location = params.get('location');
+  if (params.get('treehouse') != null) state.treehouse = { ...(state.treehouse || {}), stage: +params.get('treehouse') }; // preview only, never saved
+  if (params.get('thparts')) state.treehouse = { ...(state.treehouse || { stage: 2 }), parts: params.get('thparts').split(',') };
   if (params.get('outfit')) state.outfit = params.get('outfit');
   const hour = params.has('hour') ? parseFloat(params.get('hour')) : null;
   const weather = parseWeather(state.weather);
-  const settings = createSettings(); const S0 = settings.get(); const Q = QUALITY[S0.quality];
+  await loadSignFonts();
+  const settings = createSettings(); const S0 = settings.get(); const Q = QUALITY[params.get('quality')] || QUALITY[S0.quality] || QUALITY.auto;
 
   // ── renderer ──
   const canvas = document.getElementById('scene');
@@ -62,8 +70,9 @@ async function init() {
   renderer.setSize(innerWidth, innerHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap; // r18x: PCFSoftShadowMap was folded into PCF + shadow.radius (soft Vogel-disk filtering)
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
+  const TM = { aces: THREE.ACESFilmicToneMapping, agx: THREE.AgXToneMapping, neutral: THREE.NeutralToneMapping };
+  renderer.toneMapping = TM[params.get('tm')] ?? THREE.AgXToneMapping;
+  const EXPO = renderer.toneMapping === THREE.AgXToneMapping ? 1.25 : 1.0; renderer.toneMappingExposure = EXPO;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(isMobile && innerWidth < innerHeight ? 55 : 42, innerWidth / innerHeight, 0.1, 9000);
@@ -72,19 +81,21 @@ async function init() {
   const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0 });
   const sun = sky.sun;
   const S = isMobile ? Math.min(1024, Q.shadow) : Q.shadow;
-  sun.shadow.mapSize.set(S, S); sun.shadow.radius = 4; sun.shadow.blurSamples = 12; sun.castShadow = S0.shadows;
+  sun.shadow.mapSize.set(S, S); sun.shadow.radius = Q.tier >= 2 ? 5 : 3; sun.shadow.blurSamples = Q.tier >= 2 ? 16 : 8; sun.castShadow = S0.shadows;
   Object.assign(sun.shadow.camera, { left: -46, right: 46, top: 46, bottom: -46, near: 1, far: 160 });
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.04;
 
   const fogBase = weather.fog ? (weather.heavy ? 0.03 : 0.018) : 0.0006 + (weather.rain || weather.snow ? 0.0012 : 0) + weather.cloudiness * 0.0002;
-  scene.fog = new THREE.FogExp2(0xc6dcec, fogBase);
+  scene.fog = new MistFog(0xc6dcec, fogBase);
   const season = seasonOf(new Date(), params.get('season'));
   const snowy = weather.snow || season === 'winter';
   const land = buildLandscape(scene, { snowy, mobile: isMobile, season });
   const island = buildIsland(scene, { snowy, mobile: isMobile, state, detail: S0.detail, season });
+  const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile });
   const worldState = buildWorldState(scene, state);
   const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
   const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow });
+  { const zs = new THREE.Group(); zs.name = 'zone-signs'; scene.add(zs); zoneSigns(zs, ZONES, { groundY, OBSTACLES, BRIDGE }); }
 
   const mochi = createMochi(state.outfit || '');
   scene.add(mochi.root);
@@ -97,6 +108,7 @@ async function init() {
   const rt = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: THREE.HalfFloatType, samples: isMobile ? 0 : Q.msaa });
   const composer = new EffectComposer(renderer, rt);
   composer.addPass(new RenderPass(scene, camera));
+  let ao = null; if (Q.ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.addPass(ao); }
   const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.45, 0.55, 1.0);
   composer.addPass(bloom); bloom.enabled = S0.bloom;
   composer.addPass(new OutputPass());
@@ -200,6 +212,8 @@ async function init() {
   music.onChange((song) => { ui.setSong(song); island.music.setPlaying(!!song); });
   const setPanel = buildSettingsPanel(document.getElementById('ui'), settings, { music });
   settings.on((st, patch) => {
+    if ('quality' in patch && QUALITY[st.quality]?.ao && !ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.insertPass(ao, 1); }
+    if ('quality' in patch && ao) ao.enabled = !!QUALITY[st.quality]?.ao;
     if ('quality' in patch) { const q = QUALITY[st.quality]; renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, q.pr)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, q.pr)); composer.setSize(innerWidth, innerHeight);
       const sz = isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('shadows' in patch) sun.castShadow = st.shadows;
@@ -290,6 +304,16 @@ async function init() {
     skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; }
     const night = sky.state.night;
     fogCol.copy(sky.state.fogColor); scene.fog.color.copy(fogCol);
+    // dawn/dusk valley mist (more in the morning), a little at night, lots in foggy weather
+    scene.fog.mist = sky.state.golden * (new Date().getHours() < 12 || (hour != null && hour < 12) ? 0.75 : 0.45) + night * 0.12 + (weather.fog ? 0.35 : 0);
+    renderer.toneMappingExposure = EXPO * (1 + night * 0.3);
+    ENV.uRim.value = night; updateSigns(night); details.update(sky);
+    if (features.lanternLight) features.lanternLight.intensity = night * 2.4; { const w = 0.4 + ENV.uWind.value * 2; if (features.sock) features.sock.rotation.y = Math.sin(t * 1.7) * 0.45 * w; if (features.flag) features.flag.rotation.y = Math.sin(t * 3.1) * 0.35 * w; if (features.pulley) features.pulley.rotation.z = Math.sin(t * 1.3) * 0.06 * w; }
+    // tight shadow box that follows what you're looking at (crisper, softer-edged shadows)
+    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const span = walk.on || follow ? 22 : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * 0.55, 18, 46);
+      const sc = sun.shadow.camera; if (sc.right !== span) { sc.left = sc.bottom = -span; sc.right = sc.top = span; sc.updateProjectionMatrix(); }
+      const tex = (2 * span) / sun.shadow.mapSize.x; const cx = Math.round(c.x / tex) * tex, cz = Math.round(c.z / tex) * tex;
+      sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
     land.winMat.color.setRGB(0.25 + 3.5 * night, 0.18 + 2.4 * night, 0.1 + 1.0 * night);
     bloom.strength = 0.35 + night * 0.45;
 
@@ -339,6 +363,8 @@ async function init() {
     head.copy(mochi.root.position); head.y += mochi.headOffset + mochi.pivot.position.y; head.project(camera);
     const behind = head.z > 1; bubbleEl.style.transform = `translate(${(head.x * 0.5 + 0.5) * innerWidth}px, ${(-head.y * 0.5 + 0.5) * innerHeight}px) translate(-50%, -100%)`;
     bubbleEl.style.visibility = behind ? 'hidden' : 'visible';
+    { // keep the bubble below the top status chip (desktop) so they never overlap
+      const by = (-head.y * 0.5 + 0.5) * innerHeight; const minY = (innerWidth > 640 ? 52 : 70) + bubbleEl.offsetHeight; if (by < minY) bubbleEl.style.transform = `translate(${(head.x * 0.5 + 0.5) * innerWidth}px, ${minY}px) translate(-50%, -100%)`; }
 
     // camera
     if (walk.on) walk.update(dt);

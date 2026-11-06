@@ -49,9 +49,10 @@ void main(){
   col = mix(col, refl, 0.25 + 0.6 * fres);
   float sunUp = smoothstep(-0.05, 0.12, uSunDir.y);
   vec3 hv = normalize(uSunDir + v);
-  float spec = pow(max(dot(n, hv), 0.0), 260.0) * 6.0 * uSparkle;
-  col += uSunColor * spec * sunUp;
-  col *= mix(1.0, 0.35, uNight);
+  float nh = max(dot(n, hv), 0.0);
+  float spec = (pow(nh, 900.0) * 1.6 + pow(nh, 80.0) * 0.12) * uSparkle; // tight glints + a soft sheen (no blown-out haze)
+  col += uSunColor * min(spec, 0.9) * sunUp;
+  col *= mix(1.0, 0.45, uNight);
   // moon / night glints
   col += vec3(0.6,0.7,1.0) * pow(max(dot(n, normalize(vec3(-0.3,0.5,0.2) + v)), 0.0), 400.0) * 2.0 * uNight * uSparkle;
   // shore foam (lagoon only)
@@ -65,7 +66,7 @@ void main(){
     f += smoothstep(uRimR - 0.5, uRimR - 0.1, rr) * 0.8;
     col = mix(col, vec3(1.0) * mix(1.0, 0.4, uNight), clamp(f, 0.0, 1.0) * uFoam);
   }
-  gl_FragColor = vec4(col, uOpacity);
+  gl_FragColor = vec4(min(col, vec3(1.15)), uOpacity);
   #include <fog_fragment>
 }`;
 
@@ -124,16 +125,25 @@ void main(){
   vec3 col = mix(mix(uBed, uShallow, 0.55), uShallow, smoothstep(0.0, 0.5, depth));
   col = mix(col, uDeep, dk);
   col *= 0.9 + 0.2 * h0;
-  vec3 refl = mix(uHorizon, uSkyColor, clamp(reflect(-v, n).y * 1.5, 0.0, 1.0));
-  col = mix(col, refl, 0.08 + 0.5 * fres);
+  // soft reflections: sky gradient + the dark green banks mirrored near the shore
+  vec3 rd = reflect(-v, n);
+  vec3 refl = mix(uHorizon, uSkyColor, clamp(rd.y * 1.5, 0.0, 1.0));
+  float shoreRefl = smoothstep(1.6, 0.25, depth) * (1.0 - uNight);
+  refl = mix(refl, vec3(0.22, 0.30, 0.18), shoreRefl * 0.45);
+  col = mix(col, refl, 0.1 + 0.42 * fres);
+  // depth colour: deep pools go a richer teal, shallows warm over the gravel
+  col = mix(col, col * vec3(0.78, 0.92, 0.95), smoothstep(1.2, 2.2, depth) * 0.6);
   float sunUp = smoothstep(-0.05, 0.12, uSunDir.y);
   vec3 hv = normalize(uSunDir + v);
-  col += uSunColor * pow(max(dot(n, hv), 0.0), 220.0) * 5.0 * sunUp;
-  col *= mix(1.0, 0.32, uNight);
+  float nh = max(dot(n, hv), 0.0);
+  float glint = pow(nh, 1100.0) * 1.4 + pow(nh, 70.0) * 0.1; // small sparkles + a gentle sheen
+  col += uSunColor * min(glint, 0.8) * sunUp * (0.55 + 0.45 * smoothstep(0.2, 1.0, depth));
+  col *= mix(1.0, 0.45, uNight);
   col += vec3(0.6,0.7,1.0) * pow(max(dot(n, normalize(vec3(-0.3,0.5,0.2) + v)), 0.0), 300.0) * 1.5 * uNight;
   // foam: waterline + riffles over shallows + wakes trailing downstream of rocks/bars/the island
   float fn = vnoise(qa * vec2(3.0, 1.2)) * 0.6 + vnoise(qa * vec2(7.0, 2.5) + 3.0) * 0.4;
   float foam = smoothstep(0.16, 0.0, depth) * 0.95;
+  foam += smoothstep(0.45, 0.05, depth) * smoothstep(0.55, 0.95, sin(depth * 22.0 - t * 2.2 + fn * 4.0) * 0.5 + 0.5) * 0.45; // lapping shoreline bands
   foam += smoothstep(0.5, 0.12, depth) * smoothstep(0.6, 0.88, fn) * 0.6;
   float wake = 0.0;
   for (int k = 1; k <= 4; k++) { float fk = float(k); float du = uWaterY - bedH(p - fd * fk * 0.9); wake += smoothstep(0.25, 0.0, du) * (1.0 - fk * 0.2); }
@@ -142,13 +152,13 @@ void main(){
   col = mix(col, vec3(0.95, 0.97, 1.0) * mix(1.0, 0.35, uNight) * (0.7 + 0.3 * sunUp), clamp(foam, 0.0, 0.9));
   // ice shelf along the banks in snowy weather
   col = mix(col, vec3(0.85, 0.92, 0.98) * mix(1.0, 0.4, uNight), uIce * smoothstep(0.5, 0.1, depth) * smoothstep(0.4, 0.6, vnoise(p * 0.8)));
-  gl_FragColor = vec4(col, 1.0);
+  gl_FragColor = vec4(min(col, vec3(1.1)), 1.0);
   #include <fog_fragment>
 }`;
 export function makeRiverMaterial({ depthTex, rect, snowy = false }) {
   const uniforms = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
     uDepth: { value: null }, uRect: { value: new THREE.Vector3(rect.x0, rect.z0, rect.size) },
-    uDeep: { value: new THREE.Color(0x2a5e5a) }, uShallow: { value: new THREE.Color(0x6a9e88) }, uBed: { value: new THREE.Color(0xa09068) },
+    uDeep: { value: new THREE.Color(0x1f5560) }, uShallow: { value: new THREE.Color(0x5f9e8e) }, uBed: { value: new THREE.Color(0xa09068) },
     uWaterY: { value: -0.9 }, uFloorY: { value: 0.5 }, uBedY: { value: -2.8 }, uIce: { value: snowy ? 1 : 0 },
   }]);
   uniforms.uDepth.value = depthTex;
