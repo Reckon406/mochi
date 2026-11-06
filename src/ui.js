@@ -48,11 +48,13 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
       <div class="tabs" role="tablist">
         <button data-tab="diary">📔 Diary <i>${(state.diary || []).length}</i></button>
         <button data-tab="art">🎨 Art <i>${(state.art || []).length}</i></button>
+        <button data-tab="life">🎒 Life</button>
         <button data-tab="goals">⭐ Goals <i>${(state.goals || []).filter((g) => g.done).length}/${(state.goals || []).length}</i></button>
       </div>
       <div class="pane" id="pane-diary">${diaryHtml}</div>
       <div class="pane" id="pane-art">${artHtml}</div>
       <div class="pane" id="pane-goals">${goalsHtml}</div>
+      <div class="pane" id="pane-life"></div>
     </div>
   </section>
   <nav class="legend" id="legend">
@@ -65,6 +67,8 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
     <span class="hint">drag to look around · tap mochi to make him hop · tap a place to send him${canWalk ? ' · 🚶 walk = WASD' : ''}</span>
   </div>
   <button class="nowplaying" id="nowPlaying" hidden title="skip to the next song"></button>
+  <div class="doing" id="doing" hidden></div>
+  <div class="eprompt" id="eprompt" hidden></div>
   ${error ? `<div class="toast">${esc(error)}</div>` : ''}
   <div class="lightbox" id="lightbox" hidden><div class="lb-inner"><button class="lb-close" aria-label="close">✕</button><img alt=""><div class="lb-cap"><b></b><span></span></div>
     <button class="lb-prev" aria-label="previous">‹</button><button class="lb-next" aria-label="next">›</button></div></div>`;
@@ -103,6 +107,9 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
     setActiveZone(id) { root.querySelectorAll('.zone').forEach((b) => b.classList.toggle('active', b.dataset.zone === id)); },
     setFollow(on) { fol = on; fb.classList.toggle('on', on); },
     setWalk(on) { wb?.classList.toggle('on', on); wb && (wb.textContent = on ? '🛸 orbit' : '🚶 walk'); },
+    setDoing(label, bag) { const d = root.querySelector('#doing'); d.hidden = !label && !bag; d.innerHTML = `${label ? `<b>${esc(label)}</b>` : ''}${bag ? `<span>${esc(bag)}</span>` : ''}`; },
+    setPrompt(text) { const e = root.querySelector('#eprompt'); e.hidden = !text; if (text) e.textContent = text; },
+    renderLife(html) { root.querySelector('#pane-life').innerHTML = html; },
     openArt(i) { const k = artThumbs.findIndex((t) => t.i === i); if (k >= 0) showLb(k); },
     get lightboxOpen() { return !lb.hidden; },
     setSong(song) { np.hidden = !song; if (song) np.innerHTML = `<span class="eq"><i></i><i></i><i></i></span> ${esc(song.title)} <em>by mochi · skip ⏭</em>`; },

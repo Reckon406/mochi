@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { noise, fbm, smoothstep, rng, clamp } from './noise.js';
 import { ISLAND_R, islandRadius, topH, isletH, CLIFF, POND, POND_Y, ISLET, LAGOON_Y, WATER_Y, ISLET_D, skirtD as islandSkirtD, skirtY as islandSkirtY, RIVER_ROCKS, BRIDGE, bridgeYt, bridgePoint, ZONES, groundY, K, mv, SHOP, MUSIC, DOCK, OBSTACLES } from './layout.js';
 import { planHangs, framed } from './hang.js';
+import { canopy as seasonCanopy } from './season.js';
 import { makeWaterMaterial, ENV } from './water.js';
 import { woodTex, thatchTex, signTex, artTex, stripes, canvasTex } from './textures.js';
 import { TRAPPER_DIR } from './landscape.js';
@@ -41,7 +42,7 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
   return g;
 }
 
-export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1 }) {
+export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall' }) {
   const world = new THREE.Group(); scene.add(world);
   const anim = []; // per-frame updaters (t, dt)
   const glow = []; // emissive materials that brighten at night
@@ -177,6 +178,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   // ── big autumn tree ──
   const sways = [];
   function tree(x, z, { h = 2.6, r = 1.8, colors = [0xe58a2f, 0xf0b53a, 0xd4652c, 0xc7a03a], seed = 1 } = {}) {
+    colors = seasonCanopy(season, colors);
     const rr = rng(seed); const y = topH(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); world.add(g);
     const trunkG = new THREE.CylinderGeometry(0.22, 0.42, h, 10, 4); { const p = trunkG.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i); p.setX(i, p.getX(i) + Math.sin(yy * 1.5) * 0.08); } trunkG.computeVertexNormals(); }
     add(g, trunkG, mat(0x6b4a33), [0, h / 2, 0]);
@@ -198,8 +200,8 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   { const [x, y, z] = at(...TREE); const sw = new THREE.Group(); sw.position.set(x + 1.2, y + 2.8, z + 0.3); world.add(sw);
     for (const s of [-0.3, 0.3]) add(sw, new THREE.CylinderGeometry(0.012, 0.012, 2.1, 3), mat(0xc9a66b), [s, -1.05, 0], [0, 0, 0], null, false);
     add(sw, new THREE.BoxGeometry(0.75, 0.06, 0.3), mat(0x8a5a32), [0, -2.1, 0]); anim.push((t) => { sw.rotation.x = Math.sin(t * 1.4) * 0.12 * (0.4 + ENV.uWind.value * 2); }); }
-  // falling-leaf pile under it
-  for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 0.6 + R0() * 2.2; const x = TREE[0] + Math.cos(a) * rr, z = TREE[1] + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
+  // falling-leaf pile under it (fall only)
+  if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 0.6 + R0() * 2.2; const x = TREE[0] + Math.cos(a) * rr, z = TREE[1] + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
   // ── island pines ──
   function pine(x, z, s = 1) { const y = topH(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); g.scale.setScalar(s); world.add(g);
@@ -437,7 +439,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   function willowTree(x, z, s = 1) { const y = groundOrShore(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); g.scale.setScalar(s); world.add(g);
     add(g, new THREE.CylinderGeometry(0.12, 0.2, 1.6, 7), mat(0x6e5a48), [0, 0.8, 0], [0.1, 0, 0.08]);
     const dome = new THREE.SphereGeometry(1.25, 20, 12, 0, Math.PI * 2, 0, Math.PI * 0.62); const ps = dome.attributes.position; for (let i = 0; i < ps.count; i++) { const yy = ps.getY(i); ps.setY(i, yy * 1.35); const k = 1 + 0.06 * Math.sin(Math.atan2(ps.getZ(i), ps.getX(i)) * 14); ps.setX(i, ps.getX(i) * k); ps.setZ(i, ps.getZ(i) * k); } dome.computeVertexNormals();
-    const wm = new THREE.MeshStandardMaterial({ color: snowy ? 0xdfe6d8 : [0xb4b24c, 0xa6aa48, 0xc8b450][Math.floor(R0() * 3)], roughness: 0.9, side: THREE.DoubleSide });
+    const wm = new THREE.MeshStandardMaterial({ color: snowy ? 0xdfe6d8 : (season === 'fall' ? [0xb4b24c, 0xa6aa48, 0xc8b450] : season === 'winter' ? [0x9a9070, 0x8a8468, 0xa49a78] : [0x8ab84c, 0x7aa844, 0x9cc058])[Math.floor(R0() * 3)], roughness: 0.9, side: THREE.DoubleSide });
     const top = add(g, dome, wm, [0, 1.4, 0]); const ph = R0() * 6; sways.push((t) => { top.rotation.z = Math.sin(t * 1.2 + ph) * 0.03 * (0.4 + ENV.uWind.value * 2); top.rotation.x = Math.cos(t * 0.9 + ph) * 0.02 * (0.4 + ENV.uWind.value * 2); }); }
   [[-6.5, -13.2, 1.0], [-10.5, -11.5, 0.85], [12.6, 4.6, 0.9], [-2, 14.2, 0.95], [9.5, 11.6, 0.8], [-13.8, -6.8, 0.75], [4, -13.6, 0.9], [13.4, -3, 0.8], [-12, 10, 0.85]].map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 3)).forEach(([x, z, s]) => willowTree(x, z, s));
   // a big cottonwood on the island too, gold in November
@@ -567,7 +569,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     for (const gl of glow) gl.m.emissiveIntensity = gl.day + (gl.night - gl.day) * night;
     for (const L of lights) { const d = L.day || 0; L.l.intensity = d + (L.night - d) * night; }
   }
-  return { world, update, grass, ground, pondMat, clickables, music, hangs };
+  return { world, update, grass, ground, pondMat, clickables, music, hangs, lights };
 }
 
 function sign(parent, lines, [x, y, z], yaw = 0, s = 1) {

@@ -410,5 +410,94 @@
       }
     ],
     "playing": "sock-scarf-season"
-  }
+  },
+  "inventory": {
+    "worms": 2,
+    "fish": {},
+    "cooked": {},
+    "seeds": {
+      "carrot": 3,
+      "garlic": 2,
+      "kale": 2
+    },
+    "crops": {},
+    "honey": 0,
+    "shells": 0,
+    "firewood": 1,
+    "acorns": 0,
+    "trinkets": []
+  },
+  "garden": {
+    "plots": [
+      {
+        "crop": "garlic",
+        "stage": 1
+      },
+      {
+        "crop": "kale",
+        "stage": 3
+      },
+      {
+        "crop": "carrot",
+        "stage": 4
+      },
+      {
+        "crop": "potato",
+        "stage": 2
+      },
+      {
+        "crop": null,
+        "stage": 0
+      },
+      {
+        "crop": "huckleberry",
+        "stage": 3
+      }
+    ]
+  },
+  "fishLog": [],
+  "laptop": {
+    "site": "mochinet",
+    "screen": "",
+    "browsing": []
+  },
+  "mail": [],
+  "wishlist": [
+    {
+      "item": "fishing rod + worms from the garden",
+      "status": "built"
+    },
+    {
+      "item": "garden plots (plant, water, harvest)",
+      "status": "built"
+    },
+    {
+      "item": "laptop to browse the web",
+      "status": "built"
+    },
+    {
+      "item": "weather station on the cliff",
+      "status": "built"
+    },
+    {
+      "item": "Cap-O-Matic bottle-cap vending machine",
+      "status": "built"
+    },
+    {
+      "item": "treehouse in the big tree",
+      "status": "built"
+    },
+    {
+      "item": "real seasons (cottonwoods, snow, green)",
+      "status": "built"
+    },
+    {
+      "item": "mailbox with a flag",
+      "status": "built"
+    },
+    {
+      "item": "night critters: owl, bats, moths, raccoon",
+      "status": "built"
+    }
+  ]
 }

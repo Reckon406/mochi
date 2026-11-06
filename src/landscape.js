@@ -72,7 +72,7 @@ function terrainMesh(size, seg, cx, cz, snowy, hFn) {
 }
 
 export const NEAR = 170; // half-size of the high-res terrain patch around the island
-export function buildLandscape(scene, { snowy = false, mobile = false } = {}) {
+export function buildLandscape(scene, { snowy = false, mobile = false, season = 'fall' } = {}) {
   const group = new THREE.Group(); scene.add(group);
   // far terrain (sunk under the near patch so they don't fight)
   const far = terrainMesh(3800, mobile ? 170 : 240, 0, 0, snowy, (x, z) => terrainH(x, z) - (Math.max(Math.abs(x), Math.abs(z)) < NEAR - 12 ? 6 : 0));
@@ -115,7 +115,8 @@ export function buildLandscape(scene, { snowy = false, mobile = false } = {}) {
   const canopyM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 }); const trunkM = new THREE.MeshStandardMaterial({ color: 0x7a6a5a, roughness: 1 });
   const cwC = new THREE.InstancedMesh(cwCanopy, canopyM, NC), cwT = new THREE.InstancedMesh(cwTrunk, trunkM, NC);
   const wl = new THREE.InstancedMesh(willow, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, side: THREE.DoubleSide }), NWl);
-  const golds = [0xe8c040, 0xd9a830, 0xc9b24a, 0xb8a040, 0xe0b85a], willowC = [0xa8a848, 0x9aa040, 0xc0b050];
+  const golds = season === 'fall' ? [0xe8c040, 0xd9a830, 0xc9b24a, 0xb8a040, 0xe0b85a] : season === 'winter' ? [0x8a7a68, 0x7a6a58, 0x9a8a78] : season === 'spring' ? [0x9fd06a, 0x8cc65a, 0xb5dc84] : [0x5f9a3e, 0x4f8a36, 0x6fae48];
+  const willowC = season === 'fall' ? [0xa8a848, 0x9aa040, 0xc0b050] : season === 'winter' ? [0x9a9070, 0x8a8468] : [0x8ab84c, 0x7aa844, 0x9cc058];
   const placeBank = (mesh, mesh2, count, cols, minD, maxD, scale, zr, clear) => { let k = 0, tr = 0;
     while (k < count && tr < count * 40) { tr++; const z = (r() - 0.5) * 2 * zr; const side = r() < 0.5 ? -1 : 1; const off = riverW(z) + minD + Math.pow(r(), 1.6) * (maxD - minD); const x = riverX(z) + side * off;
       const h = terrainH(x, z); if (h < FLOOR_Y - 0.25 || h > FLOOR_Y + 14) continue; if (Math.hypot(x, z) < clear) continue;

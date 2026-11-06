@@ -43,9 +43,12 @@ export function createMusic(state, settings) {
     if (ctx) return ctx; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC();
     master = ctx.createGain(); master.connect(ctx.destination); musicBus = ctx.createGain(); sfxBus = ctx.createGain(); ambBus = ctx.createGain();
     const comp = ctx.createDynamicsCompressor(); musicBus.connect(comp); comp.connect(master); sfxBus.connect(master); ambBus.connect(master);
-    applyLevels(); river(); return ctx;
+    applyLevels(); // river fades in over ~2.5s on first start instead of starting at full volume
+    ambBus.gain.cancelScheduledValues(ctx.currentTime); ambBus.gain.setValueAtTime(0, ctx.currentTime); ambBus.gain.linearRampToValueAtTime(ambLevel(), ctx.currentTime + 2.5);
+    river(); return ctx;
   }
-  function applyLevels() { if (!ctx) return; const s = settings.get(); master.gain.value = s.mute ? 0 : s.master; musicBus.gain.value = s.music * 0.55; sfxBus.gain.value = s.sfx; ambBus.gain.value = s.sfx * 0.35; if (audioEl) audioEl.volume = s.mute ? 0 : s.master * s.music; }
+  function ambLevel() { const s = settings.get(); return s.sfx * (s.river ?? 0.3) * 0.35; } // river default = 30% of the old level
+  function applyLevels() { if (!ctx) return; const s = settings.get(); master.gain.value = s.mute ? 0 : s.master; musicBus.gain.value = s.music * 0.55; sfxBus.gain.value = s.sfx; const amb = ambLevel(); ambBus.gain.cancelScheduledValues(ctx.currentTime); ambBus.gain.setTargetAtTime(amb, ctx.currentTime, 0.08); if (audioEl) audioEl.volume = s.mute ? 0 : s.master * s.music; }
   function river() { // soft filtered-noise river ambience
     const len = ctx.sampleRate * 2, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0); let b = 0; for (let i = 0; i < len; i++) { b = 0.97 * b + 0.03 * (Math.random() * 2 - 1); d[i] = b * 3; }
     const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true; const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 900; src.connect(f); f.connect(ambBus); src.start();
@@ -84,12 +87,16 @@ export function createMusic(state, settings) {
     if (kind === 'hop') { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(1500, t + 0.09); o.frequency.exponentialRampToValueAtTime(1100, t + 0.16); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + 0.25); }
     else if (kind === 'click') tone(1200, t, 0.06, { wave: 'sine', vol: 0.12, bus: sfxBus });
     else if (kind === 'step') noiseHit(t, 0.05, 0.05, 2500, sfxBus);
+    else if (kind === 'sizzle') noiseHit(t, 0.5, 0.08, 4000, sfxBus);
+    else if (kind === 'hoot') { [0, 0.35, 0.55].forEach((d, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(i ? 360 : 330, t + d); o.frequency.exponentialRampToValueAtTime(300, t + d + 0.25); g.gain.setValueAtTime(0.0001, t + d); g.gain.exponentialRampToValueAtTime(0.18, t + d + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t + d + 0.3); o.connect(g); g.connect(sfxBus); o.start(t + d); o.stop(t + d + 0.35); }); }
+    else if (kind === 'clang') { [880, 1320, 1760].forEach((f) => tone(f, t, 0.5, { wave: 'square', vol: 0.05, bus: sfxBus, cutoff: 5000 })); }
+    else if (kind === 'spray') noiseHit(t, 0.6, 0.12, 2000, sfxBus);
   }
   // browsers only allow audio after a user gesture
   const kick0 = () => { if (started) return; started = true; if (!ensure()) return; ctx.resume(); if (settings.get().musicOn && songs.length) playSong(cur); };
   ['pointerdown', 'keydown', 'touchstart'].forEach((e) => addEventListener(e, kick0, { once: false, passive: true }));
   return {
-    songs, get current() { return songs[cur] || null; }, get playing() { return !!(timer || audioEl); },
+    songs, get started() { return started; }, get current() { return songs[cur] || null; }, get playing() { return !!(timer || audioEl); },
     next() { started = true; playSong(cur + 1); }, play(i = cur) { started = true; ctx?.resume(); playSong(i); }, stop() { stopSong(); onChange(null); },
     onChange(fn) { onChange = fn; }, applyLevels, sfx,
     setEnabled(on) { if (on && started && !this.playing) playSong(cur); if (!on) { stopSong(); onChange(null); } },

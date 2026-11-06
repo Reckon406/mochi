@@ -143,6 +143,9 @@ export function createMochi(outfit = '') {
   const anim = { t: 0, walk: 0, walkPhase: 0, hop: -1, hopDur: 0.62, hopH: 0.7, flap: 0, blinkT: 2, blink: 0, look: 0, lookT: 0 };
   function hop(h = 0.7) { if (anim.hop < 0) { anim.hop = 0; anim.hopH = h; anim.flap = Math.max(anim.flap, 0.7); } }
   function flap(d = 0.9) { anim.flap = Math.max(anim.flap, d); }
+  // things held in the beak (worm, fish, rod...) hang off `hold`; pose = activity animation knobs set by main
+  const hold = new THREE.Group(); hold.position.set(0, 0.36, 1.22); pivot.add(hold);
+  const pose = { peck: 0, sleep: 0, puff: 0, sway: 0 };
   const mods = { cold: 0, wet: 0, wind: 0, perk: 0 }; // set by main from weather + mood: the world gets to him
   let shake = 0;
   function update(dt, speed01 = 0) {
@@ -160,6 +163,8 @@ export function createMochi(outfit = '') {
     if (mods.wet && shake <= 0 && anim.hop < 0 && Math.random() < dt * 0.09 * mods.wet) shake = 0.7;
     if (shake > 0) { shake -= dt; rz += Math.sin(shake * 45) * 0.16 * Math.min(1, shake * 3); }
     py += 0.035 * mods.perk * idle * Math.max(0, Math.sin(t * 6));
+    rx += 0.45 * pose.peck * Math.max(0, Math.sin(t * 9)); sy *= 1 - 0.22 * pose.sleep; rx -= 0.12 * pose.sleep; rz += 0.12 * pose.sway * Math.sin(t * 4);
+    const puff = 1 + 0.45 * pose.puff;
     // hop with anticipation / stretch / land squash
     let hopY = 0;
     if (anim.hop >= 0) {
@@ -169,7 +174,7 @@ export function createMochi(outfit = '') {
       else if (u < 1) { sy *= 1 - 0.18 * Math.sin(((u - 0.88) / 0.12) * Math.PI); }
       else anim.hop = -1;
     }
-    pivot.scale.set(1 / Math.sqrt(sy), sy, 1 / Math.sqrt(sy));
+    pivot.scale.set(puff / Math.sqrt(sy), sy * puff, puff / Math.sqrt(sy));
     pivot.position.y = py + hopY; pivot.rotation.z = rz; pivot.rotation.x = rx;
     // legs
     legs[0].rotation.x = Math.sin(anim.walkPhase) * 0.7 * w; legs[1].rotation.x = -Math.sin(anim.walkPhase) * 0.7 * w;
@@ -182,10 +187,10 @@ export function createMochi(outfit = '') {
     // blink
     anim.blinkT -= dt; if (anim.blinkT < 0) { anim.blink = 0.14; anim.blinkT = 1.8 + Math.random() * 3.5; if (Math.random() < 0.2) anim.blinkT = 0.25; }
     let ey = 1; if (anim.blink > 0) { anim.blink -= dt; ey = 0.12 + 0.88 * Math.abs((anim.blink / 0.14) * 2 - 1); }
-    eyes.forEach((e) => (e.scale.y = ey));
+    ey = Math.min(ey, 1 - 0.9 * pose.sleep); eyes.forEach((e) => (e.scale.y = ey));
     // outfit physics-ish
     if (extras.cape) extras.cape.rotation.x = 0.02 + 0.3 * w + 0.3 * Math.sin(Math.min(1, Math.max(0, anim.hop) / anim.hopDur) * Math.PI) + 0.06 * Math.sin(t * 3.1) + 0.04 * Math.sin(t * 7.3) * w;
     if (extras.sock) extras.sock.rotation.z = 0.35 + Math.sin(anim.walkPhase * 0.5) * 0.25 * w + 0.05 * Math.sin(t * 2);
   }
-  return { root, pivot, hop, flap, update, anim, hit, mods, headOffset: 1.45 };
+  return { root, pivot, hop, flap, update, anim, hit, mods, hold, pose, headOffset: 1.45 };
 }

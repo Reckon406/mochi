@@ -111,10 +111,11 @@ const S = (x, z, ax, az) => [x + (K - 1) * ax, z + (K - 1) * az];
 export const SHOP = { x: 3.2, z: 8.6, w: 4.8, d: 3.6, h: 2.7 };
 { const L = Math.hypot(SHOP.x, SHOP.z); SHOP.fx = -SHOP.x / L; SHOP.fz = -SHOP.z / L; SHOP.yaw = Math.atan2(SHOP.fx, SHOP.fz); }
 export const MUSIC = { x: 9.0, z: -9.8 };
+export const VEND = { x: -6.8, z: 15.8 }; { const L = Math.hypot(VEND.x + 3, VEND.z - 6); VEND.fx = -(VEND.x + 3) / L; VEND.fz = -(VEND.z - 6) / L; VEND.yaw = Math.atan2(VEND.fx, VEND.fz); }
 // zones. pos = feature centre, spot = where Mochi stands, face = yaw he looks toward (radians, 0 = +z)
 export const ZONES = [
   { id: 'hut', name: 'Hut & Nest', emoji: '🛖', pos: Z(-4.2, -8.0), spot: S(-2.6, -5.9, -4.2, -8.0), keys: ['hut', 'home', 'house', 'nest', 'roof', 'ladder', 'bed', 'sleep', 'inside', 'door'] },
-  { id: 'tree', name: 'Big Tree', emoji: '🌳', pos: Z(4.4, -9.0), spot: S(3.4, -7.0, 4.4, -9.0), keys: ['big tree', 'oak', 'tree', 'shade', 'leaves', 'branch'] },
+  { id: 'tree', name: 'Big Tree', emoji: '🌳', pos: Z(4.4, -9.0), spot: S(3.4, -7.0, 4.4, -9.0), keys: ['big tree', 'treehouse', 'tree house', 'oak', 'tree', 'shade', 'leaves', 'branch', 'climb', 'owl'] },
   { id: 'pond', name: 'Pond', emoji: '🪷', pos: [POND.x, POND.z], spot: [POND.x - 2.4, POND.z + 2.6], keys: ['pond', 'duck', 'water', 'lily', 'puddle', 'swim'] },
   { id: 'pumpkins', name: 'Pumpkin Patch', emoji: '🎃', pos: Z(-7.0, 6.4), spot: S(-5.6, 4.9, -7.0, 6.4), keys: ['pumpkin', 'patch', 'halloween', 'jack', 'grave', 'hat grave'] },
   { id: 'beach', name: 'Beach Islet', emoji: '🏖️', pos: [ISLET.x, ISLET.z], spot: [ISLET.x - 1.6, ISLET.z + 0.4], keys: ['beach', 'islet', 'sand', 'wave', 'ocean', 'shore', 'bridge', 'lagoon', 'sea'] },
@@ -123,13 +124,14 @@ export const ZONES = [
   { id: 'museum', name: 'Cap Museum', emoji: '🧢', pos: Z(-8.2, -3.4), spot: S(-6.8, -2.0, -8.2, -3.4), keys: ['cap museum', 'museum', 'cap', 'bottle', 'shelf', 'collection', 'son'] },
   { id: 'squirrel', name: "Squirrel's Tree", emoji: '🐿️', pos: Z(10.0, -4.6), spot: S(8.1, -3.4, 10.0, -4.6), keys: ['squirrel', 'rival', 'acorn', 'cold war', 'enemy'] },
   { id: 'garden', name: 'Garden', emoji: '🥕', pos: Z(5.6, 9.0), spot: S(4.0, 7.6, 5.6, 9.0), keys: ['garden', 'carrot', 'veg', 'plant', 'cabbage', 'grow', 'seed', 'dig'] },
-  { id: 'cliff', name: 'Lookout Cliff', emoji: '🏔️', pos: [CLIFF.x, CLIFF.z], spot: [CLIFF.x - 1.4, CLIFF.z + 0.8], keys: ['lookout', 'cliff', 'view', 'peak', 'trapper', 'mountain', 'edge', 'overlook', 'stare'] },
+  { id: 'cliff', name: 'Lookout Cliff', emoji: '🏔️', pos: [CLIFF.x, CLIFF.z], spot: [CLIFF.x - 1.4, CLIFF.z + 0.8], keys: ['weather station', 'lookout', 'cliff', 'yodel', 'view', 'peak', 'trapper', 'mountain', 'edge', 'overlook', 'stare'] },
   { id: 'shop', name: 'Art Shop', emoji: '🖼️', pos: [SHOP.x, SHOP.z], spot: [SHOP.x + SHOP.fx * 3.4, SHOP.z + SHOP.fz * 3.4], keys: ['art shop', 'shop', 'gallery', 'frame', 'hang', 'exhibit', 'boutique', 'store'] },
   { id: 'campfire', name: 'Campfire', emoji: '🔥', pos: [12.5, 1.5], spot: [11.0, 2.9], keys: ['campfire', 'fire', 'marshmallow', "s'more", 'smore', 'camp', 'warm', 'cozy'] },
   { id: 'meadow', name: 'Wildflower Meadow', emoji: '🌼', pos: [-1.5, -7.5], spot: [-0.2, -6.0], keys: ['meadow', 'flower', 'bee', 'honey', 'wildflower', 'daisy', 'field', 'nap'] },
   { id: 'dock', name: 'Fishing Dock', emoji: '🎣', pos: [DOCK.x0 + DOCK.dx * DOCK.len * 0.5, DOCK.z0 + DOCK.dz * DOCK.len * 0.5], spot: [DOCK.x0 + DOCK.dx * DOCK.len * 0.8, DOCK.z0 + DOCK.dz * DOCK.len * 0.8], keys: ['dock', 'fish', 'pier', 'river', 'rod', 'boat', 'float', 'bitterroot'] },
   { id: 'music', name: 'Music Corner', emoji: '🎸', pos: [MUSIC.x, MUSIC.z], spot: [MUSIC.x + 1.4, MUSIC.z + 1.6], keys: ['music', 'song', 'sing', 'drum', 'guitar', 'uke', 'keys', 'piano', 'band', 'jam', 'concert', 'tune'] },
-  { id: 'picnic', name: 'Picnic Table', emoji: '🧺', pos: Z(-3.2, 1.6), spot: S(-2.2, 3.0, -3.2, 1.6), keys: ['picnic', 'table', 'cooler', 'soda', 'snack', 'lunch', 'quarters'] },
+  { id: 'picnic', name: 'Picnic Table', emoji: '🧺', pos: Z(-3.2, 1.6), spot: S(-2.2, 3.0, -3.2, 1.6), keys: ['picnic', 'table', 'cooler', 'soda', 'snack', 'lunch', 'quarters', 'laptop', 'computer', 'internet', 'browse', 'web', 'online', 'eat'] },
+  { id: 'vending', name: 'Cap-O-Matic', emoji: '🎰', pos: [VEND.x, VEND.z], spot: [VEND.x + VEND.fx * 1.6, VEND.z + VEND.fz * 1.6], keys: ['vending', 'cap-o-matic', 'capomatic', 'machine', 'trinket', 'spend', 'gacha', 'capsule'] },
 ];
 
 export function matchZone(location) {
@@ -149,7 +151,7 @@ export const OBSTACLES = [
   ob(-4.2, -8.0, 2.1), { x: POND.x, z: POND.z, r: POND.r + 0.2 }, ob(4.4, -9.0, 1.0),
   ob(10.0, -4.6, 0.9), ob(9.6, 6.0, 1.9), ob(-1.0, 9.9, 1.6), ob(-8.5, -3.8, 1.3),
   ob(-3.2, 1.6, 1.3), ob(5.6, 9.4, 1.5), ob(-7.0, 6.6, 1.3),
-  { x: 12.5, z: 1.5, r: 0.9 }, { x: -1.5 - 1.2, z: -7.5 - 1.0, r: 0.5 }, { x: MUSIC.x, z: MUSIC.z, r: 1.3 },
+  { x: 12.5, z: 1.5, r: 0.9 }, { x: -1.5 - 1.2, z: -7.5 - 1.0, r: 0.5 }, { x: MUSIC.x, z: MUSIC.z, r: 1.3 }, { x: VEND.x, z: VEND.z, r: 0.75 },
   { x: SHOP.x, z: SHOP.z, r: Math.hypot(SHOP.w, SHOP.d) / 2 + 0.2, mochiOnly: true },
 ];
 export const WALLS = [];

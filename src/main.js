@@ -15,6 +15,12 @@ import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF } from './layout.js';
 import { buildUI } from './ui.js';
 import { createWalk } from './controls.js';
+import { seasonOf } from './season.js';
+import { buildFeatures } from './features.js';
+import { createLife } from './life.js';
+import { createCritters } from './critters.js';
+import { FISH } from './fish.js';
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 import { buildWorldState } from './worldstate.js';
 import { createMusic } from './music.js';
 import { createSettings, buildSettingsPanel, QUALITY } from './settings.js';
@@ -71,10 +77,13 @@ async function init() {
 
   const fogBase = weather.fog ? (weather.heavy ? 0.03 : 0.018) : 0.0006 + (weather.rain || weather.snow ? 0.0012 : 0) + weather.cloudiness * 0.0002;
   scene.fog = new THREE.FogExp2(0xc6dcec, fogBase);
-  const land = buildLandscape(scene, { snowy: weather.snow, mobile: isMobile });
-  const island = buildIsland(scene, { snowy: weather.snow, mobile: isMobile, state, detail: S0.detail });
+  const season = seasonOf(new Date(), params.get('season'));
+  const snowy = weather.snow || season === 'winter';
+  const land = buildLandscape(scene, { snowy, mobile: isMobile, season });
+  const island = buildIsland(scene, { snowy, mobile: isMobile, state, detail: S0.detail, season });
   const worldState = buildWorldState(scene, state);
-  const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles });
+  const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
+  const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow });
 
   const mochi = createMochi(state.outfit || '');
   scene.add(mochi.root);
@@ -112,6 +121,7 @@ async function init() {
 
   // ── Mochi brain ──
   const favored = matchZone(state.location) || ZONES[0];
+  let life = null; // activity engine (created once music/ui exist)
   const brain = { zone: favored, path: [], wait: 3, speed: 2.1, heading: 0, busy: 0 };
   // the world gets to him (Pino-style): weather + mood nudge how he moves and where he goes
   const moodS = String(state.mood || '').toLowerCase();
@@ -152,11 +162,13 @@ async function init() {
     else if (!here && there) pts = [...avoid(from, bA), bB, to];
     else if (here && there) pts = [to];
     else pts = avoid(from, to);
+    life?.cancel(); brain.acted = false;
     brain.path = pts; brain.zone = zone; brain.wait = 0; ui.setActiveZone(zone.id);
   }
   function pickNext() {
     const others = ZONES.filter((z) => z !== brain.zone);
     let z = Math.random() < 0.45 && brain.zone !== favored ? favored : others[Math.floor(Math.random() * others.length)];
+    const sug = life && life.suggest(); if (sug) { const sz = ZONES.find((q) => q.id === sug); if (sz) z = sz; }
     if (shelter && Math.random() < 0.5) { const sz = ZONES.find((q) => q.id === shelter[Math.floor(Math.random() * shelter.length)]); if (sz && sz !== brain.zone) z = sz; }
     if (music.playing && Math.random() < 0.2 && brain.zone.id !== 'music') z = ZONES.find((q) => q.id === 'music') || z;
     planTo(z);
@@ -191,7 +203,7 @@ async function init() {
       const sz = isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('shadows' in patch) sun.castShadow = st.shadows;
     if ('bloom' in patch) bloom.enabled = st.bloom;
-    if ('master' in patch || 'music' in patch || 'sfx' in patch || 'mute' in patch) music.applyLevels();
+    if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();
     if ('musicOn' in patch) music.setEnabled(st.musicOn);
     if ('autoRotate' in patch && !st.autoRotate) controls.autoRotate = false;
   });
@@ -204,6 +216,36 @@ async function init() {
       else { const d = new THREE.Vector3(); camera.getWorldDirection(d); d.y = Math.max(d.y, -0.35); controls.target.copy(camera.position).addScaledVector(d.normalize(), 7); clampTarget(); camera.up.set(0, 1, 0); controls.update(); }
     } });
   ui.setActiveZone(favored.id); ui.setFollow(follow);
+
+  // ── life: activities, inventory, garden, fishing, laptop (Pino-style chains) ──
+  const EM = { worms: '🪱', honey: '🍯', shells: '🐚', firewood: '🪵', acorns: '🌰', caps: '🧢' };
+  const bagText = (inv) => { const f = Object.values(inv.fish).reduce((a, b) => a + b, 0), c = Object.values(inv.cooked).reduce((a, b) => a + b, 0), cr = Object.values(inv.crops).reduce((a, b) => a + b, 0);
+    return [inv.worms && `🪱${inv.worms}`, f && `🐟${f}`, c && `🍢${c}`, cr && `🥕${cr}`, inv.caps && `🧢${inv.caps}`, inv.trinkets.length && `🎁${inv.trinkets.length}`].filter(Boolean).join(' '); };
+  let lifeDirty = 1;
+  life = createLife({ state, mochi, features, say: (s, d) => say(s, d), music, sky, feel, onChange: (inv, log, label) => { if (label !== undefined) ui.setDoing(label, bagText(inv)); else ui.setDoing(life?.label || '', bagText(inv)); lifeDirty = 1; } });
+  ui.setDoing('', bagText(life.inv));
+  const critters = createCritters(scene, { lights: island.lights || [], life, say: (s, d) => say(s, d), music, season });
+  const wish = Array.isArray(state.wishlist) ? state.wishlist : [];
+  function lifeHtml() {
+    const inv = life.inv; const kv = (o, fmt = (k) => k) => Object.entries(o).filter(([, v]) => v > 0).map(([k, v]) => `<span>${esc(fmt(k))} ×${v}</span>`).join('') || '<span>—</span>';
+    const stg = ['bare', 'sprout', 'leafy', 'budding', 'ripe!'];
+    const lap = state.laptop || {}; const mail = Array.isArray(state.mail) ? state.mail : [];
+    return `<div class="life"><h5>Bag</h5><div class="chips">${Object.entries(EM).map(([k, e]) => `<span>${e} ${k} ×${inv[k] || 0}</span>`).join('')}</div>
+      <h5>Fish bucket</h5><div class="chips">${kv(inv.fish, (k) => FISH[k]?.name || k)}</div><h5>Cooked</h5><div class="chips">${kv(inv.cooked)}</div>
+      <h5>Seeds · crops</h5><div class="chips">${kv({ ...Object.fromEntries(Object.entries(inv.seeds).map(([k, v]) => [k + ' seeds', v])), ...inv.crops })}</div>${inv.trinkets.length ? `<h5>Trinkets</h5><div class="chips">${inv.trinkets.map((x) => `<span>${esc(x)}</span>`).join('')}</div>` : ''}
+      <h5>Garden (${esc(season)})</h5>${life.plots.map((p) => `<div class="row2">${esc(p.crop || 'empty')}<em>${p.crop ? stg[Math.min(4, p.stage)] : 'needs seeds'}</em></div>`).join('')}
+      <h5>Fish log · Bitterroot</h5>${life.fishLog.slice(-8).reverse().map((f) => `<div class="row2">${esc(FISH[f.species]?.name || f.species)}${f.inches ? ` · ${f.inches}"` : ''}<em>${esc(f.kept ? 'kept' : 'released')}${f.date ? ' · ' + esc(f.date) : ''}</em></div>`).join('') || '<div class="row2">no fish yet<em>worms → dock</em></div>'}
+      <h5>Laptop</h5><div class="row2">${esc(lap.site || lap.browsing?.[lap.browsing.length - 1] || 'off')}<em>${esc(lap.screen || lap.last || '')}</em></div>
+      <h5>Mail</h5>${mail.slice(-5).reverse().map((m) => `<div class="row2">${m.unread || m.read === false ? '🔴 ' : ''}${esc(m.from || 'someone')}<em>${esc(m.subject || m.text || '')}</em></div>`).join('') || '<div class="row2">mailbox empty<em>flag down</em></div>'}
+      ${wish.length ? `<h5>Wishlist</h5>${wish.map((w) => `<div class="row2">${esc(w.item || w.name || w)}<span class="st ${esc(w.status || '')}">${esc(w.status || 'wish')}</span></div>`).join('')}` : ''}</div>`;
+  }
+  // E key in walk mode: send Mochi to do the nearest thing
+  const zoneNear = () => { const c = camera.position; let best = null, bd = 7; for (const z of ZONES) { if (!life.BY_ZONE[z.id]) continue; const d = Math.hypot(z.pos[0] - c.x, z.pos[1] - c.z); if (d < bd) { bd = d; best = z; } } return best; };
+  function interactNear() { const z = zoneNear(); if (!z) return; planTo(z); life.interact(z.id); const a = life.A[life.BY_ZONE[z.id][0]]; music.sfx('click'); say(`ooh ok: ${a ? a.label.replace(/^\S+\s/, '') : z.name.toLowerCase()}`, 2.5); }
+  addEventListener('keydown', (e) => { if ((e.key === 'e' || e.key === 'E') && walk.on && !e.repeat) interactNear(); });
+  let promptT = 0;
+  if (life.initialZone && life.initialZone !== favored.id) setTimeout(() => { const z = ZONES.find((q) => q.id === life.initialZone); if (z) planTo(z); }, 1500);
+  else brain.wait = 1.2;
   if (params.get('ui') === '0') document.getElementById('ui').style.display = 'none';
 
   // ── click / tap Mochi ──
@@ -247,6 +289,13 @@ async function init() {
     // brain
     let moving = 0;
     if (brain.busy > 0) brain.busy -= dt;
+    else if (life.current) {
+      // doing an activity: life moves/poses him; face where it says
+      const p0x = mochi.root.position.x, p0z = mochi.root.position.z; life.update(dt, t);
+      if (Math.hypot(mochi.root.position.x - p0x, mochi.root.position.z - p0z) > dt * 0.3) moving = 1;
+      const want = life.face ?? mochi.root.userData.faceTo ?? brain.heading; let dh = want - brain.heading; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); brain.heading += dh * Math.min(1, dt * 5);
+      if (!life.current) { brain.wait = 1.5 + Math.random() * 3; mochi.root.userData.faceTo = null; }
+    }
     else if (brain.path.length) {
       const p = mochi.root.position; const tgt = brain.path[0]; const dx = tgt.x - p.x, dz = tgt.y - p.z; const d = Math.hypot(dx, dz);
       if (d < 0.12) { brain.path.shift(); if (!brain.path.length) { brain.wait = 5 + Math.random() * 7; if (brain.zone === favored) brain.wait += 6; if (Math.random() < 0.6) bubbleT = Math.min(bubbleT, 0.8); } }
@@ -255,17 +304,22 @@ async function init() {
         const step = Math.min(d, brain.speed * dt * (Math.abs(dh) > 1.2 ? 0.3 : 1)); p.x += Math.sin(brain.heading) * step; p.z += Math.cos(brain.heading) * step; moving = 1;
       }
     } else {
+      if (!brain.acted && params.get('stay') !== '1' && params.get('act') !== '0') { brain.acted = true; if (life.begin(brain.zone.id)) bubbleT = Math.max(bubbleT, 4); }
       brain.wait -= dt;
       const want = faceFor(brain.zone, mochi.root.position) + Math.sin(t * 0.4) * 0.35; let dh = want - brain.heading; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); brain.heading += dh * Math.min(1, dt * 2.5);
       const jam = brain.zone.id === 'music' && music.playing ? 3 : 1;
       if (Math.random() < dt * hopRate * jam) mochi.hop((0.4 + Math.random() * 0.4) * (1 - 0.3 * feel.cold)); else if (Math.random() < dt * 0.1 * (1 - 0.5 * feel.cold)) mochi.flap(0.8);
       if (brain.wait < 0 && params.get('stay') !== '1') pickNext();
     }
-    mochi.root.position.y = groundY(mochi.root.position.x, mochi.root.position.z);
+    if (!life.current) life.update(dt, t);
+    mochi.root.position.y = groundY(mochi.root.position.x, mochi.root.position.z) + life.lift;
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); wx.update(t, dt, night, sun, sky.hemi);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); critters.update(t, dt, night, sky.state.golden || 0);
+    for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
+    if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
+    promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
 
     // bubble
     bubbleT -= dt; if (bubbleT < 0) { randomThought(); bubbleT = 9 + Math.random() * 7; }
@@ -288,7 +342,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   requestAnimationFrame(frame);
-  window.__mochi = { brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel };
+  window.__mochi = { ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel };
 }
 
 init().catch((e) => {

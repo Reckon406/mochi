@@ -1,4 +1,4 @@
-// Weather from the STATE.weather string, plus clouds, falling leaves, fireflies
+// Weather from the STATE.weather string, plus clouds + falling leaves
 import * as THREE from 'three';
 import { rng } from './noise.js';
 import { ENV } from './water.js';
@@ -59,19 +59,13 @@ export function createWeather(scene, w, opts = {}) { const { mobile = false } = 
   }
   // ── autumn leaves drifting in the wind (skip when snowing) ──
   let leaves = null;
-  if (!w.snow) {
+  if (!w.snow && (opts.season ?? 'fall') === 'fall') {
     const N = 60; const ls = new THREE.Shape(); ls.moveTo(0, -0.07); ls.quadraticCurveTo(0.06, -0.01, 0, 0.07); ls.quadraticCurveTo(-0.06, -0.01, 0, -0.07); const geo = new THREE.ShapeGeometry(ls, 6); const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide, roughness: 0.8 });
     leaves = new THREE.InstancedMesh(geo, mat, N); const c = new THREE.Color(); const cols = [0xe58a2f, 0xf0b53a, 0xd4652c];
     leaves.userData.p = []; for (let i = 0; i < N; i++) { leaves.setColorAt(i, c.set(cols[i % 3])); leaves.userData.p.push({ x: (r() - 0.5) * 50, y: r() * 8, z: (r() - 0.5) * 50, ph: r() * 6, s: 0.5 + r() }); }
     group.add(leaves);
   }
-  // ── fireflies at night ──
-  const FF = 90; const fp = new Float32Array(FF * 3); const ffBase = [];
-  for (let i = 0; i < FF; i++) { const a = r() * 6.28, rr = Math.sqrt(r()) * 21; ffBase.push([Math.cos(a) * rr, 0.4 + r() * 1.6, Math.sin(a) * rr, r() * 6]); }
-  const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.BufferAttribute(fp, 3));
-  const ffMat = new THREE.PointsMaterial({ size: 0.18, map: cloudSprite(), color: new THREE.Color(3, 2.6, 0.9), transparent: true, depthWrite: false, opacity: 0, blending: THREE.AdditiveBlending });
-  const fireflies = new THREE.Points(fg, ffMat); fireflies.frustumCulled = false; group.add(fireflies);
-
+  // (no fireflies: western Montana doesn't have them. night critters live in critters.js)
   ENV.uWind.value = w.windAmt;
   let flash = 0, nextBolt = 6 + Math.random() * 10;
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), s3 = new THREE.Vector3();
@@ -87,9 +81,6 @@ export function createWeather(scene, w, opts = {}) { const { mobile = false } = 
       p.needsUpdate = true; }
     if (leaves) { const P = leaves.userData.p; for (let i = 0; i < P.length; i++) { const L = P[i]; L.y -= dt * 0.35 * L.s; L.x += dt * (0.4 + wind * 3) ; L.z += Math.sin(t + L.ph) * dt * 0.3; if (L.y < -1 || L.x > 28) { L.y = 6 + Math.random() * 4; L.x = -28 + Math.random() * 6; L.z = (Math.random() - 0.5) * 30; }
       v.set(L.x, L.y, L.z); e.set(t * 2 + L.ph, t * 1.3 + L.ph, t * 0.7); q.setFromEuler(e); s3.setScalar(1); m4.compose(v, q, s3); leaves.setMatrixAt(i, m4); } leaves.instanceMatrix.needsUpdate = true; }
-    // fireflies
-    ffMat.opacity = night * (w.rain || w.snow ? 0.2 : 1);
-    if (night > 0.05) { const p = fg.attributes.position; ffBase.forEach(([x, y, z, ph], i) => p.setXYZ(i, x + Math.sin(t * 0.5 + ph) * 0.8, y + Math.sin(t * 1.1 + ph * 2) * 0.3 * (0.5 + 0.5 * Math.sin(t * 3 + ph)), z + Math.cos(t * 0.4 + ph) * 0.8)); p.needsUpdate = true; }
     // thunder flashes
     if (w.thunder) { nextBolt -= dt; if (nextBolt < 0) { flash = 1; nextBolt = 5 + Math.random() * 12; } if (flash > 0) { flash -= dt * 3; hemi.intensity += Math.max(0, flash) * 4 * (Math.sin(t * 60) > 0 ? 1 : 0.3); } }
   }

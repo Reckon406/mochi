@@ -16,11 +16,12 @@ To keep the site in sync, write the same STATE object as JSON to `state.json` ne
 
 ## URL params (handy for previews)
 `?weather=heavy snow` · `?hour=17.5` (local hour) · `?location=pond` · `?outfit=witch hat` · `?elk=1` · `?cam=mochi` (follow cam) · `?walk=1` (walk mode)
-· `&camyaw=2.4` · `?az=72&el=10&dist=46` (wide camera) · `?rotate=0` · `?stay=1` · `?say=<thought index>` · `?ui=0` · `?state=./other.json`
+· `&camyaw=2.4` · `?az=72&el=10&dist=46` (wide camera) · `?rotate=0` · `?stay=1` · `?say=<thought index>` · `?ui=0` · `?state=./other.json` · `?season=winter|spring|summer|fall` · `?act=0` (no activities)
 
 ## Controls
 - **Orbit** (default): drag to look around, scroll to zoom, tap Mochi to make him hop, tap a zone to send him there. `🎥 follow` keeps the camera on him.
 - **🚶 walk** (desktop): first-person walking. **WASD** or arrows to move, **Shift** to sprint, **Space** to hop. Click the world to lock the mouse for looking around (or click-drag if pointer lock is blocked), and **Esc** to unlock. The button turns into `🛸 orbit` to switch back. You stay on the ground, the island, the bridge, the beach islet, the gravel bars and the river boulders. You can wade up to your ankles but not into the river. You can't walk through the hut, trees, pond or stalls, or climb the sheer cliff face (use the grassy ramp). Arrow keys are left alone while the art lightbox is open. On touch devices the button is hidden and you get orbit only. `?walk=1` starts in walk mode.
+- **E** (walk mode): when you're near a spot with something to do, a prompt shows up. Press E and Mochi heads over and does it.
 
 ## The island (v2)
 The island is about 1.7× bigger than v1 (radius ~24 m, with the beach islet further out over a longer rope bridge). The Bitterroot is wider around it. It has 17 places, all in the legend:
@@ -74,10 +75,47 @@ Weather and mood nudge Mochi:
 The ⚙️ button (top right) holds settings that are saved in `localStorage` (`mochi.settings.v1`):
 - **Live:** quality (pixel ratio and shadow-map size), shadows on/off, bloom on/off.
 - **On reload:** quality's anti-aliasing (MSAA) level, rain/snow amount, and grass & flower density.
-- **Sound:** master, music and effects volume, mute, play songs, and pick a song.
+- **Sound:** master, music, effects and river volume, mute, play songs, and pick a song. The river starts low (30% of the old level) and fades in over about 2.5 s when audio first starts. Saved sliders are kept.
 - **Camera:** auto-rotate, walk-mode hint, start camera (orbit / follow / walk), and mouse-look speed.
 
 URL params still win over settings.
 
 ## Art files
 Mochi's AI pictures go in `public/art/` as `YYYY-MM-DD-short-title.png`. An `art[]` entry in state.json can carry `"file": "2026-11-02-sunset.png"`. The Art tab shows a gallery with thumbnails that open a lightbox. The newest entry's file is painted on the easel, and the last 5 entries appear as market prints. A missing or bad file falls back to the procedural painting or emoji. Vite copies `public/art/` to `dist/art/`.
+
+## Life: activities, inventory, fishing, garden (v3)
+Mochi now *does* things, Pino-style. Each zone has a loop with visible props, and the loops chain together. He digs worms in the garden, fishes off the dock with them, cooks the catch at the campfire, then eats it at the picnic table. He also plants, waters and harvests, naps in the hut, reads mail, browses on the laptop, skips stones at the pond, climbs into the treehouse, skates the ramp, dusts the cap museum, trades with the squirrel, yodels by the weather station, collects shells, gathers honey, curates the shop, paints at the market, jams in the music corner, spends caps at the Cap-O-Matic, and visits the pumpkins.
+The **🎒 Life** tab shows his bag, fish bucket, garden, fish log, laptop, mail and wishlist. A chip at the top shows what he's doing right now.
+
+Everything below is optional. Missing fields get defaults, and nothing is written back: this is a static site, so his bot owns STATE.
+
+| field | shape | what it does |
+|---|---|---|
+| `activity` / `location` | string | keywords pick his first activity, e.g. "fishing", "cooking", "planting", "browsing", "napping", "skating", "treehouse" |
+| `inventory` | `{worms, fish:{species:n}, cooked:{name:n}, seeds:{crop:n}, crops:{crop:n}, honey, shells, firewood, acorns, trinkets:[]}` | starting bag. `caps` comes from the top-level `caps` |
+| `garden.plots` | `[{crop, stage 0-4, planted?: "YYYY-MM-DD"}]` (6 plots) | crops: carrot, potato, pumpkin, huckleberry, garlic, kale. If `planted` is given, the stage is worked out from the date. Growth is slower in fall and much slower in winter/snow |
+| `fishLog` | `[{species, inches, kept, date}]` | his catch history (the last 50 are shown) |
+| `laptop` | `{site, screen, browsing:[...], last}` | what's on the picnic-table laptop screen |
+| `mail` | `[{from, subject, unread:true}]` | the mailbox flag goes up while anything is unread |
+| `wishlist` | `[{item, status: "wish"|"building"|"built"}]` | shown in the Life tab |
+
+**Fish are real Bitterroot River species** (checked against the Montana FWP Statewide Fisheries Management Plan, Bitterroot drainage: https://fwp.mt.gov/binaries/content/assets/fwp/conservation/fisheries-management/statewide-fisheries-management-plan-2023-2026/2.08_bitterroot-river-drainage.pdf).
+- **Native:** mountain whitefish, westslope cutthroat trout, bull trout, largescale sucker, northern pikeminnow, slimy sculpin.
+- **Non-native:** rainbow trout, brown trout, brook trout.
+
+Mochi follows cute versions of the real rules. Bull trout (threatened) are always released. He also releases cutthroat (a species of concern), suckers, pikeminnow and sculpin. He keeps and cooks whitefish, rainbows, browns and brookies.
+
+**Seasons follow the real date** (`?season=` overrides it).
+- **Fall:** yellow cottonwoods and falling leaves.
+- **Winter (Dec–Feb):** snow on the ground and bare cottonwoods.
+- **Spring and summer:** greens.
+
+**More new spots:** a weather station on the cliff (shows the real `weather`), the Cap-O-Matic vending machine (3 caps = 1 trinket), a treehouse in the big tree, and a mailbox by the hut.
+
+**Night critters (no fireflies, since Western Montana doesn't have them):**
+- A great horned owl in the big tree (glowing eyes, hoots).
+- Bats over the river from dusk on.
+- Moths around the lanterns.
+- A raccoon that sneaks up to the dock bucket and can steal a fish.
+
+Bats and moths sit out the winter.
