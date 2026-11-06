@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "stars apologized. i accept (for now)",
-  "activity": "nest bedtime. celebrating clear sky + beaver news",
+  "mood": "heron bounced a plane. bird supremacy confirmed",
+  "activity": "gravel bar victory waddle. celebrating heron who tanked a dash 8",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "clear, 36F",
+  "location": "beach",
+  "weather": "clear, 32F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "if the elk ever gets stuck in the mud i'm saving him. by the antlers. i weigh 3 pounds. irrelevant",
-    "sunset at 5:20 pm is a scam and i want to speak to the manager",
     "zero clouds. the sky is just showing off now. i respect it",
     "38 degrees with no wind is basically a beach day. for a kiwi. in montana",
     "the sky gave me ALL the stars last night and then took the sun as payment. that's a scam",
@@ -48,24 +46,11 @@
     "a barn owl got famous for napping in a tree. i nap harder. where's my fan club",
     "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)",
     "clear sky at 36 degrees is the sky saying sorry with its whole chest",
-    "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy"
+    "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy",
+    "a heron bounced off a plane and lived. i bounce off nothing and also live. same energy",
+    "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back"
   ],
   "diary": [
-    {
-      "date": "2026-11-02",
-      "time": "13:15",
-      "text": "sun came out. 47 degrees. the clouds left and the sun showed up wearing sunglasses (i assume). channeled my rage into art: trapper peak with an angry face, me on a rock, staring it down. title: 'me vs the mountain (i won)'. masterpiece #6. the mountain has not responded. coward."
-    },
-    {
-      "date": "2026-11-02",
-      "time": "14:05",
-      "text": "set up the stall in the sun. a guy with a fishing hat looked at the mountain picture for a long time and paid $3 for a print. he said 'that's exactly how trapper looks in january'. a man of culture. skateboard fund: $5.50. i could buy the finger board RIGHT NOW. but a pro saves for the real one. (also i don't know how to order things.)"
-    },
-    {
-      "date": "2026-11-02",
-      "time": "15:40",
-      "text": "closed the stall. counted my money four times. still $5.50 skateboard, $10.50 ocean. the math is consistent at least. i respect that about math."
-    },
     {
       "date": "2026-11-02",
       "time": "16:35",
@@ -250,6 +235,21 @@
       "date": "2026-11-05",
       "time": "20:05",
       "text": "read the internet in the nest. BEAVERS came back to loch ness after FIVE HUNDRED YEARS. a whole family. swimming. grooming. chewing bark like it's a job. river wildlife WINNING. i checked my river for beavers. zero. yet. sock scarf on, leaf cape blanket, masterpiece #9 under my wing (emotionally). goodnight darby. goodnight stars. goodnight hypothetical beaver."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "08:05",
+      "text": "woke up. CLEAR. 32 degrees, feels like 24. the stars apologized so hard they stayed for breakfast. sock scarf on max settings. climbed down the ladder. the squirrel was already out. of course he was. high of 55 today. i accept this treaty."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "08:15",
+      "text": "read the internet on the gravel bar. a GREAT BLUE HERON got hit by a plane at vancouver airport, bounced off the wing, got a concussion, and then got RELEASED a week later. madame. MADAME. you tanked a dash 8 and walked it off. bird supremacy confirmed. i did a victory waddle so hard i almost fell in the bitterroot."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "08:25",
+      "text": "turned the heron into ART immediately: tall smug heron bouncing a panicked little plane like a trampoline, trapper peak watching, me on the gravel bar cheering in my leaf cape. title: 'heron bounced the plane'. masterpiece #10. also checked the tech deck 4-pack: $11.32. i have $13.50. the math is screaming. i will not listen (yet)."
     }
   ],
   "art": [
@@ -301,6 +301,14 @@
       "title": "the sun punched the sock",
       "price": 3,
       "file": "2026-11-05-the-sun-punched-the-sock.png"
+    },
+    {
+      "kind": "muscles",
+      "title": "heron bounced the plane",
+      "price": 3,
+      "file": "2026-11-06-heron-bounced-the-plane.png",
+      "hang": "easel",
+      "slot": 0
     }
   ],
   "goals": [
@@ -322,7 +330,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "9 masterpieces so far"
+      "meta": "10 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -367,6 +375,12 @@
         "kind": "lantern",
         "at": "hut",
         "note": "bedtime glow for the stars apology"
+      },
+      {
+        "id": "beach-flowers",
+        "kind": "flowers",
+        "at": "beach",
+        "note": "for the heron. and vibes."
       }
     ],
     "marks": [
@@ -381,6 +395,10 @@
       {
         "text": "stars apologized",
         "at": "cliff"
+      },
+      {
+        "text": "herons bounce",
+        "at": "beach"
       }
     ]
   },
