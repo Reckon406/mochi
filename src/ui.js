@@ -11,7 +11,7 @@ function bar(label, val, max, fmt, cls) {
 }
 const ART_EMOJI = { pumpkin: '🎃', muscles: '💪', ocean: '🌊', cap: '🧢', skateboard: '🛹' };
 
-export function buildUI(state, weather, { onZone, onFollow, onWalk, canWalk = true, favoredId, error }) {
+export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, onSongClick, canWalk = true, favoredId, error }) {
   const root = document.getElementById('ui');
   const sv = state.savings || {};
   const savingsBars = Object.entries(sv).map(([k, s]) => bar(`${k === 'ocean' ? '🌊' : k === 'skateboard' ? '🛹' : '💰'} ${esc(s.label || k)}`, s.saved, s.target, money, k)).join('');
@@ -59,10 +59,12 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, canWalk = tr
     ${ZONES.map((z) => `<button class="zone ${z.id === favoredId ? 'fav' : ''}" data-zone="${z.id}" title="send mochi to the ${esc(z.name.toLowerCase())}"><span>${z.emoji}</span>${esc(z.name)}</button>`).join('')}
   </nav>
   <div class="tools">
+    <button id="setBtn" title="settings: graphics, sound, camera">⚙️</button>
     <button id="followBtn" title="camera follows mochi">🎥 follow</button>
     ${canWalk ? '<button id="walkBtn" title="walk around the island (WASD + mouse)">🚶 walk</button>' : ''}
     <span class="hint">drag to look around · tap mochi to make him hop · tap a place to send him${canWalk ? ' · 🚶 walk = WASD' : ''}</span>
   </div>
+  <button class="nowplaying" id="nowPlaying" hidden title="skip to the next song"></button>
   ${error ? `<div class="toast">${esc(error)}</div>` : ''}
   <div class="lightbox" id="lightbox" hidden><div class="lb-inner"><button class="lb-close" aria-label="close">✕</button><img alt=""><div class="lb-cap"><b></b><span></span></div>
     <button class="lb-prev" aria-label="previous">‹</button><button class="lb-next" aria-label="next">›</button></div></div>`;
@@ -93,12 +95,17 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, canWalk = tr
   const fb = root.querySelector('#followBtn'); let fol = false;
   fb.onclick = () => { fol = !fol; fb.classList.toggle('on', fol); onFollow(fol); };
   const wb = root.querySelector('#walkBtn'); if (wb) wb.onclick = (e) => { e.currentTarget.blur(); onWalk?.(); };
+  root.querySelector('#setBtn').onclick = (e) => { e.currentTarget.blur(); onSettings?.(); };
+  const np = root.querySelector('#nowPlaying'); np.onclick = () => onSongClick?.();
   const tst = root.querySelector('.toast'); if (tst) setTimeout(() => tst.classList.add('gone'), 7000);
 
   return {
     setActiveZone(id) { root.querySelectorAll('.zone').forEach((b) => b.classList.toggle('active', b.dataset.zone === id)); },
     setFollow(on) { fol = on; fb.classList.toggle('on', on); },
     setWalk(on) { wb?.classList.toggle('on', on); wb && (wb.textContent = on ? '🛸 orbit' : '🚶 walk'); },
+    openArt(i) { const k = artThumbs.findIndex((t) => t.i === i); if (k >= 0) showLb(k); },
+    get lightboxOpen() { return !lb.hidden; },
+    setSong(song) { np.hidden = !song; if (song) np.innerHTML = `<span class="eq"><i></i><i></i><i></i></span> ${esc(song.title)} <em>by mochi · skip ⏭</em>`; },
     openTab(name) { root.querySelector(`.tabs button[data-tab="${name}"]`)?.click(); },
   };
 }

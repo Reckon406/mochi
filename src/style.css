@@ -115,3 +115,28 @@ html, body { margin: 0; height: 100%; overflow: hidden; background: #c6dcec; fon
 .walk-hint { position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 5; pointer-events: none; padding: 7px 14px; border-radius: 99px; background: rgba(40,25,12,.62); color: #fff8ec; font: 700 12.5px var(--font); opacity: 0; transition: opacity .5s; white-space: nowrap; }
 .walk-hint.show { opacity: 1; }
 body.walking #app::after { content: ""; position: fixed; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: rgba(255,255,255,.75); box-shadow: 0 0 0 1px rgba(0,0,0,.25); pointer-events: none; z-index: 5; }
+
+/* ── settings + now playing ── */
+.settings { position: absolute; right: 16px; top: 64px; width: min(330px, calc(100% - 32px)); max-height: calc(100% - 180px); overflow: auto; z-index: 6; background: rgba(255, 249, 238, 0.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px; padding: 12px 16px 14px; box-shadow: 0 10px 34px rgba(60,30,10,.25); color: var(--ink); font: 600 13px var(--font); }
+.settings header { display: flex; justify-content: space-between; align-items: center; font-size: 16px; margin-bottom: 4px; }
+.settings h4 { margin: 12px 0 4px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; opacity: .6; }
+.settings .srow { display: grid; grid-template-columns: 1fr 120px 38px; align-items: center; gap: 8px; padding: 4px 0; }
+.settings .srow.scheck { grid-template-columns: 1fr auto; }
+.settings .srow select { grid-column: span 2; font: inherit; border-radius: 10px; border: 1px solid rgba(120,80,40,.25); padding: 3px 6px; background: #fffdf8; }
+.settings .srow i { font-style: normal; font-size: 11px; opacity: .7; text-align: right; }
+.settings input[type=range] { width: 120px; accent-color: #c0563a; }
+.settings input[type=checkbox] { width: 18px; height: 18px; accent-color: #c0563a; }
+.settings .sclose, .settings .sreset { border: 0; background: rgba(255,255,255,.8); border-radius: 99px; padding: 5px 10px; font: 700 12px var(--font); cursor: pointer; color: var(--ink); }
+.settings footer { margin-top: 10px; text-align: right; }
+.settings .snote { font-size: 11.5px; margin: 2px 0; opacity: .8; }
+.settings .songs { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+.settings .songs button { text-align: left; border: 0; background: rgba(255,255,255,.75); border-radius: 12px; padding: 6px 10px; font: 700 12.5px var(--font); color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; gap: 8px; }
+.settings .songs em { font-style: normal; opacity: .55; font-weight: 600; }
+.nowplaying { position: absolute; left: 16px; bottom: 16px; border: 0; border-radius: 99px; padding: 7px 12px; background: rgba(40,25,12,.66); color: #fff8ec; font: 700 12px var(--font); cursor: pointer; display: flex; align-items: center; gap: 8px; max-width: 46vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.nowplaying em { font-style: normal; opacity: .65; font-weight: 600; }
+.nowplaying .eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 12px; }
+.nowplaying .eq i { width: 3px; background: #ffd34d; animation: eq .9s ease-in-out infinite; }
+.nowplaying .eq i:nth-child(2) { animation-delay: .3s; } .nowplaying .eq i:nth-child(3) { animation-delay: .6s; }
+@keyframes eq { 0%, 100% { height: 3px; } 50% { height: 12px; } }
+@media (max-width: 640px) { .nowplaying { bottom: calc(max(8px, env(safe-area-inset-bottom)) + 62px); left: 10px; max-width: 55vw; } .settings { top: 10px; right: 10px; max-height: calc(100% - 160px); } }

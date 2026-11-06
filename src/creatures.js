@@ -80,7 +80,7 @@ export function createElk() {
   add(body, new THREE.ConeGeometry(0.06, 0.15, 6), rump, [0, 1.6, -0.95], [-2.2, 0, 0]);
   root.scale.setScalar(0.85); root.visible = false;
 
-  const routes = [[[-15, 11], [13, 11.5]], [[14, -8], [-12, -11]], [[-13, -7], [6, 13.5]], [[-14, 9], [12, -9]]];
+  const routes = [[[-15, 11], [13, 11.5]], [[14, -8], [-12, -11]], [[-13, -7], [6, 13.5]], [[-14, 9], [12, -9]]].map((r) => r.map(([x, z]) => [x * 1.7, z * 1.7]));
   let active = false, prog = 0, from = new THREE.Vector2(), to = new THREE.Vector2(), timer = 25 + Math.random() * 30, walkPh = 0, pause = 0, len = 1;
   function start(p0 = 0) { const r = routes[Math.floor(Math.random() * routes.length)]; const flip = Math.random() < 0.5; from.set(...(flip ? r[1] : r[0])); to.set(...(flip ? r[0] : r[1])); len = from.distanceTo(to); prog = p0; active = true; root.visible = true; pause = 0; }
   function update(dt, t) {

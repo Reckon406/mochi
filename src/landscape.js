@@ -12,8 +12,8 @@ export const TRAPPER = { x: Math.sin(BEAR) * 900, z: -Math.cos(BEAR) * 900 };
 export const TRAPPER_DIR = new THREE.Vector2(Math.sin(BEAR), -Math.cos(BEAR));
 
 // must match the GLSL copy in water.js
-export function riverX(z) { return 30 * Math.sin(z / 240) + 12 * Math.sin(z / 83); }
-export function riverW(z) { return 8 + 22 * Math.exp(-Math.pow(z / 55, 2)); }
+import { riverX, riverW } from './layout.js';
+export { riverX, riverW };
 
 export function terrainH(x, z) {
   const dx = x - riverX(z), adx = Math.abs(dx);
@@ -80,7 +80,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false } = {}) {
   const near = terrainMesh(NEAR * 2, mobile ? 170 : 260, 0, 0, snowy, terrainH); near.receiveShadow = true; group.add(near);
 
   // ── river: one big water plane, shaded with flow + foam (bed/island depth comes from a baked height map) ──
-  const RECT = { x0: -48, z0: -52, size: 96 }; const RES = mobile ? 192 : 320;
+  const RECT = { x0: -64, z0: -64, size: 128 }; const RES = mobile ? 256 : 420;
   const data = new Uint8Array(RES * RES * 4);
   for (let j = 0; j < RES; j++) for (let i = 0; i < RES; i++) {
     const x = RECT.x0 + ((i + 0.5) / RES) * RECT.size, z = RECT.z0 + ((j + 0.5) / RES) * RECT.size;
@@ -124,8 +124,8 @@ export function buildLandscape(scene, { snowy = false, mobile = false } = {}) {
       pc.set(cols[Math.floor(r() * cols.length)]); if (snowy) pc.lerp(PAL.snow, 0.55); if (r() < 0.12 && mesh2) pc.set(snowy ? 0xe8ecf4 : 0x9a8a70); // a few already bare
       mesh.setColorAt(k, pc); k++; }
     mesh.count = k; if (mesh2) mesh2.count = k; };
-  placeBank(cwC, cwT, NC, golds, 2, 60, 1.9, 700, 70);
-  placeBank(wl, null, NWl, willowC, -0.5, 12, 1.3, 500, 40);
+  placeBank(cwC, cwT, NC, golds, 2, 60, 1.9, 700, 95);
+  placeBank(wl, null, NWl, willowC, -0.5, 12, 1.3, 500, 62);
   group.add(cwC, cwT, wl);
 
   // ── tiny Darby, Montana on the east bench, lights on at night ──

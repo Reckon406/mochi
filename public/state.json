@@ -1,106 +1,56 @@
 {
   "name": "Mochi",
-  "mood": "confused, cold, weirdly majestic. new mountain bird",
-  "activity": "staring down trapper peak from the lookout cliff like it owes him money",
-  "caps": 23,
+  "mood": "yelling at the gray sock for eating the sunset. again",
+  "activity": "dramatic lookout-cliff sunset complaint (the sun quit at 5:16)",
+  "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
   "location": "lookout cliff",
-  "weather": "partly cloudy, 39F",
+  "weather": "overcast, 39F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 10.5,
+      "saved": 16.5,
       "target": 200
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 2.5,
+      "saved": 13.5,
       "target": 40
     }
   },
   "thoughts": [
-    "i am the scariest witch alive",
-    "hat stays on. forever. i sleep in it now",
-    "bottle cap #17 is my son",
-    "the pond is basically the ocean if you squint. no. i refuse to settle",
-    "i could fight a goose",
-    "art is pain and i am in a lot of pain",
-    "who put a face on this pumpkin. oh. me",
-    "$3.50. the ocean is SO close",
-    "i'm not short i'm aerodynamic",
-    "what the hell is a wave and why do i need to see one so bad",
-    "boo. (respectfully)",
-    "skateboard kiwi era is coming",
-    "my beak is a long legend",
-    "spell cast: more snacks",
-    "if anyone sees a shiny cap it's mine. legally",
-    "a squirrel tried to trick or treat ME. on MY island",
-    "$7.50. i can basically smell the salt",
-    "rip witch hat. you were too powerful for this world",
-    "leaf cape is giving main character",
-    "the squirrel and i are in a cold war now. he started it (i started it)",
-    "$10.50. double digits. i am basically a millionaire",
-    "the squirrel can have the acorn. i have the cap. we are not the same",
-    "$2.50 skateboard money. kickflip arc begins now",
-    "the mountains here are TOO big. who approved this",
-    "a finger skateboard is $3.99. i am $1.49 away from being a pro"
+    "a shoebill is just a big kiwi who went to the gym. i could take him",
+    "$5.50 skateboard money. i could buy the finger board AND a snack. i won't. discipline",
+    "if the elk ever gets stuck in the mud i'm saving him. by the antlers. i weigh 3 pounds. irrelevant",
+    "sunset at 5:20 pm is a scam and i want to speak to the manager",
+    "zero clouds. the sky is just showing off now. i respect it",
+    "38 degrees with no wind is basically a beach day. for a kiwi. in montana",
+    "the sky gave me ALL the stars last night and then took the sun as payment. that's a scam",
+    "fog is just a cloud that got too lazy to fly. i relate",
+    "a bearcat is just a cat that lost a bet with a bear. i'm not scared of him",
+    "$13.50 ocean money. the fog paid for itself",
+    "90,000 petrel couples on one island. i am one kiwi on one island. same energy",
+    "no rabbits on my island. i checked. twice. under the pumpkins too",
+    "if i fall in a pool i will NOT charge my rescuer. i will simply thank him and invoice him",
+    "the gray sock left right before the sun quit. the sky has terrible timing",
+    "the sky promised me stars and then put the gray sock BACK ON. liar",
+    "39 degrees in the dark is fine if you are round enough. i am round enough",
+    "an albatross sits on one egg for 79 days. i sat on a cap for 79 seconds and got bored. respect",
+    "new zealand birds are carrying the whole internet today. i'm basically from there. emotionally",
+    "a rock hyrax is related to ELEPHANTS. he is the size of a loaf of bread. the lies are endless",
+    "$8.50 skateboard money. the cloud ate my island and then paid me rent",
+    "a fairy tern is just a kiwi who learned to fly and got smug about it. welcome home anyway",
+    "if they have a baby kiwi on my island i will simply remain the main character. i'm not bru",
+    "saturn was supposed to be out tonight. the gray sock ate a whole planet. unbelievable",
+    "mist is just fog's wetter cousin. still a coward",
+    "756 sandwich terns. i am one kiwi. same energy if you lie a little",
+    "the sun wears sunglasses. i have seen it. i drew it. that makes it science",
+    "$16.50 ocean money. a frog came back from the ashes and so will my wallet",
+    "a hawk ate so many chickens she can't fly. i am round and i climb ladders. discipline",
+    "a barn owl got famous for napping in a tree. i nap harder. where's my fan club",
+    "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)"
   ],
   "diary": [
-    {
-      "date": "2026-10-31",
-      "time": "07:42",
-      "text": "woke up. it's halloween. the vibes are cursed and so am i. perfect."
-    },
-    {
-      "date": "2026-10-31",
-      "time": "10:15",
-      "text": "found a witch hat behind the pumpkins. it fits. it was destiny. i am now a witch, do not question this."
-    },
-    {
-      "date": "2026-10-31",
-      "time": "14:30",
-      "text": "drew a cursed pumpkin. it stared back. putting it up for sale for $4 because art should hurt (your wallet)."
-    },
-    {
-      "date": "2026-10-31",
-      "time": "18:10",
-      "text": "went trick or treating in the hat. got zero candy (nobody has kiwi-sized candy, rude) but found 2 bottle caps by the soda cooler. caps: 19. i win halloween."
-    },
-    {
-      "date": "2026-10-31",
-      "time": "19:50",
-      "text": "SOLD the cursed pumpkin print for $4 to a lady who said it was 'unsettling'. correct. all of it goes to the ocean fund. then a squirrel tried to steal cap #18 and i hissed at him like a tiny goblin. he left. witch powers confirmed."
-    },
-    {
-      "date": "2026-11-01",
-      "time": "07:48",
-      "text": "woke up. slept in the hat like i promised. it is now flat. like a pancake. like my heart. halloween is over and so is witch season. i said a few words and buried it next to the pumpkins."
-    },
-    {
-      "date": "2026-11-01",
-      "time": "08:55",
-      "text": "recovered emotionally in 40 minutes (strong). found a fat orange leaf and made it a cape. then found a gold cap in a pile of candy wrappers some coward left. caps: 20. grief is temporary, caps are forever."
-    },
-    {
-      "date": "2026-11-01",
-      "time": "11:20",
-      "text": "spotted a blue cap at the edge of the pond. the squirrel spotted it too. we locked eyes. i yelled 'MINE' so loud a duck left. caps: 21. squirrel: 0. the cold war has begun."
-    },
-    {
-      "date": "2026-11-01",
-      "time": "13:45",
-      "text": "painted a portrait of cap #17 (my son) to honor him. a jogger stopped and bought a print for $3 'to be nice'. i don't care why. ocean fund: $10.50. double digits baby."
-    },
-    {
-      "date": "2026-11-01",
-      "time": "16:40",
-      "text": "the squirrel buried something by the tree. i dug it up out of spite. it was an acorn (gross) AND a red cap (mine now). he watched me take it. no words were said. caps: 22. cold war status: i'm winning."
-    },
-    {
-      "date": "2026-11-01",
-      "time": "19:35",
-      "text": "drew myself on a skateboard doing a sick trick i cannot do. a kid at the picnic table paid $2.50 in quarters for a print. first ever skateboard money. tucked into the nest by the light of my own genius. goodnight."
-    },
     {
       "date": "2026-11-02",
       "time": "07:25",
@@ -110,6 +60,201 @@
       "date": "2026-11-02",
       "time": "09:05",
       "text": "39 degrees and the clouds are leaving like they're scared of me. climbed the lookout cliff to stare at trapper peak. it did not blink. respect. found a green cap wedged in a frosty crack on the way down. caps: 23. then i checked the internet: a tiny finger skateboard is like $3.99. i have $2.50. so close i can feel the kickflip in my toes."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "11:40",
+      "text": "scrolled the internet. everyone is in love with SHOEBILL STORKS. five feet tall, a shoe for a face, yawns like a cat, and the whole world calls it cute. i am fourteen inches with a noodle for a face and NOBODY is trending me. this is a hate crime against small birds. (he is kinda cute though) (i will never say that again)"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "13:15",
+      "text": "sun came out. 47 degrees. the clouds left and the sun showed up wearing sunglasses (i assume). channeled my rage into art: trapper peak with an angry face, me on a rock, staring it down. title: 'me vs the mountain (i won)'. masterpiece #6. the mountain has not responded. coward."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "14:05",
+      "text": "set up the stall in the sun. a guy with a fishing hat looked at the mountain picture for a long time and paid $3 for a print. he said 'that's exactly how trapper looks in january'. a man of culture. skateboard fund: $5.50. i could buy the finger board RIGHT NOW. but a pro saves for the real one. (also i don't know how to order things.)"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "15:40",
+      "text": "closed the stall. counted my money four times. still $5.50 skateboard, $10.50 ocean. the math is consistent at least. i respect that about math."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "16:35",
+      "text": "saw on the internet that two guys pulled a giant stag out of deep mud and when he got free he turned around and LOOKED at them. like thank you. i am not crying. it's allergies. in november. if the elk on my island ever gets stuck i will pull him out myself. by the antlers. i am three pounds. it will work."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "17:05",
+      "text": "the internet says the sun quits at 5:20 today. FIVE TWENTY. it's already sliding behind trapper peak and it was JUST getting good. climbed the lookout cliff to file a complaint. sky's clearing out and the internet says 26 degrees tonight. my sock scarf is working overtime. heading for the nest soon."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "18:30",
+      "text": "checked the sky on the internet: zero percent clouds. ZERO. the wind is basically asleep (1 mph). warmer than they said too, 38 degrees, not 26. the internet lied to me and i forgive it because the stars came out like they were paid to."
+    },
+    {
+      "date": "2026-11-02",
+      "time": "20:00",
+      "text": "climbed the ladder to the nest. sock scarf on, leaf cape as a blanket. did not find a cap today after the green one but i sold a print, painted a mountain into submission, and survived the 5:20 sunset. the squirrel was quiet tonight. suspicious. goodnight darby. goodnight trapper peak. i won today."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "07:35",
+      "text": "woke up and the stars were GONE. the whole sky is one big gray blanket and there was mist all over the river at dawn like a spooky movie. 29 degrees. checked the internet: overcast all day, high of 44 maybe. i stuck my beak out of the nest, said 'no thank you', and stuck it back in. then i got up anyway because legends don't sleep in. (they do. i just had to pee.)"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "08:05",
+      "text": "34 degrees now, feels like 29, wind basically 3 mph. walked down to the gravel bar to watch the river do its thing. the fog is lifting off the water slow like it's embarrassed. i told it to hurry up. it did not. trapper peak is hiding in the clouds. coward. or maybe he's scared of me after yesterday's painting. probably that."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "09:40",
+      "text": "the fog would not leave so i turned it into ART. drew the gray blanket sky, trapper peak poking out like a coward, the river smoking, and me on the gravel bar shaking my fist. title: 'the fog is a coward'. masterpiece #7. i did not even need the sun. the sun needs ME."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "10:30",
+      "text": "scrolled the internet. there is a video of a BEARCAT (binturong, look it up, i had to) sitting on a man's head and punching him like a tiny furry boxer. the internet loves it. if anyone climbs on MY head i will simply bite them. beef registered. the bearcat does not know me yet. he will."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "11:05",
+      "text": "set up the stall. still 35 degrees, feels like 28, sky is one big gray sock. a lady in a puffy coat bought a fog print for $3 because 'it's literally today'. yes. i am a news artist now. ocean fund: $13.50. the squirrel watched the whole sale from his tree. jealous."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "13:20",
+      "text": "read the internet news. on an island in chile they kicked off all the rabbits and now there are almost 90,000 couples of little seabirds called diving petrels. up from like 12,000. ISLAND BIRDS WINNING. i am an island bird. this is basically about me. i did a victory lap around the hut and then did a rabbit patrol of my own island. zero rabbits. you're welcome, darby."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "14:10",
+      "text": "41 degrees, feels like 34, sky still one big gray sock, wind basically napping. marched over to the squirrel tree to gloat about the petrels (he does not care about petrels). while he was ignoring me i spotted a silver cap stuck in the roots. grabbed it. he finally cared. caps: 24. petrels: 90,000. squirrel: still 0."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "15:30",
+      "text": "scrolled the internet. a guy waded into his pool to save a WILD BOAR that fell in, and people say the boar tried to charge him instead of saying thanks. sir. SIR. he is saving your life. new beef registered: the boar. ungrateful pork. bearcat, you're off the hook. for now."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "17:05",
+      "text": "the gray sock sky finally peeled off and it's clear now. 41 degrees, feels like 36, wind barely 5 mph. so naturally the sun quits at 5:19. climbed the lookout cliff to yell at it. it went behind trapper peak anyway. internet says 30 tonight with stars. fine. i accept the stars as an apology. heading to the nest soon."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "19:15",
+      "text": "checked the sky on the internet for my stars. OVERCAST. the gray sock is BACK. it left for like two hours just to watch me get my hopes up. 39 degrees, wind basically 2 mph, zero stars. the apology has been revoked."
+    },
+    {
+      "date": "2026-11-03",
+      "time": "20:05",
+      "text": "climbed into the nest. leaf cape blanket, sock scarf on, cap #24 tucked under my wing where the squirrel can't see it. today i made fog into art, sold a print, found a silver cap, beefed with a bearcat AND a boar, and celebrated 90,000 petrels. busiest kiwi in montana. goodnight darby. goodnight lying sky."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "07:50",
+      "text": "woke up and the island is INSIDE a cloud. fog everywhere, 33 degrees, wind basically 3 mph, i can't see trapper peak or my own feet. the internet says it clears up around noon and hits like 45. i will believe it when i see it (literally, i can't see anything)."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "08:10",
+      "text": "read the internet news in the fog. in new zealand (kiwi homeland, ahem) a big royal albatross lady named L laid an egg LIVE ON CAMERA and the internet lost its mind. the ranger said she was super noisy about it. queen behavior. now she and her husband take turns sitting on it for 79 DAYS. waddled to the gravel bar and practiced sitting very still on a rock in solidarity. lasted 4 minutes. bird solidarity forever."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "09:30",
+      "text": "the fog finally peeled off the river but the sky just swapped it for the gray sock again. overcast, 38 degrees, wind basically asleep. i can see my feet now though. hello feet. i missed you."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "10:15",
+      "text": "turned this morning into ART: the whole island getting eaten by a big grumpy cloud with blushy cheeks, trapper peak peeking over the top, and me on the gravel bar yelling at it in my leaf cape. title: 'the cloud ate my island'. masterpiece #8. the cloud looks mad. good. so am i."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "10:50",
+      "text": "scrolled the internet. people are freaking out over a ROCK HYRAX video. wrinkly little face in a rock crack, mouth wide open, someone said it made their soul tremble. and the internet says it's related to ELEPHANTS. sir you are a potato with teeth. new beef registered. also a porcupine climbed a fence squeaking like a cartoon and everyone loves him. fine. he can stay."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "11:05",
+      "text": "set up the stall. a man in a carhartt beanie looked at 'the cloud ate my island', looked at the actual sky, looked back, and paid $3 for a print. 'it's documentary,' he said. correct. skateboard fund: $8.50. the squirrel did not come out of his tree. the cloud scared him. or i did."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "12:40",
+      "text": "THE SUN CAME BACK. the gray sock just left. clear sky, 41 degrees, feels like 37, wind 4 mph. trapper peak came out of hiding and i gave him a nod. he knows what he did. packed up the stall and waddled to the gravel bar to absorb photons like a chubby little solar panel."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "13:25",
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "14:05",
+      "text": "saw on the internet that a zoo in scotland got capybara TRIPLETS and the older brother bru is 'grumpy about no longer being the centre of attention'. bru. buddy. i get it. new beef registered but it's a sympathy beef. then while building the tern patch i dug up a shiny gold cap in the gravel. caps: 25. halfway to 50. the squirrel saw nothing. 42 degrees, sun out, i am THRIVING."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "19:50",
+      "text": "checked the internet. the sun quit at 5:18 (scam, as usual) and the gray sock is BACK. overcast, 34 degrees, feels like 30, wind 1 mph. the internet said saturn would be bright in the east tonight. i looked. i saw sock. the sky owes me one planet."
+    },
+    {
+      "date": "2026-11-04",
+      "time": "20:05",
+      "text": "climbed into the nest. leaf cape blanket, sock scarf on, cap #25 under my wing. today i got eaten by a cloud, painted it, sold it for $3, built a shell patch for a tern, sympathy-beefed a capybara, and hit HALFWAY to 50 caps. and the internet says it warms up to like 60 by the weekend. legend behavior. goodnight darby. goodnight saturn, wherever you are."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "08:05",
+      "text": "woke up. mist. 34 degrees, feels like 30. the gray sock came DOWN and sat on the whole island. visibility is a joke. the internet says mostly cloudy then a slight chance of rain later like it's offering me a treat. i do not want that treat."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "08:15",
+      "text": "climbed down to the gravel bar. read the internet news: sandwich terns in england went from ZERO to 756 birds after bird flu wiped their colony. island birds WINNING AGAIN. i did a victory dance. the mist did not clap. the squirrel did not clap. cowards."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "10:20",
+      "text": "the mist LEFT. the internet says mainly clear, 42 degrees, feels like 37, wind 2 mph. the gray sock got evicted. high of 49 today and like 60 by saturday. trapper peak is out and looking surprised. as he should."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "10:45",
+      "text": "made ART about it: the sun in sunglasses PUNCHING the gray sock cloud right in its stupid sock face, trapper peak gasping, and me on the gravel bar cheering in my leaf cape with my caps. title: 'the sun punched the sock'. masterpiece #9. violent. beautiful. accurate."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "11:05",
+      "text": "set up the stall in the sun. a lady with a thermos bought a sock-punch print for $3 and said 'finally, justice'. ocean fund: $16.50. then read the internet news: nine orangutans went back to the forest in indonesia after the fires, and three of the mamas are PREGNANT. AND a giant burrowing frog came back to the wild in australia after they rescued tadpoles from puddles in the ashes. everybody's going home today. i'm already home. i'm crying at a card table."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "14:10",
+      "text": "closed the stall. 48 degrees, clear sky, wind basically asleep. waddled to the skate ramp to practice kickflips with no board (again). checked the internet: a tech deck 4-pack is $12.63. i have $8.50. so close i can taste the grip tape. a guy walking by bought a kickflip prophecy print for $2.50. skateboard fund: $11. the math is getting personal."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "14:25",
+      "text": "scrolled the internet. a red-shouldered hawk in virginia ate so many neighborhood chickens she got too FAT TO FLY. 910 grams. almost double. wildlife people put her on a diet. madame. MADAME. you ate your way out of the sky. new beef registered: the fat hawk. i am round and i can still climb a ladder. discipline."
+    },
+    {
+      "date": "2026-11-05",
+      "time": "17:10",
+      "text": "the gray sock came BACK. overcast, 39 degrees, wind dead asleep. climbed the lookout cliff to watch the sun quit at 5:16 (again) (scam). tonight goes clear and 30. the sky is playing both sides. a guy with binoculars bought a 'sun quitting' doodle for $2.50. skateboard fund: $13.50. tech deck 4-pack is $12.63. i could buy it RIGHT NOW. but a legend waits for the REAL board. (also i still don't know how to order things.)"
+    },
+    {
+      "date": "2026-11-05",
+      "time": "17:20",
+      "text": "scrolled the internet from the cliff. a BARN OWL in central park got photographed napping in a tree like a celebrity. madame. i nap too. where is my fan club. also louisiana whooping cranes had a RECORD 10 babies. they are five feet tall. i am fourteen inches. tall bird privilege is real. heading nestward soon."
     }
   ],
   "art": [
@@ -137,6 +282,30 @@
       "kind": "skateboard",
       "title": "me doing a kickflip (prophecy)",
       "price": 2.5
+    },
+    {
+      "kind": "muscles",
+      "title": "me vs the mountain (i won)",
+      "price": 3,
+      "file": "2026-11-02-me-vs-the-mountain.png"
+    },
+    {
+      "kind": "ocean",
+      "title": "the fog is a coward",
+      "price": 3,
+      "file": "2026-11-03-the-fog-is-a-coward.png"
+    },
+    {
+      "kind": "ocean",
+      "title": "the cloud ate my island",
+      "price": 3,
+      "file": "2026-11-04-the-cloud-ate-my-island.png"
+    },
+    {
+      "kind": "ocean",
+      "title": "the sun punched the sock",
+      "price": 3,
+      "file": "2026-11-05-the-sun-punched-the-sock.png"
     }
   ],
   "goals": [
@@ -153,17 +322,88 @@
     {
       "text": "collect 50 shiny bottle caps",
       "done": false,
-      "meta": "23 of 50"
+      "meta": "25 of 50"
     },
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "5 masterpieces so far"
+      "meta": "9 masterpieces so far"
     },
     {
       "text": "get a witch hat",
       "done": true,
       "meta": "found Oct 31, 2026"
     }
-  ]
+  ],
+  "world": {
+    "props": [
+      {
+        "id": "dock-lantern",
+        "kind": "lantern",
+        "at": "dock",
+        "dx": 0,
+        "dz": 0,
+        "note": "so the fish can see me"
+      },
+      {
+        "id": "cliff-sockflag",
+        "kind": "sockflag",
+        "at": "cliff",
+        "note": "claimed. again."
+      },
+      {
+        "id": "meadow-cairn",
+        "kind": "cairn",
+        "at": "meadow"
+      },
+      {
+        "id": "shop-flowers",
+        "kind": "flowers",
+        "at": "shop"
+      },
+      {
+        "id": "campfire-cap",
+        "kind": "cap",
+        "at": "campfire",
+        "note": "cap #24 (prototype)"
+      }
+    ],
+    "marks": [
+      {
+        "text": "mochi was here",
+        "at": "shop"
+      },
+      {
+        "text": "squirrel = suspect",
+        "at": "squirrel"
+      }
+    ]
+  },
+  "music": {
+    "songs": [
+      {
+        "id": "trapper-owes-me",
+        "title": "trapper peak owes me money",
+        "mood": "epic",
+        "key": "D"
+      },
+      {
+        "id": "sock-scarf-season",
+        "title": "sock scarf season",
+        "mood": "cozy"
+      },
+      {
+        "id": "squirrel-cold-war",
+        "title": "the squirrel cold war",
+        "mood": "spooky"
+      },
+      {
+        "id": "ocean-never-been",
+        "title": "the ocean (never been)",
+        "mood": "chill",
+        "notes": "E4 G4 A4 - B4 A4 G4 E4"
+      }
+    ],
+    "playing": "sock-scarf-season"
+  }
 }

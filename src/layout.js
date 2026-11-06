@@ -1,10 +1,15 @@
 // Island layout + walkable ground height
 import { fbm, noise, smoothstep, clamp } from './noise.js';
 
-export const ISLAND_R = 14;
-export const CLIFF = { x: -11.3, z: 3.2, r: 3.4, h: 2.8 };
-export const POND = { x: 2.6, z: -1.2, r: 2.5 };
-export const ISLET = { x: 11.6, z: -19.9, r: 4.6, y: -0.55 };
+// v2: the island grew ~1.7x. Old hand-placed spots are mapped with K (centres) / mv (clusters keep their shape)
+export const K = 1.7;
+export const ISLAND_R = 24;
+export const CLIFF = { x: -11.3 * K, z: 3.2 * K, r: 4.2, h: 3.4 };
+export const POND = { x: 2.6 * K, z: -1.2 * K, r: 3.2 };
+export const ISLET = { x: 17.5, z: -30.5, r: 5.2, y: -0.55 };
+// old anchor centres (pre-v2 coords); mv(x, z) moves anything near an anchor along with it
+const ANCHORS = [[-4.2, -8.0], [4.4, -9.0], [2.6, -1.2], [-7.0, 6.4], [9.6, 6.0], [-1.0, 9.6], [-8.2, -3.4], [10.0, -4.6], [5.6, 9.0], [-11.3, 3.2], [-3.2, 1.6], [-8.9, 4.7]];
+export function mv(x, z) { let b = ANCHORS[0], bd = Infinity; for (const a of ANCHORS) { const d = Math.hypot(x - a[0], z - a[1]); if (d < bd) { bd = d; b = a; } } return [x + (K - 1) * b[0], z + (K - 1) * b[1]]; }
 export const BRIDGE = { ax: 0, az: 0, bx: 0, bz: 0, sag: 0.45, len: 1 }; // filled in below
 export const POND_Y = -0.32;
 export const LAGOON_Y = -0.95;
@@ -14,10 +19,10 @@ export const FLOOR_Y = 0.5;    // valley floor / riverbank level
 
 export function islandRadius(theta) {
   const cx = Math.cos(theta), sz = Math.sin(theta);
-  let R = ISLAND_R + 1.1 * noise(cx * 1.4 + 3, sz * 1.4 - 2) + 0.45 * Math.sin(theta * 5 + 1.3);
+  let R = ISLAND_R + 1.9 * noise(cx * 1.4 + 3, sz * 1.4 - 2) + 0.75 * Math.sin(theta * 5 + 1.3);
   // bulge to the west for the lookout cliff
   const dCliff = Math.abs(Math.atan2(Math.sin(theta - Math.PI + 0.27), Math.cos(theta - Math.PI + 0.27)));
-  R += 2.0 * Math.max(0, 1 - dCliff / 0.45);
+  R += 3.2 * Math.max(0, 1 - dCliff / 0.4);
   return R;
 }
 
@@ -38,7 +43,7 @@ export function topH(x, z) {
 // gravel bars trail downstream (north-west) and upstream (south) of the island
 function lobe(th, c, p) { return Math.pow(Math.max(0, Math.cos(th - c)), p); }
 export function barAmt(th) { return lobe(th, -2.05, 10) * 1.0 + lobe(th, 1.45, 12) * 0.75; }
-export function skirtD(th) { return 3.0 + 10 * barAmt(th); }
+export function skirtD(th) { return 3.5 + 14 * barAmt(th); }
 export function skirtY(rimY, t, th) { const e = 1 + 3.6 * barAmt(th); return rimY + (BED_Y - rimY) * Math.pow(t, e); }
 // full island surface incl. sandy/gravel skirt into the river (or -Infinity off the island)
 export function islandSurfH(x, z) {
@@ -47,7 +52,7 @@ export function islandSurfH(x, z) {
   const D = skirtD(th); if (r > R + D) return -Infinity;
   return skirtY(topH(Math.cos(th) * R, Math.sin(th) * R), (r - R) / D, th);
 }
-export const ISLET_D = 2.6;
+export const ISLET_D = 3.0;
 export function isletSurfH(x, z) {
   const r = Math.hypot(x - ISLET.x, z - ISLET.z);
   if (r <= ISLET.r) return isletH(x, z);
@@ -56,7 +61,10 @@ export function isletSurfH(x, z) {
   return rimY + (BED_Y - rimY) * Math.pow((r - ISLET.r) / ISLET_D, 1.4);
 }
 // boulders in the current
-export const RIVER_ROCKS = [[-21, -5, 1.0], [-20, 9, 0.75], [-25, 1.5, 0.6], [24, 2, 1.1], [27, 10, 0.8], [21, -9, 0.7], [-10, -27, 0.8], [6, 27, 1.0], [-3, 31, 0.7], [27, -18, 0.9], [-25, 18, 0.7], [16, -31, 0.8], [-16, -18, 0.6], [12, 22, 0.6]];
+// the Bitterroot's centreline + half-width (must match the GLSL copy in water.js). Widened in v2 for the bigger island
+export function riverX(z) { return 30 * Math.sin(z / 240) + 12 * Math.sin(z / 83); }
+export function riverW(z) { return 8 + 46 * Math.exp(-Math.pow(z / 100, 2)); }
+export const RIVER_ROCKS = [[-21, -5, 1.0], [-20, 9, 0.75], [-25, 1.5, 0.6], [24, 2, 1.1], [27, 10, 0.8], [21, -9, 0.7], [-10, -27, 0.8], [6, 27, 1.0], [-3, 31, 0.7], [27, -18, 0.9], [-25, 18, 0.7], [16, -31, 0.8], [-16, -18, 0.6], [12, 22, 0.6]].map(([x, z, r]) => [x * K, z * K, r * 1.2]).filter(([x, z]) => Math.abs(x - riverX(z)) < riverW(z) - 6);
 export function rockH(x, z) { let h = -Infinity; for (const [rx, rz, rr] of RIVER_ROCKS) { const d = Math.hypot(x - rx, z - rz); if (d < rr) h = Math.max(h, WATER_Y + 0.3 * rr - 1.6 * rr * (d / rr) * (d / rr)); } return h; }
 
 export function isletH(x, z) {
@@ -80,9 +88,16 @@ export function bridgeYt(t) {
   return a + (b - a) * t - BRIDGE.sag * Math.sin(Math.PI * t);
 }
 export function onIslet(x, z) { return Math.hypot(x - ISLET.x, z - ISLET.z) < ISLET.r - 0.2; }
+// fishing dock off the south-west shore
+export const DOCK = { th: 2.35, len: 6.5, w: 1.7 };
+{ const dx = Math.cos(DOCK.th), dz = Math.sin(DOCK.th), r0 = islandRadius(DOCK.th) - 2.2;
+  Object.assign(DOCK, { dx, dz, x0: dx * r0, z0: dz * r0, x1: dx * (r0 + DOCK.len), z1: dz * (r0 + DOCK.len) }); DOCK.y = topH(DOCK.x0, DOCK.z0) + 0.12; }
+export function dockParam(x, z) { const px = x - DOCK.x0, pz = z - DOCK.z0; return { t: (px * DOCK.dx + pz * DOCK.dz) / DOCK.len, lat: -px * DOCK.dz + pz * DOCK.dx }; }
+export function onDock(x, z) { const d = dockParam(x, z); return d.t > -0.02 && d.t < 1 && Math.abs(d.lat) < DOCK.w / 2; }
 export function groundY(x, z) {
   const bp = bridgeParam(x, z);
   if (bp.t > 0 && bp.t < 1 && Math.abs(bp.lat) < 1.0) return bridgeYt(bp.t);
+  if (onDock(x, z)) return Math.max(DOCK.y, topH(x, z));
   if (onIslet(x, z)) return isletH(x, z);
   const h = topH(x, z);
   const dp = Math.hypot(x - POND.x, z - POND.z);
@@ -90,20 +105,31 @@ export function groundY(x, z) {
   return h;
 }
 
-// 12 zones. pos = feature centre, spot = where Mochi stands, face = yaw he looks toward (radians, 0 = +z)
+const Z = (x, z) => [x * K, z * K];
+const S = (x, z, ax, az) => [x + (K - 1) * ax, z + (K - 1) * az];
+// art shop (front faces the island centre) + music corner
+export const SHOP = { x: 3.2, z: 8.6, w: 4.8, d: 3.6, h: 2.7 };
+{ const L = Math.hypot(SHOP.x, SHOP.z); SHOP.fx = -SHOP.x / L; SHOP.fz = -SHOP.z / L; SHOP.yaw = Math.atan2(SHOP.fx, SHOP.fz); }
+export const MUSIC = { x: 9.0, z: -9.8 };
+// zones. pos = feature centre, spot = where Mochi stands, face = yaw he looks toward (radians, 0 = +z)
 export const ZONES = [
-  { id: 'hut', name: 'Hut & Nest', emoji: '🛖', pos: [-4.2, -8.0], spot: [-2.6, -5.9], keys: ['hut', 'home', 'house', 'nest', 'roof', 'ladder', 'bed', 'sleep', 'inside', 'door'] },
-  { id: 'tree', name: 'Big Tree', emoji: '🌳', pos: [4.4, -9.0], spot: [3.4, -7.0], keys: ['big tree', 'oak', 'tree', 'shade', 'leaves', 'branch'] },
-  { id: 'pond', name: 'Pond', emoji: '🪷', pos: [POND.x, POND.z], spot: [POND.x - 1.9, POND.z + 2.2], keys: ['pond', 'duck', 'water', 'lily', 'puddle', 'swim'] },
-  { id: 'pumpkins', name: 'Pumpkin Patch', emoji: '🎃', pos: [-7.0, 6.4], spot: [-5.6, 4.9], keys: ['pumpkin', 'patch', 'halloween', 'jack', 'grave', 'hat grave'] },
+  { id: 'hut', name: 'Hut & Nest', emoji: '🛖', pos: Z(-4.2, -8.0), spot: S(-2.6, -5.9, -4.2, -8.0), keys: ['hut', 'home', 'house', 'nest', 'roof', 'ladder', 'bed', 'sleep', 'inside', 'door'] },
+  { id: 'tree', name: 'Big Tree', emoji: '🌳', pos: Z(4.4, -9.0), spot: S(3.4, -7.0, 4.4, -9.0), keys: ['big tree', 'oak', 'tree', 'shade', 'leaves', 'branch'] },
+  { id: 'pond', name: 'Pond', emoji: '🪷', pos: [POND.x, POND.z], spot: [POND.x - 2.4, POND.z + 2.6], keys: ['pond', 'duck', 'water', 'lily', 'puddle', 'swim'] },
+  { id: 'pumpkins', name: 'Pumpkin Patch', emoji: '🎃', pos: Z(-7.0, 6.4), spot: S(-5.6, 4.9, -7.0, 6.4), keys: ['pumpkin', 'patch', 'halloween', 'jack', 'grave', 'hat grave'] },
   { id: 'beach', name: 'Beach Islet', emoji: '🏖️', pos: [ISLET.x, ISLET.z], spot: [ISLET.x - 1.6, ISLET.z + 0.4], keys: ['beach', 'islet', 'sand', 'wave', 'ocean', 'shore', 'bridge', 'lagoon', 'sea'] },
-  { id: 'ramp', name: 'Skate Ramp', emoji: '🛹', pos: [9.6, 6.0], spot: [8.0, 4.2], keys: ['skate', 'ramp', 'half-pipe', 'halfpipe', 'kickflip', 'board', 'trick'] },
-  { id: 'market', name: 'Art Market', emoji: '🎨', pos: [-1.0, 9.6], spot: [-0.6, 7.6], keys: ['art', 'market', 'stall', 'easel', 'paint', 'draw', 'print', 'sell', 'gallery'] },
-  { id: 'museum', name: 'Cap Museum', emoji: '🧢', pos: [-8.2, -3.4], spot: [-6.8, -2.0], keys: ['cap museum', 'museum', 'cap', 'bottle', 'shelf', 'collection', 'son'] },
-  { id: 'squirrel', name: "Squirrel's Tree", emoji: '🐿️', pos: [10.0, -4.6], spot: [8.1, -3.4], keys: ['squirrel', 'rival', 'acorn', 'cold war', 'enemy'] },
-  { id: 'garden', name: 'Garden', emoji: '🥕', pos: [5.6, 9.0], spot: [4.0, 7.6], keys: ['garden', 'carrot', 'veg', 'plant', 'cabbage', 'grow', 'seed', 'dig'] },
-  { id: 'cliff', name: 'Lookout Cliff', emoji: '🏔️', pos: [CLIFF.x, CLIFF.z], spot: [CLIFF.x - 1.2, CLIFF.z + 0.6], keys: ['lookout', 'cliff', 'view', 'peak', 'trapper', 'mountain', 'edge', 'overlook', 'stare'] },
-  { id: 'picnic', name: 'Picnic Table', emoji: '🧺', pos: [-3.2, 1.6], spot: [-2.2, 3.0], keys: ['picnic', 'table', 'cooler', 'soda', 'snack', 'lunch', 'quarters'] },
+  { id: 'ramp', name: 'Skate Ramp', emoji: '🛹', pos: Z(9.6, 6.0), spot: S(8.0, 4.2, 9.6, 6.0), keys: ['skate', 'ramp', 'half-pipe', 'halfpipe', 'kickflip', 'board', 'trick'] },
+  { id: 'market', name: 'Art Market', emoji: '🎨', pos: Z(-1.0, 9.6), spot: S(-0.6, 7.6, -1.0, 9.6), keys: ['art', 'market', 'stall', 'easel', 'paint', 'draw', 'print', 'sell'] },
+  { id: 'museum', name: 'Cap Museum', emoji: '🧢', pos: Z(-8.2, -3.4), spot: S(-6.8, -2.0, -8.2, -3.4), keys: ['cap museum', 'museum', 'cap', 'bottle', 'shelf', 'collection', 'son'] },
+  { id: 'squirrel', name: "Squirrel's Tree", emoji: '🐿️', pos: Z(10.0, -4.6), spot: S(8.1, -3.4, 10.0, -4.6), keys: ['squirrel', 'rival', 'acorn', 'cold war', 'enemy'] },
+  { id: 'garden', name: 'Garden', emoji: '🥕', pos: Z(5.6, 9.0), spot: S(4.0, 7.6, 5.6, 9.0), keys: ['garden', 'carrot', 'veg', 'plant', 'cabbage', 'grow', 'seed', 'dig'] },
+  { id: 'cliff', name: 'Lookout Cliff', emoji: '🏔️', pos: [CLIFF.x, CLIFF.z], spot: [CLIFF.x - 1.4, CLIFF.z + 0.8], keys: ['lookout', 'cliff', 'view', 'peak', 'trapper', 'mountain', 'edge', 'overlook', 'stare'] },
+  { id: 'shop', name: 'Art Shop', emoji: '🖼️', pos: [SHOP.x, SHOP.z], spot: [SHOP.x + SHOP.fx * 3.4, SHOP.z + SHOP.fz * 3.4], keys: ['art shop', 'shop', 'gallery', 'frame', 'hang', 'exhibit', 'boutique', 'store'] },
+  { id: 'campfire', name: 'Campfire', emoji: '🔥', pos: [12.5, 1.5], spot: [11.0, 2.9], keys: ['campfire', 'fire', 'marshmallow', "s'more", 'smore', 'camp', 'warm', 'cozy'] },
+  { id: 'meadow', name: 'Wildflower Meadow', emoji: '🌼', pos: [-1.5, -7.5], spot: [-0.2, -6.0], keys: ['meadow', 'flower', 'bee', 'honey', 'wildflower', 'daisy', 'field', 'nap'] },
+  { id: 'dock', name: 'Fishing Dock', emoji: '🎣', pos: [DOCK.x0 + DOCK.dx * DOCK.len * 0.5, DOCK.z0 + DOCK.dz * DOCK.len * 0.5], spot: [DOCK.x0 + DOCK.dx * DOCK.len * 0.8, DOCK.z0 + DOCK.dz * DOCK.len * 0.8], keys: ['dock', 'fish', 'pier', 'river', 'rod', 'boat', 'float', 'bitterroot'] },
+  { id: 'music', name: 'Music Corner', emoji: '🎸', pos: [MUSIC.x, MUSIC.z], spot: [MUSIC.x + 1.4, MUSIC.z + 1.6], keys: ['music', 'song', 'sing', 'drum', 'guitar', 'uke', 'keys', 'piano', 'band', 'jam', 'concert', 'tune'] },
+  { id: 'picnic', name: 'Picnic Table', emoji: '🧺', pos: Z(-3.2, 1.6), spot: S(-2.2, 3.0, -3.2, 1.6), keys: ['picnic', 'table', 'cooler', 'soda', 'snack', 'lunch', 'quarters'] },
 ];
 
 export function matchZone(location) {
@@ -117,9 +143,19 @@ export function matchZone(location) {
   return best;
 }
 
-// circles Mochi should walk around
+// circles Mochi (and the walker) go around. mochiOnly = coarse blob for Mochi's planner; WALLS = fine circles only the walker uses
+const ob = (x, z, r) => { const [a, b] = mv(x, z); return { x: a, z: b, r }; };
 export const OBSTACLES = [
-  { x: -4.2, z: -8.0, r: 2.1 }, { x: POND.x, z: POND.z, r: POND.r + 0.2 }, { x: 4.4, z: -9.0, r: 1.0 },
-  { x: 10.0, z: -4.6, r: 0.9 }, { x: 9.6, z: 6.0, r: 1.9 }, { x: -1.0, z: 9.9, r: 1.6 }, { x: -8.5, z: -3.8, r: 1.3 },
-  { x: -3.2, z: 1.6, r: 1.3 }, { x: 5.6, z: 9.4, r: 1.5 }, { x: -7.0, z: 6.6, r: 1.3 },
+  ob(-4.2, -8.0, 2.1), { x: POND.x, z: POND.z, r: POND.r + 0.2 }, ob(4.4, -9.0, 1.0),
+  ob(10.0, -4.6, 0.9), ob(9.6, 6.0, 1.9), ob(-1.0, 9.9, 1.6), ob(-8.5, -3.8, 1.3),
+  ob(-3.2, 1.6, 1.3), ob(5.6, 9.4, 1.5), ob(-7.0, 6.6, 1.3),
+  { x: 12.5, z: 1.5, r: 0.9 }, { x: -1.5 - 1.2, z: -7.5 - 1.0, r: 0.5 }, { x: MUSIC.x, z: MUSIC.z, r: 1.3 },
+  { x: SHOP.x, z: SHOP.z, r: Math.hypot(SHOP.w, SHOP.d) / 2 + 0.2, mochiOnly: true },
 ];
+export const WALLS = [];
+{ // shop walls: back, sides, and the two front pieces either side of the doorway
+  const c = Math.cos(SHOP.yaw), s = Math.sin(SHOP.yaw); const W = (lx, lz) => WALLS.push({ x: SHOP.x + lx * c + lz * s, z: SHOP.z - lx * s + lz * c, r: 0.3 });
+  for (let lx = -SHOP.w / 2; lx <= SHOP.w / 2 + 1e-3; lx += 0.4) W(lx, -SHOP.d / 2);
+  for (let lz = -SHOP.d / 2; lz <= SHOP.d / 2 + 1e-3; lz += 0.4) { W(-SHOP.w / 2, lz); W(SHOP.w / 2, lz); }
+  for (let lx = 1.1; lx <= SHOP.w / 2 + 1e-3; lx += 0.4) { W(lx, SHOP.d / 2); W(-lx, SHOP.d / 2); }
+}

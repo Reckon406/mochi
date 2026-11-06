@@ -22,5 +22,62 @@ To keep the site in sync, write the same STATE object as JSON to `state.json` ne
 - **Orbit** (default): drag to look around, scroll to zoom, tap Mochi to make him hop, tap a zone to send him there. `🎥 follow` keeps the camera on him.
 - **🚶 walk** (desktop): first-person walking. **WASD** or arrows to move, **Shift** to sprint, **Space** to hop. Click the world to lock the mouse for looking around (or click-drag if pointer lock is blocked), and **Esc** to unlock. The button turns into `🛸 orbit` to switch back. You stay on the ground, the island, the bridge, the beach islet, the gravel bars and the river boulders. You can wade up to your ankles but not into the river. You can't walk through the hut, trees, pond or stalls, or climb the sheer cliff face (use the grassy ramp). Arrow keys are left alone while the art lightbox is open. On touch devices the button is hidden and you get orbit only. `?walk=1` starts in walk mode.
 
+## The island (v2)
+The island is about 1.7× bigger than v1 (radius ~24 m, with the beach islet further out over a longer rope bridge). The Bitterroot is wider around it. It has 17 places, all in the legend:
+
+hut, big tree, pond, pumpkin patch, beach islet, skate ramp, art market, cap museum, squirrel's tree, garden, lookout cliff, picnic table, and new in v2: **Art Shop**, **Campfire**, **Wildflower Meadow** (beehive), **Fishing Dock** (rowboat), **Music Corner**.
+
+Gravel paths link the places. `location` strings resolve by keyword: for example "art shop" or "gallery" go to the shop, "campfire" or "marshmallow" to the campfire, "dock" or "fishing" to the dock, "song", "drum" or "guitar" to the music corner, and "bees" or "meadow" to the meadow.
+
+## Where his pictures hang
+- **Default:** the newest piece goes on the market **easel**. The next 9 go in the **Art Shop** (3 on the back wall, 2 on each side wall inside, 2 outside by the door). Older pieces go on the **hut** wall, the **museum** side panels, the **market** backboard, the **picnic** signboard and the **dock** board. Spare spots there get prints of his real (`file`) pictures.
+- **Moving a piece:** add `"hang"` to an art entry to move it. Use `"easel" | "shop" | "market" | "hut" | "museum" | "picnic" | "dock"`, and optionally `"slot"` (0-based, e.g. `"slot": 0`). The spots are: easel 1, shop 9, market 5, hut 2, museum 2, picnic 1, dock 1. If a spot is full, the piece goes to the shop.
+- **Clicking:** clicking any hung picture opens it in the Art tab lightbox.
+
+## STATE.world (things Mochi changes on the island)
+```json
+"world": {
+  "props": [
+    { "id": "dock-lantern", "kind": "lantern", "at": "dock", "note": "so the fish can see me" },
+    { "id": "rock-1", "kind": "cairn", "x": -3.5, "z": -8.0 },
+    { "kind": "sign", "at": "pond", "dx": 1.0, "dz": -0.5, "note": "NO SWIMMING (ducks)" }
+  ],
+  "marks": [ { "text": "mochi was here", "at": "shop" } ]
+}
+```
+- **`kind`:** one of `lantern` (glows at night), `sign`/`note` (shows `note`), `flowers` (`color` optional), `cairn`/`rocks`, `sockflag`/`flag`, `pumpkin`, `snowman`, `birdhouse`, `cap`, `mushroom` or `rock`. An unknown kind shows up as a little sign with its name.
+- **Where it goes:** `at` takes a zone id or a keyword (`dx`/`dz` are optional offsets in metres). Or use `x`/`z` island coordinates: centre 0,0, +x east, −z north, shore at about 22–26 m. `yaw` (radians) is optional.
+- **`marks`:** short painted planks with `text`, placed by `at` or `x`/`z`.
+- **Limits:** up to 40 props and 16 marks. There is no rebuild: write `state.json` and reload.
+
+**Keep `world` and `music` when copying STATE into `state.json`.** If the Canvas STATE doesn't have them, merge them in.
+
+## The world affects him
+Weather and mood nudge Mochi:
+- **Cold** (snow or ≤35°F, a little at ≤45°F): he puffs up, hunches, shivers, hops less, and drifts to the campfire or hut.
+- **Rain:** he does the odd full-body shake-off and heads for the hut or Art Shop.
+- **Wind:** he leans into it.
+- **Happy, confident or majestic mood:** bouncy idle and more hops. Sad or sleepy moods slow him down.
+- **A song playing:** he sometimes wanders to the Music Corner and bops there, and notes float over the stage.
+
+## Music (STATE.music)
+```json
+"music": { "songs": [ { "id": "sock-scarf-season", "title": "sock scarf season", "mood": "cozy", "key": "D", "bpm": 90, "notes": "E4 G4 A4 - B4", "file": "2026-11-06-song.mp3" } ], "playing": "sock-scarf-season" }
+```
+- **How songs are made:** songs are **generated live with Web Audio**. There are no audio files. The `title` seeds the melody and chords, so each song is unique and repeatable.
+- **Fields:** `mood` picks the scale, tempo and sound (`happy, chill, sad, spooky, hype, cozy, epic`, plus loose words like "majestic" or "lonely"). `key`, `bpm` and `notes` (a motif like `"C4 E4 G4 - A4"`, where `-` is a rest) are optional.
+- **Real tracks:** an optional `file` plays `./music/<file>` (mp3/ogg/wav/m4a) instead.
+- **Adding a song to the soundtrack:** append a new entry to `music.songs`. The playlist loops through all songs, starting at `playing`.
+- **Playback:** audio starts after the first click or keypress (a browser rule). The now-playing chip (bottom left) skips to the next song. There's also a soft river ambience and little sound effects (hop chirp, footsteps in walk mode).
+
+## ⚙️ Settings
+The ⚙️ button (top right) holds settings that are saved in `localStorage` (`mochi.settings.v1`):
+- **Live:** quality (pixel ratio and shadow-map size), shadows on/off, bloom on/off.
+- **On reload:** quality's anti-aliasing (MSAA) level, rain/snow amount, and grass & flower density.
+- **Sound:** master, music and effects volume, mute, play songs, and pick a song.
+- **Camera:** auto-rotate, walk-mode hint, start camera (orbit / follow / walk), and mouse-look speed.
+
+URL params still win over settings.
+
 ## Art files
 Mochi's AI pictures go in `public/art/` as `YYYY-MM-DD-short-title.png`. An `art[]` entry in state.json can carry `"file": "2026-11-02-sunset.png"`. The Art tab shows a gallery with thumbnails that open a lightbox. The newest entry's file is painted on the easel, and the last 5 entries appear as market prints. A missing or bad file falls back to the procedural painting or emoji. Vite copies `public/art/` to `dist/art/`.

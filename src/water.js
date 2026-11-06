@@ -95,7 +95,7 @@ float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
 float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
 float riverX(float z){ return 30.0*sin(z/240.0) + 12.0*sin(z/83.0); }
 float riverXd(float z){ return 30.0/240.0*cos(z/240.0) + 12.0/83.0*cos(z/83.0); }
-float riverW(float z){ return 8.0 + 22.0*exp(-pow(z/55.0, 2.0)); }
+float riverW(float z){ return 8.0 + 46.0*exp(-pow(z/100.0, 2.0)); }
 float bedH(vec2 p){
   float w = riverW(p.y); float adx = abs(p.x - riverX(p.y));
   float h = mix(uFloorY, uBedY, smoothstep(w + 5.0, w - 3.0, adx));

@@ -143,6 +143,8 @@ export function createMochi(outfit = '') {
   const anim = { t: 0, walk: 0, walkPhase: 0, hop: -1, hopDur: 0.62, hopH: 0.7, flap: 0, blinkT: 2, blink: 0, look: 0, lookT: 0 };
   function hop(h = 0.7) { if (anim.hop < 0) { anim.hop = 0; anim.hopH = h; anim.flap = Math.max(anim.flap, 0.7); } }
   function flap(d = 0.9) { anim.flap = Math.max(anim.flap, d); }
+  const mods = { cold: 0, wet: 0, wind: 0, perk: 0 }; // set by main from weather + mood: the world gets to him
+  let shake = 0;
   function update(dt, speed01 = 0) {
     anim.t += dt; const t = anim.t;
     anim.walk += (speed01 - anim.walk) * Math.min(1, dt * 8);
@@ -152,6 +154,12 @@ export function createMochi(outfit = '') {
     let sy = 1 + 0.025 * Math.sin(t * 2.4) * (1 - w);
     let py = 0, rz = Math.sin(anim.walkPhase) * 0.13 * w, rx = 0.06 * w;
     py += Math.abs(Math.sin(anim.walkPhase)) * 0.06 * w;
+    // cold: puffed + hunched + shivering. wet: the occasional full-body shake-off. wind: lean in. good mood: bouncy idle
+    const idle = 1 - w;
+    sy *= 1 - 0.07 * mods.cold * idle; rz += Math.sin(t * 57) * 0.018 * mods.cold * idle; rx += 0.07 * mods.wind + 0.05 * mods.cold * idle;
+    if (mods.wet && shake <= 0 && anim.hop < 0 && Math.random() < dt * 0.09 * mods.wet) shake = 0.7;
+    if (shake > 0) { shake -= dt; rz += Math.sin(shake * 45) * 0.16 * Math.min(1, shake * 3); }
+    py += 0.035 * mods.perk * idle * Math.max(0, Math.sin(t * 6));
     // hop with anticipation / stretch / land squash
     let hopY = 0;
     if (anim.hop >= 0) {
@@ -169,7 +177,7 @@ export function createMochi(outfit = '') {
     if (anim.hop >= 0) { const tuck = Math.sin(Math.min(1, anim.hop / anim.hopDur) * Math.PI) * 0.6; legs[0].rotation.x = -tuck; legs[1].rotation.x = -tuck; }
     // wings
     anim.flap = Math.max(0, anim.flap - dt);
-    const fa = anim.flap > 0 ? 0.4 + 0.9 * Math.abs(Math.sin(t * 28)) : 0.08 + 0.05 * Math.sin(t * 3) + 0.15 * w * Math.abs(Math.sin(anim.walkPhase));
+    const fa = anim.flap > 0 ? 0.4 + 0.9 * Math.abs(Math.sin(t * 28)) : (0.08 - 0.06 * mods.cold) + 0.05 * Math.sin(t * 3) + 0.15 * w * Math.abs(Math.sin(anim.walkPhase));
     wings[0].rotation.z = -fa; wings[1].rotation.z = fa;
     // blink
     anim.blinkT -= dt; if (anim.blinkT < 0) { anim.blink = 0.14; anim.blinkT = 1.8 + Math.random() * 3.5; if (Math.random() < 0.2) anim.blinkT = 0.25; }
@@ -179,5 +187,5 @@ export function createMochi(outfit = '') {
     if (extras.cape) extras.cape.rotation.x = 0.02 + 0.3 * w + 0.3 * Math.sin(Math.min(1, Math.max(0, anim.hop) / anim.hopDur) * Math.PI) + 0.06 * Math.sin(t * 3.1) + 0.04 * Math.sin(t * 7.3) * w;
     if (extras.sock) extras.sock.rotation.z = 0.35 + Math.sin(anim.walkPhase * 0.5) * 0.25 * w + 0.05 * Math.sin(t * 2);
   }
-  return { root, pivot, hop, flap, update, anim, hit, headOffset: 1.45 };
+  return { root, pivot, hop, flap, update, anim, hit, mods, headOffset: 1.45 };
 }
