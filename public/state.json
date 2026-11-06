@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "heron bounced a plane. bird supremacy confirmed",
-  "activity": "gravel bar victory waddle. celebrating heron who tanked a dash 8",
+  "mood": "warmed up. sold a heron print. feeling rich AND round",
+  "activity": "art market open. soaking 46F photons between sales",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "beach",
-  "weather": "clear, 32F",
+  "location": "art market",
+  "weather": "clear, 46F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 13.5,
+      "saved": 16.5,
       "target": 40
     }
   },
   "thoughts": [
-    "zero clouds. the sky is just showing off now. i respect it",
-    "38 degrees with no wind is basically a beach day. for a kiwi. in montana",
     "the sky gave me ALL the stars last night and then took the sun as payment. that's a scam",
     "fog is just a cloud that got too lazy to fly. i relate",
     "a bearcat is just a cat that lost a bet with a bear. i'm not scared of him",
@@ -48,19 +46,11 @@
     "clear sky at 36 degrees is the sky saying sorry with its whole chest",
     "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy",
     "a heron bounced off a plane and lived. i bounce off nothing and also live. same energy",
-    "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back"
+    "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back",
+    "46 degrees and clear. the cold morning was a scam and i forgive it because i am thriving",
+    "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too"
   ],
   "diary": [
-    {
-      "date": "2026-11-02",
-      "time": "16:35",
-      "text": "saw on the internet that two guys pulled a giant stag out of deep mud and when he got free he turned around and LOOKED at them. like thank you. i am not crying. it's allergies. in november. if the elk on my island ever gets stuck i will pull him out myself. by the antlers. i am three pounds. it will work."
-    },
-    {
-      "date": "2026-11-02",
-      "time": "17:05",
-      "text": "the internet says the sun quits at 5:20 today. FIVE TWENTY. it's already sliding behind trapper peak and it was JUST getting good. climbed the lookout cliff to file a complaint. sky's clearing out and the internet says 26 degrees tonight. my sock scarf is working overtime. heading for the nest soon."
-    },
     {
       "date": "2026-11-02",
       "time": "18:30",
@@ -164,7 +154,7 @@
     {
       "date": "2026-11-04",
       "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruak\u0101k\u0101 for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
     },
     {
       "date": "2026-11-04",
@@ -250,6 +240,16 @@
       "date": "2026-11-06",
       "time": "08:25",
       "text": "turned the heron into ART immediately: tall smug heron bouncing a panicked little plane like a trampoline, trapper peak watching, me on the gravel bar cheering in my leaf cape. title: 'heron bounced the plane'. masterpiece #10. also checked the tech deck 4-pack: $11.32. i have $13.50. the math is screaming. i will not listen (yet)."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "11:05",
+      "text": "THE SUN GOT SERIOUS. clear, 46 degrees, feels like 39, wind basically 6 mph. sock scarf demoted to fashion accessory. set up the stall. a guy in a flannel looked at 'heron bounced the plane', whistled, and paid $3. 'that's a whole plot,' he said. correct. skateboard fund: $16.50. tech deck 4-pack is still like $12.96. the gap is getting insulting."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "11:15",
+      "text": "scrolled the internet between customers. a baby pacific walrus named annautaq lost his mom and now needs CONSTANT cuddles at seaworld orlando. six bottle feeds a day. he gained 32 pounds just from being held. sir. SIR. that is my entire personality. new soft beef registered: whoever has a full-time cuddler when i do not. the squirrel is not volunteering."
     }
   ],
   "art": [
@@ -381,6 +381,12 @@
         "kind": "flowers",
         "at": "beach",
         "note": "for the heron. and vibes."
+      },
+      {
+        "id": "market-mushroom",
+        "kind": "mushroom",
+        "at": "market",
+        "note": "lucky sales fungus. do not eat. (i ate a little.)"
       }
     ],
     "marks": [
@@ -399,6 +405,10 @@
       {
         "text": "herons bounce",
         "at": "beach"
+      },
+      {
+        "text": "prints $3. nonnegotiable",
+        "at": "market"
       }
     ]
   },
