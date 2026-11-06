@@ -47,7 +47,7 @@ void main(){
   col = mix(col, uZenith, smoothstep(0.12, 0.75, y));
   col = mix(col, uGround, smoothstep(0.0, -0.25, y));
   float sd = max(dot(d, uSunDir), 0.0);
-  vec2 sxz = normalize(uSunDir.xz + 1e-4); float toward = dot(normalize(d.xz + 1e-4), sxz) * 0.5 + 0.5;
+  vec2 sxz = normalize(uSunDir.xz + 1e-4); float toward = clamp(dot(normalize(d.xz + 1e-4), sxz) * 0.5 + 0.5, 0.0, 1.0); // clamp: pow() of a hair-below-zero value = NaN (black dotted seam opposite the sun, bloom smears it into a blue screen)
   // sunset: warm band on the sun side, pink/violet afterglow above it, cool on the far side
   float band = exp(-max(y, 0.0) * 7.0);
   col += uGolden * band * mix(vec3(-0.04, -0.02, 0.05), vec3(0.32, 0.12, -0.02), pow(toward, 1.5));
@@ -77,7 +77,7 @@ void main(){
     cc = mix(cc, vec3(0.1, 0.12, 0.2), uNight * 0.85);
     col = mix(col, cc, c * 0.85);
   }
-  gl_FragColor = vec4(col, 1.0);
+  gl_FragColor = vec4(max(col, vec3(0.0)), 1.0);
 }`;
 
 const KEYS = [ // alt in degrees -> zenith, horizon, sun color, sun intensity, hemi sky, hemi ground, hemi intensity, fog

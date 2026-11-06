@@ -4,6 +4,7 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import './style.css';
 import { ENV } from './water.js';
 import { createSky } from './sky.js';
@@ -125,8 +126,12 @@ async function init() {
   const composer = new EffectComposer(renderer, rt);
   composer.addPass(new RenderPass(scene, camera));
   let ao = null; if (Q.ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.addPass(ao); }
+  // sanitize HDR before bloom: one NaN/Inf pixel (e.g. a degenerate normal) otherwise gets blurred across the whole screen
+  const sanitize = new ShaderPass({ uniforms: { tDiffuse: { value: null } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: 'uniform sampler2D tDiffuse; varying vec2 vUv; void main(){ vec4 c = texture2D(tDiffuse, vUv); bvec4 bad = bvec4(!(c.r == c.r) || c.r > 6.5e4, !(c.g == c.g) || c.g > 6.5e4, !(c.b == c.b) || c.b > 6.5e4, !(c.a == c.a)); if (any(bad)) c = vec4(0.0, 0.0, 0.0, 1.0); gl_FragColor = vec4(min(c.rgb, vec3(32.0)), c.a); }' });
+  composer.addPass(sanitize); sanitize.enabled = S0.bloom;
   const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.45, 0.55, 1.0);
-  composer.addPass(bloom); bloom.enabled = S0.bloom;
+  composer.addPass(bloom); bloom.enabled = S0.bloom; bloom.userData = { sanitize };
   composer.addPass(new OutputPass());
 
   // ── controls ──
@@ -234,7 +239,7 @@ async function init() {
     if ('quality' in patch) { const q = QUALITY[st.quality]; const cap = Math.min(q.pr, isMobile ? 1.5 : q.pr); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, cap)); composer.setSize(innerWidth, innerHeight);
       const sz = (q.tier ?? 2) <= 0 ? Math.min(512, q.shadow) : isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('shadows' in patch) sun.castShadow = st.shadows;
-    if ('bloom' in patch) bloom.enabled = st.bloom;
+    if ('bloom' in patch) { bloom.enabled = st.bloom; bloom.userData.sanitize.enabled = st.bloom; }
     if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();
     if ('musicOn' in patch) music.setEnabled(st.musicOn);
     if ('autoRotate' in patch && !st.autoRotate) controls.autoRotate = false;
