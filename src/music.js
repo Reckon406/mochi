@@ -45,6 +45,9 @@ function mkNoise(ctx, dur) {
   for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
   return buf;
 }
+// Real sampled instruments (General MIDI soundfonts via smplr, FluidR3_GM from its CDN). Lazy-loaded after the first click;
+// if anything fails we keep using the synth. smplr reuses decoded buffers and cleans up its own voices.
+const LEAD = { cozy: 'banjo', happy: 'banjo', chill: 'acoustic_grand_piano', sad: 'acoustic_grand_piano', epic: 'fiddle', hype: 'fiddle', spooky: 'harmonica' };
 function drop(...nodes) { for (const n of nodes) { try { n.disconnect(); } catch { /* already gone */ } } }
 
 export function createMusic(state, settings) {
@@ -52,6 +55,22 @@ export function createMusic(state, settings) {
   let ctx = null, master, musicBus, sfxBus, ambBus, cur = Math.max(0, songs.findIndex((s) => s.id && s.id === state.music?.playing)), timer = null, audioEl = null, onChange = () => {}, started = false;
   let noise = null; // shared one-shot noise buffers (created once per AudioContext)
   let liveNodes = 0; // approx in-flight sources (for ?debug=1)
+  let SF = null, inst = null; const leads = new Map(); // sampled instruments (null until loaded)
+  function loadSamples() {
+    if (SF || !ctx) return; SF = import('smplr').then(({ Soundfont }) => {
+      const mk = (instrument, volume) => { const x = Soundfont(ctx, { instrument, kit: 'FluidR3_GM', destination: musicBus, volume }); return x.ready.then(() => x); };
+      return Promise.all([mk('acoustic_guitar_steel', 90), mk('acoustic_bass', 105)]).then(([guitar, bass]) => { inst = { guitar, bass, mk }; });
+    }).catch((e) => { console.warn('samples failed, using synth', e); inst = null; });
+  }
+  function lead(mood) { // per-mood melody instrument, loaded on demand, cached
+    if (!inst) return null; const name = LEAD[mood] || 'acoustic_grand_piano';
+    if (!leads.has(name)) { leads.set(name, null); inst.mk(name, 85).then((x) => leads.set(name, x)).catch(() => {}); }
+    return leads.get(name);
+  }
+  function note(x, midi, t, dur, vel) { // play a sample, count it in liveNodes until it ends
+    try { liveNodes++; let done = false; const end = () => { if (!done) { done = true; liveNodes = Math.max(0, liveNodes - 1); } };
+      x.start({ note: midi, time: t, duration: dur, velocity: vel, onEnded: end }); setTimeout(end, (t - ctx.currentTime + dur + 3) * 1000); } catch { /* ignore */ }
+  }
   function ensure() {
     if (ctx) return ctx; const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return null; ctx = new AC();
     master = ctx.createGain(); master.connect(ctx.destination); musicBus = ctx.createGain(); sfxBus = ctx.createGain(); ambBus = ctx.createGain();
@@ -59,7 +78,7 @@ export function createMusic(state, settings) {
     noise = { hit: mkNoise(ctx, 0.12), tick: mkNoise(ctx, 0.04), short: mkNoise(ctx, 0.05), long: mkNoise(ctx, 0.55), spray: mkNoise(ctx, 0.6) };
     applyLevels(); // river fades in over ~2.5s on first start instead of starting at full volume
     ambBus.gain.cancelScheduledValues(ctx.currentTime); ambBus.gain.setValueAtTime(0, ctx.currentTime); ambBus.gain.linearRampToValueAtTime(ambLevel(), ctx.currentTime + 2.5);
-    river(); return ctx;
+    river(); loadSamples(); return ctx;
   }
   function ambLevel() { const s = settings.get(); return s.sfx * (s.river ?? 0.3) * 0.35; } // river default = 30% of the old level
   function applyLevels() { if (!ctx) return; const s = settings.get(); master.gain.value = s.mute ? 0 : s.master; musicBus.gain.value = s.music * 0.55; sfxBus.gain.value = s.sfx; const amb = ambLevel(); ambBus.gain.cancelScheduledValues(ctx.currentTime); ambBus.gain.setTargetAtTime(amb, ctx.currentTime, 0.08); if (audioEl) audioEl.volume = s.mute ? 0 : s.master * s.music; }
@@ -68,9 +87,7 @@ export function createMusic(state, settings) {
     const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true; const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 900; src.connect(f); f.connect(ambBus); src.start();
   }
   function track(src) {
-    liveNodes++;
-    const done = () => { liveNodes = Math.max(0, liveNodes - 1); };
-    try { src.addEventListener('ended', done); } catch { src.onended = done; }
+    liveNodes++; // the caller's onended handler decrements
   }
   function tone(freq, t, dur, { wave = 'triangle', vol = 0.2, bus = musicBus, cutoff = 2400, attack = 0.01 } = {}) {
     const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter(); o.type = wave; o.frequency.value = freq; f.type = 'lowpass'; f.frequency.value = cutoff;
@@ -103,15 +120,25 @@ export function createMusic(state, settings) {
     const sched = () => { // schedule one bar ahead
       if (bar >= total) { timer = setTimeout(() => playSong(cur + 1), beat * 1000); return; }
       const t0 = Math.max(ctx.currentTime + 0.05, sched.next || 0); const b8 = bar % 8; const chordDeg = A.prog[Math.floor(b8 / 2) % A.prog.length];
+      const moodName = moodOf(song.mood || song.title); const L = inst && lead(moodName);
+      if (inst) { // sampled band: strummed guitar, bass line, mood lead
+        const ch = [A.deg(chordDeg) - 12, A.deg(chordDeg), A.deg(chordDeg + 2), A.deg(chordDeg + 4), A.deg(chordDeg) + 12];
+        const pat = A.bpm > 100 ? [1, 0, 1, 1, 0, 1, 1, 1] : A.bpm > 80 ? [1, 0, 1, 1, 0, 1, 1, 0] : [1, 0, 0, 1, 0, 0, 1, 0];
+        pat.forEach((on, k) => { if (!on) return; const t = t0 + k * beat / 2 + (k % 2 ? A.swing * beat : 0); const down = k % 2 === 0;
+          (down ? ch : [...ch].reverse()).forEach((m, s) => note(inst.guitar, m, t + s * 0.012, beat * 0.9, down ? 70 : 50)); });
+        const bn = A.deg(chordDeg) - 12; note(inst.bass, bn, t0, beat * 1.7, 95); note(inst.bass, (bar % 2 ? bn + 7 : bn), t0 + beat * 2, beat * 1.7, 85);
+        for (let k = 0; k < 4; k++) { const n = A.mel[(b8 * 4 + k) % A.mel.length]; const t = t0 + k * beat + (k % 2 ? A.swing * beat : 0); if (n != null && bar >= 1) { if (L) note(L, n, t, beat * 0.95, 80); else tone(mtof(n), t, beat * 0.9, { wave: 'triangle', vol: 0.09 }); } }
+      } else {
       [0, 2, 4].forEach((k) => tone(mtof(A.deg(chordDeg + k)), t0, beat * 3.8, { wave: 'sine', vol: 0.05, cutoff: 900 + 1200 * A.mood.bright, attack: 0.2 }));
-      tone(mtof(A.deg(chordDeg) - 12), t0, beat * 1.8, { wave: 'triangle', vol: 0.14, cutoff: 500 }); tone(mtof(A.deg(chordDeg) - 12), t0 + beat * 2, beat * 1.8, { wave: 'triangle', vol: 0.11, cutoff: 500 });
-      for (let k = 0; k < 4; k++) { const n = A.mel[(b8 * 4 + k) % A.mel.length]; const t = t0 + k * beat + (k % 2 ? A.swing * beat : 0); if (n != null && bar >= 1) tone(mtof(n), t, beat * 0.9, { wave: A.mood.wave, vol: A.mood.wave === 'sawtooth' || A.mood.wave === 'square' ? 0.05 : 0.11, cutoff: 1500 + 2500 * A.mood.bright }); }
-      if (A.drums && bar >= 2) for (let k = 0; k < 4; k++) { const t = t0 + k * beat; if (k % 2 === 0) kick(t); else noiseHit(t, 0.12, 0.18, 1500); noiseHit(t + beat / 2, 0.04, 0.06, 7000); }
+        tone(mtof(A.deg(chordDeg) - 12), t0, beat * 1.8, { wave: 'triangle', vol: 0.14, cutoff: 500 }); tone(mtof(A.deg(chordDeg) - 12), t0 + beat * 2, beat * 1.8, { wave: 'triangle', vol: 0.11, cutoff: 500 });
+        for (let k = 0; k < 4; k++) { const n = A.mel[(b8 * 4 + k) % A.mel.length]; const t = t0 + k * beat + (k % 2 ? A.swing * beat : 0); if (n != null && bar >= 1) tone(mtof(n), t, beat * 0.9, { wave: A.mood.wave, vol: A.mood.wave === 'sawtooth' || A.mood.wave === 'square' ? 0.05 : 0.11, cutoff: 1500 + 2500 * A.mood.bright }); }
+      }
+      if (A.drums && bar >= 2) for (let k = 0; k < 4; k++) { const t = t0 + k * beat; if (k % 2 === 0) kick(t); else noiseHit(t, 0.12, inst ? 0.1 : 0.18, 1500); noiseHit(t + beat / 2, 0.04, inst ? 0.035 : 0.06, 7000); }
       sched.next = t0 + 4 * beat; bar++; timer = setTimeout(sched, Math.max(10, (sched.next - ctx.currentTime - 0.15) * 1000));
     };
     sched();
   }
-  function stopSong() { clearTimeout(timer); timer = null; if (audioEl) { audioEl.pause(); audioEl = null; } }
+  function stopSong() { clearTimeout(timer); timer = null; if (inst) { try { inst.guitar.stop(); inst.bass.stop(); leads.forEach((x) => x?.stop()); } catch {} } if (audioEl) { audioEl.pause(); audioEl = null; } }
   // little synth chirps for SFX
   function sfx(kind) { if (!ensure() || settings.get().sfx <= 0) return; const t = ctx.currentTime + 0.01;
     if (kind === 'hop') { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(1500, t + 0.09); o.frequency.exponentialRampToValueAtTime(1100, t + 0.16); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + 0.25); track(o); o.onended = () => { drop(o, g); liveNodes = Math.max(0, liveNodes - 1); }; }
