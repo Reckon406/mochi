@@ -103,8 +103,8 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
     tries++; const x = (r() - 0.5) * 2200, z = (r() - 0.5) * 2200; const h = terrainH(x, z); const rel = h - FLOOR_Y;
     if (rel < 6 || rel > 95) continue; if (Math.abs(x - riverX(z)) < 90) continue;
     const dens = smoothstep(-0.3, 0.4, noise(x * 0.012 + 5, z * 0.012)) * (rel < 15 ? 0.4 : 1); if (r() > dens) continue;
-    const sc = 2.4 + r() * 2.6; p.set(x, h - 0.5, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (1 + r() * 0.45), sc);
-    m4.compose(p, q, s); pines.setMatrixAt(placed, m4); pc.setHSL(0.28 + r() * 0.08, 0.4, snowy ? 0.55 : 0.18 + r() * 0.1); pines.setColorAt(placed, pc); placed++;
+    const sc = 2.2 + r() * 2.4; p.set(x, h - 0.5, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (1 + r() * 0.4), sc);
+    m4.compose(p, q, s); pines.setMatrixAt(placed, m4); const pineCols = seasonColors('pine', season, snowy); pc.set(pineCols[Math.floor(r() * pineCols.length)]); if (snowy) pc.lerp(PAL.snow, 0.35); pines.setColorAt(placed, pc); placed++;
   }
   pines.count = placed; pines.castShadow = !mobile; group.add(pines);
 
