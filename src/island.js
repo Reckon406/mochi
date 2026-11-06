@@ -4,6 +4,7 @@ import { noise, fbm, smoothstep, rng, clamp } from './noise.js';
 import { ISLAND_R, islandRadius, topH, isletH, CLIFF, POND, POND_Y, ISLET, LAGOON_Y, WATER_Y, ISLET_D, skirtD as islandSkirtD, skirtY as islandSkirtY, RIVER_ROCKS, BRIDGE, bridgeYt, bridgePoint, ZONES, BIGTREE, groundY, K, mv, SHOP, MUSIC, DOCK, OBSTACLES } from './layout.js';
 import { planHangs, framed } from './hang.js';
 import { canopy as seasonCanopy } from './season.js';
+import { makeBigCottonwood, makePonderosa, makeFir, makeCottonwood, makeAspen, makeWillow, bindSway } from './trees.js';
 import { barkBump, rockBump } from './gfx.js';
 import { plank, signpost } from './signs.js';
 const BARK = new Set([0x6b4a33, 0x5a3a24, 0x6a4a30]); const ROCK = new Set([0x9a948e, 0x8f8a84, 0x8a8580, 0x8a8490, 0x7a7670]);
@@ -48,6 +49,7 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
 export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall' }) {
   const world = new THREE.Group(); scene.add(world);
   const anim = []; // per-frame updaters (t, dt)
+  const sways = []; // tree canopy wind
   const glow = []; // emissive materials that brighten at night
   const lights = []; // point lights for night
   const R0 = rng(21);
@@ -178,59 +180,23 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     add(hut, new THREE.CylinderGeometry(0.04, 0.04, 0.9, 5), mat(0x6e4325), [1.0, 0.45, 2.1]); add(hut, new THREE.BoxGeometry(0.3, 0.22, 0.4), mat(0x4aa3d8), [1.0, 0.95, 2.1]);
   }
 
-  // ── big autumn tree ──
-  const sways = [];
-  // big old cottonwood: flared, lumpy trunk, buttress roots, thick limbs (low-poly, bark bump via mat())
-  function bigTrunk(g, T, h, seed) {
-    const tg = new THREE.CylinderGeometry(T.topR, T.trunkR, h, 16, 14); const p = tg.attributes.position; const v = new THREE.Vector3();
-    for (let i = 0; i < p.count; i++) { v.fromBufferAttribute(p, i); const yy = v.y + h / 2; const a = Math.atan2(v.z, v.x); const rad = Math.hypot(v.x, v.z);
-      const k = (T.radiusAt(yy) + noise(a * 1.6 + seed, yy * 0.7) * 0.12 + Math.sin(a * 5 + yy * 0.6) * 0.05) / Math.max(1e-3, rad ? rad : 1);
-      if (rad > 1e-3) { v.x *= k; v.z *= k; } v.x += Math.sin(yy * 0.55) * 0.18; p.setXYZ(i, v.x, v.y, v.z); }
-    tg.computeVertexNormals(); add(g, tg, mat(0x5e412c), [0, h / 2, 0]);
-    for (let i = 0; i < 7; i++) { const a = i / 7 * 6.283 + 0.4; const rg = new THREE.CylinderGeometry(0.1, 0.42, 1.5, 7); rg.translate(0, 0.75, 0);
-      add(g, rg, mat(0x5e412c), [Math.cos(a) * T.trunkR * 0.7, 0.35, Math.sin(a) * T.trunkR * 0.7]).quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(Math.cos(a), -0.32, Math.sin(a)).normalize()); }
-    T.limbs.forEach((a, i) => { const st = T.limbStart(a, i).sub(new THREE.Vector3(T.x, T.y - 0.05, T.z)); const len = 3.0 + (i % 2) * 0.5; const lg = new THREE.CylinderGeometry(0.1, 0.24, len, 8); lg.translate(0, len / 2, 0);
-      const m = add(g, lg, mat(0x5e412c), st.toArray()); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), T.limbDir(a));
-      const tw = new THREE.CylinderGeometry(0.04, 0.09, 1.1, 6); tw.translate(0, 0.55, 0); const tm = add(g, tw, mat(0x5e412c), st.clone().addScaledVector(T.limbDir(a), len * 0.7).toArray()); tm.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(Math.cos(a + 0.8), 0.9, Math.sin(a + 0.8)).normalize()); });
-  }
-  function tree(x, z, { h = 2.6, r = 1.8, colors = [0xe58a2f, 0xf0b53a, 0xd4652c, 0xc7a03a], seed = 1, big = null } = {}) {
-    colors = seasonCanopy(season, colors);
-    const rr = rng(seed); const y = topH(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); world.add(g);
-    if (big) bigTrunk(g, big, h, seed); else {
-    const trunkG = new THREE.CylinderGeometry(0.22, 0.42, h, 10, 4); { const p = trunkG.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i); p.setX(i, p.getX(i) + Math.sin(yy * 1.5) * 0.08); } trunkG.computeVertexNormals(); }
-    add(g, trunkG, mat(0x6b4a33), [0, h / 2, 0]);
-    for (const a of [0.6, 2.6, 4.4]) add(g, new THREE.CylinderGeometry(0.06, 0.12, 1.1, 6), mat(0x6b4a33), [Math.cos(a) * 0.35, h * 0.75, Math.sin(a) * 0.35], [Math.sin(a) * 0.8, 0, -Math.cos(a) * 0.8]); }
-    const canopy = new THREE.Group(); canopy.position.y = h; g.add(canopy);
-    const blobs = [[0, 0.6, 0, 1.1], [0.8, 0.3, 0.2, 0.85], [-0.75, 0.35, -0.1, 0.9], [0.1, 0.35, 0.8, 0.8], [-0.1, 0.4, -0.8, 0.85], [0.2, 1.25, 0.1, 0.8], [0.6, 0.9, -0.5, 0.65], [-0.6, 1.0, 0.45, 0.65]];
-    if (big) for (let i = 0; i < 9; i++) { const a = i / 9 * 6.283 + 0.3; blobs.push([Math.cos(a) * 1.45, 0.05 + (i % 3) * 0.18, Math.sin(a) * 1.45, 0.62 + (i % 2) * 0.12]); }
-    blobs.forEach(([bx, by, bz, br], i) => {
-      const geo = new THREE.IcosahedronGeometry(br * r * 0.62, 3); const p = geo.attributes.position; const v = new THREE.Vector3();
-      for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k); const n = noise(v.x * 2 + seed, v.y * 2 + v.z * 2) * 0.08 * r; v.multiplyScalar(1 + n); p.setXYZ(k, v.x, v.y, v.z); } geo.computeVertexNormals();
-      const c = new THREE.Color(colors[i % colors.length]); if (snowy) c.lerp(snowC, 0.25);
-      { const vc = new Float32Array(p.count * 3); for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k); const l = 0.78 + 0.3 * THREE.MathUtils.clamp(v.y / (br * r * 0.62) * 0.5 + 0.5, 0, 1) + noise(v.x * 3 + 7, v.z * 3) * 0.12; vc[k * 3] = l * 1.02; vc[k * 3 + 1] = l; vc[k * 3 + 2] = l * 0.96; } geo.setAttribute('color', new THREE.BufferAttribute(vc, 3)); }
-      add(canopy, geo, new THREE.MeshStandardMaterial({ color: c, roughness: 0.8, vertexColors: true }), [bx * r * 0.62, by * r * 0.62, bz * r * 0.62]);
-      if (snowy) add(canopy, new THREE.SphereGeometry(br * r * 0.5, 16, 8, 0, 6.29, 0, 1.0), mat(0xf6f8ff), [bx * r * 0.62, by * r * 0.62 + br * r * 0.2, bz * r * 0.62], [0, 0, 0], null, false);
-    });
-    const ph = rr() * 6; sways.push((t) => { const w = 0.3 + ENV.uWind.value * 2; canopy.rotation.z = Math.sin(t * 1.1 + ph) * 0.025 * w; canopy.rotation.x = Math.sin(t * 0.8 + ph * 2) * 0.02 * w; });
-    return g;
-  }
-  tree(BIGTREE.x, BIGTREE.z, { h: BIGTREE.h, r: 3.3, seed: 3, big: BIGTREE });
+  // ── Bitterroot trees (procedural: cottonwood / ponderosa / fir / aspen) ──
+  // Big treehouse cottonwood keeps BIGTREE limb anchors (swing, owl, feeder, cabin).
+  { const big = makeBigCottonwood(BIGTREE, { season, snowy, seed: 3 }); big.position.set(BIGTREE.x, BIGTREE.y - 0.05, BIGTREE.z); world.add(big); bindSway(sways, big); }
   // swing hanging from the big north-west limb
   { const hk = BIGTREE.limbPoint(BIGTREE.swingA, 2.5); const L = hk.y - 0.1 - groundY(hk.x, hk.z) - 0.55; const sw = new THREE.Group(); sw.position.copy(hk).y -= 0.1; sw.rotation.y = Math.PI / 2 - BIGTREE.swingA; world.add(sw);
     for (const s of [-0.3, 0.3]) add(sw, new THREE.CylinderGeometry(0.014, 0.014, L, 3), mat(0xc9a66b), [s, -L / 2, 0], [0, 0, 0], null, false);
     add(sw, new THREE.BoxGeometry(0.75, 0.06, 0.3), mat(0x8a5a32), [0, -L, 0]); anim.push((t) => { sw.rotation.x = Math.sin(t * 1.4) * 0.12 * (0.4 + ENV.uWind.value * 2); }); }
-  // falling-leaf pile under it (fall only)
   if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 1.7 + R0() * 2.2; const x = BIGTREE.x + Math.cos(a) * rr, z = BIGTREE.z + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
-  // ── island pines ──
-  function pine(x, z, s = 1) { const y = topH(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); g.scale.setScalar(s); world.add(g);
-    add(g, new THREE.CylinderGeometry(0.12, 0.16, 0.8, 6), mat(0x5c3d28), [0, 0.4, 0]);
-    const pm = mat(0x2f6b3e); [[1.0, 1.2, 0.9], [0.8, 1.1, 1.55], [0.56, 0.95, 2.15], [0.34, 0.7, 2.65]].forEach(([r, h, yy]) => add(g, new THREE.ConeGeometry(r, h, 9), pm, [0, yy, 0]));
-    if (snowy) [[0.85, 0.5, 1.45], [0.6, 0.45, 2.05], [0.4, 0.4, 2.65]].forEach(([r, h, yy]) => add(g, new THREE.ConeGeometry(r, h, 9), mat(0xf6f8ff), [0, yy + 0.15, 0], [0, 0, 0], null, false));
-    const ph = R0() * 6; sways.push((t) => { g.rotation.z = Math.sin(t * 1.3 + ph) * 0.015 * (0.3 + ENV.uWind.value * 2); }); }
-  [[-9.5, -7.5, 1.2], [-11, -4.5, 0.9], [-7.8, -10.3, 1.0], [12.4, -1.5, 0.8], [-12.5, 7.5, 0.85], [-9.2, 9.6, 1.0], [11.8, 9.0, 0.8], [1.5, 12.8, 0.8], [-13.8, 0.5, 0.75], [-10, 0.8, 0.7],
-    [-4, -12.5, 0.9], [7.5, -11.5, 1.1], [13, -6.5, 0.85], [-6.5, 12.5, 0.9], [12.6, 4.2, 0.8], [-12.6, -1.5, 0.9], [0.5, -13.3, 0.8], [-2, 4.5, 0.75], [7.5, 2.0, 0.8], [-6.0, -4.0, 0.85]]
-    .map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 2.6)).forEach(([x, z, s]) => pine(x, z, s));
+  function plantTree(maker, x, z, opts = {}) {
+    const y = topH(x, z); const g = maker({ ...opts, season, snowy }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
+  }
+  // island conifers: mix of ponderosa + Douglas fir
+  [[-9.5, -7.5, 1.15, 'fir'], [-11, -4.5, 0.95, 'pine'], [-7.8, -10.3, 1.05, 'fir'], [12.4, -1.5, 0.85, 'pine'], [-12.5, 7.5, 0.9, 'fir'], [-9.2, 9.6, 1.05, 'pine'], [11.8, 9.0, 0.85, 'fir'], [1.5, 12.8, 0.85, 'pine'], [-13.8, 0.5, 0.8, 'fir'], [-10, 0.8, 0.75, 'pine'],
+    [-4, -12.5, 0.95, 'fir'], [7.5, -11.5, 1.1, 'pine'], [13, -6.5, 0.9, 'fir'], [-6.5, 12.5, 0.95, 'pine'], [12.6, 4.2, 0.85, 'fir'], [-12.6, -1.5, 0.95, 'pine'], [0.5, -13.3, 0.85, 'fir'], [-2, 4.5, 0.8, 'pine'], [7.5, 2.0, 0.85, 'fir'], [-6.0, -4.0, 0.9, 'pine']]
+    .map(([x, z, s, kind], i) => [x * K, z * K, s, kind, i]).filter(([x, z]) => clear(x, z, 2.6))
+    .forEach(([x, z, s, kind, i]) => plantTree(kind === 'fir' ? makeFir : makePonderosa, x, z, { scale: s, seed: 10 + i }));
 
   // ── pumpkins (glowing jack-o-lanterns) + witch hat grave ──
   { const pm = new THREE.MeshStandardMaterial({ color: 0xf07d1f, roughness: 0.55 });
@@ -343,8 +309,8 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     add(mu, new THREE.PlaneGeometry(0.42, 0.16), new THREE.MeshStandardMaterial({ map: signTex(['#17 · my son'], { w: 256, h: 96, font: 'bold 40px sans-serif' }) }), [1.45, 0.42, 0.79], [0, 0, 0], null, false);
   }
 
-  // ── squirrel's tree ──
-  const SQ = mv(10.0, -4.6); tree(SQ[0], SQ[1], { h: 3.6, r: 1.55, colors: [0xc75a2a, 0xa8432a, 0xe07a34, 0xb8862e], seed: 9 });
+  // ── squirrel's tree (cottonwood) ──
+  const SQ = mv(10.0, -4.6); plantTree(makeCottonwood, SQ[0], SQ[1], { scale: 0.85, seed: 9, h: 3.6 });
   { const [x, y, z] = at(...SQ); add(world, new THREE.CircleGeometry(0.17, 16), mat(0x2a180c), [x - 0.32, y + 1.6, z + 0.2], [0, -1.1, 0], null, false);
     add(world, new THREE.BoxGeometry(0.9, 0.08, 0.7), mat(0x8a5a32), [x - 0.45, y + 2.55, z + 0.1]); // branch platform
     sign(world, ['NO KIWIS', '(esp. mochi)'], [x - 1.0, y, z + 0.95], -1.2, 0.6);
@@ -454,14 +420,15 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const dw = [[-2.0, -18.5, 0.6], [3.5, 18.4, 2.2], [-15.5, -10, 1.2]].map(([x, z, y]) => [x * 1.45, z * 1.45, y]);
     for (const [x, z, yaw] of dw) { const y = groundOrShore(x, z); const g = new THREE.Group(); g.position.set(x, y + 0.12, z); g.rotation.y = yaw; world.add(g); add(g, new THREE.CylinderGeometry(0.13, 0.18, 2.4, 8), mat(0xb8a890), [0, 0, 0], [0, 0, Math.PI / 2 + 0.05]); add(g, new THREE.CylinderGeometry(0.05, 0.07, 0.8, 5), mat(0xb8a890), [0.6, 0.15, 0.2], [0.6, 0, 1.0]); }
   }
-  function willowTree(x, z, s = 1) { const y = groundOrShore(x, z); const g = new THREE.Group(); g.position.set(x, y - 0.05, z); g.scale.setScalar(s); world.add(g);
-    add(g, new THREE.CylinderGeometry(0.12, 0.2, 1.6, 7), mat(0x6e5a48), [0, 0.8, 0], [0.1, 0, 0.08]);
-    const dome = new THREE.SphereGeometry(1.25, 20, 12, 0, Math.PI * 2, 0, Math.PI * 0.62); const ps = dome.attributes.position; for (let i = 0; i < ps.count; i++) { const yy = ps.getY(i); ps.setY(i, yy * 1.35); const k = 1 + 0.06 * Math.sin(Math.atan2(ps.getZ(i), ps.getX(i)) * 14); ps.setX(i, ps.getX(i) * k); ps.setZ(i, ps.getZ(i) * k); } dome.computeVertexNormals();
-    const wm = new THREE.MeshStandardMaterial({ color: snowy ? 0xdfe6d8 : (season === 'fall' ? [0xb4b24c, 0xa6aa48, 0xc8b450] : season === 'winter' ? [0x9a9070, 0x8a8468, 0xa49a78] : [0x8ab84c, 0x7aa844, 0x9cc058])[Math.floor(R0() * 3)], roughness: 0.9, side: THREE.DoubleSide });
-    const top = add(g, dome, wm, [0, 1.4, 0]); const ph = R0() * 6; sways.push((t) => { top.rotation.z = Math.sin(t * 1.2 + ph) * 0.03 * (0.4 + ENV.uWind.value * 2); top.rotation.x = Math.cos(t * 0.9 + ph) * 0.02 * (0.4 + ENV.uWind.value * 2); }); }
-  [[-6.5, -13.2, 1.0], [-10.5, -11.5, 0.85], [12.6, 4.6, 0.9], [-2, 14.2, 0.95], [9.5, 11.6, 0.8], [-13.8, -6.8, 0.75], [4, -13.6, 0.9], [13.4, -3, 0.8], [-12, 10, 0.85]].map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 3)).forEach(([x, z, s]) => willowTree(x, z, s));
-  // a big cottonwood on the island too, gold in November
-  tree(-1.5 * K, -11.8 * K, { h: 3.4, r: 1.9, colors: [0xe8c040, 0xd9a830, 0xf0cc50, 0xc9a838], seed: 17 });
+  function plantShore(maker, x, z, opts = {}) {
+    const y = groundOrShore(x, z); const g = maker({ ...opts, season, snowy }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
+  }
+  // willows / alders along the water
+  [[-6.5, -13.2, 1.0], [-10.5, -11.5, 0.85], [12.6, 4.6, 0.9], [-2, 14.2, 0.95], [9.5, 11.6, 0.8], [-13.8, -6.8, 0.75], [4, -13.6, 0.9], [13.4, -3, 0.8], [-12, 10, 0.85]].map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 3)).forEach(([x, z, s], i) => plantShore(makeWillow, x, z, { scale: s, seed: 50 + i }));
+  // island cottonwoods + a couple of aspens
+  plantTree(makeCottonwood, -1.5 * K, -11.8 * K, { scale: 1.05, seed: 17, h: 3.4 });
+  plantTree(makeAspen, 8.2 * K, -8.5 * K, { scale: 0.95, seed: 21 });
+  [[-8.5, 3.2, 0.8], [5.5, 8.5, 0.75]].map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 2.2)).forEach(([x, z, s], i) => plantTree(makeAspen, x, z, { scale: s, seed: 30 + i }));
 
   buildShop(); buildCampfire(); buildMeadow(); buildDock(); const music = buildMusic();
 

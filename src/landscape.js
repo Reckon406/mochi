@@ -2,6 +2,7 @@
 // foothills, the Bitterroot Mountains with Trapper Peak, and little Darby
 import * as THREE from 'three';
 import { addInstancedSway } from './gfx.js';
+import { lodPineGeo, lodCottonwoodGeo, lodAspenGeo, lodWillowGeo, seasonColors } from './trees.js';
 import { fbm, ridged, noise, smoothstep, rng } from './noise.js';
 import { makeRiverMaterial } from './water.js';
 import { FLOOR_Y, BED_Y, WATER_Y, islandSurfH, isletSurfH, rockH } from './layout.js';
@@ -93,44 +94,45 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   const water = new THREE.Mesh(new THREE.PlaneGeometry(3800, 3800, 1, 1).rotateX(-Math.PI / 2), riverMat); water.position.y = WATER_Y; water.receiveShadow = false; group.add(water);
 
   const r = rng(3); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(); const pc = new THREE.Color();
-  // ── foothill pines ──
-  const pineGeo = (() => { const g1 = new THREE.ConeGeometry(1, 1.4, 7); g1.translate(0, 1.3, 0); const g2 = new THREE.ConeGeometry(0.8, 1.2, 7); g2.translate(0, 2.0, 0); const g3 = new THREE.ConeGeometry(0.55, 1.0, 7); g3.translate(0, 2.6, 0); const t = new THREE.CylinderGeometry(0.15, 0.2, 0.8, 5); t.translate(0, 0.4, 0); return mergeSimple([g1, g2, g3, t]); })();
-  const N = mobile ? 3500 : 8000;
+  // ── foothill pines (LOD ponderosa/fir silhouette, instanced) ──
+  const pineGeo = lodPineGeo();
+  const N = mobile ? 2800 : 6500;
   const pines = new THREE.InstancedMesh(pineGeo, new THREE.MeshStandardMaterial({ color: snowy ? 0xb9c8bd : 0xffffff, roughness: 1, vertexColors: true }), N);
   let placed = 0, tries = 0;
   while (placed < N && tries < N * 30) {
     tries++; const x = (r() - 0.5) * 2200, z = (r() - 0.5) * 2200; const h = terrainH(x, z); const rel = h - FLOOR_Y;
     if (rel < 6 || rel > 95) continue; if (Math.abs(x - riverX(z)) < 90) continue;
     const dens = smoothstep(-0.3, 0.4, noise(x * 0.012 + 5, z * 0.012)) * (rel < 15 ? 0.4 : 1); if (r() > dens) continue;
-    const sc = 2.2 + r() * 2.2; p.set(x, h - 0.5, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (1 + r() * 0.5), sc);
-    m4.compose(p, q, s); pines.setMatrixAt(placed, m4); pc.setHSL(0.3 + r() * 0.06, 0.35, 0.16 + r() * 0.08); pines.setColorAt(placed, pc); placed++;
+    const sc = 2.4 + r() * 2.6; p.set(x, h - 0.5, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (1 + r() * 0.45), sc);
+    m4.compose(p, q, s); pines.setMatrixAt(placed, m4); pc.setHSL(0.28 + r() * 0.08, 0.4, snowy ? 0.55 : 0.18 + r() * 0.1); pines.setColorAt(placed, pc); placed++;
   }
-  pines.count = placed; group.add(pines);
+  pines.count = placed; pines.castShadow = !mobile; group.add(pines);
 
-  // ── cottonwoods + willows along the banks ──
-  const blob = (geoR, x, y, z) => { const g = new THREE.IcosahedronGeometry(geoR, 2); g.translate(x, y, z); return g; };
-  const cwCanopy = mergeSimple([blob(1.0, 0, 3.2, 0), blob(0.8, 0.8, 2.8, 0.2), blob(0.75, -0.7, 2.9, -0.3), blob(0.7, 0.1, 3.9, 0.3), blob(0.65, -0.2, 2.7, 0.8)], true);
-  const cwTrunk = (() => { const t = new THREE.CylinderGeometry(0.12, 0.22, 3.0, 6); t.translate(0, 1.5, 0); const b1 = new THREE.CylinderGeometry(0.05, 0.09, 1.4, 5); b1.rotateZ(0.7); b1.translate(0.45, 2.6, 0); const b2 = b1.clone(); b2.rotateY(2.4); return mergeSimple([t, b1, b2], true); })();
-  const willow = (() => { const d = new THREE.SphereGeometry(1, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.62); const ps = d.attributes.position; for (let i = 0; i < ps.count; i++) { const y = ps.getY(i); ps.setY(i, y * 1.5 + 0.4 * Math.max(0, 0.3 - y)); } d.computeVertexNormals(); d.translate(0, 1.4, 0); return mergeSimple([d], true); })();
-  const NC = mobile ? 260 : 520, NWl = mobile ? 160 : 320;
-  const canopyM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 }); const trunkM = new THREE.MeshStandardMaterial({ color: 0x7a6a5a, roughness: 1 });
-  addInstancedSway(canopyM, 0.12, 4.2);
-  const cwC = new THREE.InstancedMesh(cwCanopy, canopyM, NC), cwT = new THREE.InstancedMesh(cwTrunk, trunkM, NC);
-  const wlM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, side: THREE.DoubleSide }); addInstancedSway(wlM, 0.08, 2.4);
-  const wl = new THREE.InstancedMesh(willow, wlM, NWl);
-  const golds = season === 'fall' ? [0xe8c040, 0xd9a830, 0xc9b24a, 0xb8a040, 0xe0b85a] : season === 'winter' ? [0x8a7a68, 0x7a6a58, 0x9a8a78] : season === 'spring' ? [0x9fd06a, 0x8cc65a, 0xb5dc84] : [0x5f9a3e, 0x4f8a36, 0x6fae48];
-  const willowC = season === 'fall' ? [0xa8a848, 0x9aa040, 0xc0b050] : season === 'winter' ? [0x9a9070, 0x8a8468] : [0x8ab84c, 0x7aa844, 0x9cc058];
-  const placeBank = (mesh, mesh2, count, cols, minD, maxD, scale, zr, clear) => { let k = 0, tr = 0;
+  // ── bank trees: cottonwoods, aspens, willows (LOD + wind sway on canopies) ──
+  const NC = mobile ? 180 : 380, NA = mobile ? 100 : 220, NWl = mobile ? 120 : 260;
+  const cwGeo = lodCottonwoodGeo(), asGeo = lodAspenGeo(), wlGeo = lodWillowGeo();
+  const canopyM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, vertexColors: true });
+  const aspenM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, vertexColors: true });
+  const wlM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, side: THREE.DoubleSide, vertexColors: true });
+  addInstancedSway(canopyM, 0.14, 4.5); addInstancedSway(aspenM, 0.18, 3.6); addInstancedSway(wlM, 0.1, 2.6);
+  const cw = new THREE.InstancedMesh(cwGeo, canopyM, NC);
+  const asp = new THREE.InstancedMesh(asGeo, aspenM, NA);
+  const wl = new THREE.InstancedMesh(wlGeo, wlM, NWl);
+  const golds = seasonColors('cotton', season, snowy);
+  const aspenC = seasonColors('aspen', season, snowy);
+  const willowC = seasonColors('willow', season, snowy);
+  const placeBank = (mesh, count, cols, minD, maxD, scale, zr, clearR, trunkTint = null) => { let k = 0, tr = 0;
     while (k < count && tr < count * 40) { tr++; const z = (r() - 0.5) * 2 * zr; const side = r() < 0.5 ? -1 : 1; const off = riverW(z) + minD + Math.pow(r(), 1.6) * (maxD - minD); const x = riverX(z) + side * off;
-      const h = terrainH(x, z); if (h < FLOOR_Y - 0.25 || h > FLOOR_Y + 14) continue; if (Math.hypot(x, z) < clear) continue;
-      const sc = scale * (0.7 + r() * 0.6); p.set(x, h - 0.2, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (0.9 + r() * 0.3), sc); m4.compose(p, q, s);
-      mesh.setMatrixAt(k, m4); if (mesh2) mesh2.setMatrixAt(k, m4);
-      pc.set(cols[Math.floor(r() * cols.length)]); if (snowy) pc.lerp(PAL.snow, 0.55); if (r() < 0.12 && mesh2) pc.set(snowy ? 0xe8ecf4 : 0x9a8a70); // a few already bare
+      const h = terrainH(x, z); if (h < FLOOR_Y - 0.25 || h > FLOOR_Y + 14) continue; if (Math.hypot(x, z) < clearR) continue;
+      const sc = scale * (0.75 + r() * 0.55); p.set(x, h - 0.2, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (0.9 + r() * 0.35), sc); m4.compose(p, q, s);
+      mesh.setMatrixAt(k, m4);
+      const hex = cols[Math.floor(r() * cols.length)]; pc.set(hex); if (snowy) pc.lerp(PAL.snow, 0.45); if (r() < 0.1) pc.set(snowy ? 0xe8ecf4 : 0x9a8a70);
       mesh.setColorAt(k, pc); k++; }
-    mesh.count = k; if (mesh2) mesh2.count = k; };
-  placeBank(cwC, cwT, NC, golds, 2, 60, 1.9, 700, 95);
-  placeBank(wl, null, NWl, willowC, -0.5, 12, 1.3, 500, 62);
-  group.add(cwC, cwT, wl);
+    mesh.count = k; };
+  placeBank(cw, NC, golds, 2, 70, 2.1, 700, 95);
+  placeBank(asp, NA, aspenC, 4, 90, 1.7, 650, 90);
+  placeBank(wl, NWl, willowC, -0.5, 14, 1.35, 500, 62);
+  cw.castShadow = asp.castShadow = !mobile; group.add(cw, asp, wl);
 
   // ── tiny Darby, Montana on the east bench, lights on at night ──
   const houseGeo = new THREE.BoxGeometry(1, 1, 1); houseGeo.translate(0, 0.5, 0);
