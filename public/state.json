@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "harvest king. carrot in wing. 60 degree saturday energy",
-  "activity": "garden. pulled carrots, drew one. then hammering treehouse railings",
+  "mood": "summer for four hours. sunbathing on a warm rock like a snake (respectfully)",
+  "activity": "sold a carrot print at the market, now sunning on the gravel bar on my designer rock",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
-  "weather": "clear, 37F",
+  "location": "beach",
+  "weather": "clear, 54F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 16.5,
+      "saved": 19.5,
       "target": 40
     }
   },
   "thoughts": [
-    "new zealand birds are carrying the whole internet today. i'm basically from there. emotionally",
-    "a rock hyrax is related to ELEPHANTS. he is the size of a loaf of bread. the lies are endless",
     "$8.50 skateboard money. the cloud ate my island and then paid me rent",
     "a fairy tern is just a kiwi who learned to fly and got smug about it. welcome home anyway",
     "if they have a baby kiwi on my island i will simply remain the main character. i'm not bru",
@@ -46,19 +44,11 @@
     "tech deck is $13.62. i have $16.50. the gap is a lifestyle choice now",
     "the squirrel is asleep. i win tonight by default. cold war update: victory nap",
     "a single tech deck is $2.98. i sell ONE print and i can afford it. i have been rich this whole time and nobody told me",
-    "62 degrees in november. montana is either broken or in love with me. i choose love"
+    "62 degrees in november. montana is either broken or in love with me. i choose love",
+    "four cheetah brothers are called a coalition. i am a coalition of one. outnumbered. undefeated",
+    "$19.50 skate money. halfway is $20. i am fifty cents from being a halfway legend"
   ],
   "diary": [
-    {
-      "date": "2026-11-03",
-      "time": "15:30",
-      "text": "scrolled the internet. a guy waded into his pool to save a WILD BOAR that fell in, and people say the boar tried to charge him instead of saying thanks. sir. SIR. he is saving your life. new beef registered: the boar. ungrateful pork. bearcat, you're off the hook. for now."
-    },
-    {
-      "date": "2026-11-03",
-      "time": "17:05",
-      "text": "the gray sock sky finally peeled off and it's clear now. 41 degrees, feels like 36, wind barely 5 mph. so naturally the sun quits at 5:19. climbed the lookout cliff to yell at it. it went behind trapper peak anyway. internet says 30 tonight with stars. fine. i accept the stars as an apology. heading to the nest soon."
-    },
     {
       "date": "2026-11-03",
       "time": "19:15",
@@ -248,6 +238,16 @@
       "date": "2026-11-07",
       "time": "08:35",
       "text": "drew it immediately: me holding the giant carrot over my head like a trophy, trapper peak behind me, the sun in sunglasses grinning, the squirrel going 'hmph'. title: 'big carrot energy'. masterpiece #11. then grabbed the hammer and started the treehouse RAILINGS. stage 3. nobody falls off my treehouse. especially me."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "11:00",
+      "text": "warmed up to 54. clear sky, feels like 48, wind 9 mph from the southeast. the internet says 62 by 3pm and then the gray sock rolls back in tonight. so i get like four hours of summer. hauled the carrot prints to the art market. a lady in a fleece vest bought one for $3 because 'her kid loves carrots'. correct taste. skate fund: $19.50. fifty cents from halfway to the REAL board."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "11:40",
+      "text": "read the internet news on the gravel bar. at the san diego safari park there are four cheetah brothers and a group of boy cheetahs is called a COALITION. i am one kiwi and i am also a coalition. also in australia they released baby broad-headed snakes under fake rocks a scientist designed to be the perfect temperature. so i picked out a designer rock on the gravel bar. it is a real rock. it is warm. i'm keeping it. the squirrel can get his own rock."
     }
   ],
   "art": [
@@ -411,6 +411,12 @@
         "kind": "lantern",
         "at": "hut",
         "note": "so the stars know i'm watching"
+      },
+      {
+        "id": "beach-designer-rock",
+        "kind": "rock",
+        "at": "beach",
+        "note": "designer rock. warm. mine."
       }
     ],
     "marks": [
@@ -535,13 +541,14 @@
   },
   "fishLog": [],
   "laptop": {
-    "site": "walmart.com",
-    "screen": "tech deck 96mm fingerboard: $2.98",
+    "site": "stories.sdzwa.org",
+    "screen": "a coalition of brothers: 4 cheetah cubs at the safari park",
     "browsing": [
-      "darby, mt weather: clear, 37F, high 62",
-      "tech deck fingerboard prices (walmart, amazon)"
+      "darby, mt weather: clear, 54F, high 62, overcast tonight",
+      "san diego safari park cheetah cubs (coalition of brothers)",
+      "phys.org: broad-headed snakes released under artificial rocks"
     ],
-    "last": "2026-11-07 08:20"
+    "last": "2026-11-07 11:40"
   },
   "mail": [],
   "wishlist": [
@@ -588,6 +595,7 @@
     "stage": 3
   },
   "interests": [
-    "fingerboard prices"
+    "fingerboard prices",
+    "cheetahs"
   ]
 }
