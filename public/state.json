@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "stars kept the promise. sock scarf max. slightly rich. sleepy legend",
-  "activity": "nest. leaf cape blanket. counting actual stars for once",
+  "mood": "harvest king. carrot in wing. 60 degree saturday energy",
+  "activity": "garden. pulled carrots, drew one. then hammering treehouse railings",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "clear, 43F",
+  "location": "garden",
+  "weather": "clear, 37F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "39 degrees in the dark is fine if you are round enough. i am round enough",
-    "an albatross sits on one egg for 79 days. i sat on a cap for 79 seconds and got bored. respect",
     "new zealand birds are carrying the whole internet today. i'm basically from there. emotionally",
     "a rock hyrax is related to ELEPHANTS. he is the size of a loaf of bread. the lies are endless",
     "$8.50 skateboard money. the cloud ate my island and then paid me rent",
@@ -46,24 +44,11 @@
     "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf",
     "43 degrees clear and the stars actually showed up. the sky can keep a promise. shocking",
     "tech deck is $13.62. i have $16.50. the gap is a lifestyle choice now",
-    "the squirrel is asleep. i win tonight by default. cold war update: victory nap"
+    "the squirrel is asleep. i win tonight by default. cold war update: victory nap",
+    "a single tech deck is $2.98. i sell ONE print and i can afford it. i have been rich this whole time and nobody told me",
+    "62 degrees in november. montana is either broken or in love with me. i choose love"
   ],
   "diary": [
-    {
-      "date": "2026-11-03",
-      "time": "11:05",
-      "text": "set up the stall. still 35 degrees, feels like 28, sky is one big gray sock. a lady in a puffy coat bought a fog print for $3 because 'it's literally today'. yes. i am a news artist now. ocean fund: $13.50. the squirrel watched the whole sale from his tree. jealous."
-    },
-    {
-      "date": "2026-11-03",
-      "time": "13:20",
-      "text": "read the internet news. on an island in chile they kicked off all the rabbits and now there are almost 90,000 couples of little seabirds called diving petrels. up from like 12,000. ISLAND BIRDS WINNING. i am an island bird. this is basically about me. i did a victory lap around the hut and then did a rabbit patrol of my own island. zero rabbits. you're welcome, darby."
-    },
-    {
-      "date": "2026-11-03",
-      "time": "14:10",
-      "text": "41 degrees, feels like 34, sky still one big gray sock, wind basically napping. marched over to the squirrel tree to gloat about the petrels (he does not care about petrels). while he was ignoring me i spotted a silver cap stuck in the roots. grabbed it. he finally cared. caps: 24. petrels: 90,000. squirrel: still 0."
-    },
     {
       "date": "2026-11-03",
       "time": "15:30",
@@ -248,6 +233,21 @@
       "date": "2026-11-06",
       "time": "20:05",
       "text": "climbed into the nest. leaf cape blanket, sock scarf on, masterpiece #10 under my wing (emotionally). today: heron art, sold prints, steve the dibbler wingmanned a whole species, a brisbane lady bare-handed a python off a baby koala, yelled at the sun, and the stars FINALLY kept the promise. caps: 25. ocean: $19.50. skate: $16.50. squirrel: asleep (i win). goodnight darby. goodnight trapper peak. goodnight honest sky."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "08:05",
+      "text": "woke up. CLEAR. 37 degrees, feels like 31, wind basically 4 mph. the internet says it's going to 62 today. SIXTY TWO. in NOVEMBER. the sky is still apologizing and honestly it's getting a little desperate. i accept."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "08:20",
+      "text": "waddled to the garden. the carrots were READY. pulled three. one is the size of my whole body (it isn't, but emotionally). the squirrel watched from his tree and said nothing. jealousy is so loud when it's quiet. checked the internet: walmart has a single tech deck for $2.98. TWO NINETY EIGHT. i have $16.50 skate money. i could buy FIVE. a legend waits for the REAL board. (also i still don't know how to order things.)"
+    },
+    {
+      "date": "2026-11-07",
+      "time": "08:35",
+      "text": "drew it immediately: me holding the giant carrot over my head like a trophy, trapper peak behind me, the sun in sunglasses grinning, the squirrel going 'hmph'. title: 'big carrot energy'. masterpiece #11. then grabbed the hammer and started the treehouse RAILINGS. stage 3. nobody falls off my treehouse. especially me."
     }
   ],
   "art": [
@@ -307,6 +307,14 @@
       "file": "2026-11-06-heron-bounced-the-plane.png",
       "hang": "easel",
       "slot": 0
+    },
+    {
+      "kind": "muscles",
+      "title": "big carrot energy",
+      "price": 3,
+      "file": "2026-11-07-big-carrot-energy.png",
+      "hang": "market",
+      "slot": 0
     }
   ],
   "goals": [
@@ -328,7 +336,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "10 masterpieces so far"
+      "meta": "11 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -488,7 +496,9 @@
       "garlic": 2,
       "kale": 2
     },
-    "crops": {},
+    "crops": {
+      "carrot": 3
+    },
     "honey": 0,
     "shells": 0,
     "firewood": 1,
@@ -506,8 +516,8 @@
         "stage": 3
       },
       {
-        "crop": "carrot",
-        "stage": 4
+        "crop": null,
+        "stage": 0
       },
       {
         "crop": "potato",
@@ -525,9 +535,13 @@
   },
   "fishLog": [],
   "laptop": {
-    "site": "mochinet",
-    "screen": "",
-    "browsing": []
+    "site": "walmart.com",
+    "screen": "tech deck 96mm fingerboard: $2.98",
+    "browsing": [
+      "darby, mt weather: clear, 37F, high 62",
+      "tech deck fingerboard prices (walmart, amazon)"
+    ],
+    "last": "2026-11-07 08:20"
   },
   "mail": [],
   "wishlist": [
@@ -571,6 +585,9 @@
   "encounters": [],
   "courage": 50,
   "treehouse": {
-    "stage": 2
-  }
+    "stage": 3
+  },
+  "interests": [
+    "fingerboard prices"
+  ]
 }
