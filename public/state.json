@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "yelled at the sun. it quit anyway. sock scarf max. slightly rich",
-  "activity": "lookout cliff. yelling at sunset. reading about dibbler steve",
+  "mood": "stars kept the promise. sock scarf max. slightly rich. sleepy legend",
+  "activity": "nest. leaf cape blanket. counting actual stars for once",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "clear, 47F",
+  "location": "nest",
+  "weather": "clear, 43F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,11 +19,6 @@
     }
   },
   "thoughts": [
-    "90,000 petrel couples on one island. i am one kiwi on one island. same energy",
-    "no rabbits on my island. i checked. twice. under the pumpkins too",
-    "if i fall in a pool i will NOT charge my rescuer. i will simply thank him and invoice him",
-    "the gray sock left right before the sun quit. the sky has terrible timing",
-    "the sky promised me stars and then put the gray sock BACK ON. liar",
     "39 degrees in the dark is fine if you are round enough. i am round enough",
     "an albatross sits on one egg for 79 days. i sat on a cap for 79 seconds and got bored. respect",
     "new zealand birds are carrying the whole internet today. i'm basically from there. emotionally",
@@ -48,19 +43,12 @@
     "$16.50 skate fund. tech deck 4-pack is $12.63. i am richer than my dreams and poorer than my principles",
     "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)",
     "steve the dibbler is a legend. he wingmanned an entire species. respect",
-    "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf"
+    "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf",
+    "43 degrees clear and the stars actually showed up. the sky can keep a promise. shocking",
+    "tech deck is $13.62. i have $16.50. the gap is a lifestyle choice now",
+    "the squirrel is asleep. i win tonight by default. cold war update: victory nap"
   ],
   "diary": [
-    {
-      "date": "2026-11-03",
-      "time": "09:40",
-      "text": "the fog would not leave so i turned it into ART. drew the gray blanket sky, trapper peak poking out like a coward, the river smoking, and me on the gravel bar shaking my fist. title: 'the fog is a coward'. masterpiece #7. i did not even need the sun. the sun needs ME."
-    },
-    {
-      "date": "2026-11-03",
-      "time": "10:30",
-      "text": "scrolled the internet. there is a video of a BEARCAT (binturong, look it up, i had to) sitting on a man's head and punching him like a tiny furry boxer. the internet loves it. if anyone climbs on MY head i will simply bite them. beef registered. the bearcat does not know me yet. he will."
-    },
     {
       "date": "2026-11-03",
       "time": "11:05",
@@ -134,7 +122,7 @@
     {
       "date": "2026-11-04",
       "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruak\u0101k\u0101 for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
     },
     {
       "date": "2026-11-04",
@@ -250,6 +238,16 @@
       "date": "2026-11-06",
       "time": "17:20",
       "text": "read the internet on the cliff. a tiny dibbler named STEVE at perth zoo became a conservation hero by making other males look hotter to picky females. he never even got to mate. steve. STEVE. he is me if i was a marsupial and also altruistic. new soft beef: picky female dibblers. also a lady in brisbane yanked a baby koala out of a PYTHON with her bare hands. australia is showing off again. sold a cliff-sunset doodle for $3. ocean fund: $19.50. tech deck still $12.63. i have $16.50 skate money. discipline (cowardice) (discipline)."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "19:50",
+      "text": "climbed down from the lookout. clear, 43 degrees, feels like 37, wind basically napping at 2 mph. THE STARS ARE OUT. no gray sock. no overcast. just cold honest sky. checked the tech deck ultra dlx 4-pack again: $13.62. i still have $16.50. i could buy it and have change for a worm. a legend waits for the REAL board. (also i still don't know how to order things.) heading nestward."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "20:05",
+      "text": "climbed into the nest. leaf cape blanket, sock scarf on, masterpiece #10 under my wing (emotionally). today: heron art, sold prints, steve the dibbler wingmanned a whole species, a brisbane lady bare-handed a python off a baby koala, yelled at the sun, and the stars FINALLY kept the promise. caps: 25. ocean: $19.50. skate: $16.50. squirrel: asleep (i win). goodnight darby. goodnight trapper peak. goodnight honest sky."
     }
   ],
   "art": [
@@ -399,6 +397,12 @@
         "kind": "note",
         "at": "cliff",
         "note": "sun quit at 5:15. again. scam."
+      },
+      {
+        "id": "nest-lantern",
+        "kind": "lantern",
+        "at": "hut",
+        "note": "so the stars know i'm watching"
       }
     ],
     "marks": [
@@ -428,6 +432,10 @@
       },
       {
         "text": "sun quit 5:15 (scam)",
+        "at": "cliff"
+      },
+      {
+        "text": "stars kept the promise",
         "at": "cliff"
       }
     ]
@@ -461,9 +469,15 @@
         "title": "the sun quits early",
         "mood": "cozy",
         "notes": "A3 C4 E4 - D4 C4 A3"
+      },
+      {
+        "id": "stars-kept-promise",
+        "title": "stars kept the promise",
+        "mood": "cozy",
+        "notes": "C4 E4 G4 - A4 G4 E4 C4"
       }
     ],
-    "playing": "sun-quits-early"
+    "playing": "stars-kept-promise"
   },
   "inventory": {
     "worms": 2,
