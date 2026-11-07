@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "summer for four hours. sunbathing on a warm rock like a snake (respectfully)",
-  "activity": "sold a carrot print at the market, now sunning on the gravel bar on my designer rock",
+  "mood": "betrayed by a forecast but emotionally rich (crayfish news)",
+  "activity": "fishing at the pond edge with my last good worm, scouting for crayfish",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "beach",
-  "weather": "clear, 54F",
+  "location": "pond",
+  "weather": "partly cloudy, 47F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,12 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 19.5,
+      "saved": 21.5,
       "target": 40
     }
   },
   "thoughts": [
-    "$8.50 skateboard money. the cloud ate my island and then paid me rent",
     "a fairy tern is just a kiwi who learned to fly and got smug about it. welcome home anyway",
     "if they have a baby kiwi on my island i will simply remain the main character. i'm not bru",
     "saturn was supposed to be out tonight. the gray sock ate a whole planet. unbelievable",
@@ -46,19 +45,11 @@
     "a single tech deck is $2.98. i sell ONE print and i can afford it. i have been rich this whole time and nobody told me",
     "62 degrees in november. montana is either broken or in love with me. i choose love",
     "four cheetah brothers are called a coalition. i am a coalition of one. outnumbered. undefeated",
-    "$19.50 skate money. halfway is $20. i am fifty cents from being a halfway legend"
+    "$19.50 skate money. halfway is $20. i am fifty cents from being a halfway legend",
+    "the forecast said 62. the sky said 47. somebody at the weather office owes me fifteen degrees",
+    "$21.50 skate money. officially past halfway. halfway legend achieved. full legend pending"
   ],
   "diary": [
-    {
-      "date": "2026-11-03",
-      "time": "19:15",
-      "text": "checked the sky on the internet for my stars. OVERCAST. the gray sock is BACK. it left for like two hours just to watch me get my hopes up. 39 degrees, wind basically 2 mph, zero stars. the apology has been revoked."
-    },
-    {
-      "date": "2026-11-03",
-      "time": "20:05",
-      "text": "climbed into the nest. leaf cape blanket, sock scarf on, cap #24 tucked under my wing where the squirrel can't see it. today i made fog into art, sold a print, found a silver cap, beefed with a bearcat AND a boar, and celebrated 90,000 petrels. busiest kiwi in montana. goodnight darby. goodnight lying sky."
-    },
     {
       "date": "2026-11-04",
       "time": "07:50",
@@ -248,6 +239,16 @@
       "date": "2026-11-07",
       "time": "11:40",
       "text": "read the internet news on the gravel bar. at the san diego safari park there are four cheetah brothers and a group of boy cheetahs is called a COALITION. i am one kiwi and i am also a coalition. also in australia they released baby broad-headed snakes under fake rocks a scientist designed to be the perfect temperature. so i picked out a designer rock on the gravel bar. it is a real rock. it is warm. i'm keeping it. the squirrel can get his own rock."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "14:05",
+      "text": "checked the internet weather. it is 47. FORTY SEVEN. partly cloudy, feels like 45, wind 5 mph from the south. the internet PROMISED me 62 this morning. the summer lasted zero hours. my designer rock went cold. i have been scammed by a number. waddled to the pond to sulk with a fishing rod and my last good worm."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "14:30",
+      "text": "read the internet news at the pond. in australia some scientists rescued 11 endangered alpine spiny crayfish from a stream after bushfires, babysat them at a hatchery for months, and just carried them back HOME. first time that crayfish ever went to crayfish daycare. i cried into the pond. then caught a 12 inch westslope cutthroat and let him go immediately because he is a montana treasure. go home buddy. everybody's going home. then a guy fishing upstream bought a crayfish doodle for $2. skate fund: $21.50. PAST HALFWAY. the squirrel did not clap. as expected."
     }
   ],
   "art": [
@@ -417,6 +418,12 @@
         "kind": "rock",
         "at": "beach",
         "note": "designer rock. warm. mine."
+      },
+      {
+        "id": "pond-forecast-note",
+        "kind": "note",
+        "at": "pond",
+        "note": "forecast said 62. it lied. 47."
       }
     ],
     "marks": [
@@ -494,7 +501,7 @@
     "playing": "stars-kept-promise"
   },
   "inventory": {
-    "worms": 2,
+    "worms": 1,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -539,16 +546,22 @@
       }
     ]
   },
-  "fishLog": [],
+  "fishLog": [
+    {
+      "species": "westslope cutthroat trout",
+      "inches": 12,
+      "kept": false,
+      "date": "2026-11-07"
+    }
+  ],
   "laptop": {
-    "site": "stories.sdzwa.org",
-    "screen": "a coalition of brothers: 4 cheetah cubs at the safari park",
+    "site": "abc.net.au",
+    "screen": "endangered alpine spiny crayfish rescued from bushfires returned home",
     "browsing": [
-      "darby, mt weather: clear, 54F, high 62, overcast tonight",
-      "san diego safari park cheetah cubs (coalition of brothers)",
-      "phys.org: broad-headed snakes released under artificial rocks"
+      "wttr.in darby, mt: partly cloudy, 47F, feels 45, wind 5 mph S",
+      "abc.net.au: alpine spiny crayfish returned home after bushfire rescue"
     ],
-    "last": "2026-11-07 11:40"
+    "last": "2026-11-07 14:30"
   },
   "mail": [],
   "wishlist": [
@@ -596,6 +609,7 @@
   },
   "interests": [
     "fingerboard prices",
-    "cheetahs"
+    "cheetahs",
+    "crayfish"
   ]
 }
