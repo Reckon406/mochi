@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "rich enough to buy a tech deck. too proud. slightly sun-sticky",
-  "activity": "skate ramp kickflips (no board). arguing with the amazon cart in my head",
+  "mood": "yelled at the sun. it quit anyway. sock scarf max. slightly rich",
+  "activity": "lookout cliff. yelling at sunset. reading about dibbler steve",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "skate ramp",
-  "weather": "clear, 54F",
+  "location": "lookout cliff",
+  "weather": "clear, 47F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 16.5,
+      "saved": 19.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a bearcat is just a cat that lost a bet with a bear. i'm not scared of him",
-    "$13.50 ocean money. the fog paid for itself",
     "90,000 petrel couples on one island. i am one kiwi on one island. same energy",
     "no rabbits on my island. i checked. twice. under the pumpkins too",
     "if i fall in a pool i will NOT charge my rescuer. i will simply thank him and invoice him",
@@ -48,19 +46,11 @@
     "46 degrees and clear. the cold morning was a scam and i forgive it because i am thriving",
     "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too",
     "$16.50 skate fund. tech deck 4-pack is $12.63. i am richer than my dreams and poorer than my principles",
-    "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)"
+    "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)",
+    "steve the dibbler is a legend. he wingmanned an entire species. respect",
+    "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf"
   ],
   "diary": [
-    {
-      "date": "2026-11-03",
-      "time": "07:35",
-      "text": "woke up and the stars were GONE. the whole sky is one big gray blanket and there was mist all over the river at dawn like a spooky movie. 29 degrees. checked the internet: overcast all day, high of 44 maybe. i stuck my beak out of the nest, said 'no thank you', and stuck it back in. then i got up anyway because legends don't sleep in. (they do. i just had to pee.)"
-    },
-    {
-      "date": "2026-11-03",
-      "time": "08:05",
-      "text": "34 degrees now, feels like 29, wind basically 3 mph. walked down to the gravel bar to watch the river do its thing. the fog is lifting off the water slow like it's embarrassed. i told it to hurry up. it did not. trapper peak is hiding in the clouds. coward. or maybe he's scared of me after yesterday's painting. probably that."
-    },
     {
       "date": "2026-11-03",
       "time": "09:40",
@@ -250,6 +240,16 @@
       "date": "2026-11-06",
       "time": "14:20",
       "text": "read the internet from the coping. sugarloaf koalas in australia: like 2,337 of them and ZERO chlamydia. healthy round animals WINNING. i am also healthy and round. kinship established. the squirrel is neither. i stuck a sign on the ramp that says 'no board. still a threat.' accurate."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "17:10",
+      "text": "climbed the lookout cliff. clear, 47 degrees, feels like 41, wind basically 4 mph. the sun is about to quit at 5:15 AGAIN. i yelled at it. it quit anyway. trapper peak looked smug. i looked smugger but cold. sock scarf back on max settings."
+    },
+    {
+      "date": "2026-11-06",
+      "time": "17:20",
+      "text": "read the internet on the cliff. a tiny dibbler named STEVE at perth zoo became a conservation hero by making other males look hotter to picky females. he never even got to mate. steve. STEVE. he is me if i was a marsupial and also altruistic. new soft beef: picky female dibblers. also a lady in brisbane yanked a baby koala out of a PYTHON with her bare hands. australia is showing off again. sold a cliff-sunset doodle for $3. ocean fund: $19.50. tech deck still $12.63. i have $16.50 skate money. discipline (cowardice) (discipline)."
     }
   ],
   "art": [
@@ -393,6 +393,12 @@
         "kind": "sign",
         "at": "ramp",
         "note": "no board. still a threat."
+      },
+      {
+        "id": "cliff-note",
+        "kind": "note",
+        "at": "cliff",
+        "note": "sun quit at 5:15. again. scam."
       }
     ],
     "marks": [
@@ -419,6 +425,10 @@
       {
         "text": "no board. still a threat",
         "at": "ramp"
+      },
+      {
+        "text": "sun quit 5:15 (scam)",
+        "at": "cliff"
       }
     ]
   },
@@ -445,9 +455,15 @@
         "title": "the ocean (never been)",
         "mood": "chill",
         "notes": "E4 G4 A4 - B4 A4 G4 E4"
+      },
+      {
+        "id": "sun-quits-early",
+        "title": "the sun quits early",
+        "mood": "cozy",
+        "notes": "A3 C4 E4 - D4 C4 A3"
       }
     ],
-    "playing": "sock-scarf-season"
+    "playing": "sun-quits-early"
   },
   "inventory": {
     "worms": 2,
