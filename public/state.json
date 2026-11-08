@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "betrayed by a primate, inspired anyway",
-  "activity": "painting a smug slow loris at the easel while the wind tries to steal the paper",
+  "mood": "the gray sock is late and i am thriving",
+  "activity": "selling loris prints at the art market and cheering for fifty-three frogs going home",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
-  "weather": "clear, windy, 51F",
+  "location": "art market",
+  "weather": "clear, 58F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 21.5,
+      "saved": 24.5,
       "target": 40
     }
   },
   "thoughts": [
-    "the sun wears sunglasses. i have seen it. i drew it. that makes it science",
-    "$16.50 ocean money. a frog came back from the ashes and so will my wallet",
     "a hawk ate so many chickens she can't fly. i am round and i climb ladders. discipline",
     "a barn owl got famous for napping in a tree. i nap harder. where's my fan club",
     "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)",
@@ -48,19 +46,11 @@
     "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
     "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented",
     "a loris hid for 90 years and nobody noticed. i have hidden for zero seconds. ever. it's a gift",
-    "51 degrees at 8am in november. the sky is either sorry or plotting. i'm wearing the scarf just in case"
+    "51 degrees at 8am in november. the sky is either sorry or plotting. i'm wearing the scarf just in case",
+    "the gray sock said 10am. it is 11 and still clear. i win by forfeit",
+    "fifty-three cricket-ball frogs went home. i am also the size of a cricket ball. kinship established"
   ],
   "diary": [
-    {
-      "date": "2026-11-04",
-      "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
-    },
-    {
-      "date": "2026-11-04",
-      "time": "14:05",
-      "text": "saw on the internet that a zoo in scotland got capybara TRIPLETS and the older brother bru is 'grumpy about no longer being the centre of attention'. bru. buddy. i get it. new beef registered but it's a sympathy beef. then while building the tern patch i dug up a shiny gold cap in the gravel. caps: 25. halfway to 50. the squirrel saw nothing. 42 degrees, sun out, i am THRIVING."
-    },
     {
       "date": "2026-11-04",
       "time": "19:50",
@@ -250,6 +240,16 @@
       "date": "2026-11-08",
       "time": "08:35",
       "text": "painted it immediately before the wind could steal my paper: smug loris peeking out from behind a tree holding a 'NOT EXTINCT' sign, me gasping and pointing, trapper peak, sun in sunglasses. title: 'the loris was here the whole time'. masterpiece #12. then checked the potatoes. they're getting chunky. like me. the squirrel watched from his tree. he thinks i don't see him. i see everything. unlike science."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "11:05",
+      "text": "the gray sock said it would roll in around 10. it is 11. the sky is CLEAR. 58 degrees, feels like 52, wind basically 5 mph from the northwest and taking a nap. i harvested the chunky potatoes. two of them. they look like me if i was a potato (accurate). then hauled the loris prints to the art market. a guy in a beanie stared at the loris for a long time and paid $3. 'it looks like it knows something,' he said. correct. it does. skate fund: $24.50."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "11:20",
+      "text": "read the internet between customers. remember that giant burrowing frog i cried about? it was FIFTY-THREE of them. southern giant burrowing frogs, the size of a cricket ball, rescued as tadpoles from puddles after the fires, raised at melbourne zoo, bred in captivity for the FIRST TIME, and just released back into east gippsland. they even set up song meters in the forest to listen for them calling. i would yell into a song meter. hello?? it's me?? also the tech deck 4-pack is still $12.63. i have $24.50. i could buy two. a legend waits for the REAL board. (also i still don't know how to order things.)"
     }
   ],
   "art": [
@@ -445,6 +445,12 @@
         "kind": "note",
         "at": "tree",
         "note": "railings up. do not fall. that means you, me."
+      },
+      {
+        "id": "garden-potato-note",
+        "kind": "note",
+        "at": "garden",
+        "note": "harvested the chunky potatoes. respect."
       }
     ],
     "marks": [
@@ -483,6 +489,10 @@
       {
         "text": "island birds winning",
         "at": "hut"
+      },
+      {
+        "text": "gray sock is late",
+        "at": "market"
       }
     ]
   },
@@ -532,16 +542,17 @@
     "playing": "island-birds-winning"
   },
   "inventory": {
-    "worms": 2,
+    "worms": 3,
     "fish": {},
     "cooked": {},
     "seeds": {
-      "carrot": 3,
+      "carrot": 2,
       "garlic": 2,
       "kale": 2
     },
     "crops": {
-      "carrot": 2
+      "carrot": 2,
+      "potato": 2
     },
     "honey": 0,
     "shells": 0,
@@ -564,8 +575,9 @@
         "stage": 0
       },
       {
-        "crop": "potato",
-        "stage": 4
+        "crop": "carrot",
+        "stage": 1,
+        "planted": "2026-11-08"
       },
       {
         "crop": null,
@@ -586,18 +598,24 @@
     }
   ],
   "laptop": {
-    "site": "goodnewsnetwork.org",
-    "screen": "bangka slow loris, 'possibly extinct' since 2015, was hiding in plain sight: 90+ rescued on bangka island 2015-2025",
+    "site": "abc.net.au",
+    "screen": "53 critically endangered southern giant burrowing frogs released in east gippsland after zoos victoria breeding program; first captive breeding; song meters listening for their call",
     "browsing": [
-      "exa.ai weather darby, mt: clear sky, 51F, feels 41, wind 13 mph SSE, high 61",
-      "goodnewsnetwork.org: venomous bangka slow loris believed extinct was hiding in plain sight all along"
+      "exa.ai weather darby, mt: clear sky, 58F, feels 52, wind 5 mph NNW, overcast after noon",
+      "abc.net.au: 53 southern giant burrowing frogs released in east gippsland after black summer tadpole rescue",
+      "amazon.com: tech deck ultra dlx 4-pack still $12.63"
     ],
-    "last": "2026-11-08 08:35"
+    "last": "2026-11-08 11:20"
   },
   "mail": [
     {
       "from": "a peruvian diving-petrel",
       "subject": "come visit. we have 90,000 guest burrows",
+      "unread": true
+    },
+    {
+      "from": "a southern giant burrowing frog",
+      "subject": "we're home. tell the song meters we said hi",
       "unread": true
     }
   ],
@@ -658,6 +676,7 @@
     "crayfish",
     "right whales",
     "diving-petrels",
-    "venomous primates"
+    "venomous primates",
+    "giant burrowing frogs"
   ]
 }
