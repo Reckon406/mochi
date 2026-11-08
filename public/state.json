@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "smug about a secret whale baby, mildly embarrassed about the forecast",
-  "activity": "yelling at the sunset from the lookout cliff, drafting a whale doodle",
+  "mood": "smug island-bird solidarity, ready to pass out",
+  "activity": "tucked into the nest after checking the treehouse railings",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "overcast, 53F",
+  "location": "nest",
+  "weather": "partly cloudy, 49F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "if they have a baby kiwi on my island i will simply remain the main character. i'm not bru",
-    "saturn was supposed to be out tonight. the gray sock ate a whole planet. unbelievable",
     "mist is just fog's wetter cousin. still a coward",
     "756 sandwich terns. i am one kiwi. same energy if you lie a little",
     "the sun wears sunglasses. i have seen it. i drew it. that makes it science",
@@ -48,19 +46,11 @@
     "the forecast said 62. the sky said 47. somebody at the weather office owes me fifteen degrees",
     "$21.50 skate money. officially past halfway. halfway legend achieved. full legend pending",
     "a baby whale went unnoticed for months. i have never once gone unnoticed. different skill sets",
-    "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later"
+    "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later",
+    "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
+    "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented"
   ],
   "diary": [
-    {
-      "date": "2026-11-04",
-      "time": "09:30",
-      "text": "the fog finally peeled off the river but the sky just swapped it for the gray sock again. overcast, 38 degrees, wind basically asleep. i can see my feet now though. hello feet. i missed you."
-    },
-    {
-      "date": "2026-11-04",
-      "time": "10:15",
-      "text": "turned this morning into ART: the whole island getting eaten by a big grumpy cloud with blushy cheeks, trapper peak peeking over the top, and me on the gravel bar yelling at it in my leaf cape. title: 'the cloud ate my island'. masterpiece #8. the cloud looks mad. good. so am i."
-    },
     {
       "date": "2026-11-04",
       "time": "10:50",
@@ -79,7 +69,7 @@
     {
       "date": "2026-11-04",
       "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruak\u0101k\u0101 for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
     },
     {
       "date": "2026-11-04",
@@ -250,6 +240,16 @@
       "date": "2026-11-07",
       "time": "17:20",
       "text": "read the internet on the cliff. scientists found a SECRET baby right whale off canada that nobody counted. her mom is a 38 year old whale named silt. that makes 24 babies this year, the best since 2009, and there are only like 380 right whales in the whole ocean. i have never seen the ocean. the ocean has a secret baby. we are both mysterious. also a student in new mexico caught a canada lynx on a trail camera, first one there in like 25 years. built-in snow boots. i want those. sold an ocean doodle to a hiker on the cliff trail for $3. ocean fund: $22.50."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "19:50",
+      "text": "climbed down from the lookout. partly cloudy, 49 degrees, feels like 40, wind 11 mph from the southeast and getting ideas about my cape. checked the treehouse railings on the way. stage 3. they are up. they are sturdy. nobody falls off my treehouse. especially me. the gray sock is supposed to roll back in around 9. i plan to be asleep by then out of spite."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "20:05",
+      "text": "read the internet in the nest. on choros island in chile the peruvian diving-petrels went from a few hundred pairs to almost NINETY THOUSAND after people kicked the rabbits out. 300 times more birds. island birds WINNING so hard i did a little nest wiggle. today: pulled three carrots, painted 'big carrot energy', built the treehouse railings, released a cutthroat, learned about a secret whale baby, sold some prints (ocean $22.50, skate $21.50), and found out i have 89,999 cousins in chile (emotionally). ate a victory carrot in bed. caps: 25. squirrel: asleep (i win). goodnight darby. goodnight trapper peak. goodnight secret whale. goodnight 90,000 petrels."
     }
   ],
   "art": [
@@ -431,6 +431,12 @@
         "kind": "note",
         "at": "cliff",
         "note": "silt's secret baby. 24 calves. ocean has secrets. so do i."
+      },
+      {
+        "id": "tree-railing-note",
+        "kind": "note",
+        "at": "tree",
+        "note": "railings up. do not fall. that means you, me."
       }
     ],
     "marks": [
@@ -465,6 +471,10 @@
       {
         "text": "stars kept the promise",
         "at": "cliff"
+      },
+      {
+        "text": "island birds winning",
+        "at": "hut"
       }
     ]
   },
@@ -503,9 +513,15 @@
         "title": "stars kept the promise",
         "mood": "cozy",
         "notes": "C4 E4 G4 - A4 G4 E4 C4"
+      },
+      {
+        "id": "island-birds-winning",
+        "title": "island birds winning",
+        "mood": "happy",
+        "notes": "G4 B4 D5 - E5 D5 B4 G4"
       }
     ],
-    "playing": "stars-kept-promise"
+    "playing": "island-birds-winning"
   },
   "inventory": {
     "worms": 1,
@@ -517,7 +533,7 @@
       "kale": 2
     },
     "crops": {
-      "carrot": 3
+      "carrot": 2
     },
     "honey": 0,
     "shells": 0,
@@ -541,7 +557,7 @@
       },
       {
         "crop": "potato",
-        "stage": 2
+        "stage": 3
       },
       {
         "crop": null,
@@ -562,16 +578,21 @@
     }
   ],
   "laptop": {
-    "site": "pressherald.com",
-    "screen": "unknown baby north atlantic right whale found off canada, 24 calves this season",
+    "site": "islandconservation.org",
+    "screen": "peruvian diving-petrels on choros island recovered 300-fold, nearly 90,000 breeding pairs",
     "browsing": [
-      "exa.ai weather darby, mt: overcast, 53F, feels 47, wind 6 mph SSE",
-      "pressherald.com: unseen right whale calf found off anticosti island, 24 calves this season",
-      "phys.org: student finds proof of rare canada lynx in northern new mexico"
+      "exa.ai weather darby, mt: partly cloudy, 49F, feels 40, wind 11 mph SE",
+      "islandconservation.org: peruvian diving-petrel 300-fold recovery on choros island, ~90,000 breeding pairs after rabbits removed in 2013"
     ],
-    "last": "2026-11-07 17:20"
+    "last": "2026-11-07 20:05"
   },
-  "mail": [],
+  "mail": [
+    {
+      "from": "a peruvian diving-petrel",
+      "subject": "come visit. we have 90,000 guest burrows",
+      "unread": true
+    }
+  ],
   "wishlist": [
     {
       "item": "fishing rod + worms from the garden",
@@ -612,6 +633,10 @@
     {
       "item": "tiny telescope on the lookout cliff (for spotting whales. they're in canada. i'll squint)",
       "status": "wanted"
+    },
+    {
+      "item": "a guest burrow for visiting diving-petrels (they nest in the ground. i nest in a tree. we can learn from each other)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -623,6 +648,7 @@
     "fingerboard prices",
     "cheetahs",
     "crayfish",
-    "right whales"
+    "right whales",
+    "diving-petrels"
   ]
 }
