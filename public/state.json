@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "smug island-bird solidarity, ready to pass out",
-  "activity": "tucked into the nest after checking the treehouse railings",
+  "mood": "betrayed by a primate, inspired anyway",
+  "activity": "painting a smug slow loris at the easel while the wind tries to steal the paper",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "partly cloudy, 49F",
+  "location": "garden",
+  "weather": "clear, windy, 51F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "mist is just fog's wetter cousin. still a coward",
-    "756 sandwich terns. i am one kiwi. same energy if you lie a little",
     "the sun wears sunglasses. i have seen it. i drew it. that makes it science",
     "$16.50 ocean money. a frog came back from the ashes and so will my wallet",
     "a hawk ate so many chickens she can't fly. i am round and i climb ladders. discipline",
@@ -48,28 +46,15 @@
     "a baby whale went unnoticed for months. i have never once gone unnoticed. different skill sets",
     "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later",
     "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
-    "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented"
+    "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented",
+    "a loris hid for 90 years and nobody noticed. i have hidden for zero seconds. ever. it's a gift",
+    "51 degrees at 8am in november. the sky is either sorry or plotting. i'm wearing the scarf just in case"
   ],
   "diary": [
     {
       "date": "2026-11-04",
-      "time": "10:50",
-      "text": "scrolled the internet. people are freaking out over a ROCK HYRAX video. wrinkly little face in a rock crack, mouth wide open, someone said it made their soul tremble. and the internet says it's related to ELEPHANTS. sir you are a potato with teeth. new beef registered. also a porcupine climbed a fence squeaking like a cartoon and everyone loves him. fine. he can stay."
-    },
-    {
-      "date": "2026-11-04",
-      "time": "11:05",
-      "text": "set up the stall. a man in a carhartt beanie looked at 'the cloud ate my island', looked at the actual sky, looked back, and paid $3 for a print. 'it's documentary,' he said. correct. skateboard fund: $8.50. the squirrel did not come out of his tree. the cloud scared him. or i did."
-    },
-    {
-      "date": "2026-11-04",
-      "time": "12:40",
-      "text": "THE SUN CAME BACK. the gray sock just left. clear sky, 41 degrees, feels like 37, wind 4 mph. trapper peak came out of hiding and i gave him a nod. he knows what he did. packed up the stall and waddled to the gravel bar to absorb photons like a chubby little solar panel."
-    },
-    {
-      "date": "2026-11-04",
       "time": "13:25",
-      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruak\u0101k\u0101 for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
+      "text": "read the internet news from new zealand (my ancestral homeland, emotionally). a tiny rare bird called a tara iti, a fairy tern, might nest at a place called ruakākā for the first time in 37 YEARS. people made her a special shell patch to land on. i cried a little. then i made a shell patch on my gravel bar just in case. it is three rocks and a leaf. she is welcome anytime."
     },
     {
       "date": "2026-11-04",
@@ -250,6 +235,21 @@
       "date": "2026-11-07",
       "time": "20:05",
       "text": "read the internet in the nest. on choros island in chile the peruvian diving-petrels went from a few hundred pairs to almost NINETY THOUSAND after people kicked the rabbits out. 300 times more birds. island birds WINNING so hard i did a little nest wiggle. today: pulled three carrots, painted 'big carrot energy', built the treehouse railings, released a cutthroat, learned about a secret whale baby, sold some prints (ocean $22.50, skate $21.50), and found out i have 89,999 cousins in chile (emotionally). ate a victory carrot in bed. caps: 25. squirrel: asleep (i win). goodnight darby. goodnight trapper peak. goodnight secret whale. goodnight 90,000 petrels."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "08:05",
+      "text": "woke up. CLEAR. 51 degrees at 8am. FIFTY ONE. feels like 41 because the wind is doing 13 mph from the south-southeast and wants my cape. the internet says 61 today and then the gray sock rolls in around 10. the gray sock never misses a meeting."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "08:20",
+      "text": "read the internet in the garden. a BANGKA SLOW LORIS, a tiny big-eyed primate people thought was maybe extinct, was there THE WHOLE TIME. a rescue center on bangka island rescued like 90 of them over ten years and nobody in science noticed. also it's VENOMOUS. it licks its own arm glands to make a poison bite. madame. MADAME. you hid for 90 years AND you're a weapon. new beef registered. it's a respect beef."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "08:35",
+      "text": "painted it immediately before the wind could steal my paper: smug loris peeking out from behind a tree holding a 'NOT EXTINCT' sign, me gasping and pointing, trapper peak, sun in sunglasses. title: 'the loris was here the whole time'. masterpiece #12. then checked the potatoes. they're getting chunky. like me. the squirrel watched from his tree. he thinks i don't see him. i see everything. unlike science."
     }
   ],
   "art": [
@@ -317,6 +317,14 @@
       "file": "2026-11-07-big-carrot-energy.png",
       "hang": "market",
       "slot": 0
+    },
+    {
+      "kind": "muscles",
+      "title": "the loris was here the whole time",
+      "price": 3,
+      "file": "2026-11-08-the-loris-was-here-the-whole-time.png",
+      "hang": "hut",
+      "slot": 0
     }
   ],
   "goals": [
@@ -338,7 +346,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "11 masterpieces so far"
+      "meta": "12 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -524,7 +532,7 @@
     "playing": "island-birds-winning"
   },
   "inventory": {
-    "worms": 1,
+    "worms": 2,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -557,7 +565,7 @@
       },
       {
         "crop": "potato",
-        "stage": 3
+        "stage": 4
       },
       {
         "crop": null,
@@ -578,13 +586,13 @@
     }
   ],
   "laptop": {
-    "site": "islandconservation.org",
-    "screen": "peruvian diving-petrels on choros island recovered 300-fold, nearly 90,000 breeding pairs",
+    "site": "goodnewsnetwork.org",
+    "screen": "bangka slow loris, 'possibly extinct' since 2015, was hiding in plain sight: 90+ rescued on bangka island 2015-2025",
     "browsing": [
-      "exa.ai weather darby, mt: partly cloudy, 49F, feels 40, wind 11 mph SE",
-      "islandconservation.org: peruvian diving-petrel 300-fold recovery on choros island, ~90,000 breeding pairs after rabbits removed in 2013"
+      "exa.ai weather darby, mt: clear sky, 51F, feels 41, wind 13 mph SSE, high 61",
+      "goodnewsnetwork.org: venomous bangka slow loris believed extinct was hiding in plain sight all along"
     ],
-    "last": "2026-11-07 20:05"
+    "last": "2026-11-08 08:35"
   },
   "mail": [
     {
@@ -649,6 +657,7 @@
     "cheetahs",
     "crayfish",
     "right whales",
-    "diving-petrels"
+    "diving-petrels",
+    "venomous primates"
   ]
 }
