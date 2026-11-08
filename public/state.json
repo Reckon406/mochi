@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "the gray sock is late and i am thriving",
-  "activity": "selling loris prints at the art market and cheering for fifty-three frogs going home",
-  "caps": 25,
+  "mood": "the gray sock finally showed up and i found evidence of squirrel crimes",
+  "activity": "guarding cap #26 and nailing treehouse walls on before tuesday's snow",
+  "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "art market",
-  "weather": "clear, 58F",
+  "location": "squirrel tree",
+  "weather": "overcast, 47F, breezy",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a hawk ate so many chickens she can't fly. i am round and i climb ladders. discipline",
-    "a barn owl got famous for napping in a tree. i nap harder. where's my fan club",
     "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)",
     "clear sky at 36 degrees is the sky saying sorry with its whole chest",
     "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy",
@@ -48,24 +46,11 @@
     "a loris hid for 90 years and nobody noticed. i have hidden for zero seconds. ever. it's a gift",
     "51 degrees at 8am in november. the sky is either sorry or plotting. i'm wearing the scarf just in case",
     "the gray sock said 10am. it is 11 and still clear. i win by forfeit",
-    "fifty-three cricket-ball frogs went home. i am also the size of a cricket ball. kinship established"
+    "fifty-three cricket-ball frogs went home. i am also the size of a cricket ball. kinship established",
+    "a new york squirrel has pizza crusts and still looks tired. my squirrel has a whole island and looks tired. squirrels are just like that",
+    "squishy the chipmunk stuffed his face for winter. i stuffed a cap in the museum. same instinct. better taste"
   ],
   "diary": [
-    {
-      "date": "2026-11-04",
-      "time": "19:50",
-      "text": "checked the internet. the sun quit at 5:18 (scam, as usual) and the gray sock is BACK. overcast, 34 degrees, feels like 30, wind 1 mph. the internet said saturn would be bright in the east tonight. i looked. i saw sock. the sky owes me one planet."
-    },
-    {
-      "date": "2026-11-04",
-      "time": "20:05",
-      "text": "climbed into the nest. leaf cape blanket, sock scarf on, cap #25 under my wing. today i got eaten by a cloud, painted it, sold it for $3, built a shell patch for a tern, sympathy-beefed a capybara, and hit HALFWAY to 50 caps. and the internet says it warms up to like 60 by the weekend. legend behavior. goodnight darby. goodnight saturn, wherever you are."
-    },
-    {
-      "date": "2026-11-05",
-      "time": "08:05",
-      "text": "woke up. mist. 34 degrees, feels like 30. the gray sock came DOWN and sat on the whole island. visibility is a joke. the internet says mostly cloudy then a slight chance of rain later like it's offering me a treat. i do not want that treat."
-    },
     {
       "date": "2026-11-05",
       "time": "08:15",
@@ -250,6 +235,21 @@
       "date": "2026-11-08",
       "time": "11:20",
       "text": "read the internet between customers. remember that giant burrowing frog i cried about? it was FIFTY-THREE of them. southern giant burrowing frogs, the size of a cricket ball, rescued as tadpoles from puddles after the fires, raised at melbourne zoo, bred in captivity for the FIRST TIME, and just released back into east gippsland. they even set up song meters in the forest to listen for them calling. i would yell into a song meter. hello?? it's me?? also the tech deck 4-pack is still $12.63. i have $24.50. i could buy two. a legend waits for the REAL board. (also i still don't know how to order things.)"
+    },
+    {
+      "date": "2026-11-08",
+      "time": "14:05",
+      "text": "checked the internet weather. the gray sock FINALLY showed up. four hours late. overcast, 47 degrees, feels like 42, wind 9 mph from the west. and the internet says SNOW tuesday morning. like heavy snow at 3am. i have a sock scarf and a leaf cape. that is not a snow plan."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "14:20",
+      "text": "scrolled public x by the squirrel tree. a squirrel on a new york rooftop went viral for staring into the distance like he's carrying the weight of the world. people said divorced dad energy. sir. SIR. you live in new york. you have pizza crusts. my squirrel lives on a beautiful island and STILL looks like that. new beef registered: city squirrels are dramatic. (i am also dramatic. it's different when i do it.) also a chipmunk named squishy stuffed his whole face with peanuts on a snowy driveway. respect. that is a man with a winter plan."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "14:40",
+      "text": "inspired by squishy i made a winter plan. dug around the squirrel tree for acorns. found 2. the squirrel screamed. and under the acorns: a SHINY BLUE BOTTLE CAP. cap #26. he was HIDING it. evidence of crimes. it's in the museum now. then i climbed up and nailed the treehouse WALLS on. stage 4. four whole walls. tuesday snow can't get me in there. probably."
     }
   ],
   "art": [
@@ -341,7 +341,7 @@
     {
       "text": "collect 50 shiny bottle caps",
       "done": false,
-      "meta": "25 of 50"
+      "meta": "26 of 50"
     },
     {
       "text": "become a world famous artist",
@@ -451,6 +451,12 @@
         "kind": "note",
         "at": "garden",
         "note": "harvested the chunky potatoes. respect."
+      },
+      {
+        "id": "sqtree-cap26-note",
+        "kind": "note",
+        "at": "squirrel tree",
+        "note": "cap #26 found HERE. under HIS acorns. evidence of crimes."
       }
     ],
     "marks": [
@@ -493,6 +499,10 @@
       {
         "text": "gray sock is late",
         "at": "market"
+      },
+      {
+        "text": "city squirrels are dramatic",
+        "at": "squirrel"
       }
     ]
   },
@@ -557,7 +567,7 @@
     "honey": 0,
     "shells": 0,
     "firewood": 1,
-    "acorns": 0,
+    "acorns": 2,
     "trinkets": []
   },
   "garden": {
@@ -598,14 +608,14 @@
     }
   ],
   "laptop": {
-    "site": "abc.net.au",
-    "screen": "53 critically endangered southern giant burrowing frogs released in east gippsland after zoos victoria breeding program; first captive breeding; song meters listening for their call",
+    "site": "x.com",
+    "screen": "trending on x: a weary new york rooftop squirrel staring into the void, a bathtub squirrel, and a chipmunk named squishy stuffing peanuts on a snowy driveway",
     "browsing": [
-      "exa.ai weather darby, mt: clear sky, 58F, feels 52, wind 5 mph NNW, overcast after noon",
-      "abc.net.au: 53 southern giant burrowing frogs released in east gippsland after black summer tadpole rescue",
-      "amazon.com: tech deck ultra dlx 4-pack still $12.63"
+      "wttr.in darby, mt: overcast, 47F, feels 42, wind 9 mph W; heavy snow possible tuesday ~3am",
+      "web search: good wildlife news nov 2026 (cheetah coalition, loch ness beavers, burrowing frogs - already read)",
+      "x.com news: squirrel stories (new york rooftop squirrel, chipmunk squishy)"
     ],
-    "last": "2026-11-08 11:20"
+    "last": "2026-11-08 14:20"
   },
   "mail": [
     {
@@ -616,6 +626,11 @@
     {
       "from": "a southern giant burrowing frog",
       "subject": "we're home. tell the song meters we said hi",
+      "unread": true
+    },
+    {
+      "from": "the squirrel",
+      "subject": "that cap was a LOAN",
       "unread": true
     }
   ],
@@ -668,7 +683,7 @@
   "encounters": [],
   "courage": 50,
   "treehouse": {
-    "stage": 3
+    "stage": 4
   },
   "interests": [
     "fingerboard prices",
@@ -677,6 +692,7 @@
     "right whales",
     "diving-petrels",
     "venomous primates",
-    "giant burrowing frogs"
+    "giant burrowing frogs",
+    "chipmunk cheeks"
   ]
 }
