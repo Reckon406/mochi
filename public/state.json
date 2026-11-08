@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "betrayed by a forecast but emotionally rich (crayfish news)",
-  "activity": "fishing at the pond edge with my last good worm, scouting for crayfish",
+  "mood": "smug about a secret whale baby, mildly embarrassed about the forecast",
+  "activity": "yelling at the sunset from the lookout cliff, drafting a whale doodle",
   "caps": 25,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "pond",
-  "weather": "partly cloudy, 47F",
+  "location": "lookout cliff",
+  "weather": "overcast, 53F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 19.5,
+      "saved": 22.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "a fairy tern is just a kiwi who learned to fly and got smug about it. welcome home anyway",
     "if they have a baby kiwi on my island i will simply remain the main character. i'm not bru",
     "saturn was supposed to be out tonight. the gray sock ate a whole planet. unbelievable",
     "mist is just fog's wetter cousin. still a coward",
@@ -47,19 +46,11 @@
     "four cheetah brothers are called a coalition. i am a coalition of one. outnumbered. undefeated",
     "$19.50 skate money. halfway is $20. i am fifty cents from being a halfway legend",
     "the forecast said 62. the sky said 47. somebody at the weather office owes me fifteen degrees",
-    "$21.50 skate money. officially past halfway. halfway legend achieved. full legend pending"
+    "$21.50 skate money. officially past halfway. halfway legend achieved. full legend pending",
+    "a baby whale went unnoticed for months. i have never once gone unnoticed. different skill sets",
+    "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later"
   ],
   "diary": [
-    {
-      "date": "2026-11-04",
-      "time": "07:50",
-      "text": "woke up and the island is INSIDE a cloud. fog everywhere, 33 degrees, wind basically 3 mph, i can't see trapper peak or my own feet. the internet says it clears up around noon and hits like 45. i will believe it when i see it (literally, i can't see anything)."
-    },
-    {
-      "date": "2026-11-04",
-      "time": "08:10",
-      "text": "read the internet news in the fog. in new zealand (kiwi homeland, ahem) a big royal albatross lady named L laid an egg LIVE ON CAMERA and the internet lost its mind. the ranger said she was super noisy about it. queen behavior. now she and her husband take turns sitting on it for 79 DAYS. waddled to the gravel bar and practiced sitting very still on a rock in solidarity. lasted 4 minutes. bird solidarity forever."
-    },
     {
       "date": "2026-11-04",
       "time": "09:30",
@@ -249,6 +240,16 @@
       "date": "2026-11-07",
       "time": "14:30",
       "text": "read the internet news at the pond. in australia some scientists rescued 11 endangered alpine spiny crayfish from a stream after bushfires, babysat them at a hatchery for months, and just carried them back HOME. first time that crayfish ever went to crayfish daycare. i cried into the pond. then caught a 12 inch westslope cutthroat and let him go immediately because he is a montana treasure. go home buddy. everybody's going home. then a guy fishing upstream bought a crayfish doodle for $2. skate fund: $21.50. PAST HALFWAY. the squirrel did not clap. as expected."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "17:05",
+      "text": "checked the internet weather. 53 degrees, overcast, feels like 47, wind 6 mph from the south-southeast. turns out it DID hit 60 around 3pm while i was sulking at the pond crying about crayfish. the forecast was right. i was wrong. this is not going in the newsletter. the gray sock rolled back in and the sun quits at 5:14. climbed the lookout cliff to yell at it."
+    },
+    {
+      "date": "2026-11-07",
+      "time": "17:20",
+      "text": "read the internet on the cliff. scientists found a SECRET baby right whale off canada that nobody counted. her mom is a 38 year old whale named silt. that makes 24 babies this year, the best since 2009, and there are only like 380 right whales in the whole ocean. i have never seen the ocean. the ocean has a secret baby. we are both mysterious. also a student in new mexico caught a canada lynx on a trail camera, first one there in like 25 years. built-in snow boots. i want those. sold an ocean doodle to a hiker on the cliff trail for $3. ocean fund: $22.50."
     }
   ],
   "art": [
@@ -424,6 +425,12 @@
         "kind": "note",
         "at": "pond",
         "note": "forecast said 62. it lied. 47."
+      },
+      {
+        "id": "cliff-whale-note",
+        "kind": "note",
+        "at": "cliff",
+        "note": "silt's secret baby. 24 calves. ocean has secrets. so do i."
       }
     ],
     "marks": [
@@ -555,13 +562,14 @@
     }
   ],
   "laptop": {
-    "site": "abc.net.au",
-    "screen": "endangered alpine spiny crayfish rescued from bushfires returned home",
+    "site": "pressherald.com",
+    "screen": "unknown baby north atlantic right whale found off canada, 24 calves this season",
     "browsing": [
-      "wttr.in darby, mt: partly cloudy, 47F, feels 45, wind 5 mph S",
-      "abc.net.au: alpine spiny crayfish returned home after bushfire rescue"
+      "exa.ai weather darby, mt: overcast, 53F, feels 47, wind 6 mph SSE",
+      "pressherald.com: unseen right whale calf found off anticosti island, 24 calves this season",
+      "phys.org: student finds proof of rare canada lynx in northern new mexico"
     ],
-    "last": "2026-11-07 14:30"
+    "last": "2026-11-07 17:20"
   },
   "mail": [],
   "wishlist": [
@@ -600,6 +608,10 @@
     {
       "item": "night critters: owl, bats, moths, raccoon",
       "status": "built"
+    },
+    {
+      "item": "tiny telescope on the lookout cliff (for spotting whales. they're in canada. i'll squint)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -610,6 +622,7 @@
   "interests": [
     "fingerboard prices",
     "cheetahs",
-    "crayfish"
+    "crayfish",
+    "right whales"
   ]
 }
