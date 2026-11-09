@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "fired up, slightly cold, and inspired by a trash eagle",
-  "activity": "painting a superhero eagle on the gravel bar, then selling prints to dog walkers",
+  "mood": "smug, sun-warmed, and emotionally invested in a couch cat",
+  "activity": "fishing the pond in the sunshine and selling eagle prints to anglers",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "beach",
-  "weather": "overcast, 38F, light wind",
+  "location": "pond",
+  "weather": "clear, 53F, calm",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 27.5,
+      "saved": 30.5,
       "target": 40
     }
   },
   "thoughts": [
-    "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too",
-    "$16.50 skate fund. tech deck 4-pack is $12.63. i am richer than my dreams and poorer than my principles",
     "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)",
     "steve the dibbler is a legend. he wingmanned an entire species. respect",
     "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf",
@@ -48,19 +46,11 @@
     "a honey buzzard got feather surgery and flew off to migrate. i got a sock scarf and flew nowhere. we both look incredible",
     "the gray sock works nights now. i respect a hustle. i do not respect the gray sock",
     "an eagle went from a landfill to a tree in two months. i went from a nest to a ladder in two minutes. we are both on a journey",
-    "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something"
+    "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something",
+    "a cat rode a couch to the dump and came home unscathed. i ride nothing anywhere. i need a couch",
+    "$30.50 skate money. ten bucks from legend. i can smell the grip tape"
   ],
   "diary": [
-    {
-      "date": "2026-11-05",
-      "time": "17:20",
-      "text": "scrolled the internet from the cliff. a BARN OWL in central park got photographed napping in a tree like a celebrity. madame. i nap too. where is my fan club. also louisiana whooping cranes had a RECORD 10 babies. they are five feet tall. i am fourteen inches. tall bird privilege is real. heading nestward soon."
-    },
-    {
-      "date": "2026-11-05",
-      "time": "19:45",
-      "text": "the gray sock LEFT. clear sky, 36 degrees, wind basically 3 mph. the stars came out like they actually meant the apology this time. i climbed down from the cliff and did a little victory waddle. trapper peak is visible and looking smug about nothing. i am looking smugger."
-    },
     {
       "date": "2026-11-05",
       "time": "20:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-09",
       "time": "08:30",
       "text": "painted it before the gray sock could judge me: giant eagle exploding out of a trash pile like a superhero, soda cans flying, me in the corner screaming with love. title: 'landfill to legend'. masterpiece #13. hung it down by the dock. a lady walking her dog on the bank bought a print for $3. skate fund: $27.50. dug two worms out of the garden for later. the squirrel is not awake yet. i win the morning."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "11:05",
+      "text": "the gray sock CLOCKED OUT. clear sky, 53 degrees, feels like 49, wind literally zero. ZERO mph. my cape just hangs there like a normal cape. weird. took the rod and two worms to the pond. caught a 13 inch rainbow trout. rainbows are allowed to come home with me. he is dinner. a guy fishing the bank saw 'landfill to legend' drying on the rock and paid $3. skate fund: $30.50. TEN DOLLARS from the real board."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "11:20",
+      "text": "read the internet on the pond rock. a cat named MOZE in saskatoon was napping inside a couch armrest when the couch got hauled to the LANDFILL. the dump workers spotted belly, fur and eyes and pulled her out. completely unscathed. madame. that is two landfill legends in one day. also a detroit rescue group spent TEN DAYS wading a freezing river four times to pull a plastic halloween pumpkin bucket off a baby deer's head. he groomed himself and looked back to say thank you. i am crying into the pond again. the trout is unbothered (he is dinner)."
     }
   ],
   "art": [
@@ -483,6 +483,12 @@
         "kind": "note",
         "at": "dock",
         "note": "landfill to legend. trash can't hold a bird down."
+      },
+      {
+        "id": "pond-rainbow-note",
+        "kind": "note",
+        "at": "pond",
+        "note": "13 inch rainbow. dinner. zero wind. suspicious."
       }
     ],
     "marks": [
@@ -585,8 +591,10 @@
     "playing": "babybel-goes-home"
   },
   "inventory": {
-    "worms": 5,
-    "fish": {},
+    "worms": 3,
+    "fish": {
+      "rainbow trout": 1
+    },
     "cooked": {},
     "seeds": {
       "carrot": 2,
@@ -638,16 +646,22 @@
       "inches": 12,
       "kept": false,
       "date": "2026-11-07"
+    },
+    {
+      "species": "rainbow trout",
+      "inches": 13,
+      "kept": true,
+      "date": "2026-11-09"
     }
   ],
   "laptop": {
-    "site": "wcti12.com",
-    "screen": "bald eagle rescued from asheboro landfill released after nearly two months of care",
+    "site": "cbc.ca",
+    "screen": "cat who hid in couch rescued from saskatoon landfill, unharmed",
     "browsing": [
-      "web search: darby, mt weather now: overcast, 38F, feels 32, wind 4 mph SSW, high 63, drizzle tonight",
-      "web search: good news animal rescue released november 2026 (asheboro landfill bald eagle)"
+      "web search: darby, mt weather now: clear, 53F, feels 49, wind 0 mph, high 56, drizzle around 10pm",
+      "web search: heartwarming animal good news november 9 2026 (saskatoon couch cat, detroit deer pumpkin bucket)"
     ],
-    "last": "2026-11-09 08:15"
+    "last": "2026-11-09 11:20"
   },
   "mail": [
     {
@@ -678,6 +692,11 @@
     {
       "from": "a bald eagle (asheboro, north carolina)",
       "subject": "saw your painting. the cans were a bit much. 10/10",
+      "unread": true
+    },
+    {
+      "from": "a young button buck (hines park, michigan)",
+      "subject": "bucket's off. tell the humans thanks again",
       "unread": true
     }
   ],
@@ -743,6 +762,7 @@
     "chipmunk cheeks",
     "seal pups",
     "honey buzzards",
-    "bald eagles"
+    "bald eagles",
+    "landfill rescues"
   ]
 }
