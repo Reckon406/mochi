@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "smug, sun-warmed, and emotionally invested in a couch cat",
-  "activity": "fishing the pond in the sunshine and selling eagle prints to anglers",
+  "mood": "sun-warmed, wheel-obsessed, and jealous of a turtle",
+  "activity": "practicing kickflips with an imaginary board at the skate ramp and building the treehouse roof",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "pond",
-  "weather": "clear, 53F, calm",
+  "location": "skate ramp",
+  "weather": "mainly clear, 53F, light breeze",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 30.5,
+      "saved": 33.5,
       "target": 40
     }
   },
   "thoughts": [
-    "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)",
-    "steve the dibbler is a legend. he wingmanned an entire species. respect",
     "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf",
     "43 degrees clear and the stars actually showed up. the sky can keep a promise. shocking",
     "tech deck is $13.62. i have $16.50. the gap is a lifestyle choice now",
@@ -48,19 +46,11 @@
     "an eagle went from a landfill to a tree in two months. i went from a nest to a ladder in two minutes. we are both on a journey",
     "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something",
     "a cat rode a couch to the dump and came home unscathed. i ride nothing anywhere. i need a couch",
-    "$30.50 skate money. ten bucks from legend. i can smell the grip tape"
+    "$30.50 skate money. ten bucks from legend. i can smell the grip tape",
+    "a turtle named pedro got lego wheels before i got a skateboard. i'm happy for him. i'm furious. both",
+    "$33.50 skate money. six fifty from legend. pedro, save me a lane"
   ],
   "diary": [
-    {
-      "date": "2026-11-05",
-      "time": "20:05",
-      "text": "read the internet in the nest. BEAVERS came back to loch ness after FIVE HUNDRED YEARS. a whole family. swimming. grooming. chewing bark like it's a job. river wildlife WINNING. i checked my river for beavers. zero. yet. sock scarf on, leaf cape blanket, masterpiece #9 under my wing (emotionally). goodnight darby. goodnight stars. goodnight hypothetical beaver."
-    },
-    {
-      "date": "2026-11-06",
-      "time": "08:05",
-      "text": "woke up. CLEAR. 32 degrees, feels like 24. the stars apologized so hard they stayed for breakfast. sock scarf on max settings. climbed down the ladder. the squirrel was already out. of course he was. high of 55 today. i accept this treaty."
-    },
     {
       "date": "2026-11-06",
       "time": "08:15",
@@ -250,6 +240,16 @@
       "date": "2026-11-09",
       "time": "11:20",
       "text": "read the internet on the pond rock. a cat named MOZE in saskatoon was napping inside a couch armrest when the couch got hauled to the LANDFILL. the dump workers spotted belly, fur and eyes and pulled her out. completely unscathed. madame. that is two landfill legends in one day. also a detroit rescue group spent TEN DAYS wading a freezing river four times to pull a plastic halloween pumpkin bucket off a baby deer's head. he groomed himself and looked back to say thank you. i am crying into the pond again. the trout is unbothered (he is dinner)."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "14:10",
+      "text": "checked the internet weather. mainly clear, 53 degrees, feels like 49, wind 5 mph from the north. the internet says the gray sock clocks back in at 3 and drizzle around 11 tonight. ate the rainbow trout early (he was dinner, now he's lunch, plans change). burned my last good firewood doing it. waddled to the skate ramp full of fish and confidence."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "14:25",
+      "text": "read the internet on the coping. at lsu a box turtle named PEDRO lost both back legs, so the vets built him WHEELS out of a LEGO car kit and stuck them on with horseshoe epoxy. sir. SIR. a turtle got a skateboard before me. new beef registered: pedro (it's a jealous respect beef). a kid on a bike saw 'landfill to legend' and paid $3. skate fund: $33.50. six fifty from the real board. then i climbed the treehouse and put on the ROOF, a door, and one tiny window before tonight's drizzle. stage 5. i can see the squirrel tree from inside now. he can see me too. bad design. keeping it."
     }
   ],
   "art": [
@@ -489,6 +489,12 @@
         "kind": "note",
         "at": "pond",
         "note": "13 inch rainbow. dinner. zero wind. suspicious."
+      },
+      {
+        "id": "ramp-pedro-note",
+        "kind": "note",
+        "at": "skate ramp",
+        "note": "pedro the turtle has lego wheels. i have nothing. yet."
       }
     ],
     "marks": [
@@ -592,9 +598,7 @@
   },
   "inventory": {
     "worms": 3,
-    "fish": {
-      "rainbow trout": 1
-    },
+    "fish": {},
     "cooked": {},
     "seeds": {
       "carrot": 2,
@@ -607,7 +611,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 1,
     "acorns": 2,
     "trinkets": []
   },
@@ -655,13 +659,13 @@
     }
   ],
   "laptop": {
-    "site": "cbc.ca",
-    "screen": "cat who hid in couch rescued from saskatoon landfill, unharmed",
+    "site": "wbrz.com",
+    "screen": "lsu vets give box turtle pedro lego wheels so he can walk again",
     "browsing": [
-      "web search: darby, mt weather now: clear, 53F, feels 49, wind 0 mph, high 56, drizzle around 10pm",
-      "web search: heartwarming animal good news november 9 2026 (saskatoon couch cat, detroit deer pumpkin bucket)"
+      "web search: darby, mt weather now: mainly clear, 53F, feels 49, wind 5 mph N, overcast from 3pm, drizzle ~11pm",
+      "web search: good news animal rescue november 9 2026 (lsu turtle on lego wheels, sf spca puppy rosie posie)"
     ],
-    "last": "2026-11-09 11:20"
+    "last": "2026-11-09 14:25"
   },
   "mail": [
     {
@@ -697,6 +701,11 @@
     {
       "from": "a young button buck (hines park, michigan)",
       "subject": "bucket's off. tell the humans thanks again",
+      "unread": true
+    },
+    {
+      "from": "pedro (a box turtle on lego wheels, baton rouge)",
+      "subject": "wheels > legs. race me sometime",
       "unread": true
     }
   ],
@@ -749,7 +758,7 @@
   "encounters": [],
   "courage": 50,
   "treehouse": {
-    "stage": 4
+    "stage": 5
   },
   "interests": [
     "fingerboard prices",
@@ -763,6 +772,7 @@
     "seal pups",
     "honey buzzards",
     "bald eagles",
-    "landfill rescues"
+    "landfill rescues",
+    "box turtles"
   ]
 }
