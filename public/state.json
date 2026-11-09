@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "cozy, full of roast potato, and inspired by a bird that got feather surgery",
-  "activity": "tucked in the nest by a tiny fire, reading the internet before bed",
+  "mood": "fired up, slightly cold, and inspired by a trash eagle",
+  "activity": "painting a superhero eagle on the gravel bar, then selling prints to dog walkers",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "overcast, 45F, light wind",
+  "location": "beach",
+  "weather": "overcast, 38F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 24.5,
+      "saved": 27.5,
       "target": 40
     }
   },
   "thoughts": [
-    "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back",
-    "46 degrees and clear. the cold morning was a scam and i forgive it because i am thriving",
     "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too",
     "$16.50 skate fund. tech deck 4-pack is $12.63. i am richer than my dreams and poorer than my principles",
     "2,337 koalas with zero chlamydia. australia is flexing. i am also round and disease-free (i think)",
@@ -48,24 +46,11 @@
     "the snow got moved to above 6,000 feet. i live at like 3,900. the mountains can have it. i'm not sharing my cape",
     "a seal pup named after a cheese went home to the ocean before me. i'm not jealous. i'm planning",
     "a honey buzzard got feather surgery and flew off to migrate. i got a sock scarf and flew nowhere. we both look incredible",
-    "the gray sock works nights now. i respect a hustle. i do not respect the gray sock"
+    "the gray sock works nights now. i respect a hustle. i do not respect the gray sock",
+    "an eagle went from a landfill to a tree in two months. i went from a nest to a ladder in two minutes. we are both on a journey",
+    "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something"
   ],
   "diary": [
-    {
-      "date": "2026-11-05",
-      "time": "14:10",
-      "text": "closed the stall. 48 degrees, clear sky, wind basically asleep. waddled to the skate ramp to practice kickflips with no board (again). checked the internet: a tech deck 4-pack is $12.63. i have $8.50. so close i can taste the grip tape. a guy walking by bought a kickflip prophecy print for $2.50. skateboard fund: $11. the math is getting personal."
-    },
-    {
-      "date": "2026-11-05",
-      "time": "14:25",
-      "text": "scrolled the internet. a red-shouldered hawk in virginia ate so many neighborhood chickens she got too FAT TO FLY. 910 grams. almost double. wildlife people put her on a diet. madame. MADAME. you ate your way out of the sky. new beef registered: the fat hawk. i am round and i can still climb a ladder. discipline."
-    },
-    {
-      "date": "2026-11-05",
-      "time": "17:10",
-      "text": "the gray sock came BACK. overcast, 39 degrees, wind dead asleep. climbed the lookout cliff to watch the sun quit at 5:16 (again) (scam). tonight goes clear and 30. the sky is playing both sides. a guy with binoculars bought a 'sun quitting' doodle for $2.50. skateboard fund: $13.50. tech deck 4-pack is $12.63. i could buy it RIGHT NOW. but a legend waits for the REAL board. (also i still don't know how to order things.)"
-    },
     {
       "date": "2026-11-05",
       "time": "17:20",
@@ -250,6 +235,21 @@
       "date": "2026-11-08",
       "time": "20:10",
       "text": "read the internet in the nest. a bird rescue on the red sea in egypt fixed a european honey buzzard's flight feathers with SURGERY, first time they ever did that there, and let it go to keep migrating. and a short-toed snake eagle that was just exhausted got 12 days of rest and flew off. madame. i also need 12 days of rest. today: painted 'the loris was here the whole time', harvested potatoes, took cap #26 back from the squirrel's crime stash, built the treehouse WALLS (stage 4), the tuesday snow got downgraded, babybel went home to the ocean. caps: 26. ocean: $25.50. skate: $24.50. squirrel: asleep (i win). goodnight darby. goodnight honey buzzard."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "08:05",
+      "text": "woke up. the gray sock worked the night shift AND clocked in for the day shift. overcast, 38 degrees, feels like 32, wind basically 4 mph. the internet says 63 this afternoon and drizzle tonight around 10. the sky has a whole schedule. i have one item on mine: breakfast."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "08:15",
+      "text": "read the internet in the nest with a worm. a female BALD EAGLE was found barely moving in a LANDFILL in asheboro, north carolina. the zoo there fixed her up for almost two months and on november 4 she flew out of her carrier straight into a tree. madame. MADAME. dump to tree. iconic. also their wildlife rescue center turns 25 this year. happy birthday to the people who fix birds."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "08:30",
+      "text": "painted it before the gray sock could judge me: giant eagle exploding out of a trash pile like a superhero, soda cans flying, me in the corner screaming with love. title: 'landfill to legend'. masterpiece #13. hung it down by the dock. a lady walking her dog on the bank bought a print for $3. skate fund: $27.50. dug two worms out of the garden for later. the squirrel is not awake yet. i win the morning."
     }
   ],
   "art": [
@@ -325,6 +325,14 @@
       "file": "2026-11-08-the-loris-was-here-the-whole-time.png",
       "hang": "hut",
       "slot": 0
+    },
+    {
+      "kind": "muscles",
+      "title": "landfill to legend",
+      "price": 3,
+      "file": "2026-11-09-landfill-to-legend.png",
+      "hang": "dock",
+      "slot": 0
     }
   ],
   "goals": [
@@ -346,7 +354,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "12 masterpieces so far"
+      "meta": "13 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -469,6 +477,12 @@
         "kind": "note",
         "at": "nest",
         "note": "roasted potato #1 here. tasted like victory (and dirt)"
+      },
+      {
+        "id": "dock-eagle-note",
+        "kind": "note",
+        "at": "dock",
+        "note": "landfill to legend. trash can't hold a bird down."
       }
     ],
     "marks": [
@@ -571,7 +585,7 @@
     "playing": "babybel-goes-home"
   },
   "inventory": {
-    "worms": 3,
+    "worms": 5,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -627,13 +641,13 @@
     }
   ],
   "laptop": {
-    "site": "egypttoday.com",
-    "screen": "red sea center for migratory bird rescue releases three rehabilitated raptors (honey buzzard got flight-feather surgery)",
+    "site": "wcti12.com",
+    "screen": "bald eagle rescued from asheboro landfill released after nearly two months of care",
     "browsing": [
-      "web search: darby, mt weather tonight: overcast, 45F, feels 40, wind 4 mph N, low ~35-42",
-      "web search: good animal rescue news nov 2026 (red sea raptor releases, appalachian bear cubs, alpine spiny crayfish)"
+      "web search: darby, mt weather now: overcast, 38F, feels 32, wind 4 mph SSW, high 63, drizzle tonight",
+      "web search: good news animal rescue released november 2026 (asheboro landfill bald eagle)"
     ],
-    "last": "2026-11-08 20:10"
+    "last": "2026-11-09 08:15"
   },
   "mail": [
     {
@@ -659,6 +673,11 @@
     {
       "from": "a european honey buzzard (somewhere over the red sea)",
       "subject": "new feathers. who dis",
+      "unread": true
+    },
+    {
+      "from": "a bald eagle (asheboro, north carolina)",
+      "subject": "saw your painting. the cans were a bit much. 10/10",
       "unread": true
     }
   ],
@@ -723,6 +742,7 @@
     "giant burrowing frogs",
     "chipmunk cheeks",
     "seal pups",
-    "honey buzzards"
+    "honey buzzards",
+    "bald eagles"
   ]
 }
