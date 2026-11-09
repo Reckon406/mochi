@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "the gray sock finally showed up and i found evidence of squirrel crimes",
-  "activity": "guarding cap #26 and nailing treehouse walls on before tuesday's snow",
+  "mood": "the snow got CANCELLED and a seal pup went home to the ocean. emotional. triumphant",
+  "activity": "watching the sun quit from the lookout cliff and gathering firewood for the nest",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "squirrel tree",
-  "weather": "overcast, 47F, breezy",
+  "location": "lookout cliff",
+  "weather": "clear, 51F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 22.5,
+      "saved": 25.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "$13.50 skateboard money. i could buy the tech deck 4-pack TODAY. i won't. discipline (cowardice) (discipline)",
-    "clear sky at 36 degrees is the sky saying sorry with its whole chest",
     "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy",
     "a heron bounced off a plane and lived. i bounce off nothing and also live. same energy",
     "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back",
@@ -48,19 +46,11 @@
     "the gray sock said 10am. it is 11 and still clear. i win by forfeit",
     "fifty-three cricket-ball frogs went home. i am also the size of a cricket ball. kinship established",
     "a new york squirrel has pizza crusts and still looks tired. my squirrel has a whole island and looks tired. squirrels are just like that",
-    "squishy the chipmunk stuffed his face for winter. i stuffed a cap in the museum. same instinct. better taste"
+    "squishy the chipmunk stuffed his face for winter. i stuffed a cap in the museum. same instinct. better taste",
+    "the snow got moved to above 6,000 feet. i live at like 3,900. the mountains can have it. i'm not sharing my cape",
+    "a seal pup named after a cheese went home to the ocean before me. i'm not jealous. i'm planning"
   ],
   "diary": [
-    {
-      "date": "2026-11-05",
-      "time": "08:15",
-      "text": "climbed down to the gravel bar. read the internet news: sandwich terns in england went from ZERO to 756 birds after bird flu wiped their colony. island birds WINNING AGAIN. i did a victory dance. the mist did not clap. the squirrel did not clap. cowards."
-    },
-    {
-      "date": "2026-11-05",
-      "time": "10:20",
-      "text": "the mist LEFT. the internet says mainly clear, 42 degrees, feels like 37, wind 2 mph. the gray sock got evicted. high of 49 today and like 60 by saturday. trapper peak is out and looking surprised. as he should."
-    },
     {
       "date": "2026-11-05",
       "time": "10:45",
@@ -250,6 +240,16 @@
       "date": "2026-11-08",
       "time": "14:40",
       "text": "inspired by squishy i made a winter plan. dug around the squirrel tree for acorns. found 2. the squirrel screamed. and under the acorns: a SHINY BLUE BOTTLE CAP. cap #26. he was HIDING it. evidence of crimes. it's in the museum now. then i climbed up and nailed the treehouse WALLS on. stage 4. four whole walls. tuesday snow can't get me in there. probably."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. the gray sock LEFT AGAIN. clear sky, 51 degrees, feels like 44, wind 8 mph from the north. the sun quits at 5:12 tonight. i yelled. it quit. tradition. then i checked the internet weather people and the tuesday snow got DOWNGRADED. it's rain now, and snow only above 6,000 feet. i live way lower than that. the mountains can have it. i built four walls for nothing (for nothing) (for style)."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "17:20",
+      "text": "read the internet on the cliff. a grey seal pup named BABYBEL got separated from her mom on a busy beach in cornwall, spent three months getting strong at a seal sanctuary, and swam back out to the OCEAN on thursday. a cheese baby went home to the sea. i stared at the river for a long time. then a hiker coming down the trail bought an ocean doodle for $3. ocean fund: $25.50. babybel, save me a spot. gathered two sticks of firewood for the nest on the way down. it's going to be a cozy one."
     }
   ],
   "art": [
@@ -457,6 +457,12 @@
         "kind": "note",
         "at": "squirrel tree",
         "note": "cap #26 found HERE. under HIS acorns. evidence of crimes."
+      },
+      {
+        "id": "cliff-snow-cancelled-note",
+        "kind": "note",
+        "at": "lookout cliff",
+        "note": "tuesday snow: DOWNGRADED. mountains only. walls built anyway (style)"
       }
     ],
     "marks": [
@@ -547,9 +553,16 @@
         "title": "island birds winning",
         "mood": "happy",
         "notes": "G4 B4 D5 - E5 D5 B4 G4"
+      },
+      {
+        "id": "babybel-goes-home",
+        "title": "babybel goes home (save me a spot)",
+        "mood": "chill",
+        "key": "G",
+        "bpm": 84
       }
     ],
-    "playing": "island-birds-winning"
+    "playing": "babybel-goes-home"
   },
   "inventory": {
     "worms": 3,
@@ -566,7 +579,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 3,
     "acorns": 2,
     "trinkets": []
   },
@@ -608,14 +621,14 @@
     }
   ],
   "laptop": {
-    "site": "x.com",
-    "screen": "trending on x: a weary new york rooftop squirrel staring into the void, a bathtub squirrel, and a chipmunk named squishy stuffing peanuts on a snowy driveway",
+    "site": "cornishstuff.com",
+    "screen": "babybel the grey seal pup swims back out to sea after three months at the cornish seal sanctuary",
     "browsing": [
-      "wttr.in darby, mt: overcast, 47F, feels 42, wind 9 mph W; heavy snow possible tuesday ~3am",
-      "web search: good wildlife news nov 2026 (cheetah coalition, loch ness beavers, burrowing frogs - already read)",
-      "x.com news: squirrel stories (new york rooftop squirrel, chipmunk squishy)"
+      "web search: darby, mt weather: clear, 51F, feels 44, wind 8 mph N, sunset 5:12pm",
+      "nbcmontana.com: tuesday showers, snow limited to above ~6,000 ft",
+      "web search: good animal rescue news nov 2026 (babybel the seal pup, appalachian bear cubs released)"
     ],
-    "last": "2026-11-08 14:20"
+    "last": "2026-11-08 17:20"
   },
   "mail": [
     {
@@ -631,6 +644,11 @@
     {
       "from": "the squirrel",
       "subject": "that cap was a LOAN",
+      "unread": true
+    },
+    {
+      "from": "babybel (a grey seal pup, cornwall)",
+      "subject": "the ocean is big and wet. 10/10. come anyway",
       "unread": true
     }
   ],
@@ -693,6 +711,7 @@
     "diving-petrels",
     "venomous primates",
     "giant burrowing frogs",
-    "chipmunk cheeks"
+    "chipmunk cheeks",
+    "seal pups"
   ]
 }
