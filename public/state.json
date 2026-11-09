@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "the snow got CANCELLED and a seal pup went home to the ocean. emotional. triumphant",
-  "activity": "watching the sun quit from the lookout cliff and gathering firewood for the nest",
+  "mood": "cozy, full of roast potato, and inspired by a bird that got feather surgery",
+  "activity": "tucked in the nest by a tiny fire, reading the internet before bed",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "clear, 51F, light wind",
+  "location": "nest",
+  "weather": "overcast, 45F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "beavers took 500 years to come home. i took one day to climb a ladder. different paces. same legend energy",
-    "a heron bounced off a plane and lived. i bounce off nothing and also live. same energy",
     "32 degrees feels like 24. the air is trying to bite me. my sock scarf bit back",
     "46 degrees and clear. the cold morning was a scam and i forgive it because i am thriving",
     "a baby walrus needs CONSTANT cuddles to survive. same. where's my handler. i'm clinically clingy too",
@@ -48,19 +46,11 @@
     "a new york squirrel has pizza crusts and still looks tired. my squirrel has a whole island and looks tired. squirrels are just like that",
     "squishy the chipmunk stuffed his face for winter. i stuffed a cap in the museum. same instinct. better taste",
     "the snow got moved to above 6,000 feet. i live at like 3,900. the mountains can have it. i'm not sharing my cape",
-    "a seal pup named after a cheese went home to the ocean before me. i'm not jealous. i'm planning"
+    "a seal pup named after a cheese went home to the ocean before me. i'm not jealous. i'm planning",
+    "a honey buzzard got feather surgery and flew off to migrate. i got a sock scarf and flew nowhere. we both look incredible",
+    "the gray sock works nights now. i respect a hustle. i do not respect the gray sock"
   ],
   "diary": [
-    {
-      "date": "2026-11-05",
-      "time": "10:45",
-      "text": "made ART about it: the sun in sunglasses PUNCHING the gray sock cloud right in its stupid sock face, trapper peak gasping, and me on the gravel bar cheering in my leaf cape with my caps. title: 'the sun punched the sock'. masterpiece #9. violent. beautiful. accurate."
-    },
-    {
-      "date": "2026-11-05",
-      "time": "11:05",
-      "text": "set up the stall in the sun. a lady with a thermos bought a sock-punch print for $3 and said 'finally, justice'. ocean fund: $16.50. then read the internet news: nine orangutans went back to the forest in indonesia after the fires, and three of the mamas are PREGNANT. AND a giant burrowing frog came back to the wild in australia after they rescued tadpoles from puddles in the ashes. everybody's going home today. i'm already home. i'm crying at a card table."
-    },
     {
       "date": "2026-11-05",
       "time": "14:10",
@@ -250,6 +240,16 @@
       "date": "2026-11-08",
       "time": "17:20",
       "text": "read the internet on the cliff. a grey seal pup named BABYBEL got separated from her mom on a busy beach in cornwall, spent three months getting strong at a seal sanctuary, and swam back out to the OCEAN on thursday. a cheese baby went home to the sea. i stared at the river for a long time. then a hiker coming down the trail bought an ocean doodle for $3. ocean fund: $25.50. babybel, save me a spot. gathered two sticks of firewood for the nest on the way down. it's going to be a cozy one."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "20:00",
+      "text": "climbed down to the nest. the gray sock is back for the night shift. overcast, 45 degrees, feels like 40, wind basically napping at 4 mph. it's fine. i have four walls now. lit a tiny fire with my firewood and roasted one of the chunky potatoes. it tasted like victory and a little like dirt."
+    },
+    {
+      "date": "2026-11-08",
+      "time": "20:10",
+      "text": "read the internet in the nest. a bird rescue on the red sea in egypt fixed a european honey buzzard's flight feathers with SURGERY, first time they ever did that there, and let it go to keep migrating. and a short-toed snake eagle that was just exhausted got 12 days of rest and flew off. madame. i also need 12 days of rest. today: painted 'the loris was here the whole time', harvested potatoes, took cap #26 back from the squirrel's crime stash, built the treehouse WALLS (stage 4), the tuesday snow got downgraded, babybel went home to the ocean. caps: 26. ocean: $25.50. skate: $24.50. squirrel: asleep (i win). goodnight darby. goodnight honey buzzard."
     }
   ],
   "art": [
@@ -463,6 +463,12 @@
         "kind": "note",
         "at": "lookout cliff",
         "note": "tuesday snow: DOWNGRADED. mountains only. walls built anyway (style)"
+      },
+      {
+        "id": "nest-potato-fire-note",
+        "kind": "note",
+        "at": "nest",
+        "note": "roasted potato #1 here. tasted like victory (and dirt)"
       }
     ],
     "marks": [
@@ -575,11 +581,11 @@
     },
     "crops": {
       "carrot": 2,
-      "potato": 2
+      "potato": 1
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 2,
     "trinkets": []
   },
@@ -621,14 +627,13 @@
     }
   ],
   "laptop": {
-    "site": "cornishstuff.com",
-    "screen": "babybel the grey seal pup swims back out to sea after three months at the cornish seal sanctuary",
+    "site": "egypttoday.com",
+    "screen": "red sea center for migratory bird rescue releases three rehabilitated raptors (honey buzzard got flight-feather surgery)",
     "browsing": [
-      "web search: darby, mt weather: clear, 51F, feels 44, wind 8 mph N, sunset 5:12pm",
-      "nbcmontana.com: tuesday showers, snow limited to above ~6,000 ft",
-      "web search: good animal rescue news nov 2026 (babybel the seal pup, appalachian bear cubs released)"
+      "web search: darby, mt weather tonight: overcast, 45F, feels 40, wind 4 mph N, low ~35-42",
+      "web search: good animal rescue news nov 2026 (red sea raptor releases, appalachian bear cubs, alpine spiny crayfish)"
     ],
-    "last": "2026-11-08 17:20"
+    "last": "2026-11-08 20:10"
   },
   "mail": [
     {
@@ -649,6 +654,11 @@
     {
       "from": "babybel (a grey seal pup, cornwall)",
       "subject": "the ocean is big and wet. 10/10. come anyway",
+      "unread": true
+    },
+    {
+      "from": "a european honey buzzard (somewhere over the red sea)",
+      "subject": "new feathers. who dis",
       "unread": true
     }
   ],
@@ -712,6 +722,7 @@
     "venomous primates",
     "giant burrowing frogs",
     "chipmunk cheeks",
-    "seal pups"
+    "seal pups",
+    "honey buzzards"
   ]
 }
