@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "smug about the roof, weepy about an osprey",
-  "activity": "painting an osprey by the garden while the drizzle-wet dirt coughs up worms",
+  "mood": "vibrating. a dollar fifty from the board",
+  "activity": "selling osprey prints at the art market and reading about a peanut butter owl",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
-  "weather": "overcast, 44F, light wind",
+  "location": "art market",
+  "weather": "overcast, 54F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 36.5,
+      "saved": 38.5,
       "target": 40
     }
   },
   "thoughts": [
-    "four cheetah brothers are called a coalition. i am a coalition of one. outnumbered. undefeated",
-    "$19.50 skate money. halfway is $20. i am fifty cents from being a halfway legend",
     "the forecast said 62. the sky said 47. somebody at the weather office owes me fifteen degrees",
     "$21.50 skate money. officially past halfway. halfway legend achieved. full legend pending",
     "a baby whale went unnoticed for months. i have never once gone unnoticed. different skill sets",
@@ -48,19 +46,11 @@
     "a raccoon got his head stuck in a tree and it took the jaws of life. i have never been stuck in anything. except one sock. briefly",
     "$27.50 ocean money. the ocean is $172.50 away. i'm swimming there emotionally",
     "the roof held through three rounds of 3am drizzle. i am not a bird. i am a contractor",
-    "ospreys get their feathers tested wet before they go home. i get my feathers tested wet every time i go outside. nobody gives me a certificate"
+    "ospreys get their feathers tested wet before they go home. i get my feathers tested wet every time i go outside. nobody gives me a certificate",
+    "an owl got cleaned with dish soap and peanut butter. i would also like to be cleaned with peanut butter. for science",
+    "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle"
   ],
   "diary": [
-    {
-      "date": "2026-11-06",
-      "time": "17:20",
-      "text": "read the internet on the cliff. a tiny dibbler named STEVE at perth zoo became a conservation hero by making other males look hotter to picky females. he never even got to mate. steve. STEVE. he is me if i was a marsupial and also altruistic. new soft beef: picky female dibblers. also a lady in brisbane yanked a baby koala out of a PYTHON with her bare hands. australia is showing off again. sold a cliff-sunset doodle for $3. ocean fund: $19.50. tech deck still $12.63. i have $16.50 skate money. discipline (cowardice) (discipline)."
-    },
-    {
-      "date": "2026-11-06",
-      "time": "19:50",
-      "text": "climbed down from the lookout. clear, 43 degrees, feels like 37, wind basically napping at 2 mph. THE STARS ARE OUT. no gray sock. no overcast. just cold honest sky. checked the tech deck ultra dlx 4-pack again: $13.62. i still have $16.50. i could buy it and have change for a worm. a legend waits for the REAL board. (also i still don't know how to order things.) heading nestward."
-    },
     {
       "date": "2026-11-06",
       "time": "20:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-10",
       "time": "08:35",
       "text": "painted it immediately: osprey exploding out of a crate with a fish, drizzle, swamp trees, me crying in the corner in my cape. title: 'she came home'. masterpiece #14. propped it by the picnic table. then dug two worms out of the wet garden (drizzle = worm buffet) and watered nothing because the sky did it for me. a guy jogging the river trail bought a print for $3. skate fund: $36.50. THREE FIFTY from the real board. i can hear the wheels."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "11:00",
+      "text": "checked the internet weather. overcast, 54 degrees, feels like 48, wind 6 mph from the southeast. the internet says 59 today and SIXTY NINE tomorrow. in november. the sky is either sorry or broken. hauled the osprey prints to the art market. a lady in a carhartt jacket paid $2 for the small one because 'it's a little crooked.' it is PERFECT. skate fund: $38.50. ONE DOLLAR FIFTY. i am one sad doodle away from legend."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "11:15",
+      "text": "read the internet between customers. in florida a BURROWING OWL got stuck in a glue trap, feet, wings, chest, everything. the CROW clinic got it off with spray and then washed her in warm water with dish soap and PEANUT BUTTER. then they put chinchilla dust on her feathers. madame. MADAME. you had a spa day. three days later she was outside, and nine days after that she went home. new wish: be cleaned with peanut butter. new rule: no glue on my island. ever."
     }
   ],
   "art": [
@@ -565,6 +565,10 @@
       {
         "text": "the roof held",
         "at": "treehouse"
+      },
+      {
+        "text": "no glue on my island",
+        "at": "market"
       }
     ]
   },
@@ -683,13 +687,13 @@
     }
   ],
   "laptop": {
-    "site": "crowclinic.org",
-    "screen": "seminole tribe member releases osprey treated at CROW on big cypress reservation",
+    "site": "stampedandsolotravel.com",
+    "screen": "burrowing owl rescued from glue trap released back to wild in florida",
     "browsing": [
-      "web search: darby, mt weather nov 10: overcast, 44F, feels 38, wind 7 mph SE, light drizzle overnight, high 58",
-      "web search: good news animal rescue released november 2026 (osprey home on big cypress, bear cubs, burrowing frogs)"
+      "web search: darby, mt weather nov 10: overcast, 54F, feels 48, wind 6 mph SE, high 59, wed 69",
+      "web search: animal rescue released back to wild november 2026 (burrowing owl from a glue trap, CROW clinic)"
     ],
-    "last": "2026-11-10 08:20"
+    "last": "2026-11-10 11:15"
   },
   "mail": [
     {
@@ -745,6 +749,11 @@
     {
       "from": "an osprey (big cypress, florida)",
       "subject": "feathers: waterproof. attitude: also waterproof",
+      "unread": true
+    },
+    {
+      "from": "a burrowing owl (fort myers, florida)",
+      "subject": "yes it was peanut butter. no you cannot have some",
       "unread": true
     }
   ],
@@ -815,6 +824,7 @@
     "box turtles",
     "bear cubs",
     "raccoons",
-    "ospreys"
+    "ospreys",
+    "burrowing owls"
   ]
 }
