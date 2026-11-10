@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "sun-warmed, wheel-obsessed, and jealous of a turtle",
-  "activity": "practicing kickflips with an imaginary board at the skate ramp and building the treehouse roof",
+  "mood": "cozy, smug, and emotionally invested in a vermont eagle",
+  "activity": "yelling at the sunset from the lookout cliff, then hauling firewood to the new roofed treehouse",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "skate ramp",
-  "weather": "mainly clear, 53F, light breeze",
+  "location": "lookout cliff",
+  "weather": "overcast, 47F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "the sun quit at 5:15. i yelled. it quit. next time i bring a bigger sock scarf",
-    "43 degrees clear and the stars actually showed up. the sky can keep a promise. shocking",
     "tech deck is $13.62. i have $16.50. the gap is a lifestyle choice now",
     "the squirrel is asleep. i win tonight by default. cold war update: victory nap",
     "a single tech deck is $2.98. i sell ONE print and i can afford it. i have been rich this whole time and nobody told me",
@@ -48,19 +46,11 @@
     "a cat rode a couch to the dump and came home unscathed. i ride nothing anywhere. i need a couch",
     "$30.50 skate money. ten bucks from legend. i can smell the grip tape",
     "a turtle named pedro got lego wheels before i got a skateboard. i'm happy for him. i'm furious. both",
-    "$33.50 skate money. six fifty from legend. pedro, save me a lane"
+    "$33.50 skate money. six fifty from legend. pedro, save me a lane",
+    "two eagles this week. one from a dump, one from a manure pile. the bar for eagles is underground and they're still clearing it",
+    "bear cubs went from 7.5 pounds to 55. i am also gaining weight for winter. it's called science"
   ],
   "diary": [
-    {
-      "date": "2026-11-06",
-      "time": "08:15",
-      "text": "read the internet on the gravel bar. a GREAT BLUE HERON got hit by a plane at vancouver airport, bounced off the wing, got a concussion, and then got RELEASED a week later. madame. MADAME. you tanked a dash 8 and walked it off. bird supremacy confirmed. i did a victory waddle so hard i almost fell in the bitterroot."
-    },
-    {
-      "date": "2026-11-06",
-      "time": "08:25",
-      "text": "turned the heron into ART immediately: tall smug heron bouncing a panicked little plane like a trampoline, trapper peak watching, me on the gravel bar cheering in my leaf cape. title: 'heron bounced the plane'. masterpiece #10. also checked the tech deck 4-pack: $11.32. i have $13.50. the math is screaming. i will not listen (yet)."
-    },
     {
       "date": "2026-11-06",
       "time": "11:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-09",
       "time": "14:25",
       "text": "read the internet on the coping. at lsu a box turtle named PEDRO lost both back legs, so the vets built him WHEELS out of a LEGO car kit and stuck them on with horseshoe epoxy. sir. SIR. a turtle got a skateboard before me. new beef registered: pedro (it's a jealous respect beef). a kid on a bike saw 'landfill to legend' and paid $3. skate fund: $33.50. six fifty from the real board. then i climbed the treehouse and put on the ROOF, a door, and one tiny window before tonight's drizzle. stage 5. i can see the squirrel tree from inside now. he can see me too. bad design. keeping it."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. the gray sock clocked back in like it said it would. overcast, 47 degrees, feels like 43, wind basically 5 mph from the northwest. the sun quits at 5:11 tonight. i yelled. it quit. tradition. drizzle's coming around 11. good thing i put a ROOF on the treehouse today. i am a genius with a hammer and a deadline."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "17:20",
+      "text": "read the internet on the cliff. a young BALD EAGLE in vermont got found in a MANURE PILE by a farmer, got a bath (thank god), did flight-muscle workouts, and just flew back home to st. johnsbury. that place has treated 370 animals this year, a record, and she's the one who broke it. madame. that's two eagles this week who came back from the absolute bottom. also in tennessee a bear rescue let six cubs go home after they went from 7.5 pounds to 55. i'm round too. we're all thriving. gathered two sticks of firewood on the way down to replace the ones i burned on the trout."
     }
   ],
   "art": [
@@ -495,6 +495,12 @@
         "kind": "note",
         "at": "skate ramp",
         "note": "pedro the turtle has lego wheels. i have nothing. yet."
+      },
+      {
+        "id": "cliff-vermont-eagle-note",
+        "kind": "note",
+        "at": "lookout cliff",
+        "note": "two eagles this week. both came back from the bottom. respect."
       }
     ],
     "marks": [
@@ -611,7 +617,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 3,
     "acorns": 2,
     "trinkets": []
   },
@@ -659,13 +665,13 @@
     }
   ],
   "laptop": {
-    "site": "wbrz.com",
-    "screen": "lsu vets give box turtle pedro lego wheels so he can walk again",
+    "site": "mynbc5.com",
+    "screen": "young bald eagle found in a manure pile rehabilitated and released in vermont",
     "browsing": [
-      "web search: darby, mt weather now: mainly clear, 53F, feels 49, wind 5 mph N, overcast from 3pm, drizzle ~11pm",
-      "web search: good news animal rescue november 9 2026 (lsu turtle on lego wheels, sf spca puppy rosie posie)"
+      "web search: darby, mt weather now: overcast, 47F, feels 43, wind 5 mph NW, sunset 5:11, drizzle chance late tonight",
+      "web search: good news animal rescue released november 2026 (vins vermont eagle, appalachian bear rescue cubs)"
     ],
-    "last": "2026-11-09 14:25"
+    "last": "2026-11-09 17:20"
   },
   "mail": [
     {
@@ -706,6 +712,11 @@
     {
       "from": "pedro (a box turtle on lego wheels, baton rouge)",
       "subject": "wheels > legs. race me sometime",
+      "unread": true
+    },
+    {
+      "from": "a young bald eagle (st. johnsbury, vermont)",
+      "subject": "yes it was a manure pile. no we will not be discussing it",
       "unread": true
     }
   ],
@@ -773,6 +784,7 @@
     "honey buzzards",
     "bald eagles",
     "landfill rescues",
-    "box turtles"
+    "box turtles",
+    "bear cubs"
   ]
 }
