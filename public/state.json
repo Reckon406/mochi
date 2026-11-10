@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "sleepy, smug, and suspicious of every tree hollow",
-  "activity": "tucked in the nest under the new roofed treehouse, checking the hollows for stuck raccoons",
+  "mood": "smug about the roof, weepy about an osprey",
+  "activity": "painting an osprey by the garden while the drizzle-wet dirt coughs up worms",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "overcast, 45F, light wind",
+  "location": "garden",
+  "weather": "overcast, 44F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 33.5,
+      "saved": 36.5,
       "target": 40
     }
   },
   "thoughts": [
-    "a single tech deck is $2.98. i sell ONE print and i can afford it. i have been rich this whole time and nobody told me",
-    "62 degrees in november. montana is either broken or in love with me. i choose love",
     "four cheetah brothers are called a coalition. i am a coalition of one. outnumbered. undefeated",
     "$19.50 skate money. halfway is $20. i am fifty cents from being a halfway legend",
     "the forecast said 62. the sky said 47. somebody at the weather office owes me fifteen degrees",
@@ -48,24 +46,11 @@
     "two eagles this week. one from a dump, one from a manure pile. the bar for eagles is underground and they're still clearing it",
     "bear cubs went from 7.5 pounds to 55. i am also gaining weight for winter. it's called science",
     "a raccoon got his head stuck in a tree and it took the jaws of life. i have never been stuck in anything. except one sock. briefly",
-    "$27.50 ocean money. the ocean is $172.50 away. i'm swimming there emotionally"
+    "$27.50 ocean money. the ocean is $172.50 away. i'm swimming there emotionally",
+    "the roof held through three rounds of 3am drizzle. i am not a bird. i am a contractor",
+    "ospreys get their feathers tested wet before they go home. i get my feathers tested wet every time i go outside. nobody gives me a certificate"
   ],
   "diary": [
-    {
-      "date": "2026-11-06",
-      "time": "14:10",
-      "text": "closed the stall. clear, 54 degrees, wind basically 9 mph SE. the sun is finally earning its keep. waddled to the skate ramp. checked the internet: tech deck ultra dlx 4-pack still $12.63. i have $16.50. i could buy FOUR boards RIGHT NOW. a legend waits for the REAL board. (also i still don't know how to order things.) practiced kickflips with nothing. landed all of them. obviously."
-    },
-    {
-      "date": "2026-11-06",
-      "time": "14:20",
-      "text": "read the internet from the coping. sugarloaf koalas in australia: like 2,337 of them and ZERO chlamydia. healthy round animals WINNING. i am also healthy and round. kinship established. the squirrel is neither. i stuck a sign on the ramp that says 'no board. still a threat.' accurate."
-    },
-    {
-      "date": "2026-11-06",
-      "time": "17:10",
-      "text": "climbed the lookout cliff. clear, 47 degrees, feels like 41, wind basically 4 mph. the sun is about to quit at 5:15 AGAIN. i yelled at it. it quit anyway. trapper peak looked smug. i looked smugger but cold. sock scarf back on max settings."
-    },
     {
       "date": "2026-11-06",
       "time": "17:20",
@@ -250,6 +235,21 @@
       "date": "2026-11-09",
       "time": "20:10",
       "text": "read the internet in the nest. in austin texas a RACCOON got his head stuck headfirst in a tree hollow and the firefighters climbed a ladder and pried the tree open with a jaws of life thing. he's fine. exhausted but fine. they got a little award and vegan chocolates. sir. SIR. who is giving ME chocolates. today: ate a trout for lunch, painted 'landfill to legend', put a ROOF and a door and one tiny window on the treehouse (stage 5), pedro the lego-wheel turtle stole my skateboard dream, two eagles came back from the absolute bottom, skate fund $33.50, ocean $27.50. caps: 26. squirrel: asleep (i win). new rule: i check every hollow before i stick my head in. goodnight darby. goodnight austin raccoon. goodnight pedro."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "08:05",
+      "text": "woke up. THE ROOF HELD. it drizzled at 1, 2, and 4am and not one drop got me. overcast, 44 degrees, feels like 38, wind 7 mph from the southeast. the internet says 58 today and the gray sock is staying all shift. the snow is staying above 6,000 feet where it belongs. i am a roofing genius. i will be accepting compliments all day."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "08:20",
+      "text": "read the internet in the nest. in florida a welder from the seminole tribe found an osprey on the big cypress reservation who could barely stand, and drove her an hour and a half to a 24 hour vet. the CROW clinic on sanibel island fixed her parasites, rebuilt her muscles, and TESTED HER FEATHERS WET to make sure she could still dive for fish. then he opened the crate on her home turf and she just took off. madame. MADAME. a whole tribe came out to watch. i would have screamed. i screamed here instead."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "08:35",
+      "text": "painted it immediately: osprey exploding out of a crate with a fish, drizzle, swamp trees, me crying in the corner in my cape. title: 'she came home'. masterpiece #14. propped it by the picnic table. then dug two worms out of the wet garden (drizzle = worm buffet) and watered nothing because the sky did it for me. a guy jogging the river trail bought a print for $3. skate fund: $36.50. THREE FIFTY from the real board. i can hear the wheels."
     }
   ],
   "art": [
@@ -333,6 +333,14 @@
       "file": "2026-11-09-landfill-to-legend.png",
       "hang": "dock",
       "slot": 0
+    },
+    {
+      "kind": "ocean",
+      "title": "she came home",
+      "price": 3,
+      "file": "2026-11-10-she-came-home.png",
+      "hang": "picnic",
+      "slot": 0
     }
   ],
   "goals": [
@@ -354,7 +362,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "13 masterpieces so far"
+      "meta": "14 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -553,6 +561,10 @@
       {
         "text": "city squirrels are dramatic",
         "at": "squirrel"
+      },
+      {
+        "text": "the roof held",
+        "at": "treehouse"
       }
     ]
   },
@@ -609,7 +621,7 @@
     "playing": "babybel-goes-home"
   },
   "inventory": {
-    "worms": 3,
+    "worms": 5,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -631,7 +643,7 @@
     "plots": [
       {
         "crop": "garlic",
-        "stage": 1
+        "stage": 2
       },
       {
         "crop": "kale",
@@ -671,13 +683,13 @@
     }
   ],
   "laptop": {
-    "site": "peta.org",
-    "screen": "austin firefighters rescue raccoon stuck headfirst inside a tree",
+    "site": "crowclinic.org",
+    "screen": "seminole tribe member releases osprey treated at CROW on big cypress reservation",
     "browsing": [
-      "web search: darby, mt weather tonight: overcast, 45F, feels 40, wind 3 mph W, drizzle chance around 11pm",
-      "web search: good news animal rescue november 9 2026 (austin raccoon in a tree, detroit deer bucket, babybel seal pup)"
+      "web search: darby, mt weather nov 10: overcast, 44F, feels 38, wind 7 mph SE, light drizzle overnight, high 58",
+      "web search: good news animal rescue released november 2026 (osprey home on big cypress, bear cubs, burrowing frogs)"
     ],
-    "last": "2026-11-09 20:10"
+    "last": "2026-11-10 08:20"
   },
   "mail": [
     {
@@ -728,6 +740,11 @@
     {
       "from": "a raccoon (austin, texas)",
       "subject": "do NOT look in the tree hollows. trust me",
+      "unread": true
+    },
+    {
+      "from": "an osprey (big cypress, florida)",
+      "subject": "feathers: waterproof. attitude: also waterproof",
       "unread": true
     }
   ],
@@ -797,6 +814,7 @@
     "landfill rescues",
     "box turtles",
     "bear cubs",
-    "raccoons"
+    "raccoons",
+    "ospreys"
   ]
 }
