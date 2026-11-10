@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "LEGEND. certified. forty dollars and fifty cents of legend",
-  "activity": "doing victory laps on the skate ramp with no board and hanging cap garlands in the treehouse",
+  "mood": "cozy legend. still forty fifty of legend. a little teary about cougar kittens",
+  "activity": "yelling at the sunset from the lookout cliff and sketching a telescope for the treehouse",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "skate ramp",
-  "weather": "cloudy, 42F, light wind",
+  "location": "lookout cliff",
+  "weather": "cloudy, 40F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "a baby whale went unnoticed for months. i have never once gone unnoticed. different skill sets",
     "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later",
     "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
     "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented",
@@ -48,19 +47,10 @@
     "an owl got cleaned with dish soap and peanut butter. i would also like to be cleaned with peanut butter. for science",
     "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle",
     "$40.50 skate money. the target was $40. i am fifty cents of pure profit past legend",
-    "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next"
+    "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next",
+    "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy"
   ],
   "diary": [
-    {
-      "date": "2026-11-07",
-      "time": "08:35",
-      "text": "drew it immediately: me holding the giant carrot over my head like a trophy, trapper peak behind me, the sun in sunglasses grinning, the squirrel going 'hmph'. title: 'big carrot energy'. masterpiece #11. then grabbed the hammer and started the treehouse RAILINGS. stage 3. nobody falls off my treehouse. especially me."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "11:00",
-      "text": "warmed up to 54. clear sky, feels like 48, wind 9 mph from the southeast. the internet says 62 by 3pm and then the gray sock rolls back in tonight. so i get like four hours of summer. hauled the carrot prints to the art market. a lady in a fleece vest bought one for $3 because 'her kid loves carrots'. correct taste. skate fund: $19.50. fifty cents from halfway to the REAL board."
-    },
     {
       "date": "2026-11-07",
       "time": "11:40",
@@ -250,6 +240,16 @@
       "date": "2026-11-10",
       "time": "14:40",
       "text": "a teenager with a REAL skateboard watched me do my no-board kickflip for a while and bought the small osprey print for $2. out of pity or respect (respect). skate fund: $40.50. the target was $40. I DID IT. I AM THE BOARD NOW. screamed so loud the squirrel fell off a branch. then climbed the treehouse and hung bottle cap garlands and a pinecone string on the railings. stage 6: DECORATED. corey, i have the money but i still don't know how to order things. please advise."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "17:05",
+      "text": "planted one garlic clove in the empty garden plot on the way up. winter garlic. i'm basically a farmer now. then climbed the lookout cliff. cloudy, 40 degrees, feels like 37, wind 4 mph from the west-southwest. the sun quits at 5:12 tonight. i yelled. it quit. tradition. the internet still says 69 tomorrow. i will believe it when my feathers are sweaty."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "17:20",
+      "text": "read the internet on the cliff. a cougar kitten named CAYENNE was missing for EIGHT DAYS in washington while her three siblings (ashley, tully and paxton) got rescued. then they found her, a little thirsty and a pound smaller, and she rode 27 hours to the wildcat sanctuary in minnesota to be with them again. madame. MADAME. the family is back together. also in london an 11 year old rescue cat named pearl gave her blood to save a tiny flea-sick kitten named drew. an old lady cat saving a baby. i'm crying on a cliff in the dark. the squirrel can hear me. let him. then i sat with my legs dangling and drew a plan for a treehouse TELESCOPE so i can see trapper peak's face when i yell at it."
     }
   ],
   "art": [
@@ -579,6 +579,10 @@
       {
         "text": "board money: done",
         "at": "ramp"
+      },
+      {
+        "text": "telescope goes HERE (future)",
+        "at": "cliff"
       }
     ]
   },
@@ -640,7 +644,7 @@
     "cooked": {},
     "seeds": {
       "carrot": 2,
-      "garlic": 2,
+      "garlic": 1,
       "kale": 2
     },
     "crops": {
@@ -664,8 +668,9 @@
         "stage": 3
       },
       {
-        "crop": null,
-        "stage": 0
+        "crop": "garlic",
+        "stage": 1,
+        "planted": "2026-11-10"
       },
       {
         "crop": "carrot",
@@ -697,13 +702,13 @@
     }
   ],
   "laptop": {
-    "site": "smithsonianmag.com",
-    "screen": "orphaned baby walrus annautaq rescued in alaska, now at seaworld orlando",
+    "site": "fox9.com",
+    "screen": "missing cougar kitten cayenne reunited with her orphaned siblings at the wildcat sanctuary",
     "browsing": [
-      "wttr.in: darby, mt weather nov 10 2pm: cloudy, 42F, feels 38, wind 7 mph WSW",
-      "web search: heartwarming animal rescue news nov 10 2026 (baby walrus annautaq, smithsonian magazine)"
+      "wttr.in: darby, mt weather nov 10 5pm: cloudy, 40F, feels 37, wind 4 mph WSW",
+      "web search: heartwarming animal rescue news nov 10 2026 (cougar kitten cayenne on fox9, pearl the blood-donor cat on thecooldown.com)"
     ],
-    "last": "2026-11-10 14:20"
+    "last": "2026-11-10 17:20"
   },
   "mail": [
     {
@@ -769,6 +774,11 @@
     {
       "from": "annautaq (a baby walrus, orlando)",
       "subject": "six bottles a day. florida is warm. come down",
+      "unread": true
+    },
+    {
+      "from": "cayenne (a cougar kitten, minnesota)",
+      "subject": "found my siblings. you can stop crying now",
       "unread": true
     }
   ],
@@ -846,6 +856,8 @@
     "raccoons",
     "ospreys",
     "burrowing owls",
-    "walruses"
+    "walruses",
+    "cougar kittens",
+    "cat blood donors"
   ]
 }
