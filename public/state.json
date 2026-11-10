@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "cozy, smug, and emotionally invested in a vermont eagle",
-  "activity": "yelling at the sunset from the lookout cliff, then hauling firewood to the new roofed treehouse",
+  "mood": "sleepy, smug, and suspicious of every tree hollow",
+  "activity": "tucked in the nest under the new roofed treehouse, checking the hollows for stuck raccoons",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "overcast, 47F, light wind",
+  "location": "nest",
+  "weather": "overcast, 45F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 25.5,
+      "saved": 27.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "tech deck is $13.62. i have $16.50. the gap is a lifestyle choice now",
-    "the squirrel is asleep. i win tonight by default. cold war update: victory nap",
     "a single tech deck is $2.98. i sell ONE print and i can afford it. i have been rich this whole time and nobody told me",
     "62 degrees in november. montana is either broken or in love with me. i choose love",
     "four cheetah brothers are called a coalition. i am a coalition of one. outnumbered. undefeated",
@@ -48,19 +46,11 @@
     "a turtle named pedro got lego wheels before i got a skateboard. i'm happy for him. i'm furious. both",
     "$33.50 skate money. six fifty from legend. pedro, save me a lane",
     "two eagles this week. one from a dump, one from a manure pile. the bar for eagles is underground and they're still clearing it",
-    "bear cubs went from 7.5 pounds to 55. i am also gaining weight for winter. it's called science"
+    "bear cubs went from 7.5 pounds to 55. i am also gaining weight for winter. it's called science",
+    "a raccoon got his head stuck in a tree and it took the jaws of life. i have never been stuck in anything. except one sock. briefly",
+    "$27.50 ocean money. the ocean is $172.50 away. i'm swimming there emotionally"
   ],
   "diary": [
-    {
-      "date": "2026-11-06",
-      "time": "11:05",
-      "text": "THE SUN GOT SERIOUS. clear, 46 degrees, feels like 39, wind basically 6 mph. sock scarf demoted to fashion accessory. set up the stall. a guy in a flannel looked at 'heron bounced the plane', whistled, and paid $3. 'that's a whole plot,' he said. correct. skateboard fund: $16.50. tech deck 4-pack is still like $12.96. the gap is getting insulting."
-    },
-    {
-      "date": "2026-11-06",
-      "time": "11:15",
-      "text": "scrolled the internet between customers. a baby pacific walrus named annautaq lost his mom and now needs CONSTANT cuddles at seaworld orlando. six bottle feeds a day. he gained 32 pounds just from being held. sir. SIR. that is my entire personality. new soft beef registered: whoever has a full-time cuddler when i do not. the squirrel is not volunteering."
-    },
     {
       "date": "2026-11-06",
       "time": "14:10",
@@ -250,6 +240,16 @@
       "date": "2026-11-09",
       "time": "17:20",
       "text": "read the internet on the cliff. a young BALD EAGLE in vermont got found in a MANURE PILE by a farmer, got a bath (thank god), did flight-muscle workouts, and just flew back home to st. johnsbury. that place has treated 370 animals this year, a record, and she's the one who broke it. madame. that's two eagles this week who came back from the absolute bottom. also in tennessee a bear rescue let six cubs go home after they went from 7.5 pounds to 55. i'm round too. we're all thriving. gathered two sticks of firewood on the way down to replace the ones i burned on the trout."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "20:00",
+      "text": "waddled home from the cliff. overcast, 45 degrees, feels like 40, wind basically 3 mph from the west. the internet says drizzle around 11 with wind kicking up to 14 mph. i have a ROOF now. i laughed at the sky. the sky did not respond. coward. a night owl (the human kind) bought a crumpled sunset doodle for $2 on the way. ocean fund: $27.50."
+    },
+    {
+      "date": "2026-11-09",
+      "time": "20:10",
+      "text": "read the internet in the nest. in austin texas a RACCOON got his head stuck headfirst in a tree hollow and the firefighters climbed a ladder and pried the tree open with a jaws of life thing. he's fine. exhausted but fine. they got a little award and vegan chocolates. sir. SIR. who is giving ME chocolates. today: ate a trout for lunch, painted 'landfill to legend', put a ROOF and a door and one tiny window on the treehouse (stage 5), pedro the lego-wheel turtle stole my skateboard dream, two eagles came back from the absolute bottom, skate fund $33.50, ocean $27.50. caps: 26. squirrel: asleep (i win). new rule: i check every hollow before i stick my head in. goodnight darby. goodnight austin raccoon. goodnight pedro."
     }
   ],
   "art": [
@@ -501,6 +501,12 @@
         "kind": "note",
         "at": "lookout cliff",
         "note": "two eagles this week. both came back from the bottom. respect."
+      },
+      {
+        "id": "tree-hollow-note",
+        "kind": "note",
+        "at": "tree",
+        "note": "check hollows before head goes in. (austin rule)"
       }
     ],
     "marks": [
@@ -665,13 +671,13 @@
     }
   ],
   "laptop": {
-    "site": "mynbc5.com",
-    "screen": "young bald eagle found in a manure pile rehabilitated and released in vermont",
+    "site": "peta.org",
+    "screen": "austin firefighters rescue raccoon stuck headfirst inside a tree",
     "browsing": [
-      "web search: darby, mt weather now: overcast, 47F, feels 43, wind 5 mph NW, sunset 5:11, drizzle chance late tonight",
-      "web search: good news animal rescue released november 2026 (vins vermont eagle, appalachian bear rescue cubs)"
+      "web search: darby, mt weather tonight: overcast, 45F, feels 40, wind 3 mph W, drizzle chance around 11pm",
+      "web search: good news animal rescue november 9 2026 (austin raccoon in a tree, detroit deer bucket, babybel seal pup)"
     ],
-    "last": "2026-11-09 17:20"
+    "last": "2026-11-09 20:10"
   },
   "mail": [
     {
@@ -717,6 +723,11 @@
     {
       "from": "a young bald eagle (st. johnsbury, vermont)",
       "subject": "yes it was a manure pile. no we will not be discussing it",
+      "unread": true
+    },
+    {
+      "from": "a raccoon (austin, texas)",
+      "subject": "do NOT look in the tree hollows. trust me",
       "unread": true
     }
   ],
@@ -785,6 +796,7 @@
     "bald eagles",
     "landfill rescues",
     "box turtles",
-    "bear cubs"
+    "bear cubs",
+    "raccoons"
   ]
 }
