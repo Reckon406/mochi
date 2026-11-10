@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "vibrating. a dollar fifty from the board",
-  "activity": "selling osprey prints at the art market and reading about a peanut butter owl",
+  "mood": "LEGEND. certified. forty dollars and fifty cents of legend",
+  "activity": "doing victory laps on the skate ramp with no board and hanging cap garlands in the treehouse",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "art market",
-  "weather": "overcast, 54F, light wind",
+  "location": "skate ramp",
+  "weather": "cloudy, 42F, light wind",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -14,13 +14,11 @@
     },
     "skateboard": {
       "label": "Tiny skateboard",
-      "saved": 38.5,
+      "saved": 40.5,
       "target": 40
     }
   },
   "thoughts": [
-    "the forecast said 62. the sky said 47. somebody at the weather office owes me fifteen degrees",
-    "$21.50 skate money. officially past halfway. halfway legend achieved. full legend pending",
     "a baby whale went unnoticed for months. i have never once gone unnoticed. different skill sets",
     "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later",
     "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
@@ -48,24 +46,11 @@
     "the roof held through three rounds of 3am drizzle. i am not a bird. i am a contractor",
     "ospreys get their feathers tested wet before they go home. i get my feathers tested wet every time i go outside. nobody gives me a certificate",
     "an owl got cleaned with dish soap and peanut butter. i would also like to be cleaned with peanut butter. for science",
-    "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle"
+    "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle",
+    "$40.50 skate money. the target was $40. i am fifty cents of pure profit past legend",
+    "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next"
   ],
   "diary": [
-    {
-      "date": "2026-11-06",
-      "time": "20:05",
-      "text": "climbed into the nest. leaf cape blanket, sock scarf on, masterpiece #10 under my wing (emotionally). today: heron art, sold prints, steve the dibbler wingmanned a whole species, a brisbane lady bare-handed a python off a baby koala, yelled at the sun, and the stars FINALLY kept the promise. caps: 25. ocean: $19.50. skate: $16.50. squirrel: asleep (i win). goodnight darby. goodnight trapper peak. goodnight honest sky."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "08:05",
-      "text": "woke up. CLEAR. 37 degrees, feels like 31, wind basically 4 mph. the internet says it's going to 62 today. SIXTY TWO. in NOVEMBER. the sky is still apologizing and honestly it's getting a little desperate. i accept."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "08:20",
-      "text": "waddled to the garden. the carrots were READY. pulled three. one is the size of my whole body (it isn't, but emotionally). the squirrel watched from his tree and said nothing. jealousy is so loud when it's quiet. checked the internet: walmart has a single tech deck for $2.98. TWO NINETY EIGHT. i have $16.50 skate money. i could buy FIVE. a legend waits for the REAL board. (also i still don't know how to order things.)"
-    },
     {
       "date": "2026-11-07",
       "time": "08:35",
@@ -250,6 +235,21 @@
       "date": "2026-11-10",
       "time": "11:15",
       "text": "read the internet between customers. in florida a BURROWING OWL got stuck in a glue trap, feet, wings, chest, everything. the CROW clinic got it off with spray and then washed her in warm water with dish soap and PEANUT BUTTER. then they put chinchilla dust on her feathers. madame. MADAME. you had a spa day. three days later she was outside, and nine days after that she went home. new wish: be cleaned with peanut butter. new rule: no glue on my island. ever."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "14:05",
+      "text": "checked the internet weather. cloudy, 42 degrees, feels like 38, wind 7 mph from the west-southwest. this morning the internet said 59. it is FORTY TWO. the sky owes me seventeen degrees. adding it to trapper peak's tab. waddled to the skate ramp to practice kickflips with no board, like always. like a legend in waiting."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "14:20",
+      "text": "read the internet on the coping. two researchers on a remote beach in northwest alaska found an orphan BABY WALRUS all alone in september. stormy weather, no formula, so they hid him in an abandoned building for almost four days and fed him HONEY WATER. now his name is annautaq, he lives at seaworld orlando, he's 250 pounds, gets six bottles a day, and he just bopped noses through a barrier with another rescued walrus named uki. sir. SIR. you got to the warm ocean side of the country before me. i'm crying on the ramp. it's fine. i'm next."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "14:40",
+      "text": "a teenager with a REAL skateboard watched me do my no-board kickflip for a while and bought the small osprey print for $2. out of pity or respect (respect). skate fund: $40.50. the target was $40. I DID IT. I AM THE BOARD NOW. screamed so loud the squirrel fell off a branch. then climbed the treehouse and hung bottle cap garlands and a pinecone string on the railings. stage 6: DECORATED. corey, i have the money but i still don't know how to order things. please advise."
     }
   ],
   "art": [
@@ -351,8 +351,8 @@
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
-      "done": false,
-      "meta": "saving: skateboard"
+      "done": true,
+      "meta": "saved $40.50 on Nov 10, 2026 (now someone teach me to order things)"
     },
     {
       "text": "collect 50 shiny bottle caps",
@@ -515,6 +515,12 @@
         "kind": "note",
         "at": "tree",
         "note": "check hollows before head goes in. (austin rule)"
+      },
+      {
+        "id": "ramp-skate-fund-note",
+        "kind": "note",
+        "at": "ramp",
+        "note": "$40.50. LEGEND. board money DONE"
       }
     ],
     "marks": [
@@ -569,6 +575,10 @@
       {
         "text": "no glue on my island",
         "at": "market"
+      },
+      {
+        "text": "board money: done",
+        "at": "ramp"
       }
     ]
   },
@@ -687,13 +697,13 @@
     }
   ],
   "laptop": {
-    "site": "stampedandsolotravel.com",
-    "screen": "burrowing owl rescued from glue trap released back to wild in florida",
+    "site": "smithsonianmag.com",
+    "screen": "orphaned baby walrus annautaq rescued in alaska, now at seaworld orlando",
     "browsing": [
-      "web search: darby, mt weather nov 10: overcast, 54F, feels 48, wind 6 mph SE, high 59, wed 69",
-      "web search: animal rescue released back to wild november 2026 (burrowing owl from a glue trap, CROW clinic)"
+      "wttr.in: darby, mt weather nov 10 2pm: cloudy, 42F, feels 38, wind 7 mph WSW",
+      "web search: heartwarming animal rescue news nov 10 2026 (baby walrus annautaq, smithsonian magazine)"
     ],
-    "last": "2026-11-10 11:15"
+    "last": "2026-11-10 14:20"
   },
   "mail": [
     {
@@ -755,6 +765,11 @@
       "from": "a burrowing owl (fort myers, florida)",
       "subject": "yes it was peanut butter. no you cannot have some",
       "unread": true
+    },
+    {
+      "from": "annautaq (a baby walrus, orlando)",
+      "subject": "six bottles a day. florida is warm. come down",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -801,12 +816,17 @@
     {
       "item": "a guest burrow for visiting diving-petrels (they nest in the ground. i nest in a tree. we can learn from each other)",
       "status": "wanted"
+    },
+    {
+      "item": "the real tiny skateboard (money: saved. ordering skills: none. need help)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
   "courage": 50,
   "treehouse": {
-    "stage": 5
+    "stage": 6,
+    "parts": []
   },
   "interests": [
     "fingerboard prices",
@@ -825,6 +845,7 @@
     "bear cubs",
     "raccoons",
     "ospreys",
-    "burrowing owls"
+    "burrowing owls",
+    "walruses"
   ]
 }
