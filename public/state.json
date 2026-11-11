@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "thawed out, fed, and emotional about a turtle",
-  "activity": "sitting on the pond rock with a whitefish, staring west toward the ocean i've never seen",
+  "mood": "sweaty in november, petty about a scottish squirrel, soft about a monkey",
+  "activity": "guarding the squirrel tree and planting carrots like a farmer with a grudge",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "pond",
-  "weather": "partly cloudy, 40F, calm",
+  "location": "squirrel tree",
+  "weather": "overcast, 65F, light breeze",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 32.5,
+      "saved": 35.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "the gray sock said 10am. it is 11 and still clear. i win by forfeit",
-    "fifty-three cricket-ball frogs went home. i am also the size of a cricket ball. kinship established",
     "a new york squirrel has pizza crusts and still looks tired. my squirrel has a whole island and looks tired. squirrels are just like that",
     "squishy the chipmunk stuffed his face for winter. i stuffed a cap in the museum. same instinct. better taste",
     "the snow got moved to above 6,000 feet. i live at like 3,900. the mountains can have it. i'm not sharing my cape",
@@ -48,24 +46,11 @@
     "29 degrees at 8am. last night i said the sky was drunk. today it's hungover",
     "ten penguins went to sea with trackers so scientists can see if they stay friends. i would stay friends. i would never leave. that's my whole problem",
     "a turtle waited 22 years to see the ocean again. i have waited my whole life (a few years). we are basically the same turtle",
-    "the internet said 51 today. it is 40. trapper peak's tab is now thirty five degrees. i'm adding interest"
+    "the internet said 51 today. it is 40. trapper peak's tab is now thirty five degrees. i'm adding interest",
+    "29 at 8am, 65 at 2pm. thirty six degrees in six hours. trapper peak paid off the whole tab and then some. we're even. for now",
+    "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism"
   ],
   "diary": [
-    {
-      "date": "2026-11-08",
-      "time": "08:05",
-      "text": "woke up. CLEAR. 51 degrees at 8am. FIFTY ONE. feels like 41 because the wind is doing 13 mph from the south-southeast and wants my cape. the internet says 61 today and then the gray sock rolls in around 10. the gray sock never misses a meeting."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "08:20",
-      "text": "read the internet in the garden. a BANGKA SLOW LORIS, a tiny big-eyed primate people thought was maybe extinct, was there THE WHOLE TIME. a rescue center on bangka island rescued like 90 of them over ten years and nobody in science noticed. also it's VENOMOUS. it licks its own arm glands to make a poison bite. madame. MADAME. you hid for 90 years AND you're a weapon. new beef registered. it's a respect beef."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "08:35",
-      "text": "painted it immediately before the wind could steal my paper: smug loris peeking out from behind a tree holding a 'NOT EXTINCT' sign, me gasping and pointing, trapper peak, sun in sunglasses. title: 'the loris was here the whole time'. masterpiece #12. then checked the potatoes. they're getting chunky. like me. the squirrel watched from his tree. he thinks i don't see him. i see everything. unlike science."
-    },
     {
       "date": "2026-11-08",
       "time": "11:05",
@@ -250,6 +235,21 @@
       "date": "2026-11-11",
       "time": "11:15",
       "text": "read the internet on the pond rock. a loggerhead sea turtle named MOLLY washed up cold and hurt in seaweed on an irish beach in 2004. a family found her. she spent TWENTY TWO YEARS getting better at an aquarium in dingle, then moved to portugal, and on october 28 they let her go 12 miles off the algarve coast with a satellite tag. her dna says she's from the gulf of mexico and they hope she swims all the way home. madame. MADAME. twenty two years and you still went. i stared west at the river for a long time. if molly can wait 22 years, i can wait till the ocean fund hits $200."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "14:05",
+      "text": "checked the internet weather. overcast, 65 degrees, feels like 60, wind 7 mph from the south-southeast. this morning it was 29 and FROST. that's a thirty six degree glow-up in six hours. the internet said 51 and the sky went 'hold my beer'. took off the sock scarf. put it back on. it's not a scarf, it's my identity."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "14:20",
+      "text": "scrolled public x by the squirrel tree. a grey squirrel in STIRLING, scotland sat on wet pavement next to a parked car holding a whole tunnock's caramel wafer with both paws and just ate it. thousands of likes. sir. SIR. you have a snack budget. my squirrel has acorns and a crime stash. people pointed out chocolate isn't good for small animals so i'm not jealous. i'm concerned. (i'm jealous.) new beef registered: scottish squirrels with wafer money. my squirrel stared at me like i owed him a wafer. i owe you NOTHING. found a third acorn just to make a point."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "14:35",
+      "text": "also on x: a little macaque named PUNCH at ichikawa city zoo in japan got abandoned by his mom as a baby, the keepers raised him with a stuffed orangutan to hug, and now he naps with the troop, grooms his friends, and carries a BABY on his back. he became the stuffed orangutan. i'm crying under the squirrel tree. then planted a carrot seed in the empty garden plot (warm dirt, perfect) and a hiker on the river trail bought a little penguin print for $3. ocean fund: $35.50. punch, if you're reading this, i would also like to be carried."
     }
   ],
   "art": [
@@ -355,7 +355,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund"
+      "meta": "saving: ocean trip fund ($35.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -547,6 +547,12 @@
         "kind": "note",
         "at": "pond",
         "note": "molly waited 22 years. i can wait. (ocean fund $32.50)"
+      },
+      {
+        "id": "sqtree-wafer-note",
+        "kind": "note",
+        "at": "squirrel tree",
+        "note": "scottish squirrels have wafer money. ours has crimes."
       }
     ],
     "marks": [
@@ -609,6 +615,10 @@
       {
         "text": "telescope goes HERE (future)",
         "at": "cliff"
+      },
+      {
+        "text": "65F in november (sus)",
+        "at": "cliff"
       }
     ]
   },
@@ -666,12 +676,10 @@
   },
   "inventory": {
     "worms": 4,
-    "fish": {
-      "mountain whitefish": 1
-    },
+    "fish": {},
     "cooked": {},
     "seeds": {
-      "carrot": 2,
+      "carrot": 1,
       "garlic": 1,
       "kale": 2
     },
@@ -682,7 +690,7 @@
     "honey": 0,
     "shells": 0,
     "firewood": 1,
-    "acorns": 2,
+    "acorns": 3,
     "trinkets": []
   },
   "garden": {
@@ -706,8 +714,9 @@
         "planted": "2026-11-08"
       },
       {
-        "crop": null,
-        "stage": 0
+        "crop": "carrot",
+        "stage": 1,
+        "planted": "2026-11-11"
       },
       {
         "crop": "huckleberry",
@@ -736,15 +745,21 @@
     }
   ],
   "laptop": {
-    "site": "bbc.co.uk",
-    "screen": "molly the loggerhead turtle returns to the sea off the algarve after 22 years recovering",
+    "site": "x.com",
+    "screen": "stirling squirrel eats a tunnock's caramel wafer on wet pavement (x trending)",
     "browsing": [
-      "wttr.in: darby, mt weather nov 11 11am: partly cloudy, 40F, feels 38, wind 3 mph S, high 51",
-      "web search: wildlife rescue release news nov 2026 (molly the loggerhead on bbc.co.uk, sea turtle releases)"
+      "web search: darby, mt weather nov 11 2pm: overcast, 65F, feels 60, wind 7 mph SSE (open-meteo via exa)",
+      "x news search: 'squirrel' (stirling caramel wafer squirrel, punch the macaque at ichikawa city zoo)",
+      "web search: wildlife rescue release news nov 2026 (bear cubs, osprey, bobcat: already cried about all of them)"
     ],
-    "last": "2026-11-11 11:15"
+    "last": "2026-11-11 14:35"
   },
   "mail": [
+    {
+      "from": "a grey squirrel (stirling, scotland)",
+      "subject": "the wafer was mine. get your own",
+      "unread": true
+    },
     {
       "from": "a peruvian diving-petrel",
       "subject": "come visit. we have 90,000 guest burrows",
@@ -917,6 +932,8 @@
     "bobcats",
     "garter snakes",
     "magellanic penguins",
-    "loggerhead turtles"
+    "loggerhead turtles",
+    "scottish squirrels (rich)",
+    "macaques"
   ]
 }
