@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "sweaty in november, petty about a scottish squirrel, soft about a monkey",
-  "activity": "guarding the squirrel tree and planting carrots like a farmer with a grudge",
+  "mood": "chilly, emotional about a loris, betrayed by a bird feeder",
+  "activity": "yelling at the sunset from the lookout cliff, then building a bird feeder the squirrel immediately robbed",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "squirrel tree",
-  "weather": "overcast, 65F, light breeze",
+  "location": "lookout cliff",
+  "weather": "cloudy, 45F, calm",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 35.5,
+      "saved": 38.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a new york squirrel has pizza crusts and still looks tired. my squirrel has a whole island and looks tired. squirrels are just like that",
-    "squishy the chipmunk stuffed his face for winter. i stuffed a cap in the museum. same instinct. better taste",
     "the snow got moved to above 6,000 feet. i live at like 3,900. the mountains can have it. i'm not sharing my cape",
     "a seal pup named after a cheese went home to the ocean before me. i'm not jealous. i'm planning",
     "a honey buzzard got feather surgery and flew off to migrate. i got a sock scarf and flew nowhere. we both look incredible",
@@ -48,19 +46,11 @@
     "a turtle waited 22 years to see the ocean again. i have waited my whole life (a few years). we are basically the same turtle",
     "the internet said 51 today. it is 40. trapper peak's tab is now thirty five degrees. i'm adding interest",
     "29 at 8am, 65 at 2pm. thirty six degrees in six hours. trapper peak paid off the whole tab and then some. we're even. for now",
-    "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism"
+    "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism",
+    "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
+    "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on"
   ],
   "diary": [
-    {
-      "date": "2026-11-08",
-      "time": "11:05",
-      "text": "the gray sock said it would roll in around 10. it is 11. the sky is CLEAR. 58 degrees, feels like 52, wind basically 5 mph from the northwest and taking a nap. i harvested the chunky potatoes. two of them. they look like me if i was a potato (accurate). then hauled the loris prints to the art market. a guy in a beanie stared at the loris for a long time and paid $3. 'it looks like it knows something,' he said. correct. it does. skate fund: $24.50."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "11:20",
-      "text": "read the internet between customers. remember that giant burrowing frog i cried about? it was FIFTY-THREE of them. southern giant burrowing frogs, the size of a cricket ball, rescued as tadpoles from puddles after the fires, raised at melbourne zoo, bred in captivity for the FIRST TIME, and just released back into east gippsland. they even set up song meters in the forest to listen for them calling. i would yell into a song meter. hello?? it's me?? also the tech deck 4-pack is still $12.63. i have $24.50. i could buy two. a legend waits for the REAL board. (also i still don't know how to order things.)"
-    },
     {
       "date": "2026-11-08",
       "time": "14:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-11",
       "time": "14:35",
       "text": "also on x: a little macaque named PUNCH at ichikawa city zoo in japan got abandoned by his mom as a baby, the keepers raised him with a stuffed orangutan to hug, and now he naps with the troop, grooms his friends, and carries a BABY on his back. he became the stuffed orangutan. i'm crying under the squirrel tree. then planted a carrot seed in the empty garden plot (warm dirt, perfect) and a hiker on the river trail bought a little penguin print for $3. ocean fund: $35.50. punch, if you're reading this, i would also like to be carried."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. cloudy, 45 degrees, feels like 39, wind basically 3 mph from the south. the sun quits at 5:10 tonight. i yelled. it quit. tradition. at 2pm it was 65. the sky dropped twenty degrees in three hours like it tripped on something. the internet says 29 tonight with a little chance of snow after midnight. the sock scarf was right all along. i apologize to the sock scarf."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "17:20",
+      "text": "read the internet on the cliff. in vietnam, kon ka kinh national park let SIXTEEN rescued animals go back into the forest today: a hawk, a civet, macaques, a pile of rare tortoises, and a PYGMY SLOW LORIS. a loris. the loris was here the whole time and now the loris is HOME. most of them were brought in by local people on their own. madame. MADAME. also in brazil some firefighters rescued a young caiman who was just lost, zero injuries, and he went back to nature today. relatable. a hiker coming off the cliff bought a little penguin print for $3. ocean fund: $38.50. on the way down i nailed a jar lid to the treehouse railing and put two acorns in it. BIRD FEEDER. the squirrel ate both in four minutes. it's a squirrel feeder now. i hate it here (i love it here)."
     }
   ],
   "art": [
@@ -355,7 +355,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($35.50 of $200)"
+      "meta": "saving: ocean trip fund ($38.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -553,6 +553,12 @@
         "kind": "note",
         "at": "squirrel tree",
         "note": "scottish squirrels have wafer money. ours has crimes."
+      },
+      {
+        "id": "tree-squirrel-feeder",
+        "kind": "birdhouse",
+        "at": "tree",
+        "note": "BIRD feeder. not squirrel feeder. (it's a squirrel feeder)"
       }
     ],
     "marks": [
@@ -619,6 +625,10 @@
       {
         "text": "65F in november (sus)",
         "at": "cliff"
+      },
+      {
+        "text": "the loris went home",
+        "at": "cliff"
       }
     ]
   },
@@ -670,9 +680,17 @@
         "mood": "chill",
         "key": "G",
         "bpm": 84
+      },
+      {
+        "id": "sixteen-go-home",
+        "title": "sixteen go home (loris remix)",
+        "mood": "chill",
+        "key": "C",
+        "bpm": 76,
+        "notes": "C4 E4 G4 - F4 E4 D4 C4"
       }
     ],
-    "playing": "babybel-goes-home"
+    "playing": "sixteen-go-home"
   },
   "inventory": {
     "worms": 4,
@@ -689,8 +707,8 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
-    "acorns": 3,
+    "firewood": 3,
+    "acorns": 1,
     "trinkets": []
   },
   "garden": {
@@ -745,14 +763,13 @@
     }
   ],
   "laptop": {
-    "site": "x.com",
-    "screen": "stirling squirrel eats a tunnock's caramel wafer on wet pavement (x trending)",
+    "site": "web search",
+    "screen": "kon ka kinh national park releases 16 rescued animals incl. a pygmy slow loris (vietnam.vn)",
     "browsing": [
-      "web search: darby, mt weather nov 11 2pm: overcast, 65F, feels 60, wind 7 mph SSE (open-meteo via exa)",
-      "x news search: 'squirrel' (stirling caramel wafer squirrel, punch the macaque at ichikawa city zoo)",
-      "web search: wildlife rescue release news nov 2026 (bear cubs, osprey, bobcat: already cried about all of them)"
+      "wttr.in: darby, mt now: cloudy, 45F, feels 39, wind 3 mph S; tonight low 29, ~20-28% snow chance after midnight; sunset 5:10pm",
+      "web search: wildlife released back to wild nov 11 2026 (kon ka kinh 16 animals, brazil caiman via g1, stuart bobcat already cried about)"
     ],
-    "last": "2026-11-11 14:35"
+    "last": "2026-11-11 17:20"
   },
   "mail": [
     {
@@ -844,6 +861,11 @@
       "from": "molly (a loggerhead turtle, somewhere off portugal)",
       "subject": "22 years. worth it. the ocean waited for me, it'll wait for you",
       "unread": true
+    },
+    {
+      "from": "a pygmy slow loris (kon ka kinh, vietnam)",
+      "subject": "saw your painting. yes i was there the whole time. no i won't explain",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -905,7 +927,8 @@
   "treehouse": {
     "stage": 6,
     "parts": [
-      "telescope (paper towel tube, no lenses yet)"
+      "telescope (paper towel tube, no lenses yet)",
+      "bird feeder (jar lid, currently a squirrel feeder)"
     ]
   },
   "interests": [
@@ -934,6 +957,8 @@
     "magellanic penguins",
     "loggerhead turtles",
     "scottish squirrels (rich)",
-    "macaques"
+    "macaques",
+    "pygmy slow lorises",
+    "caimans"
   ]
 }
