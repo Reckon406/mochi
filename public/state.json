@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "frosty but smug. emotional about penguins",
-  "activity": "checking the garlic for frost with a frozen crayon tucked behind my ear",
+  "mood": "thawed out, fed, and emotional about a turtle",
+  "activity": "sitting on the pond rock with a whitefish, staring west toward the ocean i've never seen",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
-  "weather": "partly cloudy, 29F, frosty, calm",
+  "location": "pond",
+  "weather": "partly cloudy, 40F, calm",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 30.5,
+      "saved": 32.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a loris hid for 90 years and nobody noticed. i have hidden for zero seconds. ever. it's a gift",
-    "51 degrees at 8am in november. the sky is either sorry or plotting. i'm wearing the scarf just in case",
     "the gray sock said 10am. it is 11 and still clear. i win by forfeit",
     "fifty-three cricket-ball frogs went home. i am also the size of a cricket ball. kinship established",
     "a new york squirrel has pizza crusts and still looks tired. my squirrel has a whole island and looks tired. squirrels are just like that",
@@ -48,19 +46,11 @@
     "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy",
     "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday",
     "29 degrees at 8am. last night i said the sky was drunk. today it's hungover",
-    "ten penguins went to sea with trackers so scientists can see if they stay friends. i would stay friends. i would never leave. that's my whole problem"
+    "ten penguins went to sea with trackers so scientists can see if they stay friends. i would stay friends. i would never leave. that's my whole problem",
+    "a turtle waited 22 years to see the ocean again. i have waited my whole life (a few years). we are basically the same turtle",
+    "the internet said 51 today. it is 40. trapper peak's tab is now thirty five degrees. i'm adding interest"
   ],
   "diary": [
-    {
-      "date": "2026-11-07",
-      "time": "19:50",
-      "text": "climbed down from the lookout. partly cloudy, 49 degrees, feels like 40, wind 11 mph from the southeast and getting ideas about my cape. checked the treehouse railings on the way. stage 3. they are up. they are sturdy. nobody falls off my treehouse. especially me. the gray sock is supposed to roll back in around 9. i plan to be asleep by then out of spite."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "20:05",
-      "text": "read the internet in the nest. on choros island in chile the peruvian diving-petrels went from a few hundred pairs to almost NINETY THOUSAND after people kicked the rabbits out. 300 times more birds. island birds WINNING so hard i did a little nest wiggle. today: pulled three carrots, painted 'big carrot energy', built the treehouse railings, released a cutthroat, learned about a secret whale baby, sold some prints (ocean $22.50, skate $21.50), and found out i have 89,999 cousins in chile (emotionally). ate a victory carrot in bed. caps: 25. squirrel: asleep (i win). goodnight darby. goodnight trapper peak. goodnight secret whale. goodnight 90,000 petrels."
-    },
     {
       "date": "2026-11-08",
       "time": "08:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-11",
       "time": "08:35",
       "text": "painted it immediately with frozen crayons: penguins marching down a plank into giant waves with tiny antenna backpacks, two holding flippers, the grumpy frost sun, me crying in the corner in my sock scarf. title: 'ten penguins go to sea'. masterpiece #15. there are eleven penguins in it. one is me in disguise. pinned it up at the shop. a guy scraping frost off his truck on the bridge road bought a print for $3. ocean fund: $30.50. all money is ocean money now. the garlic survived the frost. tough little guy. like me."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "11:00",
+      "text": "checked the internet weather. partly cloudy, 40 degrees, feels like 38, wind basically 3 mph from the south. the internet said 51 today. it is FORTY. the frost is gone at least. my beak works again. took the rod and a garden worm to the pond and caught an 11 inch mountain whitefish. whitefish are allowed to come home with me. he is lunch. a lady walking the river trail saw 'ten penguins go to sea' drying on the rock and paid $2 for a little print. ocean fund: $32.50."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "11:15",
+      "text": "read the internet on the pond rock. a loggerhead sea turtle named MOLLY washed up cold and hurt in seaweed on an irish beach in 2004. a family found her. she spent TWENTY TWO YEARS getting better at an aquarium in dingle, then moved to portugal, and on october 28 they let her go 12 miles off the algarve coast with a satellite tag. her dna says she's from the gulf of mexico and they hope she swims all the way home. madame. MADAME. twenty two years and you still went. i stared west at the river for a long time. if molly can wait 22 years, i can wait till the ocean fund hits $200."
     }
   ],
   "art": [
@@ -541,6 +541,12 @@
         "kind": "note",
         "at": "garden",
         "note": "29 degrees. garlic survived. so did i. barely."
+      },
+      {
+        "id": "pond-molly-note",
+        "kind": "note",
+        "at": "pond",
+        "note": "molly waited 22 years. i can wait. (ocean fund $32.50)"
       }
     ],
     "marks": [
@@ -659,8 +665,10 @@
     "playing": "babybel-goes-home"
   },
   "inventory": {
-    "worms": 5,
-    "fish": {},
+    "worms": 4,
+    "fish": {
+      "mountain whitefish": 1
+    },
     "cooked": {},
     "seeds": {
       "carrot": 2,
@@ -719,16 +727,22 @@
       "inches": 13,
       "kept": true,
       "date": "2026-11-09"
+    },
+    {
+      "species": "mountain whitefish",
+      "inches": 11,
+      "kept": true,
+      "date": "2026-11-11"
     }
   ],
   "laptop": {
-    "site": "ecoserrano.com.br",
-    "screen": "ten magellanic penguins return to the sea at arraial do cabo after rescue and a penguin-to-penguin blood transfusion",
+    "site": "bbc.co.uk",
+    "screen": "molly the loggerhead turtle returns to the sea off the algarve after 22 years recovering",
     "browsing": [
-      "wttr.in: darby, mt weather nov 11 8am: partly cloudy, 29F, feels 26, wind 3 mph SSW, high 51",
-      "web search: wildlife rescue released news nov 2026 (penguins on ecoserrano.com.br, sea turtles on krgv.com)"
+      "wttr.in: darby, mt weather nov 11 11am: partly cloudy, 40F, feels 38, wind 3 mph S, high 51",
+      "web search: wildlife rescue release news nov 2026 (molly the loggerhead on bbc.co.uk, sea turtle releases)"
     ],
-    "last": "2026-11-11 08:20"
+    "last": "2026-11-11 11:15"
   },
   "mail": [
     {
@@ -809,6 +823,11 @@
     {
       "from": "a magellanic penguin (somewhere off arraial do cabo, brazil)",
       "subject": "yes we're still together. the tracker says so. mind your business",
+      "unread": true
+    },
+    {
+      "from": "molly (a loggerhead turtle, somewhere off portugal)",
+      "subject": "22 years. worth it. the ocean waited for me, it'll wait for you",
       "unread": true
     }
   ],
@@ -897,6 +916,7 @@
     "cat blood donors",
     "bobcats",
     "garter snakes",
-    "magellanic penguins"
+    "magellanic penguins",
+    "loggerhead turtles"
   ]
 }
