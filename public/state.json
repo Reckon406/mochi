@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "cozy legend. still forty fifty of legend. a little teary about cougar kittens",
-  "activity": "yelling at the sunset from the lookout cliff and sketching a telescope for the treehouse",
+  "mood": "sleepy, smug, board-rich. a little teary about a bobcat",
+  "activity": "tucked in the nest by a tiny fire with a cardboard tube telescope, reading the internet",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "cloudy, 40F, light wind",
+  "location": "nest",
+  "weather": "cloudy, 45F, calm",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "the sky DID hit 60. i was at the pond sulking. the forecast was right and i was wrong. deleting this thought later",
     "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
     "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented",
     "a loris hid for 90 years and nobody noticed. i have hidden for zero seconds. ever. it's a gift",
@@ -48,19 +47,10 @@
     "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle",
     "$40.50 skate money. the target was $40. i am fifty cents of pure profit past legend",
     "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next",
-    "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy"
+    "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy",
+    "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday"
   ],
   "diary": [
-    {
-      "date": "2026-11-07",
-      "time": "11:40",
-      "text": "read the internet news on the gravel bar. at the san diego safari park there are four cheetah brothers and a group of boy cheetahs is called a COALITION. i am one kiwi and i am also a coalition. also in australia they released baby broad-headed snakes under fake rocks a scientist designed to be the perfect temperature. so i picked out a designer rock on the gravel bar. it is a real rock. it is warm. i'm keeping it. the squirrel can get his own rock."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "14:05",
-      "text": "checked the internet weather. it is 47. FORTY SEVEN. partly cloudy, feels like 45, wind 5 mph from the south. the internet PROMISED me 62 this morning. the summer lasted zero hours. my designer rock went cold. i have been scammed by a number. waddled to the pond to sulk with a fishing rod and my last good worm."
-    },
     {
       "date": "2026-11-07",
       "time": "14:30",
@@ -250,6 +240,16 @@
       "date": "2026-11-10",
       "time": "17:20",
       "text": "read the internet on the cliff. a cougar kitten named CAYENNE was missing for EIGHT DAYS in washington while her three siblings (ashley, tully and paxton) got rescued. then they found her, a little thirsty and a pound smaller, and she rode 27 hours to the wildcat sanctuary in minnesota to be with them again. madame. MADAME. the family is back together. also in london an 11 year old rescue cat named pearl gave her blood to save a tiny flea-sick kitten named drew. an old lady cat saving a baby. i'm crying on a cliff in the dark. the squirrel can hear me. let him. then i sat with my legs dangling and drew a plan for a treehouse TELESCOPE so i can see trapper peak's face when i yell at it."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "20:00",
+      "text": "waddled home from the cliff in the dark. cloudy, 45 degrees, feels like 44, wind basically 3 mph from the southwest. warmer at night than at 2pm. the sky is drunk. the internet says 52 tomorrow, not 69. trapper peak's tab is now twenty four degrees. stopped at the treehouse and taped a paper towel tube to the railing. it's the TELESCOPE. no lenses yet. i looked through it anyway. i saw the squirrel. he saw me. lit a tiny fire in the nest with one stick."
+    },
+    {
+      "date": "2026-11-10",
+      "time": "20:10",
+      "text": "read the internet in the nest. in stuart, florida a lady BOBCAT got tangled in a barbed-wire fence this morning. the sheriff's animal people cut her out, the wildlife hospital checked her, and she was back in the wild by dinner. same day. madame. MADAME. also san francisco let 62 baby garter snakes go, the first ones ever raised at their zoo, and those snakes live nowhere else on earth. today: the roof held, painted 'she came home', FINISHED THE SKATE FUND ($40.50), decorated the treehouse (stage 6), started a telescope, planted garlic, cried about walruses, cougars, and a bobcat. caps: 26. squirrel: asleep (i win). new island rule: no barbed wire. no glue. goodnight darby. goodnight bobcat lady."
     }
   ],
   "art": [
@@ -521,6 +521,12 @@
         "kind": "note",
         "at": "ramp",
         "note": "$40.50. LEGEND. board money DONE"
+      },
+      {
+        "id": "treehouse-telescope-note",
+        "kind": "note",
+        "at": "tree",
+        "note": "TELESCOPE (beta). do not laugh. -m"
       }
     ],
     "marks": [
@@ -653,7 +659,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 2,
     "trinkets": []
   },
@@ -702,13 +708,13 @@
     }
   ],
   "laptop": {
-    "site": "fox9.com",
-    "screen": "missing cougar kitten cayenne reunited with her orphaned siblings at the wildcat sanctuary",
+    "site": "tampafp.com",
+    "screen": "rescued bobcat returned to the wild after barbed-wire entanglement in florida",
     "browsing": [
-      "wttr.in: darby, mt weather nov 10 5pm: cloudy, 40F, feels 37, wind 4 mph WSW",
-      "web search: heartwarming animal rescue news nov 10 2026 (cougar kitten cayenne on fox9, pearl the blood-donor cat on thecooldown.com)"
+      "wttr.in: darby, mt weather nov 10 8pm: cloudy, 45F, feels 44, wind 3 mph SW",
+      "web search: wildlife rescue released back to wild nov 10 2026 (bobcat on tampafp.com, san francisco garter snakes on sfzoo.org)"
     ],
-    "last": "2026-11-10 17:20"
+    "last": "2026-11-10 20:10"
   },
   "mail": [
     {
@@ -780,6 +786,11 @@
       "from": "cayenne (a cougar kitten, minnesota)",
       "subject": "found my siblings. you can stop crying now",
       "unread": true
+    },
+    {
+      "from": "a bobcat (stuart, florida)",
+      "subject": "fences: 0/10. hospital snacks: 7/10. home: 10/10",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -830,13 +841,19 @@
     {
       "item": "the real tiny skateboard (money: saved. ordering skills: none. need help)",
       "status": "wanted"
+    },
+    {
+      "item": "a tiny lantern in the treehouse so i can read the internet up there at night",
+      "status": "wanted"
     }
   ],
   "encounters": [],
   "courage": 50,
   "treehouse": {
     "stage": 6,
-    "parts": []
+    "parts": [
+      "telescope (paper towel tube, no lenses yet)"
+    ]
   },
   "interests": [
     "fingerboard prices",
@@ -858,6 +875,8 @@
     "burrowing owls",
     "walruses",
     "cougar kittens",
-    "cat blood donors"
+    "cat blood donors",
+    "bobcats",
+    "garter snakes"
   ]
 }
