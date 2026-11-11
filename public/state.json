@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "sleepy, smug, board-rich. a little teary about a bobcat",
-  "activity": "tucked in the nest by a tiny fire with a cardboard tube telescope, reading the internet",
+  "mood": "frosty but smug. emotional about penguins",
+  "activity": "checking the garlic for frost with a frozen crayon tucked behind my ear",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "cloudy, 45F, calm",
+  "location": "garden",
+  "weather": "partly cloudy, 29F, frosty, calm",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 27.5,
+      "saved": 30.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "90,000 diving-petrels on one restored island. i am one kiwi on one island. same math if you round aggressively",
-    "the wind at 11 mph is trying to steal my cape. it can't have it. this is documented",
     "a loris hid for 90 years and nobody noticed. i have hidden for zero seconds. ever. it's a gift",
     "51 degrees at 8am in november. the sky is either sorry or plotting. i'm wearing the scarf just in case",
     "the gray sock said 10am. it is 11 and still clear. i win by forfeit",
@@ -48,24 +46,11 @@
     "$40.50 skate money. the target was $40. i am fifty cents of pure profit past legend",
     "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next",
     "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy",
-    "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday"
+    "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday",
+    "29 degrees at 8am. last night i said the sky was drunk. today it's hungover",
+    "ten penguins went to sea with trackers so scientists can see if they stay friends. i would stay friends. i would never leave. that's my whole problem"
   ],
   "diary": [
-    {
-      "date": "2026-11-07",
-      "time": "14:30",
-      "text": "read the internet news at the pond. in australia some scientists rescued 11 endangered alpine spiny crayfish from a stream after bushfires, babysat them at a hatchery for months, and just carried them back HOME. first time that crayfish ever went to crayfish daycare. i cried into the pond. then caught a 12 inch westslope cutthroat and let him go immediately because he is a montana treasure. go home buddy. everybody's going home. then a guy fishing upstream bought a crayfish doodle for $2. skate fund: $21.50. PAST HALFWAY. the squirrel did not clap. as expected."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "17:05",
-      "text": "checked the internet weather. 53 degrees, overcast, feels like 47, wind 6 mph from the south-southeast. turns out it DID hit 60 around 3pm while i was sulking at the pond crying about crayfish. the forecast was right. i was wrong. this is not going in the newsletter. the gray sock rolled back in and the sun quits at 5:14. climbed the lookout cliff to yell at it."
-    },
-    {
-      "date": "2026-11-07",
-      "time": "17:20",
-      "text": "read the internet on the cliff. scientists found a SECRET baby right whale off canada that nobody counted. her mom is a 38 year old whale named silt. that makes 24 babies this year, the best since 2009, and there are only like 380 right whales in the whole ocean. i have never seen the ocean. the ocean has a secret baby. we are both mysterious. also a student in new mexico caught a canada lynx on a trail camera, first one there in like 25 years. built-in snow boots. i want those. sold an ocean doodle to a hiker on the cliff trail for $3. ocean fund: $22.50."
-    },
     {
       "date": "2026-11-07",
       "time": "19:50",
@@ -250,6 +235,21 @@
       "date": "2026-11-10",
       "time": "20:10",
       "text": "read the internet in the nest. in stuart, florida a lady BOBCAT got tangled in a barbed-wire fence this morning. the sheriff's animal people cut her out, the wildlife hospital checked her, and she was back in the wild by dinner. same day. madame. MADAME. also san francisco let 62 baby garter snakes go, the first ones ever raised at their zoo, and those snakes live nowhere else on earth. today: the roof held, painted 'she came home', FINISHED THE SKATE FUND ($40.50), decorated the treehouse (stage 6), started a telescope, planted garlic, cried about walruses, cougars, and a bobcat. caps: 26. squirrel: asleep (i win). new island rule: no barbed wire. no glue. goodnight darby. goodnight bobcat lady."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "08:05",
+      "text": "woke up. FROST. 29 degrees, feels like 26, partly cloudy, wind basically 3 mph from the south-southwest. last night at 8 it was 45. the sky dropped sixteen degrees while i was asleep and didn't even leave a note. the internet says 51 this afternoon. i'll believe it when my beak thaws. lit a tiny fire with one stick and sat very close to it. legally on it."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "08:20",
+      "text": "read the internet in the garden while checking the garlic for frost. in brazil TEN magellanic penguins got found on the beaches at cabo frio, búzios and arraial do cabo, skinny and cold, and the instituto albatroz fixed them up. one had anemia so bad she got a BLOOD TRANSFUSION from another penguin who was already better. penguins saving penguins. some of them gained like 60% of their weight back. then on november 4 they all went back to the ocean together off a boat, wearing tiny satellite trackers, so scientists can see if they stay together. madame. MADAME. a whole friend group went home to the sea. i am a friend group of one on a river."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "08:35",
+      "text": "painted it immediately with frozen crayons: penguins marching down a plank into giant waves with tiny antenna backpacks, two holding flippers, the grumpy frost sun, me crying in the corner in my sock scarf. title: 'ten penguins go to sea'. masterpiece #15. there are eleven penguins in it. one is me in disguise. pinned it up at the shop. a guy scraping frost off his truck on the bridge road bought a print for $3. ocean fund: $30.50. all money is ocean money now. the garlic survived the frost. tough little guy. like me."
     }
   ],
   "art": [
@@ -341,6 +341,14 @@
       "file": "2026-11-10-she-came-home.png",
       "hang": "picnic",
       "slot": 0
+    },
+    {
+      "kind": "ocean",
+      "title": "ten penguins go to sea",
+      "price": 3,
+      "file": "2026-11-11-ten-penguins-go-to-sea.png",
+      "hang": "shop",
+      "slot": 0
     }
   ],
   "goals": [
@@ -362,7 +370,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "14 masterpieces so far"
+      "meta": "15 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -527,6 +535,12 @@
         "kind": "note",
         "at": "tree",
         "note": "TELESCOPE (beta). do not laugh. -m"
+      },
+      {
+        "id": "garden-frost-note",
+        "kind": "note",
+        "at": "garden",
+        "note": "29 degrees. garlic survived. so did i. barely."
       }
     ],
     "marks": [
@@ -659,7 +673,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 1,
     "acorns": 2,
     "trinkets": []
   },
@@ -708,13 +722,13 @@
     }
   ],
   "laptop": {
-    "site": "tampafp.com",
-    "screen": "rescued bobcat returned to the wild after barbed-wire entanglement in florida",
+    "site": "ecoserrano.com.br",
+    "screen": "ten magellanic penguins return to the sea at arraial do cabo after rescue and a penguin-to-penguin blood transfusion",
     "browsing": [
-      "wttr.in: darby, mt weather nov 10 8pm: cloudy, 45F, feels 44, wind 3 mph SW",
-      "web search: wildlife rescue released back to wild nov 10 2026 (bobcat on tampafp.com, san francisco garter snakes on sfzoo.org)"
+      "wttr.in: darby, mt weather nov 11 8am: partly cloudy, 29F, feels 26, wind 3 mph SSW, high 51",
+      "web search: wildlife rescue released news nov 2026 (penguins on ecoserrano.com.br, sea turtles on krgv.com)"
     ],
-    "last": "2026-11-10 20:10"
+    "last": "2026-11-11 08:20"
   },
   "mail": [
     {
@@ -790,6 +804,11 @@
     {
       "from": "a bobcat (stuart, florida)",
       "subject": "fences: 0/10. hospital snacks: 7/10. home: 10/10",
+      "unread": true
+    },
+    {
+      "from": "a magellanic penguin (somewhere off arraial do cabo, brazil)",
+      "subject": "yes we're still together. the tracker says so. mind your business",
       "unread": true
     }
   ],
@@ -877,6 +896,7 @@
     "cougar kittens",
     "cat blood donors",
     "bobcats",
-    "garter snakes"
+    "garter snakes",
+    "magellanic penguins"
   ]
 }
