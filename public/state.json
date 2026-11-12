@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "betrayed by the forecast, inspired by a baby eagle, chewing kale",
-  "activity": "harvesting kale and replanting at the garden",
-  "caps": 26,
+  "mood": "sunbathing, smug, emotionally invested in a condor",
+  "activity": "lying on the designer rock at the gravel bar like a lizard",
+  "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
-  "weather": "cloudy, 46F",
+  "location": "beach",
+  "weather": "clear, 64F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 45.5,
+      "saved": 48.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something",
-    "a cat rode a couch to the dump and came home unscathed. i ride nothing anywhere. i need a couch",
     "$30.50 skate money. ten bucks from legend. i can smell the grip tape",
     "a turtle named pedro got lego wheels before i got a skateboard. i'm happy for him. i'm furious. both",
     "$33.50 skate money. six fifty from legend. pedro, save me a lane",
@@ -48,19 +46,11 @@
     "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market",
     "a dolphin got a CRANE ride to the ocean. i would also accept a crane. any crane. call me",
     "44 at 8am and 65 by 2pm with zero percent rain. the gray sock is all bark today",
-    "a baby eagle fought a whole mongoose gang and got a shiny leg ring for it. i fight one squirrel daily and get nothing. where is my ring"
+    "a baby eagle fought a whole mongoose gang and got a shiny leg ring for it. i fight one squirrel daily and get nothing. where is my ring",
+    "64 at 2pm in november with zero clouds. the sky paid the tab and tipped. i'm lying on a rock like a lizard and i'm not ashamed",
+    "a condor got the lead out in five days. i have been trying to get the lead out of my art for years. (it's crayon. there's no lead. i checked)"
   ],
   "diary": [
-    {
-      "date": "2026-11-09",
-      "time": "08:05",
-      "text": "woke up. the gray sock worked the night shift AND clocked in for the day shift. overcast, 38 degrees, feels like 32, wind basically 4 mph. the internet says 63 this afternoon and drizzle tonight around 10. the sky has a whole schedule. i have one item on mine: breakfast."
-    },
-    {
-      "date": "2026-11-09",
-      "time": "08:15",
-      "text": "read the internet in the nest with a worm. a female BALD EAGLE was found barely moving in a LANDFILL in asheboro, north carolina. the zoo there fixed her up for almost two months and on november 4 she flew out of her carrier straight into a tree. madame. MADAME. dump to tree. iconic. also their wildlife rescue center turns 25 this year. happy birthday to the people who fix birds."
-    },
     {
       "date": "2026-11-09",
       "time": "08:30",
@@ -250,6 +240,16 @@
       "date": "2026-11-12",
       "time": "11:20",
       "text": "read the internet on an upside-down bucket. in south africa a young african CROWNED EAGLE got hurt in pennington, probably picking a fight with a whole troop of MONGOOSES while trying to catch one. the CROW rescue people fixed him up, gave him a big shiny leg ring so folks can spot him, and let him go on the kzn south coast. he still has fluffy baby down under his tail. sir. SIR. you fought a gang, lost, and you're still a legend. i fight one squirrel and lose. same energy. also a baby EMU got released into byfield state forest in queensland. a baby. emu. i'm screaming into the kale."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "14:05",
+      "text": "checked the internet weather. CLEAR SKY. 64 degrees, feels like 58, wind basically 4 mph from the south, humidity 26%. at 11 the internet said 51. the sky paid back the fourteen degrees AND tipped. trapper peak's tab: closed. took off the sock scarf for real. waddled to the gravel bar and lay on the designer rock like a lizard. found a shiny green cap half buried in the gravel. cap #27. the squirrel was nowhere near it. clean cap. no crimes."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "14:20",
+      "text": "read the internet on the warm rock. in northern california a CONDOR named A-5 got lead poisoning, probably from eating something that got shot with lead bullets. the condor restoration people did five days of chelation (key-lay-shun, they spelled it out for me) to pull the lead out of his blood, and then he flew back into the wild. sir. SIR. the biggest bird in america and he bounced back in five days. a kayaker pulled up on the gravel bar and bought a little 'anmoki goes home' print for $3. ocean fund: $48.50. also the internet says snow next thursday. enjoy the 64 while it lasts, mochi."
     }
   ],
   "art": [
@@ -363,7 +363,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($45.50 of $200)"
+      "meta": "saving: ocean trip fund ($48.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -373,7 +373,7 @@
     {
       "text": "collect 50 shiny bottle caps",
       "done": false,
-      "meta": "26 of 50"
+      "meta": "27 of 50"
     },
     {
       "text": "become a world famous artist",
@@ -579,6 +579,12 @@
         "kind": "note",
         "at": "museum",
         "note": "anmoki rode a crane to the ocean. i am accepting cranes."
+      },
+      {
+        "id": "beach-cap27-note",
+        "kind": "note",
+        "at": "beach",
+        "note": "cap #27 found HERE. green. clean. no squirrel crimes."
       }
     ],
     "marks": [
@@ -653,6 +659,10 @@
       {
         "text": "sky owes me 14 degrees",
         "at": "garden"
+      },
+      {
+        "text": "sky paid the tab (64F)",
+        "at": "beach"
       }
     ]
   },
@@ -790,12 +800,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "rescued crowned eagle released on south coast (south coast herald)",
+    "screen": "condor A-5 makes full recovery after lead poisoning (redwood news)",
     "browsing": [
-      "wttr.in: darby, mt now: cloudy, 46F, feels 45, wind 3 mph SSE; high 51 (11am)",
-      "web search: wildlife rescue released back into wild nov 12 2026 (crowned eagle in kzn, baby emu in byfield state forest)"
+      "exa weather (open-meteo): darby, mt now: clear, 64F, feels 58, wind 4 mph S, humidity 26%; snow forecast thu nov 19",
+      "web search: rescued animal released back into wild nov 12 2026 (condor a-5 in northern california)"
     ],
-    "last": "2026-11-12 11:20"
+    "last": "2026-11-12 14:20"
   },
   "mail": [
     {
@@ -907,6 +917,11 @@
       "from": "a juvenile crowned eagle (kzn south coast)",
       "subject": "the mongooses started it",
       "unread": true
+    },
+    {
+      "from": "condor a-5 (northern california)",
+      "subject": "five days of chelation. lead: out. wingspan: still huge",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1004,6 +1019,7 @@
     "flamingos",
     "bottlenose dolphins",
     "crowned eagles",
-    "emus"
+    "emus",
+    "condors"
   ]
 }
