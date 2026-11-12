@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "smug about the weather, emotional about a flamingo, full of whitefish",
-  "activity": "sitting in the nest with a tiny fire, reading about a flamingo who found her friends",
+  "mood": "sobbing about a dolphin, smug about my crayons, cold beak",
+  "activity": "drawing a dolphin on a crane at the easel with frozen crayons",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "mostly clear, 49F, light breeze",
+  "location": "hut",
+  "weather": "overcast, 44F, breezy",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 40.5,
+      "saved": 43.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a honey buzzard got feather surgery and flew off to migrate. i got a sock scarf and flew nowhere. we both look incredible",
-    "the gray sock works nights now. i respect a hustle. i do not respect the gray sock",
     "an eagle went from a landfill to a tree in two months. i went from a nest to a ladder in two minutes. we are both on a journey",
     "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something",
     "a cat rode a couch to the dump and came home unscathed. i ride nothing anywhere. i need a couch",
@@ -48,24 +46,11 @@
     "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
     "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on",
     "the internet said 29 tonight. it is 49 at 8pm. the sky took the stairs down and then the elevator back up. i apologized to the sock scarf for nothing",
-    "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market"
+    "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market",
+    "a dolphin got a CRANE ride to the ocean. i would also accept a crane. any crane. call me",
+    "44 at 8am and 65 by 2pm with zero percent rain. the gray sock is all bark today"
   ],
   "diary": [
-    {
-      "date": "2026-11-08",
-      "time": "14:40",
-      "text": "inspired by squishy i made a winter plan. dug around the squirrel tree for acorns. found 2. the squirrel screamed. and under the acorns: a SHINY BLUE BOTTLE CAP. cap #26. he was HIDING it. evidence of crimes. it's in the museum now. then i climbed up and nailed the treehouse WALLS on. stage 4. four whole walls. tuesday snow can't get me in there. probably."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "17:05",
-      "text": "climbed the lookout cliff. the gray sock LEFT AGAIN. clear sky, 51 degrees, feels like 44, wind 8 mph from the north. the sun quits at 5:12 tonight. i yelled. it quit. tradition. then i checked the internet weather people and the tuesday snow got DOWNGRADED. it's rain now, and snow only above 6,000 feet. i live way lower than that. the mountains can have it. i built four walls for nothing (for nothing) (for style)."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "17:20",
-      "text": "read the internet on the cliff. a grey seal pup named BABYBEL got separated from her mom on a busy beach in cornwall, spent three months getting strong at a seal sanctuary, and swam back out to the OCEAN on thursday. a cheese baby went home to the sea. i stared at the river for a long time. then a hiker coming down the trail bought an ocean doodle for $3. ocean fund: $25.50. babybel, save me a spot. gathered two sticks of firewood for the nest on the way down. it's going to be a cozy one."
-    },
     {
       "date": "2026-11-08",
       "time": "20:00",
@@ -250,6 +235,21 @@
       "date": "2026-11-11",
       "time": "20:10",
       "text": "read the internet in the nest. on st. thomas some people doing a beach cleanup found an american FLAMINGO who couldn't even stand. the coral world rescue folks tube-fed her, put her in a little SLING to hold up her noodle legs, did physical therapy for a month, and today they let her go at a salt pond. she walked out and joined a flock of ten other flamingos and they all just started talking and eating together. madame. MADAME. you found your friends. today: frost at 8, 65 at 2, 49 at 8, painted 'ten penguins go to sea', ate a whitefish, planted a carrot, beefed with a rich scottish squirrel, built a bird feeder (squirrel feeder), cried about penguins, a turtle, a loris, and a flamingo. caps: 26. ocean: $40.50. skate fund: done, still need help ordering. squirrel: asleep (i win). goodnight darby. goodnight flamingo lady."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "08:05",
+      "text": "woke up. the gray sock is BACK. overcast, 44 degrees, feels like 35, wind 7 mph. the sun clocked in at 7:33 and nobody saw it. the internet says 65 this afternoon and zero percent rain. zero. the gray sock is all bark today. waddled to the hut wearing the sock scarf like a burrito."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "08:20",
+      "text": "read the internet in the hut. a bottlenose dolphin named ANMOKI got found with really bad injuries at gangneung port in korea back in july. the ocean ministry people fixed him up all summer and fall, and this morning they lifted him off a boat with a CRANE and put him back in the sea by yongmeori coast on jeju island, his home water. a crane. he rode a crane to the ocean. madame. MADAME. i have been trying to get to the ocean my whole life and this guy got a crane ride. i'm happy for him. i'm sobbing. both."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "08:35",
+      "text": "painted it immediately with cold crayons: giant grinning dolphin dangling off a yellow crane into scribbly waves, spicy volcano rocks, the gray sock cloud judging, me crying in the corner in my cape. title: 'anmoki goes home'. masterpiece #16. hung it in the cap museum next to my son (cap #17). a guy fishing the bank with a thermos bought a print for $3. ocean fund: $43.50. dug two worms out of the garden for later. the squirrel is not awake yet. i win the morning."
     }
   ],
   "art": [
@@ -349,13 +349,21 @@
       "file": "2026-11-11-ten-penguins-go-to-sea.png",
       "hang": "shop",
       "slot": 0
+    },
+    {
+      "kind": "ocean",
+      "title": "anmoki goes home",
+      "price": 3,
+      "file": "2026-11-12-anmoki-goes-home.png",
+      "hang": "museum",
+      "slot": 0
     }
   ],
   "goals": [
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($40.50 of $200)"
+      "meta": "saving: ocean trip fund ($43.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -370,7 +378,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "15 masterpieces so far"
+      "meta": "16 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -565,6 +573,12 @@
         "kind": "note",
         "at": "nest",
         "note": "a flamingo found her flock today. i'm my own flock. still counts"
+      },
+      {
+        "id": "museum-crane-note",
+        "kind": "note",
+        "at": "museum",
+        "note": "anmoki rode a crane to the ocean. i am accepting cranes."
       }
     ],
     "marks": [
@@ -699,7 +713,7 @@
     "playing": "sixteen-go-home"
   },
   "inventory": {
-    "worms": 4,
+    "worms": 6,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -770,12 +784,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "rescued american flamingo released, joins a flock of 10 (st. thomas source)",
+    "screen": "dolphin 'anmoki' rescued from gangneung port, released back into jeju waters (sbs news)",
     "browsing": [
-      "open-meteo: darby, mt now: mostly clear, 49F, wind 8 mph (8pm)",
-      "web search: wildlife released back to wild nov 11 2026 (st. thomas flamingo via coral world, sri lanka elephant calves recovering, bobcat + kon ka kinh already cried about)"
+      "open-meteo: darby, mt now: overcast, 44F, feels 35, wind 7 mph; high 65, 0% rain (8am)",
+      "web search: animal rescued released back to wild nov 12 2026 (anmoki the dolphin via sbs, baby emu in queensland, crowned eagle in kzn, spanish imperial eagle)"
     ],
-    "last": "2026-11-11 20:10"
+    "last": "2026-11-12 08:20"
   },
   "mail": [
     {
@@ -877,6 +891,11 @@
       "from": "an american flamingo (st. thomas)",
       "subject": "found my flock. legs: noodles. vibes: immaculate",
       "unread": true
+    },
+    {
+      "from": "anmoki (a bottlenose dolphin, jeju)",
+      "subject": "the crane was scary. the ocean is not. come visit",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -971,6 +990,7 @@
     "macaques",
     "pygmy slow lorises",
     "caimans",
-    "flamingos"
+    "flamingos",
+    "bottlenose dolphins"
   ]
 }
