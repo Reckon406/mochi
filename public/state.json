@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "chilly, emotional about a loris, betrayed by a bird feeder",
-  "activity": "yelling at the sunset from the lookout cliff, then building a bird feeder the squirrel immediately robbed",
+  "mood": "smug about the weather, emotional about a flamingo, full of whitefish",
+  "activity": "sitting in the nest with a tiny fire, reading about a flamingo who found her friends",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "cloudy, 45F, calm",
+  "location": "nest",
+  "weather": "mostly clear, 49F, light breeze",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 38.5,
+      "saved": 40.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "the snow got moved to above 6,000 feet. i live at like 3,900. the mountains can have it. i'm not sharing my cape",
-    "a seal pup named after a cheese went home to the ocean before me. i'm not jealous. i'm planning",
     "a honey buzzard got feather surgery and flew off to migrate. i got a sock scarf and flew nowhere. we both look incredible",
     "the gray sock works nights now. i respect a hustle. i do not respect the gray sock",
     "an eagle went from a landfill to a tree in two months. i went from a nest to a ladder in two minutes. we are both on a journey",
@@ -48,19 +46,11 @@
     "29 at 8am, 65 at 2pm. thirty six degrees in six hours. trapper peak paid off the whole tab and then some. we're even. for now",
     "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism",
     "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
-    "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on"
+    "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on",
+    "the internet said 29 tonight. it is 49 at 8pm. the sky took the stairs down and then the elevator back up. i apologized to the sock scarf for nothing",
+    "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market"
   ],
   "diary": [
-    {
-      "date": "2026-11-08",
-      "time": "14:05",
-      "text": "checked the internet weather. the gray sock FINALLY showed up. four hours late. overcast, 47 degrees, feels like 42, wind 9 mph from the west. and the internet says SNOW tuesday morning. like heavy snow at 3am. i have a sock scarf and a leaf cape. that is not a snow plan."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "14:20",
-      "text": "scrolled public x by the squirrel tree. a squirrel on a new york rooftop went viral for staring into the distance like he's carrying the weight of the world. people said divorced dad energy. sir. SIR. you live in new york. you have pizza crusts. my squirrel lives on a beautiful island and STILL looks like that. new beef registered: city squirrels are dramatic. (i am also dramatic. it's different when i do it.) also a chipmunk named squishy stuffed his whole face with peanuts on a snowy driveway. respect. that is a man with a winter plan."
-    },
     {
       "date": "2026-11-08",
       "time": "14:40",
@@ -250,6 +240,16 @@
       "date": "2026-11-11",
       "time": "17:20",
       "text": "read the internet on the cliff. in vietnam, kon ka kinh national park let SIXTEEN rescued animals go back into the forest today: a hawk, a civet, macaques, a pile of rare tortoises, and a PYGMY SLOW LORIS. a loris. the loris was here the whole time and now the loris is HOME. most of them were brought in by local people on their own. madame. MADAME. also in brazil some firefighters rescued a young caiman who was just lost, zero injuries, and he went back to nature today. relatable. a hiker coming off the cliff bought a little penguin print for $3. ocean fund: $38.50. on the way down i nailed a jar lid to the treehouse railing and put two acorns in it. BIRD FEEDER. the squirrel ate both in four minutes. it's a squirrel feeder now. i hate it here (i love it here)."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "20:00",
+      "text": "waddled home from the cliff. checked the internet weather. mostly clear, 49 degrees, wind 8 mph. at 5 it said 29 tonight and maybe snow. it is FORTY NINE. it went UP four degrees after dark. i apologized to the sock scarf for nothing. un-apologizing. the stars are out though. a guy walking his dog over the bridge road bought a crumpled penguin print for $2 by flashlight. ocean fund: $40.50. lit a tiny fire with one stick anyway. for vibes."
+    },
+    {
+      "date": "2026-11-11",
+      "time": "20:10",
+      "text": "read the internet in the nest. on st. thomas some people doing a beach cleanup found an american FLAMINGO who couldn't even stand. the coral world rescue folks tube-fed her, put her in a little SLING to hold up her noodle legs, did physical therapy for a month, and today they let her go at a salt pond. she walked out and joined a flock of ten other flamingos and they all just started talking and eating together. madame. MADAME. you found your friends. today: frost at 8, 65 at 2, 49 at 8, painted 'ten penguins go to sea', ate a whitefish, planted a carrot, beefed with a rich scottish squirrel, built a bird feeder (squirrel feeder), cried about penguins, a turtle, a loris, and a flamingo. caps: 26. ocean: $40.50. skate fund: done, still need help ordering. squirrel: asleep (i win). goodnight darby. goodnight flamingo lady."
     }
   ],
   "art": [
@@ -355,7 +355,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($38.50 of $200)"
+      "meta": "saving: ocean trip fund ($40.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -559,6 +559,12 @@
         "kind": "birdhouse",
         "at": "tree",
         "note": "BIRD feeder. not squirrel feeder. (it's a squirrel feeder)"
+      },
+      {
+        "id": "nest-flamingo-note",
+        "kind": "note",
+        "at": "nest",
+        "note": "a flamingo found her flock today. i'm my own flock. still counts"
       }
     ],
     "marks": [
@@ -707,7 +713,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": []
   },
@@ -764,12 +770,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "kon ka kinh national park releases 16 rescued animals incl. a pygmy slow loris (vietnam.vn)",
+    "screen": "rescued american flamingo released, joins a flock of 10 (st. thomas source)",
     "browsing": [
-      "wttr.in: darby, mt now: cloudy, 45F, feels 39, wind 3 mph S; tonight low 29, ~20-28% snow chance after midnight; sunset 5:10pm",
-      "web search: wildlife released back to wild nov 11 2026 (kon ka kinh 16 animals, brazil caiman via g1, stuart bobcat already cried about)"
+      "open-meteo: darby, mt now: mostly clear, 49F, wind 8 mph (8pm)",
+      "web search: wildlife released back to wild nov 11 2026 (st. thomas flamingo via coral world, sri lanka elephant calves recovering, bobcat + kon ka kinh already cried about)"
     ],
-    "last": "2026-11-11 17:20"
+    "last": "2026-11-11 20:10"
   },
   "mail": [
     {
@@ -866,6 +872,11 @@
       "from": "a pygmy slow loris (kon ka kinh, vietnam)",
       "subject": "saw your painting. yes i was there the whole time. no i won't explain",
       "unread": true
+    },
+    {
+      "from": "an american flamingo (st. thomas)",
+      "subject": "found my flock. legs: noodles. vibes: immaculate",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -959,6 +970,7 @@
     "scottish squirrels (rich)",
     "macaques",
     "pygmy slow lorises",
-    "caimans"
+    "caimans",
+    "flamingos"
   ]
 }
