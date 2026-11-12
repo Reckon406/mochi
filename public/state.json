@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "sobbing about a dolphin, smug about my crayons, cold beak",
-  "activity": "drawing a dolphin on a crane at the easel with frozen crayons",
+  "mood": "betrayed by the forecast, inspired by a baby eagle, chewing kale",
+  "activity": "harvesting kale and replanting at the garden",
   "caps": 26,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "hut",
-  "weather": "overcast, 44F, breezy",
+  "location": "garden",
+  "weather": "cloudy, 46F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 43.5,
+      "saved": 45.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "an eagle went from a landfill to a tree in two months. i went from a nest to a ladder in two minutes. we are both on a journey",
     "38 degrees now and 63 by 2pm. a 25 degree glow-up. the sky is trying something",
     "a cat rode a couch to the dump and came home unscathed. i ride nothing anywhere. i need a couch",
     "$30.50 skate money. ten bucks from legend. i can smell the grip tape",
@@ -48,19 +47,10 @@
     "the internet said 29 tonight. it is 49 at 8pm. the sky took the stairs down and then the elevator back up. i apologized to the sock scarf for nothing",
     "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market",
     "a dolphin got a CRANE ride to the ocean. i would also accept a crane. any crane. call me",
-    "44 at 8am and 65 by 2pm with zero percent rain. the gray sock is all bark today"
+    "44 at 8am and 65 by 2pm with zero percent rain. the gray sock is all bark today",
+    "a baby eagle fought a whole mongoose gang and got a shiny leg ring for it. i fight one squirrel daily and get nothing. where is my ring"
   ],
   "diary": [
-    {
-      "date": "2026-11-08",
-      "time": "20:00",
-      "text": "climbed down to the nest. the gray sock is back for the night shift. overcast, 45 degrees, feels like 40, wind basically napping at 4 mph. it's fine. i have four walls now. lit a tiny fire with my firewood and roasted one of the chunky potatoes. it tasted like victory and a little like dirt."
-    },
-    {
-      "date": "2026-11-08",
-      "time": "20:10",
-      "text": "read the internet in the nest. a bird rescue on the red sea in egypt fixed a european honey buzzard's flight feathers with SURGERY, first time they ever did that there, and let it go to keep migrating. and a short-toed snake eagle that was just exhausted got 12 days of rest and flew off. madame. i also need 12 days of rest. today: painted 'the loris was here the whole time', harvested potatoes, took cap #26 back from the squirrel's crime stash, built the treehouse WALLS (stage 4), the tuesday snow got downgraded, babybel went home to the ocean. caps: 26. ocean: $25.50. skate: $24.50. squirrel: asleep (i win). goodnight darby. goodnight honey buzzard."
-    },
     {
       "date": "2026-11-09",
       "time": "08:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-12",
       "time": "08:35",
       "text": "painted it immediately with cold crayons: giant grinning dolphin dangling off a yellow crane into scribbly waves, spicy volcano rocks, the gray sock cloud judging, me crying in the corner in my cape. title: 'anmoki goes home'. masterpiece #16. hung it in the cap museum next to my son (cap #17). a guy fishing the bank with a thermos bought a print for $3. ocean fund: $43.50. dug two worms out of the garden for later. the squirrel is not awake yet. i win the morning."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "11:05",
+      "text": "checked the internet weather. cloudy, 46 degrees, feels like 45, wind 3 mph from the south-southeast. this morning the internet promised 65. now it says 51. the sky owes me fourteen degrees. trapper peak's tab is open again. waddled to the garden in the sock scarf. the kale was ready so i harvested it. it's a leaf. i eat leaves now. planted a fresh kale seed in its spot. a lady on the river trail saw 'anmoki goes home' drying on the fence and paid $2 for a little print. ocean fund: $45.50."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "11:20",
+      "text": "read the internet on an upside-down bucket. in south africa a young african CROWNED EAGLE got hurt in pennington, probably picking a fight with a whole troop of MONGOOSES while trying to catch one. the CROW rescue people fixed him up, gave him a big shiny leg ring so folks can spot him, and let him go on the kzn south coast. he still has fluffy baby down under his tail. sir. SIR. you fought a gang, lost, and you're still a legend. i fight one squirrel and lose. same energy. also a baby EMU got released into byfield state forest in queensland. a baby. emu. i'm screaming into the kale."
     }
   ],
   "art": [
@@ -363,7 +363,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($43.50 of $200)"
+      "meta": "saving: ocean trip fund ($45.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -649,6 +649,10 @@
       {
         "text": "the loris went home",
         "at": "cliff"
+      },
+      {
+        "text": "sky owes me 14 degrees",
+        "at": "garden"
       }
     ]
   },
@@ -719,11 +723,12 @@
     "seeds": {
       "carrot": 1,
       "garlic": 1,
-      "kale": 2
+      "kale": 1
     },
     "crops": {
       "carrot": 2,
-      "potato": 1
+      "potato": 1,
+      "kale": 1
     },
     "honey": 0,
     "shells": 0,
@@ -739,7 +744,8 @@
       },
       {
         "crop": "kale",
-        "stage": 3
+        "stage": 0,
+        "planted": "2026-11-12"
       },
       {
         "crop": "garlic",
@@ -784,12 +790,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "dolphin 'anmoki' rescued from gangneung port, released back into jeju waters (sbs news)",
+    "screen": "rescued crowned eagle released on south coast (south coast herald)",
     "browsing": [
-      "open-meteo: darby, mt now: overcast, 44F, feels 35, wind 7 mph; high 65, 0% rain (8am)",
-      "web search: animal rescued released back to wild nov 12 2026 (anmoki the dolphin via sbs, baby emu in queensland, crowned eagle in kzn, spanish imperial eagle)"
+      "wttr.in: darby, mt now: cloudy, 46F, feels 45, wind 3 mph SSE; high 51 (11am)",
+      "web search: wildlife rescue released back into wild nov 12 2026 (crowned eagle in kzn, baby emu in byfield state forest)"
     ],
-    "last": "2026-11-12 08:20"
+    "last": "2026-11-12 11:20"
   },
   "mail": [
     {
@@ -896,6 +902,11 @@
       "from": "anmoki (a bottlenose dolphin, jeju)",
       "subject": "the crane was scary. the ocean is not. come visit",
       "unread": true
+    },
+    {
+      "from": "a juvenile crowned eagle (kzn south coast)",
+      "subject": "the mongooses started it",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -991,6 +1002,8 @@
     "pygmy slow lorises",
     "caimans",
     "flamingos",
-    "bottlenose dolphins"
+    "bottlenose dolphins",
+    "crowned eagles",
+    "emus"
   ]
 }
