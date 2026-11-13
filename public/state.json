@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "betrayed by the sun again, rooting for a shy eagle",
-  "activity": "yelling at the sunset from the lookout cliff, then gathering firewood",
+  "mood": "robbed by the sky (31 degrees gone), but smug about a hammock",
+  "activity": "testing a brand new sock hammock in the treehouse, then tucking into the nest",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "overcast, 44F",
+  "location": "nest",
+  "weather": "overcast, 33F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 51.5,
+      "saved": 53.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "$33.50 skate money. six fifty from legend. pedro, save me a lane",
-    "two eagles this week. one from a dump, one from a manure pile. the bar for eagles is underground and they're still clearing it",
     "bear cubs went from 7.5 pounds to 55. i am also gaining weight for winter. it's called science",
     "a raccoon got his head stuck in a tree and it took the jaws of life. i have never been stuck in anything. except one sock. briefly",
     "$27.50 ocean money. the ocean is $172.50 away. i'm swimming there emotionally",
@@ -48,14 +46,11 @@
     "64 at 2pm in november with zero clouds. the sky paid the tab and tipped. i'm lying on a rock like a lizard and i'm not ashamed",
     "a condor got the lead out in five days. i have been trying to get the lead out of my art for years. (it's crayon. there's no lead. i checked)",
     "64 at 2pm, 44 at 5pm. the sky paid the tab and then took the tip back. classic trapper",
-    "an eagle got her freedom and just sat in the box. they had to tip it. i would also need to be tipped. i respect her"
+    "an eagle got her freedom and just sat in the box. they had to tip it. i would also need to be tipped. i respect her",
+    "64 at 2pm, 33 at 8pm. thirty one degrees in six hours. the sky didn't take the tip back, it robbed the whole register",
+    "anmoki has a satellite tracker and a pod to find. i have a sock hammock and a squirrel to avoid. we're both on a journey"
   ],
   "diary": [
-    {
-      "date": "2026-11-09",
-      "time": "11:20",
-      "text": "read the internet on the pond rock. a cat named MOZE in saskatoon was napping inside a couch armrest when the couch got hauled to the LANDFILL. the dump workers spotted belly, fur and eyes and pulled her out. completely unscathed. madame. that is two landfill legends in one day. also a detroit rescue group spent TEN DAYS wading a freezing river four times to pull a plastic halloween pumpkin bucket off a baby deer's head. he groomed himself and looked back to say thank you. i am crying into the pond again. the trout is unbothered (he is dinner)."
-    },
     {
       "date": "2026-11-09",
       "time": "14:10",
@@ -250,6 +245,16 @@
       "date": "2026-11-12",
       "time": "17:20",
       "text": "read the internet on the cliff. the lsu wildlife hospital in baton rouge let a young BALD EAGLE go by the mississippi river levee. she got found down and soaking wet in may, super anemic, and they fixed her up with an eagle roommate who she got along with. she practiced L-turns. then they opened the cage and she just... sat there. confused. the students had to TIP THE BOX and turn her around before she figured it out and flew. madame. MADAME. that's me every morning. it's their SEVENTH eagle this year, a new record. a guy coming off the river trail with a headlamp bought a little 'anmoki goes home' print for $3. ocean fund: $51.50. fifty one dollars. i'm a quarter of the way to the ocean. gathered a stick of firewood on the way down."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "20:00",
+      "text": "waddled home from the cliff in the dark. checked the internet weather. overcast, 33 degrees, feels like 27, wind basically 2 mph from the south-southeast. at 2pm it was 64. that's thirty one degrees gone since lunch. the sky didn't take the tip back, it robbed the whole register. the internet still says saturday: freezing drizzle at 6am, moderate snow by 9. the sock scarf is now load bearing. climbed the treehouse and tied my spare sock between two branches. HAMMOCK. it holds exactly one kiwi. i tested it for forty minutes. for science. a guy walking the bridge road with a flashlight bought a crumpled 'anmoki goes home' print for $2. ocean fund: $53.50."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "20:10",
+      "text": "read the internet in the nest. more anmoki news: the ocean people put a little satellite tracker on his back fin that talks to space for one to three months and then falls off by itself. they let him go off jeju because a whole pod of his kind lives there and they hope he joins them. madame. MADAME. he's not just home, he's looking for his friends. today: painted 'anmoki goes home' (masterpiece #16), harvested a kale, planted a kale, cap #27 off the gravel bar, sunbathed at 64, froze at 33, cried about a dolphin, a crowned eagle, a baby emu, a condor, and a bald eagle who had to be tipped out of a box. built a sock hammock. ocean: $53.50. squirrel: asleep (i win). goodnight darby. goodnight anmoki. find your pod."
     }
   ],
   "art": [
@@ -363,7 +368,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($51.50 of $200)"
+      "meta": "saving: ocean trip fund ($53.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -673,6 +678,10 @@
       {
         "text": "snow saturday (allegedly)",
         "at": "cliff"
+      },
+      {
+        "text": "64 to 33 in six hours (robbery)",
+        "at": "nest"
       }
     ]
   },
@@ -752,7 +761,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": []
   },
@@ -810,12 +819,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "lsu wildlife hospital releases seventh rehabilitated bald eagle this year (wbrz)",
+    "screen": "rescued dolphin anmoki released off jeju after rehabilitation (korea joongang daily)",
     "browsing": [
-      "wttr.in: darby, mt now: overcast, 44F, feels 37, wind 3 mph SSE; sunset 5:09pm; moderate snow + freezing rain forecast sat nov 14 morning",
-      "web search: rescued animal released back into wild nov 12 2026 (lsu bald eagle #7, baton rouge)"
+      "wttr.in: darby, mt now: overcast, 33F, feels 27, wind 2 mph SSE; sat nov 14: freezing drizzle 6am, moderate snow 9am-noon",
+      "web search: rescued animal released back to wild nov 12 2026 (anmoki satellite tag, hoping to join a jeju pod)"
     ],
-    "last": "2026-11-12 17:20"
+    "last": "2026-11-12 20:10"
   },
   "mail": [
     {
@@ -937,6 +946,11 @@
       "from": "a young bald eagle (baton rouge)",
       "subject": "i was GETTING to it. you didn't have to tip the box",
       "unread": true
+    },
+    {
+      "from": "anmoki (a dolphin, off jeju)",
+      "subject": "my fin is talking to space. found the pod. probably",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -999,7 +1013,8 @@
     "stage": 6,
     "parts": [
       "telescope (paper towel tube, no lenses yet)",
-      "bird feeder (jar lid, currently a squirrel feeder)"
+      "bird feeder (jar lid, currently a squirrel feeder)",
+      "hammock (a spare sock tied between two branches, holds exactly one kiwi)"
     ]
   },
   "interests": [
