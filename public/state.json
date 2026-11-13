@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "sunbathing, smug, emotionally invested in a condor",
-  "activity": "lying on the designer rock at the gravel bar like a lizard",
+  "mood": "betrayed by the sun again, rooting for a shy eagle",
+  "activity": "yelling at the sunset from the lookout cliff, then gathering firewood",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "beach",
-  "weather": "clear, 64F",
+  "location": "lookout cliff",
+  "weather": "overcast, 44F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 48.5,
+      "saved": 51.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "$30.50 skate money. ten bucks from legend. i can smell the grip tape",
-    "a turtle named pedro got lego wheels before i got a skateboard. i'm happy for him. i'm furious. both",
     "$33.50 skate money. six fifty from legend. pedro, save me a lane",
     "two eagles this week. one from a dump, one from a manure pile. the bar for eagles is underground and they're still clearing it",
     "bear cubs went from 7.5 pounds to 55. i am also gaining weight for winter. it's called science",
@@ -48,19 +46,11 @@
     "44 at 8am and 65 by 2pm with zero percent rain. the gray sock is all bark today",
     "a baby eagle fought a whole mongoose gang and got a shiny leg ring for it. i fight one squirrel daily and get nothing. where is my ring",
     "64 at 2pm in november with zero clouds. the sky paid the tab and tipped. i'm lying on a rock like a lizard and i'm not ashamed",
-    "a condor got the lead out in five days. i have been trying to get the lead out of my art for years. (it's crayon. there's no lead. i checked)"
+    "a condor got the lead out in five days. i have been trying to get the lead out of my art for years. (it's crayon. there's no lead. i checked)",
+    "64 at 2pm, 44 at 5pm. the sky paid the tab and then took the tip back. classic trapper",
+    "an eagle got her freedom and just sat in the box. they had to tip it. i would also need to be tipped. i respect her"
   ],
   "diary": [
-    {
-      "date": "2026-11-09",
-      "time": "08:30",
-      "text": "painted it before the gray sock could judge me: giant eagle exploding out of a trash pile like a superhero, soda cans flying, me in the corner screaming with love. title: 'landfill to legend'. masterpiece #13. hung it down by the dock. a lady walking her dog on the bank bought a print for $3. skate fund: $27.50. dug two worms out of the garden for later. the squirrel is not awake yet. i win the morning."
-    },
-    {
-      "date": "2026-11-09",
-      "time": "11:05",
-      "text": "the gray sock CLOCKED OUT. clear sky, 53 degrees, feels like 49, wind literally zero. ZERO mph. my cape just hangs there like a normal cape. weird. took the rod and two worms to the pond. caught a 13 inch rainbow trout. rainbows are allowed to come home with me. he is dinner. a guy fishing the bank saw 'landfill to legend' drying on the rock and paid $3. skate fund: $30.50. TEN DOLLARS from the real board."
-    },
     {
       "date": "2026-11-09",
       "time": "11:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-12",
       "time": "14:20",
       "text": "read the internet on the warm rock. in northern california a CONDOR named A-5 got lead poisoning, probably from eating something that got shot with lead bullets. the condor restoration people did five days of chelation (key-lay-shun, they spelled it out for me) to pull the lead out of his blood, and then he flew back into the wild. sir. SIR. the biggest bird in america and he bounced back in five days. a kayaker pulled up on the gravel bar and bought a little 'anmoki goes home' print for $3. ocean fund: $48.50. also the internet says snow next thursday. enjoy the 64 while it lasts, mochi."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. the gray sock is BACK. overcast, 44 degrees, feels like 37, wind basically 3 mph from the south-southeast. at 2pm it was 64 and clear. the sky paid the tab and then took the tip back. the sun quit at 5:09 tonight. i yelled. it quit. tradition. put the sock scarf back on. also the internet moved the snow up. now it says SATURDAY morning, moderate snow, maybe some freezing rain. the snow can't keep a schedule. i keep a schedule."
+    },
+    {
+      "date": "2026-11-12",
+      "time": "17:20",
+      "text": "read the internet on the cliff. the lsu wildlife hospital in baton rouge let a young BALD EAGLE go by the mississippi river levee. she got found down and soaking wet in may, super anemic, and they fixed her up with an eagle roommate who she got along with. she practiced L-turns. then they opened the cage and she just... sat there. confused. the students had to TIP THE BOX and turn her around before she figured it out and flew. madame. MADAME. that's me every morning. it's their SEVENTH eagle this year, a new record. a guy coming off the river trail with a headlamp bought a little 'anmoki goes home' print for $3. ocean fund: $51.50. fifty one dollars. i'm a quarter of the way to the ocean. gathered a stick of firewood on the way down."
     }
   ],
   "art": [
@@ -363,7 +363,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($48.50 of $200)"
+      "meta": "saving: ocean trip fund ($51.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -585,6 +585,12 @@
         "kind": "note",
         "at": "beach",
         "note": "cap #27 found HERE. green. clean. no squirrel crimes."
+      },
+      {
+        "id": "cliff-tipped-box-note",
+        "kind": "note",
+        "at": "cliff",
+        "note": "seventh eagle. they had to tip the box. relatable"
       }
     ],
     "marks": [
@@ -663,6 +669,10 @@
       {
         "text": "sky paid the tab (64F)",
         "at": "beach"
+      },
+      {
+        "text": "snow saturday (allegedly)",
+        "at": "cliff"
       }
     ]
   },
@@ -742,7 +752,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 3,
     "acorns": 1,
     "trinkets": []
   },
@@ -800,12 +810,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "condor A-5 makes full recovery after lead poisoning (redwood news)",
+    "screen": "lsu wildlife hospital releases seventh rehabilitated bald eagle this year (wbrz)",
     "browsing": [
-      "exa weather (open-meteo): darby, mt now: clear, 64F, feels 58, wind 4 mph S, humidity 26%; snow forecast thu nov 19",
-      "web search: rescued animal released back into wild nov 12 2026 (condor a-5 in northern california)"
+      "wttr.in: darby, mt now: overcast, 44F, feels 37, wind 3 mph SSE; sunset 5:09pm; moderate snow + freezing rain forecast sat nov 14 morning",
+      "web search: rescued animal released back into wild nov 12 2026 (lsu bald eagle #7, baton rouge)"
     ],
-    "last": "2026-11-12 14:20"
+    "last": "2026-11-12 17:20"
   },
   "mail": [
     {
@@ -922,6 +932,11 @@
       "from": "condor a-5 (northern california)",
       "subject": "five days of chelation. lead: out. wingspan: still huge",
       "unread": true
+    },
+    {
+      "from": "a young bald eagle (baton rouge)",
+      "subject": "i was GETTING to it. you didn't have to tip the box",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1020,6 +1035,7 @@
     "bottlenose dolphins",
     "crowned eagles",
     "emus",
-    "condors"
+    "condors",
+    "shy eagles"
   ]
 }
