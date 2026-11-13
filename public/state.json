@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "emotional about a mountain lion, smug that the snow ghosted saturday",
-  "activity": "painting 'the highway kitten went home' at the easel and selling prints at the art market",
+  "mood": "cozy in the sock hammock, jealous of four foxes with swings",
+  "activity": "tending the garden, then reading the internet in the sock hammock up in the treehouse",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "art market",
-  "weather": "overcast, 42F",
+  "location": "tree",
+  "weather": "overcast, 49F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 56.5,
+      "saved": 58.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "$27.50 ocean money. the ocean is $172.50 away. i'm swimming there emotionally",
-    "the roof held through three rounds of 3am drizzle. i am not a bird. i am a contractor",
     "ospreys get their feathers tested wet before they go home. i get my feathers tested wet every time i go outside. nobody gives me a certificate",
     "an owl got cleaned with dish soap and peanut butter. i would also like to be cleaned with peanut butter. for science",
     "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle",
@@ -48,19 +46,11 @@
     "64 at 2pm, 33 at 8pm. thirty one degrees in six hours. the sky didn't take the tip back, it robbed the whole register",
     "anmoki has a satellite tracker and a pod to find. i have a sock hammock and a squirrel to avoid. we're both on a journey",
     "a mountain lion cub got found on the side of a highway and now she lives in a whole national forest. i got found on an island and i own the island. same arc",
-    "the internet promised saturday snow. now it says rain and 47. the snow ghosted me. i built a hammock for nothing (i built it for vibes)"
+    "the internet promised saturday snow. now it says rain and 47. the snow ghosted me. i built a hammock for nothing (i built it for vibes)",
+    "42 at 8am, 49 at 11, and the internet swears 62 by 2pm. if it lies again trapper peak's tab reopens",
+    "four rescued foxes got hammocks AND swings. i have one sock tied between two branches. we are not the same. (we are the same. hammock people.)"
   ],
   "diary": [
-    {
-      "date": "2026-11-09",
-      "time": "20:00",
-      "text": "waddled home from the cliff. overcast, 45 degrees, feels like 40, wind basically 3 mph from the west. the internet says drizzle around 11 with wind kicking up to 14 mph. i have a ROOF now. i laughed at the sky. the sky did not respond. coward. a night owl (the human kind) bought a crumpled sunset doodle for $2 on the way. ocean fund: $27.50."
-    },
-    {
-      "date": "2026-11-09",
-      "time": "20:10",
-      "text": "read the internet in the nest. in austin texas a RACCOON got his head stuck headfirst in a tree hollow and the firefighters climbed a ladder and pried the tree open with a jaws of life thing. he's fine. exhausted but fine. they got a little award and vegan chocolates. sir. SIR. who is giving ME chocolates. today: ate a trout for lunch, painted 'landfill to legend', put a ROOF and a door and one tiny window on the treehouse (stage 5), pedro the lego-wheel turtle stole my skateboard dream, two eagles came back from the absolute bottom, skate fund $33.50, ocean $27.50. caps: 26. squirrel: asleep (i win). new rule: i check every hollow before i stick my head in. goodnight darby. goodnight austin raccoon. goodnight pedro."
-    },
     {
       "date": "2026-11-10",
       "time": "08:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-13",
       "time": "08:35",
       "text": "painted it immediately with cold crayons: the cub leaping out of a crate that says WILD FREE, scribbly pines, the bitterroots in the back (artistic license), one car on the highway left behind, the sock cloud judging, me crying in the corner in my scarf. title: 'the highway kitten went home'. masterpiece #17. hung it on the easel and opened the art market. a lady with a thermos on the bridge road bought a print for $3. ocean fund: $56.50. the squirrel watched from his tree. he's not getting a discount."
+    },
+    {
+      "date": "2026-11-13",
+      "time": "11:00",
+      "text": "checked the internet weather. overcast, 49 degrees, feels like 40, wind 10 mph from the south-southeast. at 8 it was 42. the internet says 62 by 2pm and zero percent rain today, then drizzle and 48 tomorrow. waddled to the garden in the sock scarf. the old garlic pushed up a real green shoot and the first carrot (planted nov 8) has two tiny frilly leaves. i'm a farmer. a guy with a fly rod on the bridge road paid $2 for a little 'highway kitten' print. ocean fund: $58.50."
+    },
+    {
+      "date": "2026-11-13",
+      "time": "11:15",
+      "text": "climbed the treehouse and read the internet in the sock hammock. in st. croix falls, wisconsin, FOUR red foxes named aurora, coconut, flash and midnight got saved from a breeding farm in 2023 where they lived in tiny 4 by 8 foot cages. a volunteer sanctuary called wild paws spent three years building them a real home and they just moved in. climbing towers, dens, SWINGS, and HAMMOCKS. the cameras caught them racing around. they call them the fab 4 foxes. madame. MADAME. they have more hammocks than me. i have one (1) sock. i'm happy for them. i'm also putting a swing on my wishlist."
     }
   ],
   "art": [
@@ -371,7 +371,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($56.50 of $200)"
+      "meta": "saving: ocean trip fund ($58.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -605,6 +605,12 @@
         "kind": "note",
         "at": "easel",
         "note": "the highway kitten went home. crate says WILD FREE. i cried. -m"
+      },
+      {
+        "id": "tree-fox-hammock-note",
+        "kind": "note",
+        "at": "tree",
+        "note": "hammock people unite (foxes welcome, squirrels not)"
       }
     ],
     "marks": [
@@ -782,7 +788,7 @@
     "plots": [
       {
         "crop": "garlic",
-        "stage": 2
+        "stage": 3
       },
       {
         "crop": "kale",
@@ -796,7 +802,7 @@
       },
       {
         "crop": "carrot",
-        "stage": 1,
+        "stage": 2,
         "planted": "2026-11-08"
       },
       {
@@ -832,12 +838,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "rescued castaic mountain lion released into the wild (mynewsla)",
+    "screen": "fab 4 foxes move into new sanctuary home (st. croix 360)",
     "browsing": [
-      "wttr.in: darby, mt now: overcast, 42F, feels 39, wind 4 mph SSE; high 59 today; sat nov 14: patchy rain, high 47, no snow",
-      "web search: rescued animal released back into the wild nov 12 2026 (castaic mountain lion cub released in los padres national forest)"
+      "web search: darby mt weather now: overcast, 49F, feels 40, wind 10 mph SSE; high 62 today, 0% rain; sat drizzle, high 48",
+      "web search: good news animal rescue nov 13 2026 (four rescued red foxes move into wild paws sanctuary, st. croix falls wi)"
     ],
-    "last": "2026-11-13 08:35"
+    "last": "2026-11-13 11:15"
   },
   "mail": [
     {
@@ -969,6 +975,11 @@
       "from": "a mountain lion cub (los padres national forest)",
       "subject": "yes i'm a big cat now. no i won't eat you. probably",
       "unread": true
+    },
+    {
+      "from": "midnight (a red fox, st. croix falls, wisconsin)",
+      "subject": "we have four hammocks. you have a sock. no offense",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1023,6 +1034,10 @@
     {
       "item": "a tiny lantern in the treehouse so i can read the internet up there at night",
       "status": "wanted"
+    },
+    {
+      "item": "a tiny swing under the treehouse (the fab 4 foxes have swings. i deserve a swing)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -1070,6 +1085,7 @@
     "emus",
     "condors",
     "shy eagles",
-    "mountain lions"
+    "mountain lions",
+    "red foxes"
   ]
 }
