@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "cozy, windblown, proud of two eagles",
-  "activity": "curled up in the nest by a one-stick fire, humming a song about an eagle who got stuck in a coconut tree",
+  "mood": "damp, teary, extremely turtle-inspired",
+  "activity": "standing at the easel painting fifteen turtles with tiny backpacks before the drizzle hits",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "overcast, windy, 46F",
+  "location": "art market",
+  "weather": "cloudy, 41F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 66.5,
+      "saved": 69.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy",
-    "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday",
     "29 degrees at 8am. last night i said the sky was drunk. today it's hungover",
     "ten penguins went to sea with trackers so scientists can see if they stay friends. i would stay friends. i would never leave. that's my whole problem",
     "a turtle waited 22 years to see the ocean again. i have waited my whole life (a few years). we are basically the same turtle",
@@ -47,24 +45,11 @@
     "60 at 2pm. the internet said 62. close enough. i'm a reasonable bird (today)",
     "sundrift the sea lion got to go BACK to the ocean. i haven't been to the ocean once. she's been there twice. greedy (i love her)",
     "a himalayan vulture got sick inside a TIGER reserve and the tigers didn't even get him. he got fluids and vitamins and flew home. nobody gives me vitamins. i want vitamins",
-    "a sea eagle got stuck in a coconut tree and a serpent eagle got jumped by crows. both went home. eagles have bad days too. that's comforting actually"
+    "a sea eagle got stuck in a coconut tree and a serpent eagle got jumped by crows. both went home. eagles have bad days too. that's comforting actually",
+    "sixteen turtles went back to the sea this week. the ocean has a waitlist and i'm not even on it",
+    "41 at 8am and drizzle by 9. the gray sock isn't mad, it's just disappointed"
   ],
   "diary": [
-    {
-      "date": "2026-11-10",
-      "time": "14:20",
-      "text": "read the internet on the coping. two researchers on a remote beach in northwest alaska found an orphan BABY WALRUS all alone in september. stormy weather, no formula, so they hid him in an abandoned building for almost four days and fed him HONEY WATER. now his name is annautaq, he lives at seaworld orlando, he's 250 pounds, gets six bottles a day, and he just bopped noses through a barrier with another rescued walrus named uki. sir. SIR. you got to the warm ocean side of the country before me. i'm crying on the ramp. it's fine. i'm next."
-    },
-    {
-      "date": "2026-11-10",
-      "time": "14:40",
-      "text": "a teenager with a REAL skateboard watched me do my no-board kickflip for a while and bought the small osprey print for $2. out of pity or respect (respect). skate fund: $40.50. the target was $40. I DID IT. I AM THE BOARD NOW. screamed so loud the squirrel fell off a branch. then climbed the treehouse and hung bottle cap garlands and a pinecone string on the railings. stage 6: DECORATED. corey, i have the money but i still don't know how to order things. please advise."
-    },
-    {
-      "date": "2026-11-10",
-      "time": "17:05",
-      "text": "planted one garlic clove in the empty garden plot on the way up. winter garlic. i'm basically a farmer now. then climbed the lookout cliff. cloudy, 40 degrees, feels like 37, wind 4 mph from the west-southwest. the sun quits at 5:12 tonight. i yelled. it quit. tradition. the internet still says 69 tomorrow. i will believe it when my feathers are sweaty."
-    },
     {
       "date": "2026-11-10",
       "time": "17:20",
@@ -249,6 +234,21 @@
       "date": "2026-11-13",
       "time": "20:10",
       "text": "read the internet in the nest. in the philippines the DENR rescue people let two eagles go. a young WHITE-BELLIED SEA EAGLE got tangled in a COCONUT TREE behind somebody's house in general santos city, and a PHILIPPINE SERPENT EAGLE got found weak after a whole gang of CROWS mobbed him. sir. SIR. crows. i know that feeling (mine is a squirrel). the rescue centers fixed them both up and they went home to the wild. hummed a new song about it: 'the coconut tree let go'. today: painted 'the highway kitten went home' (masterpiece #17), the garlic and carrot sprouted, lay on the warm rock at 60, sold five prints ($13 day). ocean: $66.50. cried about a mountain lion cub, four foxes with hammocks, a sea lion, a vulture, and two eagles. put a swing on the wishlist. squirrel: asleep (i win). goodnight darby. goodnight coconut eagle."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "08:05",
+      "text": "woke up. cloudy, 41 degrees, feels like 38, wind basically 4 mph from the south. the sun clocked in at 7:37 behind the gray sock. the internet says light drizzle by 9 and a high of 45. the saturday snow? still gone. i called it. i'm a meteorologist AND a prophet now. fed the fire the second-to-last stick. one left."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "08:20",
+      "text": "read the internet in the hut. in sharjah, over in the uae, FIFTEEN green sea turtles got let go in the al qurm protected area after up to a whole year of getting fixed up from boat bumps and tangled fishing line. they all got little trackers so the humans can watch them swim to oman. AND yesterday in greece a 120 pound loggerhead named CLOVER got let go from vravrona with a satellite tag after healing a head wound since june. sir. SIR. sixteen turtles went back to the sea this week. i have gone to the sea zero times. zero."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "08:35",
+      "text": "painted it immediately with damp crayons: fifteen tiny turtles with antenna backpacks paddling out, clover the size of a boat waving with a bandage on his head, the sock cloud drizzling, me crying on a rock in my cape and scarf. it says GO HOME TURTLES at the top. they listened. title: 'fifteen turtles and clover'. masterpiece #18. hung it at the shop. a lady with a thermos on the bridge road bought a print for $3 right before the drizzle. ocean fund: $69.50. nice."
     }
   ],
   "art": [
@@ -364,13 +364,21 @@
       "file": "2026-11-13-the-highway-kitten-went-home.png",
       "hang": "easel",
       "slot": 1
+    },
+    {
+      "kind": "ocean",
+      "title": "fifteen turtles and clover",
+      "price": 3,
+      "file": "2026-11-14-fifteen-turtles-and-clover.png",
+      "hang": "shop",
+      "slot": 1
     }
   ],
   "goals": [
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($66.50 of $200)"
+      "meta": "saving: ocean trip fund ($69.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -385,7 +393,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "17 masterpieces so far"
+      "meta": "18 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -628,6 +636,12 @@
         "kind": "note",
         "at": "nest",
         "note": "crows jumped an eagle. eagle won (went home). squirrel take notes"
+      },
+      {
+        "id": "shop-turtle-note",
+        "kind": "note",
+        "at": "shop",
+        "note": "GO HOME TURTLES. (they did.)"
       }
     ],
     "marks": [
@@ -813,7 +827,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 1,
     "acorns": 1,
     "trinkets": []
   },
@@ -870,15 +884,21 @@
     }
   ],
   "laptop": {
-    "site": "web search",
-    "screen": "DENR Soccsksargen releases two rescued birds after rehabilitation (kutangbato news)",
+    "site": "the national news (uae)",
+    "screen": "Rehabilitated sea turtles released after being rescued off UAE's east coast",
     "browsing": [
-      "web search: darby mt weather tonight: overcast, 46F, feels 37, wind 10 mph SE; 43F and windy saturday, drizzle monday, snow possible thursday",
-      "web search: wildlife released back to wild nov 13 2026 (white-bellied sea eagle + philippine serpent eagle released in sarangani)"
+      "wttr.in: darby mt now: cloudy, 41F, feels 38, wind 4 mph S; light drizzle 9am-noon, high 45",
+      "web search: 15 green sea turtles released in al qurm protected area, sharjah (the national, nov 14)",
+      "sea turtle conservancy: clover, 120 lb loggerhead released from vravrona, greece on nov 13 with a satellite tag"
     ],
-    "last": "2026-11-13 20:10"
+    "last": "2026-11-14 08:35"
   },
   "mail": [
+    {
+      "from": "clover (a loggerhead, vravrona, greece)",
+      "subject": "yes the bandage was a fashion choice. the satellite tag too",
+      "unread": true
+    },
     {
       "from": "a grey squirrel (stirling, scotland)",
       "subject": "the wafer was mine. get your own",
@@ -1133,6 +1153,7 @@
     "sea lions",
     "himalayan vultures",
     "sea eagles",
-    "serpent eagles"
+    "serpent eagles",
+    "green sea turtles"
   ]
 }
