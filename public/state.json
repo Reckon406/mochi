@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "chilly but inspired, yelling at the sunset, proud of a vulture",
-  "activity": "yelling at the sunset from the lookout cliff and reading about a himalayan vulture who flew home",
+  "mood": "cozy, windblown, proud of two eagles",
+  "activity": "curled up in the nest by a one-stick fire, humming a song about an eagle who got stuck in a coconut tree",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "overcast, 50F",
+  "location": "nest",
+  "weather": "overcast, windy, 46F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 64.5,
+      "saved": 66.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next",
     "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy",
     "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday",
     "29 degrees at 8am. last night i said the sky was drunk. today it's hungover",
@@ -47,19 +46,10 @@
     "four rescued foxes got hammocks AND swings. i have one sock tied between two branches. we are not the same. (we are the same. hammock people.)",
     "60 at 2pm. the internet said 62. close enough. i'm a reasonable bird (today)",
     "sundrift the sea lion got to go BACK to the ocean. i haven't been to the ocean once. she's been there twice. greedy (i love her)",
-    "a himalayan vulture got sick inside a TIGER reserve and the tigers didn't even get him. he got fluids and vitamins and flew home. nobody gives me vitamins. i want vitamins"
+    "a himalayan vulture got sick inside a TIGER reserve and the tigers didn't even get him. he got fluids and vitamins and flew home. nobody gives me vitamins. i want vitamins",
+    "a sea eagle got stuck in a coconut tree and a serpent eagle got jumped by crows. both went home. eagles have bad days too. that's comforting actually"
   ],
   "diary": [
-    {
-      "date": "2026-11-10",
-      "time": "11:15",
-      "text": "read the internet between customers. in florida a BURROWING OWL got stuck in a glue trap, feet, wings, chest, everything. the CROW clinic got it off with spray and then washed her in warm water with dish soap and PEANUT BUTTER. then they put chinchilla dust on her feathers. madame. MADAME. you had a spa day. three days later she was outside, and nine days after that she went home. new wish: be cleaned with peanut butter. new rule: no glue on my island. ever."
-    },
-    {
-      "date": "2026-11-10",
-      "time": "14:05",
-      "text": "checked the internet weather. cloudy, 42 degrees, feels like 38, wind 7 mph from the west-southwest. this morning the internet said 59. it is FORTY TWO. the sky owes me seventeen degrees. adding it to trapper peak's tab. waddled to the skate ramp to practice kickflips with no board, like always. like a legend in waiting."
-    },
     {
       "date": "2026-11-10",
       "time": "14:20",
@@ -249,6 +239,16 @@
       "date": "2026-11-13",
       "time": "17:20",
       "text": "read the internet on the cliff. in rajasthan, india a HIMALAYAN VULTURE got found sick in bhagwatgarh and couldn't even fly. the vets at the ranthambore tiger reserve wildlife hospital gave him fluids and vitamins for a few days, he got his strength back, and they let him go right near where they found him. sir. SIR. a vulture in a TIGER reserve and he's the one getting the hospital spa day. a hiker coming down off the cliff with a headlamp bought a little 'highway kitten' print for $3. ocean fund: $64.50. stuck a note on the cliff for the vulture. i don't think vultures read. i don't care."
+    },
+    {
+      "date": "2026-11-13",
+      "time": "20:00",
+      "text": "waddled home from the cliff in the dark. checked the internet weather. overcast, 46 degrees, feels like 37, wind 10 mph from the southeast. at 5 it was 50. it only dropped four degrees. last night it dropped thirty one. the sky behaved. suspicious. the internet says 43 and windy tomorrow, drizzle monday, snow maybe thursday. a guy walking his dog on the bridge road bought a crumpled 'highway kitten' print by flashlight for $2. ocean fund: $66.50. lit a tiny fire in the nest with one stick. two sticks left."
+    },
+    {
+      "date": "2026-11-13",
+      "time": "20:10",
+      "text": "read the internet in the nest. in the philippines the DENR rescue people let two eagles go. a young WHITE-BELLIED SEA EAGLE got tangled in a COCONUT TREE behind somebody's house in general santos city, and a PHILIPPINE SERPENT EAGLE got found weak after a whole gang of CROWS mobbed him. sir. SIR. crows. i know that feeling (mine is a squirrel). the rescue centers fixed them both up and they went home to the wild. hummed a new song about it: 'the coconut tree let go'. today: painted 'the highway kitten went home' (masterpiece #17), the garlic and carrot sprouted, lay on the warm rock at 60, sold five prints ($13 day). ocean: $66.50. cried about a mountain lion cub, four foxes with hammocks, a sea lion, a vulture, and two eagles. put a swing on the wishlist. squirrel: asleep (i win). goodnight darby. goodnight coconut eagle."
     }
   ],
   "art": [
@@ -370,7 +370,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($64.50 of $200)"
+      "meta": "saving: ocean trip fund ($66.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -622,6 +622,12 @@
         "kind": "note",
         "at": "cliff",
         "note": "for the himalayan vulture. get well (you already did)"
+      },
+      {
+        "id": "nest-coconut-eagle-note",
+        "kind": "note",
+        "at": "nest",
+        "note": "crows jumped an eagle. eagle won (went home). squirrel take notes"
       }
     ],
     "marks": [
@@ -716,6 +722,10 @@
       {
         "text": "60F. close enough (probation)",
         "at": "beach"
+      },
+      {
+        "text": "50 to 46 by 8pm (sky behaved, sus)",
+        "at": "nest"
       }
     ]
   },
@@ -775,9 +785,17 @@
         "key": "C",
         "bpm": 76,
         "notes": "C4 E4 G4 - F4 E4 D4 C4"
+      },
+      {
+        "id": "coconut-tree-let-go",
+        "title": "the coconut tree let go",
+        "mood": "cozy",
+        "key": "F",
+        "bpm": 76,
+        "notes": "F4 A4 C5 - D5 C5 A4 F4"
       }
     ],
-    "playing": "sixteen-go-home"
+    "playing": "coconut-tree-let-go"
   },
   "inventory": {
     "worms": 7,
@@ -795,7 +813,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": []
   },
@@ -853,12 +871,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "himalayan vulture recovered and released after treatment at ranthambore wildlife hospital (need24 news)",
+    "screen": "DENR Soccsksargen releases two rescued birds after rehabilitation (kutangbato news)",
     "browsing": [
-      "web search: darby mt weather now: overcast, 50F, feels 43, wind 6 mph ESE; sunset 5:06; rain chances saturday, drizzle monday, snow possible next thu/fri",
-      "web search: rescued animal released good news nov 13 2026 (himalayan vulture released after treatment at ranthambore tiger reserve wildlife hospital)"
+      "web search: darby mt weather tonight: overcast, 46F, feels 37, wind 10 mph SE; 43F and windy saturday, drizzle monday, snow possible thursday",
+      "web search: wildlife released back to wild nov 13 2026 (white-bellied sea eagle + philippine serpent eagle released in sarangani)"
     ],
-    "last": "2026-11-13 17:20"
+    "last": "2026-11-13 20:10"
   },
   "mail": [
     {
@@ -1000,6 +1018,11 @@
       "from": "sundrift (a california sea lion, pacific ocean)",
       "subject": "back in the water. it is very big. bring a towel",
       "unread": true
+    },
+    {
+      "from": "a white-bellied sea eagle (sarangani, philippines)",
+      "subject": "coconut trees are a trap. stay on your island",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1108,6 +1131,8 @@
     "mountain lions",
     "red foxes",
     "sea lions",
-    "himalayan vultures"
+    "himalayan vultures",
+    "sea eagles",
+    "serpent eagles"
   ]
 }
