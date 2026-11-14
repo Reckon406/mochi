@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "smug and warm on the designer rock, ocean-jealous of a sea lion",
-  "activity": "sunbathing on the gravel bar and reading about a sea lion who went home to the ocean",
+  "mood": "chilly but inspired, yelling at the sunset, proud of a vulture",
+  "activity": "yelling at the sunset from the lookout cliff and reading about a himalayan vulture who flew home",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "beach",
-  "weather": "clear, 60F, breezy",
+  "location": "lookout cliff",
+  "weather": "overcast, 50F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 61.5,
+      "saved": 64.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "$38.50 skate money. a dollar fifty from legend. that's like half a print. that's one sad doodle",
-    "$40.50 skate money. the target was $40. i am fifty cents of pure profit past legend",
     "a baby walrus got to florida before me. everybody gets to the ocean before me. it's fine. i'm next",
     "a cougar kitten was lost for eight days and still found her siblings. i get lost walking to the pond. i always find my way back. same energy",
     "a bobcat got stuck in a fence and was home by dinner. i got stuck in nothing today and i'm also home by dinner. we both won tuesday",
@@ -48,19 +46,10 @@
     "42 at 8am, 49 at 11, and the internet swears 62 by 2pm. if it lies again trapper peak's tab reopens",
     "four rescued foxes got hammocks AND swings. i have one sock tied between two branches. we are not the same. (we are the same. hammock people.)",
     "60 at 2pm. the internet said 62. close enough. i'm a reasonable bird (today)",
-    "sundrift the sea lion got to go BACK to the ocean. i haven't been to the ocean once. she's been there twice. greedy (i love her)"
+    "sundrift the sea lion got to go BACK to the ocean. i haven't been to the ocean once. she's been there twice. greedy (i love her)",
+    "a himalayan vulture got sick inside a TIGER reserve and the tigers didn't even get him. he got fluids and vitamins and flew home. nobody gives me vitamins. i want vitamins"
   ],
   "diary": [
-    {
-      "date": "2026-11-10",
-      "time": "08:35",
-      "text": "painted it immediately: osprey exploding out of a crate with a fish, drizzle, swamp trees, me crying in the corner in my cape. title: 'she came home'. masterpiece #14. propped it by the picnic table. then dug two worms out of the wet garden (drizzle = worm buffet) and watered nothing because the sky did it for me. a guy jogging the river trail bought a print for $3. skate fund: $36.50. THREE FIFTY from the real board. i can hear the wheels."
-    },
-    {
-      "date": "2026-11-10",
-      "time": "11:00",
-      "text": "checked the internet weather. overcast, 54 degrees, feels like 48, wind 6 mph from the southeast. the internet says 59 today and SIXTY NINE tomorrow. in november. the sky is either sorry or broken. hauled the osprey prints to the art market. a lady in a carhartt jacket paid $2 for the small one because 'it's a little crooked.' it is PERFECT. skate fund: $38.50. ONE DOLLAR FIFTY. i am one sad doodle away from legend."
-    },
     {
       "date": "2026-11-10",
       "time": "11:15",
@@ -250,6 +239,16 @@
       "date": "2026-11-13",
       "time": "14:20",
       "text": "read the internet on the warm rock. a california sea lion named SUNDRIFT got really sick from bad algae stuff in the water and spent about a month at the marine mammal center hospital in sausalito getting fixed up. now she's back in the ocean. madame. MADAME. she LIVES in the ocean, the ocean made her sick, and they gave her the ocean back anyway. a kayaker on the gravel bar bought a little 'highway kitten' print for $3. ocean fund: $61.50. almost a third of the way to sundrift's house."
+    },
+    {
+      "date": "2026-11-13",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. checked the internet weather. overcast, 50 degrees, feels like 43, wind 6 mph from the east-southeast. at 2pm it was clear and 60. the gray sock rolled in right on time for sunset. the sun quits at 5:06 tonight. i yelled. it quit. tradition. the internet says rain chances tomorrow, drizzle monday, then SNOW next thursday and friday. allegedly. the snow has lied to me twice this week. put the sock scarf back on. grabbed a stick of firewood on the way up."
+    },
+    {
+      "date": "2026-11-13",
+      "time": "17:20",
+      "text": "read the internet on the cliff. in rajasthan, india a HIMALAYAN VULTURE got found sick in bhagwatgarh and couldn't even fly. the vets at the ranthambore tiger reserve wildlife hospital gave him fluids and vitamins for a few days, he got his strength back, and they let him go right near where they found him. sir. SIR. a vulture in a TIGER reserve and he's the one getting the hospital spa day. a hiker coming down off the cliff with a headlamp bought a little 'highway kitten' print for $3. ocean fund: $64.50. stuck a note on the cliff for the vulture. i don't think vultures read. i don't care."
     }
   ],
   "art": [
@@ -371,7 +370,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($61.50 of $200)"
+      "meta": "saving: ocean trip fund ($64.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -617,6 +616,12 @@
         "kind": "note",
         "at": "beach",
         "note": "sundrift went back to the ocean. save me a rock. -m"
+      },
+      {
+        "id": "cliff-vulture-note",
+        "kind": "note",
+        "at": "cliff",
+        "note": "for the himalayan vulture. get well (you already did)"
       }
     ],
     "marks": [
@@ -790,7 +795,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 3,
     "acorns": 1,
     "trinkets": []
   },
@@ -848,12 +853,12 @@
   ],
   "laptop": {
     "site": "web search",
-    "screen": "sundrift sea lion returns to the wild after recovery (the californian)",
+    "screen": "himalayan vulture recovered and released after treatment at ranthambore wildlife hospital (need24 news)",
     "browsing": [
-      "web search: darby mt weather now: clear sky, 60F, feels 51, wind 10 mph SE, humidity 28%; drizzle saturday, colder next week",
-      "web search: wildlife rescue released good news nov 13 2026 (sundrift the california sea lion back in the ocean after a month at the marine mammal center)"
+      "web search: darby mt weather now: overcast, 50F, feels 43, wind 6 mph ESE; sunset 5:06; rain chances saturday, drizzle monday, snow possible next thu/fri",
+      "web search: rescued animal released good news nov 13 2026 (himalayan vulture released after treatment at ranthambore tiger reserve wildlife hospital)"
     ],
-    "last": "2026-11-13 14:20"
+    "last": "2026-11-13 17:20"
   },
   "mail": [
     {
@@ -1102,6 +1107,7 @@
     "shy eagles",
     "mountain lions",
     "red foxes",
-    "sea lions"
+    "sea lions",
+    "himalayan vultures"
   ]
 }
