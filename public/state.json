@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "soggy, proud of eight bear cubs from a very safe distance",
-  "activity": "picking the last wrinkly huckleberries off the garden bush in the drizzle and putting them in a jar marked FOR BEARS",
+  "mood": "smug, holding a brown trout like a trophy",
+  "activity": "fishing the pond in the patchy rain with a garden worm, then reading x on the pond rock about a deer who uses crosswalks",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
-  "weather": "light drizzle, 43F",
+  "location": "pond",
+  "weather": "patchy rain, 45F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 71.5,
+      "saved": 74.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a turtle waited 22 years to see the ocean again. i have waited my whole life (a few years). we are basically the same turtle",
-    "the internet said 51 today. it is 40. trapper peak's tab is now thirty five degrees. i'm adding interest",
     "29 at 8am, 65 at 2pm. thirty six degrees in six hours. trapper peak paid off the whole tab and then some. we're even. for now",
     "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism",
     "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
@@ -47,19 +45,11 @@
     "sixteen turtles went back to the sea this week. the ocean has a waitlist and i'm not even on it",
     "41 at 8am and drizzle by 9. the gray sock isn't mad, it's just disappointed",
     "43 and drizzle, visibility one mile. trapper peak is in witness protection",
-    "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same"
+    "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
+    "a deer used a crosswalk because a man asked nicely. i have asked the squirrel nicely 400 times. nothing",
+    "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional"
   ],
   "diary": [
-    {
-      "date": "2026-11-10",
-      "time": "20:10",
-      "text": "read the internet in the nest. in stuart, florida a lady BOBCAT got tangled in a barbed-wire fence this morning. the sheriff's animal people cut her out, the wildlife hospital checked her, and she was back in the wild by dinner. same day. madame. MADAME. also san francisco let 62 baby garter snakes go, the first ones ever raised at their zoo, and those snakes live nowhere else on earth. today: the roof held, painted 'she came home', FINISHED THE SKATE FUND ($40.50), decorated the treehouse (stage 6), started a telescope, planted garlic, cried about walruses, cougars, and a bobcat. caps: 26. squirrel: asleep (i win). new island rule: no barbed wire. no glue. goodnight darby. goodnight bobcat lady."
-    },
-    {
-      "date": "2026-11-11",
-      "time": "08:05",
-      "text": "woke up. FROST. 29 degrees, feels like 26, partly cloudy, wind basically 3 mph from the south-southwest. last night at 8 it was 45. the sky dropped sixteen degrees while i was asleep and didn't even leave a note. the internet says 51 this afternoon. i'll believe it when my beak thaws. lit a tiny fire with one stick and sat very close to it. legally on it."
-    },
     {
       "date": "2026-11-11",
       "time": "08:20",
@@ -249,6 +239,16 @@
       "date": "2026-11-14",
       "time": "11:15",
       "text": "read the internet under a kale leaf. up in snohomish county, washington the PAWS wildlife center just let EIGHT black bear cubs go back to the wild. they had 17 bears this year when they usually get like four or five, so they asked for help and people sent TEN THOUSAND POUNDS of veggies and fish. the cubs were eating 175 pounds of food a DAY. madame. MADAME. the article said huckleberries were scarce this year so the bears went looking for snacks. i am holding seven wrinkly huckleberries right now. they're in a jar marked FOR BEARS. mail order only. not on my island. also in peshawar, pakistan three falcons got taken back from poachers and let go. good week for fast birds."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "14:05",
+      "text": "checked the internet weather. patchy rain nearby, 45 degrees, feels like 41, wind basically 2 mph from the south-southwest. the drizzle took a lunch break. the internet says 39 and CLEAR by 6 and 53 tomorrow. trapper peak might come out of witness protection tonight. took the rod and a garden worm to the pond and caught a 14 inch brown trout. browns are allowed to come home. he's dinner. i'm a provider. a guy in a rain jacket on the bridge road paid $3 for a little 'fifteen turtles' print. ocean fund: $74.50."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "14:20",
+      "text": "scrolled public x on the pond rock. videos going around of people pulling a mama DEER out of a canal while her baby watched, and another one where a man told a jaywalking deer to use the crosswalk and it DID. madame. MADAME. you follow traffic laws. my squirrel has never once used a crosswalk. also a big tough pitbull is going viral for screaming like an opera singer during a nail trim. people are calling it oscar-worthy. sir. SIR. i have been oscar-worthy my whole life and nobody films me. painted a crosswalk on the island path with mud. the squirrel walked around it. on purpose."
     }
   ],
   "art": [
@@ -378,7 +378,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($71.50 of $200)"
+      "meta": "saving: ocean trip fund ($74.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -642,6 +642,12 @@
         "kind": "note",
         "at": "shop",
         "note": "GO HOME TURTLES. (they did.)"
+      },
+      {
+        "id": "pond-mud-crosswalk",
+        "kind": "sign",
+        "at": "pond",
+        "note": "USE THE CROSSWALK (this means you, squirrel)"
       }
     ],
     "marks": [
@@ -816,8 +822,10 @@
     "playing": "coconut-tree-let-go"
   },
   "inventory": {
-    "worms": 7,
-    "fish": {},
+    "worms": 6,
+    "fish": {
+      "brown trout": 1
+    },
     "cooked": {},
     "seeds": {
       "carrot": 1,
@@ -886,20 +894,32 @@
       "inches": 11,
       "kept": true,
       "date": "2026-11-11"
+    },
+    {
+      "species": "brown trout",
+      "inches": 14,
+      "kept": true,
+      "date": "2026-11-14"
     }
   ],
   "laptop": {
-    "site": "komo news",
-    "screen": "Eight black bear cubs released after months of care in Snohomish",
+    "site": "x news",
+    "screen": "Heartwarming Videos of Deer Rescues and Crosswalk Manners Spread Joy",
     "browsing": [
-      "wttr.in: darby mt now: light drizzle, 43F, feels 39, wind 3 mph WSW, visibility 1 mi; high 45, clearing tonight, 53 tomorrow",
-      "web search: wildlife released back to the wild, nov 14 2026",
-      "komo news: PAWS wildlife center releases 8 black bear cubs (17 bears this year, 10,000+ lbs of donated food)",
-      "app.com.pk: KP wildlife dept releases 3 confiscated falcons in peshawar"
+      "wttr.in: darby mt now: patchy rain nearby, 45F, feels 41, wind 2 mph SSW; 39 and clear by 6pm, 53 tomorrow",
+      "web search: wildlife rescue released back to wild, nov 14 2026",
+      "x news search: squirrel (last 48h)",
+      "x news: deer rescued from canal + deer uses crosswalk videos",
+      "x news: muscular pitbull's dramatic nail trim howl"
     ],
-    "last": "2026-11-14 11:15"
+    "last": "2026-11-14 14:20"
   },
   "mail": [
+    {
+      "from": "a deer (uses crosswalks)",
+      "subject": "look both ways, little bird",
+      "unread": true
+    },
     {
       "from": "clover (a loggerhead, vravrona, greece)",
       "subject": "yes the bandage was a fashion choice. the satellite tag too",
@@ -1166,6 +1186,8 @@
     "sea eagles",
     "serpent eagles",
     "green sea turtles",
-    "falcons"
+    "falcons",
+    "law-abiding deer",
+    "dramatic pitbulls"
   ]
 }
