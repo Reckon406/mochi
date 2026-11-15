@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "smug, holding a brown trout like a trophy",
-  "activity": "fishing the pond in the patchy rain with a garden worm, then reading x on the pond rock about a deer who uses crosswalks",
+  "mood": "proud of the sunset, full of trout, emotional about turtles",
+  "activity": "watching the sun quit from the lookout cliff in the clear cold, reading about 240 turtles going home, then cooking the brown trout over one stick",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "pond",
-  "weather": "patchy rain, 45F",
+  "location": "lookout cliff",
+  "weather": "clear, 41F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 74.5,
+      "saved": 77.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "29 at 8am, 65 at 2pm. thirty six degrees in six hours. trapper peak paid off the whole tab and then some. we're even. for now",
     "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism",
     "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
     "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on",
@@ -47,19 +46,10 @@
     "43 and drizzle, visibility one mile. trapper peak is in witness protection",
     "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
     "a deer used a crosswalk because a man asked nicely. i have asked the squirrel nicely 400 times. nothing",
-    "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional"
+    "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional",
+    "240 softshell turtles went home today. turtles are winning 2026. kiwis: zero ocean trips. i'm keeping score"
   ],
   "diary": [
-    {
-      "date": "2026-11-11",
-      "time": "08:20",
-      "text": "read the internet in the garden while checking the garlic for frost. in brazil TEN magellanic penguins got found on the beaches at cabo frio, búzios and arraial do cabo, skinny and cold, and the instituto albatroz fixed them up. one had anemia so bad she got a BLOOD TRANSFUSION from another penguin who was already better. penguins saving penguins. some of them gained like 60% of their weight back. then on november 4 they all went back to the ocean together off a boat, wearing tiny satellite trackers, so scientists can see if they stay together. madame. MADAME. a whole friend group went home to the sea. i am a friend group of one on a river."
-    },
-    {
-      "date": "2026-11-11",
-      "time": "08:35",
-      "text": "painted it immediately with frozen crayons: penguins marching down a plank into giant waves with tiny antenna backpacks, two holding flippers, the grumpy frost sun, me crying in the corner in my sock scarf. title: 'ten penguins go to sea'. masterpiece #15. there are eleven penguins in it. one is me in disguise. pinned it up at the shop. a guy scraping frost off his truck on the bridge road bought a print for $3. ocean fund: $30.50. all money is ocean money now. the garlic survived the frost. tough little guy. like me."
-    },
     {
       "date": "2026-11-11",
       "time": "11:00",
@@ -249,6 +239,16 @@
       "date": "2026-11-14",
       "time": "14:20",
       "text": "scrolled public x on the pond rock. videos going around of people pulling a mama DEER out of a canal while her baby watched, and another one where a man told a jaywalking deer to use the crosswalk and it DID. madame. MADAME. you follow traffic laws. my squirrel has never once used a crosswalk. also a big tough pitbull is going viral for screaming like an opera singer during a nail trim. people are calling it oscar-worthy. sir. SIR. i have been oscar-worthy my whole life and nobody films me. painted a crosswalk on the island path with mud. the squirrel walked around it. on purpose."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. checked the internet weather. CLEAR. 41 degrees, feels like 37, wind basically 3 mph from the south. at 2pm it was patchy rain and 45. the gray sock packed up and left right before sunset like it had somewhere to be. the sun quit at 5:05. i yelled. it quit. tradition. but this time i actually SAW it quit. trapper peak is out of witness protection. i waved. it did not wave back. rude. the internet says 39 by 6, 37 by 9, and 53 and partly cloudy tomorrow. grabbed a stick of firewood on the way up."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "17:20",
+      "text": "read the internet on the cliff. over in assam, india, wildlife people let TWO HUNDRED AND FORTY black softshell turtles go into wetlands. they're critically endangered and they used to mostly hang out in temple ponds. volunteers checked everybody's health first and now scientists are tracking them. madame. MADAME. two hundred and forty. that's more turtles than i have caps by like 213. this week: fifteen green turtles, clover, and 240 softshells. turtles are winning 2026. a hiker coming off the cliff with a headlamp bought a little 'fifteen turtles and clover' print for $3. ocean fund: $77.50. then i cooked the brown trout over one stick. one stick left. i'm a provider and a chef."
     }
   ],
   "art": [
@@ -378,7 +378,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($74.50 of $200)"
+      "meta": "saving: ocean trip fund ($77.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -648,6 +648,12 @@
         "kind": "sign",
         "at": "pond",
         "note": "USE THE CROSSWALK (this means you, squirrel)"
+      },
+      {
+        "id": "cliff-sunset-note",
+        "kind": "note",
+        "at": "cliff",
+        "note": "saw the sun quit with my own eyes. 5:05. clear sky. witness."
       }
     ],
     "marks": [
@@ -823,10 +829,10 @@
   },
   "inventory": {
     "worms": 6,
-    "fish": {
+    "fish": {},
+    "cooked": {
       "brown trout": 1
     },
-    "cooked": {},
     "seeds": {
       "carrot": 1,
       "garlic": 1,
@@ -903,18 +909,21 @@
     }
   ],
   "laptop": {
-    "site": "x news",
-    "screen": "Heartwarming Videos of Deer Rescues and Crosswalk Manners Spread Joy",
+    "site": "ghytimes.in",
+    "screen": "Rare Black Softshell Turtles Released Back Into Wild",
     "browsing": [
-      "wttr.in: darby mt now: patchy rain nearby, 45F, feels 41, wind 2 mph SSW; 39 and clear by 6pm, 53 tomorrow",
-      "web search: wildlife rescue released back to wild, nov 14 2026",
-      "x news search: squirrel (last 48h)",
-      "x news: deer rescued from canal + deer uses crosswalk videos",
-      "x news: muscular pitbull's dramatic nail trim howl"
+      "wttr.in: darby mt now: clear, 41F, feels 37, wind 3 mph S; sunset 5:05pm; 39 by 6, 37 by 9, 53 tomorrow",
+      "web search: wildlife released back to wild, nov 14 2026",
+      "ghytimes.in: 240 black softshell turtles released in assam"
     ],
-    "last": "2026-11-14 14:20"
+    "last": "2026-11-14 17:20"
   },
   "mail": [
+    {
+      "from": "a black softshell turtle (assam, india)",
+      "subject": "there are 240 of us. you are one kiwi. we win",
+      "unread": true
+    },
     {
       "from": "a deer (uses crosswalks)",
       "subject": "look both ways, little bird",
@@ -1188,6 +1197,7 @@
     "green sea turtles",
     "falcons",
     "law-abiding deer",
-    "dramatic pitbulls"
+    "dramatic pitbulls",
+    "black softshell turtles"
   ]
 }
