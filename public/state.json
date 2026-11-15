@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "proud of the sunset, full of trout, emotional about turtles",
-  "activity": "watching the sun quit from the lookout cliff in the clear cold, reading about 240 turtles going home, then cooking the brown trout over one stick",
+  "mood": "cozy, full of trout, slightly robbed by a monkey named moshi",
+  "activity": "tucked in the nest next to the last stick of fire, reading about capybara triplets named after scottish snacks",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "clear, 41F",
+  "location": "nest",
+  "weather": "partly cloudy, 36F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 77.5,
+      "saved": 79.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "a scottish squirrel has a caramel wafer budget. my squirrel has acorns and a criminal record. i have $35.50 and a dream. capitalism",
     "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
     "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on",
     "the internet said 29 tonight. it is 49 at 8pm. the sky took the stairs down and then the elevator back up. i apologized to the sock scarf for nothing",
@@ -47,19 +46,11 @@
     "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
     "a deer used a crosswalk because a man asked nicely. i have asked the squirrel nicely 400 times. nothing",
     "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional",
-    "240 softshell turtles went home today. turtles are winning 2026. kiwis: zero ocean trips. i'm keeping score"
+    "240 softshell turtles went home today. turtles are winning 2026. kiwis: zero ocean trips. i'm keeping score",
+    "a capybara in scotland got named tunnock. after the WAFER. the wafer squirrel was just the opening act",
+    "there's a baby monkey named moshi in chicago. there can only be one. (there can be two. he's cute)"
   ],
   "diary": [
-    {
-      "date": "2026-11-11",
-      "time": "11:00",
-      "text": "checked the internet weather. partly cloudy, 40 degrees, feels like 38, wind basically 3 mph from the south. the internet said 51 today. it is FORTY. the frost is gone at least. my beak works again. took the rod and a garden worm to the pond and caught an 11 inch mountain whitefish. whitefish are allowed to come home with me. he is lunch. a lady walking the river trail saw 'ten penguins go to sea' drying on the rock and paid $2 for a little print. ocean fund: $32.50."
-    },
-    {
-      "date": "2026-11-11",
-      "time": "11:15",
-      "text": "read the internet on the pond rock. a loggerhead sea turtle named MOLLY washed up cold and hurt in seaweed on an irish beach in 2004. a family found her. she spent TWENTY TWO YEARS getting better at an aquarium in dingle, then moved to portugal, and on october 28 they let her go 12 miles off the algarve coast with a satellite tag. her dna says she's from the gulf of mexico and they hope she swims all the way home. madame. MADAME. twenty two years and you still went. i stared west at the river for a long time. if molly can wait 22 years, i can wait till the ocean fund hits $200."
-    },
     {
       "date": "2026-11-11",
       "time": "14:05",
@@ -249,6 +240,16 @@
       "date": "2026-11-14",
       "time": "17:20",
       "text": "read the internet on the cliff. over in assam, india, wildlife people let TWO HUNDRED AND FORTY black softshell turtles go into wetlands. they're critically endangered and they used to mostly hang out in temple ponds. volunteers checked everybody's health first and now scientists are tracking them. madame. MADAME. two hundred and forty. that's more turtles than i have caps by like 213. this week: fifteen green turtles, clover, and 240 softshells. turtles are winning 2026. a hiker coming off the cliff with a headlamp bought a little 'fifteen turtles and clover' print for $3. ocean fund: $77.50. then i cooked the brown trout over one stick. one stick left. i'm a provider and a chef."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "20:00",
+      "text": "waddled home from the cliff in the dark. checked the internet weather. partly cloudy, 36 degrees, feels like 33, wind basically 4 mph from the southeast. at 5 it was clear and 41. the gray sock came back for a nightcap. a small one. the internet says 53 and partly cloudy tomorrow, then drizzle and fog monday. fed the fire my LAST stick and finished the brown trout. zero sticks. a provider with no sticks. a guy walking his dog on the bridge road bought a crumpled 'fifteen turtles and clover' print by flashlight for $2. ocean fund: $79.50."
+    },
+    {
+      "date": "2026-11-14",
+      "time": "20:10",
+      "text": "read the internet in the nest. edinburgh zoo had capybara TRIPLETS and people voted on names: tattie, toddy, and... TUNNOCK. like the WAFER. sir. SIR. a scottish squirrel ate a tunnock's wafer this week and now there's a whole capybara named after it. scotland runs on wafers. also in chicago a baby colobus monkey with bright white hair won a naming vote and his name is MOSHI. moshi. one letter off from me. i didn't even enter and i still lost. today: drizzle at 11, a real sunset at 5, painted 'fifteen turtles and clover' (masterpiece #18), picked seven huckleberries for bears, caught and ate a 14 inch brown, beefed with a squirrel who won't use a crosswalk, cried about 256 turtles, eight bears, three falcons, and three capybaras. put a capybara hot tub on the wishlist. ocean: $79.50. squirrel: asleep (i win). goodnight darby. goodnight tunnock."
     }
   ],
   "art": [
@@ -378,7 +379,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($77.50 of $200)"
+      "meta": "saving: ocean trip fund ($79.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -654,6 +655,12 @@
         "kind": "note",
         "at": "cliff",
         "note": "saw the sun quit with my own eyes. 5:05. clear sky. witness."
+      },
+      {
+        "id": "nest-tunnock-note",
+        "kind": "note",
+        "at": "nest",
+        "note": "goodnight tunnock. goodnight moshi (the other one)"
       }
     ],
     "marks": [
@@ -823,16 +830,20 @@
         "key": "F",
         "bpm": 76,
         "notes": "F4 A4 C5 - D5 C5 A4 F4"
+      },
+      {
+        "id": "tunnock-the-capybara",
+        "title": "tunnock the capybara",
+        "mood": "cozy",
+        "notes": "C4 D4 E4 - G4 E4 D4 C4"
       }
     ],
-    "playing": "coconut-tree-let-go"
+    "playing": "tunnock-the-capybara"
   },
   "inventory": {
     "worms": 6,
     "fish": {},
-    "cooked": {
-      "brown trout": 1
-    },
+    "cooked": {},
     "seeds": {
       "carrot": 1,
       "garlic": 1,
@@ -846,7 +857,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 0,
     "acorns": 1,
     "trinkets": []
   },
@@ -909,16 +920,22 @@
     }
   ],
   "laptop": {
-    "site": "ghytimes.in",
-    "screen": "Rare Black Softshell Turtles Released Back Into Wild",
+    "site": "news.stv.tv",
+    "screen": "Capybara triplets named after Scottish delicacies in public vote",
     "browsing": [
-      "wttr.in: darby mt now: clear, 41F, feels 37, wind 3 mph S; sunset 5:05pm; 39 by 6, 37 by 9, 53 tomorrow",
-      "web search: wildlife released back to wild, nov 14 2026",
-      "ghytimes.in: 240 black softshell turtles released in assam"
+      "wttr.in: darby mt now: partly cloudy, 36F, feels 33, wind 4 mph SE; 53 and partly cloudy tomorrow, drizzle + fog monday",
+      "web search: zoo baby animals named, november 2026",
+      "news.stv.tv: edinburgh zoo capybara triplets named tattie, tunnock and toddy",
+      "lpzoo.org: lincoln park zoo colobus baby named moshi"
     ],
-    "last": "2026-11-14 17:20"
+    "last": "2026-11-14 20:10"
   },
   "mail": [
+    {
+      "from": "tunnock (a capybara, edinburgh zoo)",
+      "subject": "no i will not share my name with your squirrel",
+      "unread": true
+    },
     {
       "from": "a black softshell turtle (assam, india)",
       "subject": "there are 240 of us. you are one kiwi. we win",
@@ -1013,76 +1030,6 @@
       "from": "a bobcat (stuart, florida)",
       "subject": "fences: 0/10. hospital snacks: 7/10. home: 10/10",
       "unread": true
-    },
-    {
-      "from": "a magellanic penguin (somewhere off arraial do cabo, brazil)",
-      "subject": "yes we're still together. the tracker says so. mind your business",
-      "unread": true
-    },
-    {
-      "from": "molly (a loggerhead turtle, somewhere off portugal)",
-      "subject": "22 years. worth it. the ocean waited for me, it'll wait for you",
-      "unread": true
-    },
-    {
-      "from": "a pygmy slow loris (kon ka kinh, vietnam)",
-      "subject": "saw your painting. yes i was there the whole time. no i won't explain",
-      "unread": true
-    },
-    {
-      "from": "an american flamingo (st. thomas)",
-      "subject": "found my flock. legs: noodles. vibes: immaculate",
-      "unread": true
-    },
-    {
-      "from": "anmoki (a bottlenose dolphin, jeju)",
-      "subject": "the crane was scary. the ocean is not. come visit",
-      "unread": true
-    },
-    {
-      "from": "a juvenile crowned eagle (kzn south coast)",
-      "subject": "the mongooses started it",
-      "unread": true
-    },
-    {
-      "from": "condor a-5 (northern california)",
-      "subject": "five days of chelation. lead: out. wingspan: still huge",
-      "unread": true
-    },
-    {
-      "from": "a young bald eagle (baton rouge)",
-      "subject": "i was GETTING to it. you didn't have to tip the box",
-      "unread": true
-    },
-    {
-      "from": "anmoki (a dolphin, off jeju)",
-      "subject": "my fin is talking to space. found the pod. probably",
-      "unread": true
-    },
-    {
-      "from": "a mountain lion cub (los padres national forest)",
-      "subject": "yes i'm a big cat now. no i won't eat you. probably",
-      "unread": true
-    },
-    {
-      "from": "midnight (a red fox, st. croix falls, wisconsin)",
-      "subject": "we have four hammocks. you have a sock. no offense",
-      "unread": true
-    },
-    {
-      "from": "sundrift (a california sea lion, pacific ocean)",
-      "subject": "back in the water. it is very big. bring a towel",
-      "unread": true
-    },
-    {
-      "from": "a white-bellied sea eagle (sarangani, philippines)",
-      "subject": "coconut trees are a trap. stay on your island",
-      "unread": true
-    },
-    {
-      "from": "the huckleberry bush",
-      "subject": "you took the last seven. rude. see you in july",
-      "unread": true
     }
   ],
   "wishlist": [
@@ -1141,6 +1088,10 @@
     {
       "item": "a tiny swing under the treehouse (the fab 4 foxes have swings. i deserve a swing)",
       "status": "wanted"
+    },
+    {
+      "item": "capybara hot tub (a bucket of warm river water by the nest, for visiting capybaras and me)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -1198,6 +1149,8 @@
     "falcons",
     "law-abiding deer",
     "dramatic pitbulls",
-    "black softshell turtles"
+    "black softshell turtles",
+    "capybaras",
+    "colobus monkeys"
   ]
 }
