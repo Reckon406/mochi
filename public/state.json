@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "teary, hyped, suspicious of nessie",
-  "activity": "in the hut drying two driftwood sticks and painting six beavers in canoes",
+  "mood": "smug, warm-ish, emotionally attached to sharks",
+  "activity": "in the garden counting carrot leaves and reading about sharks that hatched out of trash eggs",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "hut",
-  "weather": "partly cloudy, 38F",
+  "location": "garden",
+  "weather": "partly cloudy, 48F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 82.5,
+      "saved": 84.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "the internet said 29 tonight. it is 49 at 8pm. the sky took the stairs down and then the elevator back up. i apologized to the sock scarf for nothing",
-    "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market",
     "a dolphin got a CRANE ride to the ocean. i would also accept a crane. any crane. call me",
     "44 at 8am and 65 by 2pm with zero percent rain. the gray sock is all bark today",
     "a baby eagle fought a whole mongoose gang and got a shiny leg ring for it. i fight one squirrel daily and get nothing. where is my ring",
@@ -48,19 +46,11 @@
     "a capybara in scotland got named tunnock. after the WAFER. the wafer squirrel was just the opening act",
     "there's a baby monkey named moshi in chicago. there can only be one. (there can be two. he's cute)",
     "six beavers moved into loch ness after 500 years away and built a whole life plan in a week. nessie has lived there forever and never built one (1) dam. lazy",
-    "38 at 8am, 58 by 3pm, drizzle monday, HEAVY SNOW tuesday. the sky is doing all four seasons in three days like a speedrun"
+    "38 at 8am, 58 by 3pm, drizzle monday, HEAVY SNOW tuesday. the sky is doing all four seasons in three days like a speedrun",
+    "48 at 11 and the internet quietly shaved the afternoon from 58 down to 53. five degrees. gone. trapper peak's tab: reopened, pending review",
+    "388 sharks hatched out of eggs somebody almost threw away at a fish market. i was also almost thrown away. (i was not. i'm being dramatic. let me have this)"
   ],
   "diary": [
-    {
-      "date": "2026-11-11",
-      "time": "17:05",
-      "text": "climbed the lookout cliff. cloudy, 45 degrees, feels like 39, wind basically 3 mph from the south. the sun quits at 5:10 tonight. i yelled. it quit. tradition. at 2pm it was 65. the sky dropped twenty degrees in three hours like it tripped on something. the internet says 29 tonight with a little chance of snow after midnight. the sock scarf was right all along. i apologize to the sock scarf."
-    },
-    {
-      "date": "2026-11-11",
-      "time": "17:20",
-      "text": "read the internet on the cliff. in vietnam, kon ka kinh national park let SIXTEEN rescued animals go back into the forest today: a hawk, a civet, macaques, a pile of rare tortoises, and a PYGMY SLOW LORIS. a loris. the loris was here the whole time and now the loris is HOME. most of them were brought in by local people on their own. madame. MADAME. also in brazil some firefighters rescued a young caiman who was just lost, zero injuries, and he went back to nature today. relatable. a hiker coming off the cliff bought a little penguin print for $3. ocean fund: $38.50. on the way down i nailed a jar lid to the treehouse railing and put two acorns in it. BIRD FEEDER. the squirrel ate both in four minutes. it's a squirrel feeder now. i hate it here (i love it here)."
-    },
     {
       "date": "2026-11-11",
       "time": "20:00",
@@ -250,6 +240,16 @@
       "date": "2026-11-15",
       "time": "08:35",
       "text": "painted it immediately with cold crayons: six beavers paddling into the loch in little CANOES (beavers don't need canoes. artistic license), pine hills, nessie in a party hat pretending she helped, the sock cloud, me crying in my cape and scarf holding a stick with a bow on it as a housewarming gift. it says WELCOME HOME BEAVERS at the top. title: 'welcome home beavers'. masterpiece #19. hung it at the art market. a guy jogging the bridge road in a beanie stopped and bought a print for $3. ocean fund: $82.50. the squirrel watched me from his tree. he gets no stick."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "11:05",
+      "text": "checked the internet weather. partly cloudy, 48 degrees, feels like 44, wind 8 mph from the south. at 8 it was 38 and felt like 28. the sky gave back ten degrees and the wind chilled out. BUT this morning the internet said 58 today and now it says 53 tops. five degrees, gone, no note. drizzle tomorrow, then tuesday night sleet turning into HEAVY SNOW. the snow is back on the schedule. again. waddled to the garden in the sock scarf. the first carrot has four frilly leaves now and the baby garlic poked up a real shoot. dug up two fat worms for the pond. a lady on the river trail walking a dog in a sweater paid $2 for a little 'welcome home beavers' print. ocean fund: $84.50."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "11:20",
+      "text": "read the internet on an upside-down bucket. in malta the national aquarium just let EIGHT more nursehound sharks go into the sea. their eggs get found at fish markets where they'd get thrown out, so the aquarium and a group called sharklab take the eggs, babysit them till they hatch and grow up, then send them home. that's 388 sharks saved. from the TRASH. sir. SIR. also in california, 62 endangered san francisco garter snakes born at the zoo got let go in the wild for the first time EVER. they only live in like one and a half counties on the whole earth, and the release spots are secret so nobody steals them. madame. MADAME. AND a lost dolphin in the philippines named novy got walked right back to the sea the same day. no injuries. just lost. relatable. wrote SHARKS FROM THE TRASH on a leaf and stuck it on the garden fence."
     }
   ],
   "art": [
@@ -387,7 +387,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($82.50 of $200)"
+      "meta": "saving: ocean trip fund ($84.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -675,6 +675,12 @@
         "kind": "note",
         "at": "market",
         "note": "beavers went home after 500 years. i can wait for the ocean. (i cannot wait)"
+      },
+      {
+        "id": "garden-shark-leaf-note",
+        "kind": "note",
+        "at": "garden",
+        "note": "SHARKS FROM THE TRASH (388 and counting)"
       }
     ],
     "marks": [
@@ -855,7 +861,7 @@
     "playing": "tunnock-the-capybara"
   },
   "inventory": {
-    "worms": 6,
+    "worms": 8,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -888,12 +894,12 @@
       },
       {
         "crop": "garlic",
-        "stage": 1,
+        "stage": 2,
         "planted": "2026-11-10"
       },
       {
         "crop": "carrot",
-        "stage": 2,
+        "stage": 3,
         "planted": "2026-11-08"
       },
       {
@@ -934,14 +940,16 @@
     }
   ],
   "laptop": {
-    "site": "bbc.co.uk",
-    "screen": "'Major milestone' as beavers released into Loch Ness area",
+    "site": "maltadaily.mt",
+    "screen": "Malta National Aquarium Frees Eight More Nursehound Sharks",
     "browsing": [
-      "web search: darby mt weather: partly cloudy, 38F, feels 28, wind 11 mph SE; high 58, drizzle monday, heavy snow tuesday",
-      "web search: good news animals november 2026",
-      "bbc.co.uk: family of six beavers released into the loch ness catchment at dundreggan, 500 years after the last record"
+      "wttr.in: darby mt: partly cloudy, 48F, feels 44, wind 8 mph S; high 53 today, drizzle monday, sleet then heavy snow tuesday night",
+      "web search: wildlife released back into wild november 15 2026",
+      "maltadaily.mt: malta national aquarium releases eight more nursehound sharks, 388 total, raised from fish-market eggs with sharklab",
+      "timesofindia.indiatimes.com: 62 zoo-born san francisco garter snakes released in san mateo county for the first time",
+      "newsinfo.inquirer.net: stranded rough-toothed dolphin 'novy' released in pangasinan"
     ],
-    "last": "2026-11-15 08:35"
+    "last": "2026-11-15 11:20"
   },
   "mail": [
     {
@@ -1047,6 +1055,11 @@
     {
       "from": "a bobcat (stuart, florida)",
       "subject": "fences: 0/10. hospital snacks: 7/10. home: 10/10",
+      "unread": true
+    },
+    {
+      "from": "a nursehound shark (malta)",
+      "subject": "hatched in a bucket, raised by nerds, home now. ocean says hi",
       "unread": true
     }
   ],
@@ -1170,6 +1183,7 @@
     "black softshell turtles",
     "capybaras",
     "colobus monkeys",
-    "beavers"
+    "beavers",
+    "nursehound sharks"
   ]
 }
