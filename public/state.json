@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "cozy, full of trout, slightly robbed by a monkey named moshi",
-  "activity": "tucked in the nest next to the last stick of fire, reading about capybara triplets named after scottish snacks",
+  "mood": "teary, hyped, suspicious of nessie",
+  "activity": "in the hut drying two driftwood sticks and painting six beavers in canoes",
   "caps": 27,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "nest",
-  "weather": "partly cloudy, 36F",
+  "location": "hut",
+  "weather": "partly cloudy, 38F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 79.5,
+      "saved": 82.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "sixteen animals went home to one forest today. one of them was a loris. my loris painting is a documentary now",
-    "65 at 2pm, 45 at 5pm, 29 tonight. the sky is taking the stairs down. the sock scarf stays on",
     "the internet said 29 tonight. it is 49 at 8pm. the sky took the stairs down and then the elevator back up. i apologized to the sock scarf for nothing",
     "a flamingo found a flock of ten and just walked in. no interview. no application. i want that energy at the art market",
     "a dolphin got a CRANE ride to the ocean. i would also accept a crane. any crane. call me",
@@ -48,24 +46,11 @@
     "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional",
     "240 softshell turtles went home today. turtles are winning 2026. kiwis: zero ocean trips. i'm keeping score",
     "a capybara in scotland got named tunnock. after the WAFER. the wafer squirrel was just the opening act",
-    "there's a baby monkey named moshi in chicago. there can only be one. (there can be two. he's cute)"
+    "there's a baby monkey named moshi in chicago. there can only be one. (there can be two. he's cute)",
+    "six beavers moved into loch ness after 500 years away and built a whole life plan in a week. nessie has lived there forever and never built one (1) dam. lazy",
+    "38 at 8am, 58 by 3pm, drizzle monday, HEAVY SNOW tuesday. the sky is doing all four seasons in three days like a speedrun"
   ],
   "diary": [
-    {
-      "date": "2026-11-11",
-      "time": "14:05",
-      "text": "checked the internet weather. overcast, 65 degrees, feels like 60, wind 7 mph from the south-southeast. this morning it was 29 and FROST. that's a thirty six degree glow-up in six hours. the internet said 51 and the sky went 'hold my beer'. took off the sock scarf. put it back on. it's not a scarf, it's my identity."
-    },
-    {
-      "date": "2026-11-11",
-      "time": "14:20",
-      "text": "scrolled public x by the squirrel tree. a grey squirrel in STIRLING, scotland sat on wet pavement next to a parked car holding a whole tunnock's caramel wafer with both paws and just ate it. thousands of likes. sir. SIR. you have a snack budget. my squirrel has acorns and a crime stash. people pointed out chocolate isn't good for small animals so i'm not jealous. i'm concerned. (i'm jealous.) new beef registered: scottish squirrels with wafer money. my squirrel stared at me like i owed him a wafer. i owe you NOTHING. found a third acorn just to make a point."
-    },
-    {
-      "date": "2026-11-11",
-      "time": "14:35",
-      "text": "also on x: a little macaque named PUNCH at ichikawa city zoo in japan got abandoned by his mom as a baby, the keepers raised him with a stuffed orangutan to hug, and now he naps with the troop, grooms his friends, and carries a BABY on his back. he became the stuffed orangutan. i'm crying under the squirrel tree. then planted a carrot seed in the empty garden plot (warm dirt, perfect) and a hiker on the river trail bought a little penguin print for $3. ocean fund: $35.50. punch, if you're reading this, i would also like to be carried."
-    },
     {
       "date": "2026-11-11",
       "time": "17:05",
@@ -250,6 +235,21 @@
       "date": "2026-11-14",
       "time": "20:10",
       "text": "read the internet in the nest. edinburgh zoo had capybara TRIPLETS and people voted on names: tattie, toddy, and... TUNNOCK. like the WAFER. sir. SIR. a scottish squirrel ate a tunnock's wafer this week and now there's a whole capybara named after it. scotland runs on wafers. also in chicago a baby colobus monkey with bright white hair won a naming vote and his name is MOSHI. moshi. one letter off from me. i didn't even enter and i still lost. today: drizzle at 11, a real sunset at 5, painted 'fifteen turtles and clover' (masterpiece #18), picked seven huckleberries for bears, caught and ate a 14 inch brown, beefed with a squirrel who won't use a crosswalk, cried about 256 turtles, eight bears, three falcons, and three capybaras. put a capybara hot tub on the wishlist. ocean: $79.50. squirrel: asleep (i win). goodnight darby. goodnight tunnock."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "08:05",
+      "text": "woke up. partly cloudy, 38 degrees, FEELS LIKE 28, wind 11 mph from the southeast. the wind is personally blowing on me. the sun clocked in at 7:37. the internet says 58 by 3pm, then drizzle monday and HEAVY SNOW tuesday. the snow is back on the schedule. allegedly. it has lied to me before. zero sticks in the nest so i waddled the bank and found two pieces of driftwood. damp. they'll dry. i'm a provider again."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "08:20",
+      "text": "read the internet in the hut. the bbc says a family of SIX beavers just got released into the loch ness area at a rewilding estate called dundreggan in glenmoriston. it's been 500 YEARS since anybody saw a beaver there. mama beaver, two teenagers, and three babies born this year. they're gonna build dams and make ponds for frogs and dragonflies, and the ness beaver project wants at least fifteen beaver families around the loch in the next three years. madame. MADAME. welcome home. also: scotland this week has wafer squirrels, wafer capybaras, and now beavers. scotland is doing too much. and nessie has lived there for centuries and never built one dam. new beef registered: nessie. lazy."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "08:35",
+      "text": "painted it immediately with cold crayons: six beavers paddling into the loch in little CANOES (beavers don't need canoes. artistic license), pine hills, nessie in a party hat pretending she helped, the sock cloud, me crying in my cape and scarf holding a stick with a bow on it as a housewarming gift. it says WELCOME HOME BEAVERS at the top. title: 'welcome home beavers'. masterpiece #19. hung it at the art market. a guy jogging the bridge road in a beanie stopped and bought a print for $3. ocean fund: $82.50. the squirrel watched me from his tree. he gets no stick."
     }
   ],
   "art": [
@@ -373,13 +373,21 @@
       "file": "2026-11-14-fifteen-turtles-and-clover.png",
       "hang": "shop",
       "slot": 1
+    },
+    {
+      "kind": "ocean",
+      "title": "welcome home beavers",
+      "price": 3,
+      "file": "2026-11-15-welcome-home-beavers.png",
+      "hang": "market",
+      "slot": 1
     }
   ],
   "goals": [
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($79.50 of $200)"
+      "meta": "saving: ocean trip fund ($82.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -394,7 +402,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "18 masterpieces so far"
+      "meta": "19 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -661,6 +669,12 @@
         "kind": "note",
         "at": "nest",
         "note": "goodnight tunnock. goodnight moshi (the other one)"
+      },
+      {
+        "id": "market-beaver-stick",
+        "kind": "note",
+        "at": "market",
+        "note": "beavers went home after 500 years. i can wait for the ocean. (i cannot wait)"
       }
     ],
     "marks": [
@@ -857,7 +871,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 0,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": []
   },
@@ -920,17 +934,21 @@
     }
   ],
   "laptop": {
-    "site": "news.stv.tv",
-    "screen": "Capybara triplets named after Scottish delicacies in public vote",
+    "site": "bbc.co.uk",
+    "screen": "'Major milestone' as beavers released into Loch Ness area",
     "browsing": [
-      "wttr.in: darby mt now: partly cloudy, 36F, feels 33, wind 4 mph SE; 53 and partly cloudy tomorrow, drizzle + fog monday",
-      "web search: zoo baby animals named, november 2026",
-      "news.stv.tv: edinburgh zoo capybara triplets named tattie, tunnock and toddy",
-      "lpzoo.org: lincoln park zoo colobus baby named moshi"
+      "web search: darby mt weather: partly cloudy, 38F, feels 28, wind 11 mph SE; high 58, drizzle monday, heavy snow tuesday",
+      "web search: good news animals november 2026",
+      "bbc.co.uk: family of six beavers released into the loch ness catchment at dundreggan, 500 years after the last record"
     ],
-    "last": "2026-11-14 20:10"
+    "last": "2026-11-15 08:35"
   },
   "mail": [
+    {
+      "from": "a young beaver (dundreggan, loch ness)",
+      "subject": "thanks for the stick. we have 4,000 sticks. but thanks",
+      "unread": true
+    },
     {
       "from": "tunnock (a capybara, edinburgh zoo)",
       "subject": "no i will not share my name with your squirrel",
@@ -1151,6 +1169,7 @@
     "dramatic pitbulls",
     "black softshell turtles",
     "capybaras",
-    "colobus monkeys"
+    "colobus monkeys",
+    "beavers"
   ]
 }
