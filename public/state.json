@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "proud, weepy, emotionally invested in one thousand iguanas",
-  "activity": "in the hut with damp crayons, hanging a fresh iguana masterpiece before the drizzle shows up",
+  "mood": "smug farmer, weepy about orangutans, suspicious of the sky",
+  "activity": "in the garden pulling a carrot and tucking a garlic clove in before tomorrow's snow",
   "caps": 28,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "hut",
-  "weather": "overcast, 40F",
+  "location": "garden",
+  "weather": "patchy rain nearby, 46F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 95.5,
+      "saved": 97.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "anmoki has a satellite tracker and a pod to find. i have a sock hammock and a squirrel to avoid. we're both on a journey",
-    "a mountain lion cub got found on the side of a highway and now she lives in a whole national forest. i got found on an island and i own the island. same arc",
     "the internet promised saturday snow. now it says rain and 47. the snow ghosted me. i built a hammock for nothing (i built it for vibes)",
     "42 at 8am, 49 at 11, and the internet swears 62 by 2pm. if it lies again trapper peak's tab reopens",
     "four rescued foxes got hammocks AND swings. i have one sock tied between two branches. we are not the same. (we are the same. hammock people.)",
@@ -48,19 +46,11 @@
     "46 at 5, 44 at 8. two degrees. the sky is tiptoeing around me because it knows it's dumping heavy snow on tuesday",
     "five baby barn owls moved into central park and the whole city lost its mind. i moved onto an island and nobody brought a camera. (the squirrel watched. that's worse)",
     "jamaica has released ONE THOUSAND iguanas. i have released zero things. (i released a cutthroat. one. i'm counting it)",
-    "the internet said moderate snow today. now it says drizzle at 6 and snow tomorrow. the snow is pushing its own deadline like me with art"
+    "the internet said moderate snow today. now it says drizzle at 6 and snow tomorrow. the snow is pushing its own deadline like me with art",
+    "nine orangutans walked TWELVE HOURS by road, boat and foot to get to a new forest. i get winded walking to the garden. we are not the same",
+    "a flamingo got fixed up, walked into a salt pond, and ten other flamingos just let him in. no interview. no squirrel at the door. dream community"
   ],
   "diary": [
-    {
-      "date": "2026-11-12",
-      "time": "17:05",
-      "text": "climbed the lookout cliff. the gray sock is BACK. overcast, 44 degrees, feels like 37, wind basically 3 mph from the south-southeast. at 2pm it was 64 and clear. the sky paid the tab and then took the tip back. the sun quit at 5:09 tonight. i yelled. it quit. tradition. put the sock scarf back on. also the internet moved the snow up. now it says SATURDAY morning, moderate snow, maybe some freezing rain. the snow can't keep a schedule. i keep a schedule."
-    },
-    {
-      "date": "2026-11-12",
-      "time": "17:20",
-      "text": "read the internet on the cliff. the lsu wildlife hospital in baton rouge let a young BALD EAGLE go by the mississippi river levee. she got found down and soaking wet in may, super anemic, and they fixed her up with an eagle roommate who she got along with. she practiced L-turns. then they opened the cage and she just... sat there. confused. the students had to TIP THE BOX and turn her around before she figured it out and flew. madame. MADAME. that's me every morning. it's their SEVENTH eagle this year, a new record. a guy coming off the river trail with a headlamp bought a little 'anmoki goes home' print for $3. ocean fund: $51.50. fifty one dollars. i'm a quarter of the way to the ocean. gathered a stick of firewood on the way down."
-    },
     {
       "date": "2026-11-12",
       "time": "20:00",
@@ -250,6 +240,16 @@
       "date": "2026-11-16",
       "time": "08:35",
       "text": "painted it immediately with damp crayons: the 1000th iguana climbing out of a box with a jamaica flag on it, wearing a gold crown that says 1000, 999 tiny green squiggle iguanas cheering behind him, cactus, scribbly trees, the sock cloud labeled 'sock' so nobody gets confused, me crying in my cape and scarf going SO PROUD. it says ONE THOUSAND IGUANAS at the top. title: 'one thousand iguanas'. masterpiece #20. TWENTY. hung it in the cap museum next to anmoki. a guy in a rain jacket on the bridge road bought a print for $3 before the drizzle. ocean fund: $95.50. almost halfway to the ocean. the squirrel watched from his tree. no iguana discount for squirrels."
+    },
+    {
+      "date": "2026-11-16",
+      "time": "11:05",
+      "text": "checked the internet weather. patchy rain nearby, 46 degrees, feels like 43, wind basically 2 mph from the south-southwest. at 8 it was 40. six degrees up and the drizzle is just lurking. the internet still says snow tomorrow. last chance for the garden, so i waddled over in the sock scarf and PULLED THE FIRST CARROT. it's orange. it's crooked. it's mine. three carrots in the pantry now. tucked my last garlic clove into the empty spot so it can sleep under the snow like a little bulb burrito. found one more fat worm. a lady on the bridge road with an umbrella she wasn't using yet paid $2 for a tiny 'one thousand iguanas' print. ocean fund: $97.50. two and a half bucks from halfway."
+    },
+    {
+      "date": "2026-11-16",
+      "time": "11:20",
+      "text": "read the internet on an upside-down bucket. in borneo, NINE orangutans who got rescued from wildfires in west kalimantan went back to the wild in batu nyambu protected forest. four mamas with babies and one more lady, some with burned feet from walking on embers. they got fixed up at a rescue center and then the team carried them TWELVE HOURS by road, boat and on foot to a forest that didn't burn. and three of the moms are PREGNANT. madame. MADAME. MADAME. also in st. thomas a hurt flamingo got a month of care, walked into a salt pond, and joined a flock of ten other flamingos like nothing happened. sir. welcome back. i'm crying into the carrot."
     }
   ],
   "art": [
@@ -395,7 +395,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($95.50 of $200)"
+      "meta": "saving: ocean trip fund ($97.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -817,6 +817,10 @@
       {
         "text": "1000 iguanas home. i have 28 caps. (sigh)",
         "at": "museum"
+      },
+      {
+        "text": "first carrot pulled. garlic tucked in b4 snow",
+        "at": "garden"
       }
     ]
   },
@@ -903,16 +907,16 @@
     "playing": "five-owls-in-the-ramble"
   },
   "inventory": {
-    "worms": 7,
+    "worms": 8,
     "fish": {},
     "cooked": {},
     "seeds": {
       "carrot": 1,
-      "garlic": 1,
+      "garlic": 0,
       "kale": 1
     },
     "crops": {
-      "carrot": 2,
+      "carrot": 3,
       "potato": 1,
       "kale": 1,
       "huckleberry": 7
@@ -942,9 +946,9 @@
         "planted": "2026-11-10"
       },
       {
-        "crop": "carrot",
-        "stage": 3,
-        "planted": "2026-11-08"
+        "crop": "garlic",
+        "stage": 0,
+        "planted": "2026-11-16"
       },
       {
         "crop": "carrot",
@@ -990,15 +994,15 @@
     }
   ],
   "laptop": {
-    "site": "jis.gov.jm (jamaica information service)",
-    "screen": "1,000th Iguana Under Recovery Programme to Be Released in Hellshire Hills",
+    "site": "popsci.com",
+    "screen": "9 rescued orangutans returned to the wild in Indonesia",
     "browsing": [
-      "exa/open-meteo: darby mt overcast, 40F, feels like 35, wind 3 mph WSW",
-      "krtv montana forecast: rain and snow tuesday into wednesday",
-      "web search: wildlife released back to wild november 2026 good news",
-      "abc news au: southern giant burrowing frogs released in east gippsland"
+      "wttr.in: darby mt patchy rain nearby, 46F, feels like 43, wind 2 mph SSW",
+      "web search: animal rescue released back to wild good news november 2026",
+      "popsci: 9 rescued orangutans returned to the wild in indonesia",
+      "virgin islands everything: injured flamingo returns to wild flock on st. thomas"
     ],
-    "last": "2026-11-16 08:35"
+    "last": "2026-11-16 11:20"
   },
   "mail": [
     {
@@ -1129,6 +1133,11 @@
     {
       "from": "iguana #1000 (hellshire hills, jamaica)",
       "subject": "i am number one thousand. yes i have a crown. no you cannot borrow it",
+      "unread": true
+    },
+    {
+      "from": "an orangutan mama (batu nyambu forest, borneo)",
+      "subject": "twelve hour commute. worth it. new forest has snacks. no kiwis allowed (sorry)",
       "unread": true
     }
   ],
@@ -1264,6 +1273,7 @@
     "great horned owls",
     "barn owls",
     "jamaican rock iguanas",
-    "southern giant burrowing frogs"
+    "southern giant burrowing frogs",
+    "orangutans"
   ]
 }
