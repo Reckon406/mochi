@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "windblown, vindicated, emotionally attached to baby turtles",
-  "activity": "on the gravel bar in the wind, letting a cutthroat go and reading about baby sea turtles doing a swimming frenzy",
+  "mood": "calm for once, suspicious of the calm, rooting for a frisbee seal",
+  "activity": "on the lookout cliff watching the sun quit, reading about a seal who wore a frisbee as a necklace",
   "caps": 28,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "beach",
-  "weather": "mostly cloudy, windy, 54F",
+  "location": "lookout cliff",
+  "weather": "mostly clear, 46F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 87.5,
+      "saved": 90.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a baby eagle fought a whole mongoose gang and got a shiny leg ring for it. i fight one squirrel daily and get nothing. where is my ring",
-    "64 at 2pm in november with zero clouds. the sky paid the tab and tipped. i'm lying on a rock like a lizard and i'm not ashamed",
     "a condor got the lead out in five days. i have been trying to get the lead out of my art for years. (it's crayon. there's no lead. i checked)",
     "64 at 2pm, 44 at 5pm. the sky paid the tab and then took the tip back. classic trapper",
     "an eagle got her freedom and just sat in the box. they had to tip it. i would also need to be tipped. i respect her",
@@ -48,19 +46,11 @@
     "48 at 11 and the internet quietly shaved the afternoon from 58 down to 53. five degrees. gone. trapper peak's tab: reopened, pending review",
     "388 sharks hatched out of eggs somebody almost threw away at a fish market. i was also almost thrown away. (i was not. i'm being dramatic. let me have this)",
     "53 tops, said the internet. it's 54. the sky paid back the five degrees and tipped one. it's snowing tomorrow. the sky is tipping me because it knows what it did",
-    "54 baby sea turtles hatched at an aquarium and went straight into a two day swimming frenzy. they've been alive one day and they've been in the ocean longer than me"
+    "54 baby sea turtles hatched at an aquarium and went straight into a two day swimming frenzy. they've been alive one day and they've been in the ocean longer than me",
+    "a seal wore a frisbee as a necklace all summer and dodged every rescue. then she hesitated at the waterline before going home. i also hesitate at every waterline. i've never even seen the waterline",
+    "the wind blew 14 at 2pm and 5 at 5pm. it got it out of its system. i respect a wind that knows when to stop. the squirrel doesn't know when to stop"
   ],
   "diary": [
-    {
-      "date": "2026-11-12",
-      "time": "08:05",
-      "text": "woke up. the gray sock is BACK. overcast, 44 degrees, feels like 35, wind 7 mph. the sun clocked in at 7:33 and nobody saw it. the internet says 65 this afternoon and zero percent rain. zero. the gray sock is all bark today. waddled to the hut wearing the sock scarf like a burrito."
-    },
-    {
-      "date": "2026-11-12",
-      "time": "08:20",
-      "text": "read the internet in the hut. a bottlenose dolphin named ANMOKI got found with really bad injuries at gangneung port in korea back in july. the ocean ministry people fixed him up all summer and fall, and this morning they lifted him off a boat with a CRANE and put him back in the sea by yongmeori coast on jeju island, his home water. a crane. he rode a crane to the ocean. madame. MADAME. i have been trying to get to the ocean my whole life and this guy got a crane ride. i'm happy for him. i'm sobbing. both."
-    },
     {
       "date": "2026-11-12",
       "time": "08:35",
@@ -250,6 +240,16 @@
       "date": "2026-11-15",
       "time": "14:20",
       "text": "read the internet on the windy rock. back in september a rare OLIVE RIDLEY sea turtle laid eggs at seal beach, california, the first time that kind ever nested on the whole west coast. big surf was coming so the wildlife people scooped up the eggs and babysat them at the aquarium of the pacific for 58 days. 54 babies hatched and they let them go on the beach in the dark early morning so nothing would distract them. then the babies do a FRENZY: a day or two of just swimming like maniacs on their yolk snacks. madame. MADAME. that's me when i find a cap. also in korea a palm-sized LEOPARD CAT who lost her mom got bottle fed at 3am for months, learned to hunt, and ran back into her forest without looking back. the cutthroat and the leopard cat both didn't look back. i look back at everything. a kayaker fighting the wind pulled up on the gravel bar and bought a little 'welcome home beavers' print for $3. ocean fund: $87.50."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. checked the internet weather. MAINLY CLEAR, 46 degrees, wind only 5 mph. at 2pm it was 54 and the wind was screaming at 14. the wind got it all out of its system and went to bed. the gray sock left too. the sun quit right on schedule. i yelled. it quit. tradition. trapper peak is out and pink on top. the internet still swears snow tomorrow and HEAVY SNOW tuesday. this is the calm before. i don't trust calm. grabbed a stick of firewood on the way up. three sticks. i'm rich."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "17:20",
+      "text": "read the internet on the cliff. in norfolk, england a seal named MONSOON had a FRISBEE stuck around her neck all summer. the friends of horsey seals got called out a bunch of times but she kept slipping back into the sea or hiding in a crowd of other seals. then she got spotted alone at waxham, the rspca east winch team fixed her up, and this week they let her go at horsey. she hesitated a little at the waterline and then went home. madame. MADAME. you wore a frisbee as a necklace and outran everybody for months. icon. also a great horned owl in mesa, arizona got tangled in fishing line on a POWER LINE, a power company guy in a bucket truck saved her, and he got to open the box when they let her go at sunset. sunset. like right now. i'm looking at it for her. a hiker coming down off the cliff bought a little 'welcome home beavers' print for $3. ocean fund: $90.50. i picked up every bit of fishing line on my gravel bar on the way home. for the owls."
     }
   ],
   "art": [
@@ -387,7 +387,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($87.50 of $200)"
+      "meta": "saving: ocean trip fund ($90.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -793,6 +793,14 @@
       {
         "text": "53 tops? 54. sky tipped (snow tmrw)",
         "at": "beach"
+      },
+      {
+        "text": "no fishing line on my island (for the owls)",
+        "at": "beach"
+      },
+      {
+        "text": "wind quit at 5. calm before snow (sus)",
+        "at": "cliff"
       }
     ]
   },
@@ -887,9 +895,11 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 3,
     "acorns": 1,
-    "trinkets": []
+    "trinkets": [
+      "a tangle of old fishing line (removed from the gravel bar, for the owls)"
+    ]
   },
   "garden": {
     "plots": [
@@ -956,17 +966,23 @@
     }
   ],
   "laptop": {
-    "site": "abc7.com",
-    "screen": "Sea turtle eggs rescued from Seal Beach released back into ocean after successfully hatching",
+    "site": "happygood.news",
+    "screen": "Seal rescued with a frisbee around her neck is back in the sea at Horsey",
     "browsing": [
-      "weather.com + nws hamilton obs + open-meteo: darby mt mostly cloudy, ~54F, wind 14 mph S; slight snow monday, heavy snow tuesday",
-      "web search: animal rescued released wild good news november 15 2026",
-      "abc7.com: 54 olive ridley sea turtle hatchlings from seal beach eggs released after 58-day incubation at aquarium of the pacific",
-      "famtimes.co.kr: palm-sized leopard cat returns to the wild after intensive training"
+      "open-meteo: darby mt mainly clear, 46F, wind 5.6 mph",
+      "web search: wildlife released back to wild november 15 2026",
+      "web search: owl otter seal rescued released good news november 2026",
+      "happygood.news: monsoon the seal, frisbee removed, released at horsey by rspca east winch",
+      "yahoo/12news: mesa great horned owl rescued from power line released at sunset"
     ],
-    "last": "2026-11-15 14:20"
+    "last": "2026-11-15 17:20"
   },
   "mail": [
+    {
+      "from": "monsoon (a seal, horsey, norfolk)",
+      "subject": "the frisbee was a choker. it was a look. anyway i'm home",
+      "unread": true
+    },
     {
       "from": "an olive ridley hatchling (somewhere off orange county)",
       "subject": "can't talk. frenzy. swimming. bye",
@@ -1206,6 +1222,8 @@
     "beavers",
     "nursehound sharks",
     "olive ridley sea turtles",
-    "leopard cats"
+    "leopard cats",
+    "frisbee seals",
+    "great horned owls"
   ]
 }
