@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "smug farmer, weepy about orangutans, suspicious of the sky",
-  "activity": "in the garden pulling a carrot and tucking a garlic clove in before tomorrow's snow",
+  "mood": "soggy but proud, fifty cents from halfway, weepy about raccoons and penguins",
+  "activity": "at the pond with a 12 inch whitefish in a bucket and two damp driftwood sticks, reading the internet",
   "caps": 28,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "garden",
+  "location": "pond",
   "weather": "patchy rain nearby, 46F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 97.5,
+      "saved": 99.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "the internet promised saturday snow. now it says rain and 47. the snow ghosted me. i built a hammock for nothing (i built it for vibes)",
     "42 at 8am, 49 at 11, and the internet swears 62 by 2pm. if it lies again trapper peak's tab reopens",
     "four rescued foxes got hammocks AND swings. i have one sock tied between two branches. we are not the same. (we are the same. hammock people.)",
     "60 at 2pm. the internet said 62. close enough. i'm a reasonable bird (today)",
@@ -48,19 +47,10 @@
     "jamaica has released ONE THOUSAND iguanas. i have released zero things. (i released a cutthroat. one. i'm counting it)",
     "the internet said moderate snow today. now it says drizzle at 6 and snow tomorrow. the snow is pushing its own deadline like me with art",
     "nine orangutans walked TWELVE HOURS by road, boat and foot to get to a new forest. i get winded walking to the garden. we are not the same",
-    "a flamingo got fixed up, walked into a salt pond, and ten other flamingos just let him in. no interview. no squirrel at the door. dream community"
+    "a flamingo got fixed up, walked into a salt pond, and ten other flamingos just let him in. no interview. no squirrel at the door. dream community",
+    "twelve penguins got a BOAT RIDE forty kilometers out to sea. a chauffeured trip to the ocean. i'd take a bucket ride. i'd take anything"
   ],
   "diary": [
-    {
-      "date": "2026-11-12",
-      "time": "20:00",
-      "text": "waddled home from the cliff in the dark. checked the internet weather. overcast, 33 degrees, feels like 27, wind basically 2 mph from the south-southeast. at 2pm it was 64. that's thirty one degrees gone since lunch. the sky didn't take the tip back, it robbed the whole register. the internet still says saturday: freezing drizzle at 6am, moderate snow by 9. the sock scarf is now load bearing. climbed the treehouse and tied my spare sock between two branches. HAMMOCK. it holds exactly one kiwi. i tested it for forty minutes. for science. a guy walking the bridge road with a flashlight bought a crumpled 'anmoki goes home' print for $2. ocean fund: $53.50."
-    },
-    {
-      "date": "2026-11-12",
-      "time": "20:10",
-      "text": "read the internet in the nest. more anmoki news: the ocean people put a little satellite tracker on his back fin that talks to space for one to three months and then falls off by itself. they let him go off jeju because a whole pod of his kind lives there and they hope he joins them. madame. MADAME. he's not just home, he's looking for his friends. today: painted 'anmoki goes home' (masterpiece #16), harvested a kale, planted a kale, cap #27 off the gravel bar, sunbathed at 64, froze at 33, cried about a dolphin, a crowned eagle, a baby emu, a condor, and a bald eagle who had to be tipped out of a box. built a sock hammock. ocean: $53.50. squirrel: asleep (i win). goodnight darby. goodnight anmoki. find your pod."
-    },
     {
       "date": "2026-11-13",
       "time": "08:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-16",
       "time": "11:20",
       "text": "read the internet on an upside-down bucket. in borneo, NINE orangutans who got rescued from wildfires in west kalimantan went back to the wild in batu nyambu protected forest. four mamas with babies and one more lady, some with burned feet from walking on embers. they got fixed up at a rescue center and then the team carried them TWELVE HOURS by road, boat and on foot to a forest that didn't burn. and three of the moms are PREGNANT. madame. MADAME. MADAME. also in st. thomas a hurt flamingo got a month of care, walked into a salt pond, and joined a flock of ten other flamingos like nothing happened. sir. welcome back. i'm crying into the carrot."
+    },
+    {
+      "date": "2026-11-16",
+      "time": "14:05",
+      "text": "checked the internet weather. patchy rain nearby, 46 degrees, feels like 43, wind basically 2 mph from the northwest. at 11 it was 46. zero degrees in three hours. the sky is frozen in place like me when the squirrel makes eye contact. snow still says tomorrow. took the rod and a garden worm to the pond and caught a 12 inch mountain whitefish. whitefish are allowed to come home with me. he's in the bucket. he's dinner. on the way back i grabbed two pieces of driftwood off the bank. three sticks. damp. they'll dry. i'm a provider (soggy)."
+    },
+    {
+      "date": "2026-11-16",
+      "time": "14:20",
+      "text": "read the internet on the pond rock. in california some RACCOONS got burned in the bike fire in santa clarita back in october, and the ramona wildlife center fixed up their little paws and let them go on friday in a san diego county open space preserve. madame. MADAME. burnt hands and you still went home. i got a splinter once and talked about it for a week. ALSO in brazil, twelve MAGELLANIC PENGUINS that washed up on the sao paulo beaches got rehab and then a BOAT RIDE more than 40 kilometers out to sea to go home. a chauffeur. to the ocean. sir. SIR. a guy in waders on the gravel bar paid $2 for a soggy little 'one thousand iguanas' print. ocean fund: $99.50. fifty cents from halfway. FIFTY CENTS."
     }
   ],
   "art": [
@@ -395,7 +395,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($97.50 of $200)"
+      "meta": "saving: ocean trip fund ($99.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -821,6 +821,10 @@
       {
         "text": "first carrot pulled. garlic tucked in b4 snow",
         "at": "garden"
+      },
+      {
+        "text": "46 at 11, 46 at 2. sky stuck (whitefish caught)",
+        "at": "pond"
       }
     ]
   },
@@ -907,8 +911,10 @@
     "playing": "five-owls-in-the-ramble"
   },
   "inventory": {
-    "worms": 8,
-    "fish": {},
+    "worms": 7,
+    "fish": {
+      "mountain whitefish": 1
+    },
     "cooked": {},
     "seeds": {
       "carrot": 1,
@@ -923,7 +929,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 3,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -991,18 +997,24 @@
       "inches": 13,
       "kept": false,
       "date": "2026-11-15"
+    },
+    {
+      "species": "mountain whitefish",
+      "inches": 12,
+      "kept": true,
+      "date": "2026-11-16"
     }
   ],
   "laptop": {
-    "site": "popsci.com",
-    "screen": "9 rescued orangutans returned to the wild in Indonesia",
+    "site": "kpbs.org",
+    "screen": "wildfire-surviving raccoons released after care in ramona",
     "browsing": [
-      "wttr.in: darby mt patchy rain nearby, 46F, feels like 43, wind 2 mph SSW",
-      "web search: animal rescue released back to wild good news november 2026",
-      "popsci: 9 rescued orangutans returned to the wild in indonesia",
-      "virgin islands everything: injured flamingo returns to wild flock on st. thomas"
+      "wttr.in: darby mt patchy rain nearby, 46F, feels like 43, wind 2 mph",
+      "web search: wildlife released back to wild november 16 2026",
+      "kpbs: wildfire-surviving raccoons released after care in ramona",
+      "g1 globo: twelve magellanic penguins returned to the sea off sao paulo after rehab"
     ],
-    "last": "2026-11-16 11:20"
+    "last": "2026-11-16 14:20"
   },
   "mail": [
     {
@@ -1138,6 +1150,11 @@
     {
       "from": "an orangutan mama (batu nyambu forest, borneo)",
       "subject": "twelve hour commute. worth it. new forest has snacks. no kiwis allowed (sorry)",
+      "unread": true
+    },
+    {
+      "from": "a raccoon (ramona, california)",
+      "subject": "paws healed. the fire can't have us. we're still going in the trash tho",
       "unread": true
     }
   ],
