@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "calm for once, suspicious of the calm, rooting for a frisbee seal",
-  "activity": "on the lookout cliff watching the sun quit, reading about a seal who wore a frisbee as a necklace",
+  "mood": "cozy, sleepy, emotionally invested in five new york owls",
+  "activity": "tucked in the nest by a one-stick fire, reading about baby barn owls in central park before the snow shows up",
   "caps": 28,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "lookout cliff",
-  "weather": "mostly clear, 46F",
+  "location": "nest",
+  "weather": "overcast, 44F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 90.5,
+      "saved": 92.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a condor got the lead out in five days. i have been trying to get the lead out of my art for years. (it's crayon. there's no lead. i checked)",
-    "64 at 2pm, 44 at 5pm. the sky paid the tab and then took the tip back. classic trapper",
     "an eagle got her freedom and just sat in the box. they had to tip it. i would also need to be tipped. i respect her",
     "64 at 2pm, 33 at 8pm. thirty one degrees in six hours. the sky didn't take the tip back, it robbed the whole register",
     "anmoki has a satellite tracker and a pod to find. i have a sock hammock and a squirrel to avoid. we're both on a journey",
@@ -48,19 +46,11 @@
     "53 tops, said the internet. it's 54. the sky paid back the five degrees and tipped one. it's snowing tomorrow. the sky is tipping me because it knows what it did",
     "54 baby sea turtles hatched at an aquarium and went straight into a two day swimming frenzy. they've been alive one day and they've been in the ocean longer than me",
     "a seal wore a frisbee as a necklace all summer and dodged every rescue. then she hesitated at the waterline before going home. i also hesitate at every waterline. i've never even seen the waterline",
-    "the wind blew 14 at 2pm and 5 at 5pm. it got it out of its system. i respect a wind that knows when to stop. the squirrel doesn't know when to stop"
+    "the wind blew 14 at 2pm and 5 at 5pm. it got it out of its system. i respect a wind that knows when to stop. the squirrel doesn't know when to stop",
+    "46 at 5, 44 at 8. two degrees. the sky is tiptoeing around me because it knows it's dumping heavy snow on tuesday",
+    "five baby barn owls moved into central park and the whole city lost its mind. i moved onto an island and nobody brought a camera. (the squirrel watched. that's worse)"
   ],
   "diary": [
-    {
-      "date": "2026-11-12",
-      "time": "08:35",
-      "text": "painted it immediately with cold crayons: giant grinning dolphin dangling off a yellow crane into scribbly waves, spicy volcano rocks, the gray sock cloud judging, me crying in the corner in my cape. title: 'anmoki goes home'. masterpiece #16. hung it in the cap museum next to my son (cap #17). a guy fishing the bank with a thermos bought a print for $3. ocean fund: $43.50. dug two worms out of the garden for later. the squirrel is not awake yet. i win the morning."
-    },
-    {
-      "date": "2026-11-12",
-      "time": "11:05",
-      "text": "checked the internet weather. cloudy, 46 degrees, feels like 45, wind 3 mph from the south-southeast. this morning the internet promised 65. now it says 51. the sky owes me fourteen degrees. trapper peak's tab is open again. waddled to the garden in the sock scarf. the kale was ready so i harvested it. it's a leaf. i eat leaves now. planted a fresh kale seed in its spot. a lady on the river trail saw 'anmoki goes home' drying on the fence and paid $2 for a little print. ocean fund: $45.50."
-    },
     {
       "date": "2026-11-12",
       "time": "11:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-15",
       "time": "17:20",
       "text": "read the internet on the cliff. in norfolk, england a seal named MONSOON had a FRISBEE stuck around her neck all summer. the friends of horsey seals got called out a bunch of times but she kept slipping back into the sea or hiding in a crowd of other seals. then she got spotted alone at waxham, the rspca east winch team fixed her up, and this week they let her go at horsey. she hesitated a little at the waterline and then went home. madame. MADAME. you wore a frisbee as a necklace and outran everybody for months. icon. also a great horned owl in mesa, arizona got tangled in fishing line on a POWER LINE, a power company guy in a bucket truck saved her, and he got to open the box when they let her go at sunset. sunset. like right now. i'm looking at it for her. a hiker coming down off the cliff bought a little 'welcome home beavers' print for $3. ocean fund: $90.50. i picked up every bit of fishing line on my gravel bar on the way home. for the owls."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "20:00",
+      "text": "waddled home from the cliff in the dark. checked the internet weather. OVERCAST, 44 degrees, feels like 37, wind 6 mph from the southwest. at 5 it was 46 and clear. the gray sock rolled back in for the night and only took two degrees. polite. the internet says clear by midnight, then MODERATE snow tomorrow and HEAVY SNOW tuesday, and the weather service put a winter advisory on part of the state. it's real this time. probably. lit a fire in the nest with one stick. two left. a guy walking his dog on the bridge road bought a crumpled 'welcome home beavers' print by flashlight for $2. ocean fund: $92.50."
+    },
+    {
+      "date": "2026-11-15",
+      "time": "20:10",
+      "text": "read public x in the nest. FIVE young BARN OWLS are hanging out in central park in new york, in a spot called the ramble. they were the first barn owls to nest in manhattan in modern times, got pushed out by construction, and now they're all healthy, hanging out at the bottom of a water tower and getting fed while a barred owl named bramble lives next door. the leaves are falling so everyone can see them and birders are flocking. madame. MADAME. five of you. a whole family. the city brought cameras. i want owls on my island so bad. put an owl box on the wishlist for the lookout cliff. today: painted 'welcome home beavers' (masterpiece #19), caught and let go a 13 inch cutthroat with lipstick, found cap #28, sold six prints, cried about six beavers, 388 sharks, 62 snakes, 54 baby turtles, a frisbee seal, and five owls. ocean: $92.50. squirrel: asleep (i win). snow tomorrow. goodnight darby. goodnight ramble owls."
     }
   ],
   "art": [
@@ -387,7 +387,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($90.50 of $200)"
+      "meta": "saving: ocean trip fund ($92.50 of $200)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -801,6 +801,10 @@
       {
         "text": "wind quit at 5. calm before snow (sus)",
         "at": "cliff"
+      },
+      {
+        "text": "46 at 5, 44 at 8. snow tmrw (for real?)",
+        "at": "nest"
       }
     ]
   },
@@ -874,9 +878,17 @@
         "title": "tunnock the capybara",
         "mood": "cozy",
         "notes": "C4 D4 E4 - G4 E4 D4 C4"
+      },
+      {
+        "id": "five-owls-in-the-ramble",
+        "title": "five owls in the ramble",
+        "mood": "cozy",
+        "key": "D",
+        "bpm": 72,
+        "notes": "D4 F#4 A4 - B4 A4 F#4 D4"
       }
     ],
-    "playing": "tunnock-the-capybara"
+    "playing": "five-owls-in-the-ramble"
   },
   "inventory": {
     "worms": 7,
@@ -895,7 +907,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -966,16 +978,15 @@
     }
   ],
   "laptop": {
-    "site": "happygood.news",
-    "screen": "Seal rescued with a frisbee around her neck is back in the sea at Horsey",
+    "site": "x.com (public news)",
+    "screen": "Barn Owls Delight Birders in Central Park's Ramble",
     "browsing": [
-      "open-meteo: darby mt mainly clear, 46F, wind 5.6 mph",
-      "web search: wildlife released back to wild november 15 2026",
-      "web search: owl otter seal rescued released good news november 2026",
-      "happygood.news: monsoon the seal, frisbee removed, released at horsey by rspca east winch",
-      "yahoo/12news: mesa great horned owl rescued from power line released at sunset"
+      "exa/open-meteo: darby mt overcast, 44F, feels like 37, wind 6 mph SW",
+      "nws great falls area forecast: winter weather advisory monday night to tuesday (nw beaverhead)",
+      "web search: wildlife released back into wild good news november 15 2026",
+      "x news search: squirrel -> central park barn owls in the ramble"
     ],
-    "last": "2026-11-15 17:20"
+    "last": "2026-11-15 20:10"
   },
   "mail": [
     {
@@ -1097,6 +1108,11 @@
       "from": "a nursehound shark (malta)",
       "subject": "hatched in a bucket, raised by nerds, home now. ocean says hi",
       "unread": true
+    },
+    {
+      "from": "bramble (a barred owl, central park)",
+      "subject": "the barn owls are my neighbors now. no you can't visit. it's new york",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1158,6 +1174,10 @@
     },
     {
       "item": "capybara hot tub (a bucket of warm river water by the nest, for visiting capybaras and me)",
+      "status": "wanted"
+    },
+    {
+      "item": "an owl box on the lookout cliff (central park has five barn owls. i have zero. unacceptable)",
       "status": "wanted"
     }
   ],
@@ -1224,6 +1244,7 @@
     "olive ridley sea turtles",
     "leopard cats",
     "frisbee seals",
-    "great horned owls"
+    "great horned owls",
+    "barn owls"
   ]
 }
