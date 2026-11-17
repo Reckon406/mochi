@@ -20,6 +20,9 @@ import { seasonOf } from './season.js';
 import { buildFeatures } from './features.js';
 import { buildWishes, applyWishBuilt } from './wishes.js';
 import { createExtras } from './extras.js';
+import { liveWeather, startLiveWeather } from './live.js';
+import { createNightSky } from './nightsky.js';
+import { createWaterFx } from './waterfx.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -58,6 +61,9 @@ const audioCtl = { suspend() {}, resume() {} };
 
 async function init() {
   const { state, error } = await loadState();
+  // stage B: real Darby weather (Open-Meteo) unless a ?weather= preview is set; Mochi's own text is kept as weatherMochi
+  let live = null;
+  if (!params.get('weather') && params.get('live') !== '0') { try { live = await liveWeather(); } catch (e) { live = null; } if (live) { state.weatherMochi = state.weather; state.weather = live.text; } }
   if (params.get('weather')) state.weather = params.get('weather');
   if (params.get('location')) state.location = params.get('location');
   if (params.get('treehouse') != null) state.treehouse = { ...(state.treehouse || {}), stage: +params.get('treehouse') }; // preview only, never saved
@@ -294,6 +300,12 @@ async function init() {
   else brain.wait = 1.2;
   if (params.get('ui') === '0') document.getElementById('ui').style.display = 'none';
 
+  // ── stage B: night sky + water polish + live weather refresh ──
+  let nightSky = null, waterFx = null;
+  try { nightSky = createNightSky(scene, { weather, season, mochi, say: (s, d) => say(s, d), force: params.get('aurora') === '1' ? 'aurora' : params.get('star') === '1' ? 'star' : null,
+    log: (e) => { life.encounters.push({ ...e, date: new Date().toLocaleDateString('en-CA') }); lifeDirty = 1; } }); } catch (e) { console.warn('night sky failed', e); }
+  try { waterFx = createWaterFx(scene, { lights: [...(island.lights || []), ...(features.lanternLight ? [{ l: features.lanternLight }] : [])], mobile: isMobile, music }); } catch (e) { console.warn('water fx failed', e); }
+  if (!params.get('weather') && params.get('live') !== '0') startLiveWeather((w) => { state.weather = w.text; const el = document.querySelector('#ui .loc span'); if (el) el.textContent = w.text; if (w.tempF != null) { feel.cold = w.tempF <= 35 ? 1 : w.tempF <= 45 ? 0.45 : 0; mochi.mods.cold = feel.cold; } });
   // ── stage A: photo mode, petting, snacks ──
   let extras = null;
   try { extras = createExtras({ scene, camera, renderer, renderNow: () => composer.render(0), mochi, music, say: (s, d) => say(s, d), feel,
@@ -409,9 +421,9 @@ async function init() {
     if (!life.current) life.update(dt, t);
     mochi.root.position.y = groundY(mochi.root.position.x, mochi.root.position.z) + life.lift;
     mochi.root.rotation.y = brain.heading;
-    mochi.update(dt, moving);
+    mochi.update(dt, moving); extras?.update(dt); nightSky?.update(t, dt, sky.state.night || 0, camera);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); extras?.update(dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
@@ -450,7 +462,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { extras, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

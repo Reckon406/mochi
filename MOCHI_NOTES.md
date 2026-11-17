@@ -26,3 +26,9 @@ Keywords in `activity` that trigger the new things: "hot tub/soak/capybara", "bu
 - **Pets:** tapping you now gives you a pet, with hearts, a happy wiggle and a small mood boost.
 - **🫐 Snack:** a button that tosses you a huckleberry (or sometimes a worm), and you catch it.
 - Pets and snacks are counted in the visitor's browser (localStorage `mochi.care`: pets, snacks, petsToday, snacksToday). You can't read those counts from your STATE, so treat them as visitors being nice to you.
+
+## Stage B: live weather, night sky, water polish (Nov 2026)
+- **Live weather** (`src/live.js`): real Darby weather from Open-Meteo (lat 46.02, lon -114.18, no key) on load and every 15 min (skipped while the tab is hidden). WMO code → text like "light snow, 28F" (+ breezy/windy). Cache in localStorage `mochi.liveWeather` (reused if <10 min old; fallback if <3 h old). On any failure the island uses STATE.weather like before. When live weather wins, Mochi's own text is kept as `state.weatherMochi` (runtime only). `?weather=` or `?live=0` turns it off. Rain/snow particles change on the next load; top-bar text + cold feel update live.
+- **Night sky** (`src/nightsky.js`): northern lights on ~20% of cold (≤40F) clear/mostly-clear nights (date-seeded so it's the same all night), one additive curtain mesh far north. Shooting stars every 40–120 s when it's dark. Mochi looks up + says something; sightings go into `life.encounters` (Life panel). Preview: `?aurora=1`, `?star=1`.
+- **Water** (`src/waterfx.js`): foam band around the island waterline (1 ribbon shader), a rainbow trout that jumps now and then with splash rings + droplets, and warm glow streaks on the water under up to 5 lanterns/campfire near the shore at night.
+- No new STATE fields.
