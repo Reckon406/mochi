@@ -118,6 +118,8 @@ export const VEND = { x: -6.8, z: 15.8 }; { const L = Math.hypot(VEND.x + 3, VEN
 // wishlist builds (v3 outer ring): hot tub by the nest, petrel guest burrow north, whale scope + owl box on the cliff, Corey's gift board by the ramp
 export const WISH = { tub: { x: -10.0, z: -17.6 }, burrow: { x: -4.5, z: 22.0 }, scope: { x: CLIFF.x - 1.2, z: CLIFF.z - 2.2 }, owlbox: { x: CLIFF.x + 1.9, z: CLIFF.z + 1.6 }, board: { x: 14.0, z: 7.2 }, swingA: -1.0 };
 // zones. pos = feature centre, spot = where Mochi stands, face = yaw he looks toward (radians, 0 = +z)
+// shooting range (stage D): north of the Lookout Cliff, lane runs west (-x), away from the island
+export const RANGE = { x: -22.6, z: -6.6, bench: -19.4, tgt: -25.7, len: 6.3 };
 export const ZONES = [
   { id: 'hut', name: 'Hut & Nest', emoji: '🛖', pos: Z(-4.2, -8.0), spot: S(-2.6, -5.9, -4.2, -8.0), keys: ['hut', 'home', 'house', 'nest', 'roof', 'ladder', 'bed', 'sleep', 'inside', 'door'] },
   { id: 'tree', name: 'Big Tree', emoji: '🌳', pos: Z(4.4, -9.0), spot: S(3.4, -7.0, 4.4, -9.0), keys: ['big tree', 'treehouse', 'tree house', 'oak', 'tree', 'shade', 'leaves', 'branch', 'climb', 'owl'] },
@@ -138,6 +140,7 @@ export const ZONES = [
   { id: 'picnic', name: 'Picnic Table', emoji: '🧺', pos: Z(-3.2, 1.6), spot: S(-2.2, 3.0, -3.2, 1.6), keys: ['picnic', 'table', 'cooler', 'soda', 'snack', 'lunch', 'quarters', 'laptop', 'computer', 'internet', 'browse', 'web', 'online', 'eat'] },
   { id: 'hottub', name: 'Hot Tub', emoji: '♨️', pos: [WISH.tub.x, WISH.tub.z], spot: [WISH.tub.x + 1.3, WISH.tub.z + 1.2], keys: ['hot tub', 'hottub', 'tub', 'soak', 'capybara', 'bath', 'steam', 'warm water'] },
   { id: 'burrow', name: 'Petrel Burrow', emoji: '🐦', pos: [WISH.burrow.x, WISH.burrow.z], spot: [WISH.burrow.x + 0.9, WISH.burrow.z - 1.6], keys: ['burrow', 'petrel', 'diving-petrel', 'guest', 'seabird', 'tunnel'] },
+  { id: 'range', name: 'Shooting Range', emoji: '🎯', pos: [RANGE.x, RANGE.z], spot: [RANGE.bench + 0.55, RANGE.z], keys: ['range', 'shooting', 'target', 'gun', 'rifle', 'plinking', 'clay'] },
   { id: 'vending', name: 'Cap-O-Matic', emoji: '🎰', pos: [VEND.x, VEND.z], spot: [VEND.x + VEND.fx * 1.6, VEND.z + VEND.fz * 1.6], keys: ['vending', 'cap-o-matic', 'capomatic', 'machine', 'trinket', 'spend', 'gacha', 'capsule'] },
 ];
 
@@ -162,6 +165,7 @@ export const OBSTACLES = [
   { x: SHOP.x, z: SHOP.z, r: Math.hypot(SHOP.w, SHOP.d) / 2 + 0.2, mochiOnly: true },
   { x: 0.2, z: 2.8, r: 0.45 }, { x: -1.2, z: 5.7, r: 0.85 }, // sign pass: crossroads post + notice board (signs.js CROSS / worldstate.js BOARD)
   { x: WISH.tub.x, z: WISH.tub.z, r: 0.85 }, { x: WISH.burrow.x, z: WISH.burrow.z, r: 1.0 }, { x: WISH.owlbox.x, z: WISH.owlbox.z, r: 0.3 }, { x: WISH.scope.x, z: WISH.scope.z, r: 0.3 },
+  { x: RANGE.tgt - 0.3, z: RANGE.z, r: 1.6 }, { x: RANGE.bench, z: RANGE.z, r: 0.4 }, { x: RANGE.bench + 0.4, z: RANGE.z - 2.5, r: 0.7 }, { x: RANGE.bench + 0.2, z: RANGE.z + 2.4, r: 0.6 }, { x: RANGE.x - 1.6, z: RANGE.z - 2.2, r: 0.5 }, // range: targets/berm, bench, vending, rack, clay thrower
 ];
 export const WALLS = [];
 { // shop walls: back, sides, and the two front pieces either side of the doorway

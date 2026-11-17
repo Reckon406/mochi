@@ -24,6 +24,8 @@ import { liveWeather, startLiveWeather } from './live.js';
 import { createNightSky } from './nightsky.js';
 import { createWaterFx } from './waterfx.js';
 import { createAdventures } from './adventures.js';
+import { createRange } from './range.js';
+import { createTempSigns } from './tempsigns.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -304,6 +306,12 @@ async function init() {
   // ── stage C: raft trips + finds, friends, radio ──
   let adv = null;
   try { adv = createAdventures(scene, { life, mochi, say: (s, d) => say(s, d), music, getWild: () => wild, features, ui, state }); } catch (e) { console.warn('adventures failed', e); }
+  // ── stage D: shooting range + Gun-O-Matic ──
+  let range = null;
+  try { range = createRange(scene, { life, mochi, say: (s, d) => say(s, d), music, state, getWild: () => wild }); } catch (e) { console.warn('range failed', e); }
+  // ── temporary stake signs (Mochi + the squirrel) ──
+  let tempSigns = null;
+  try { tempSigns = createTempSigns(scene, { state, island, life, mochi, say: (s, d) => say(s, d), music, squirrel, squirrelPos: squirrelZone.pos }); } catch (e) { console.warn('temp signs failed', e); }
   // ── stage B: night sky + water polish + live weather refresh ──
   let nightSky = null, waterFx = null;
   try { nightSky = createNightSky(scene, { weather, season, mochi, say: (s, d) => say(s, d), force: params.get('aurora') === '1' ? 'aurora' : params.get('star') === '1' ? 'star' : null,
@@ -428,7 +436,7 @@ async function init() {
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving); extras?.update(dt); nightSky?.update(t, dt, sky.state.night || 0, camera);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
@@ -467,7 +475,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

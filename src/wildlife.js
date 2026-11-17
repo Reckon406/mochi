@@ -183,6 +183,8 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
   const LINES = {
     spot: { bear: ['...is that a BEAR. across the river. hi bear. stay there bear', 'bear on the far bank. i am very small and very still', 'big fuzzy guy drinking over there. we are both just thirsty'], lion: ['mountain lion over there. majestic. please keep being majestic OVER THERE', 'a big cat is looking at me. i am not a snack. i am a bird'], wolf: ['a wolf on the bank. pretty. scary. pretty scary', 'wolf. watching. i am also watching. this is a staring contest now'] },
     cross: { bear: ['oh no it is SWIMMING', 'the bear is coming over. ok. plan. i have a plan. (i do not have a plan)'], lion: ['the cat is crossing. cats hate water. this cat does not know that'], wolf: ['wolf is wading over. ok ok ok'] },
+    warn: 'ear muffs ON. warning shots, into the SKY. go home big guy',
+    warnLeft: ['it jumped and ran home. nobody got hurt. that is the whole point', 'sky: 2, bear: 0 (the bear is fine, just embarrassed)', 'scared it home. into the sky, never at anybody'],
     puff: 'I AM VERY BIG. LOOK AT MY CAPE. GO HOME', pot: '*CLANG CLANG CLANG* this is my island!!', spray: '*psssht* bear spray. sorry. please leave', hide: 'nope. hiding in the hut. this is my hut', climb: 'treehouse. up. now.',
     left: ['it left. it LEFT. i am basically a ranger now', 'it backed off. my heart is going 900 bpm', 'and STAY on your side of the river (respectfully)'],
     shaken: ['ok that was a lot. i need a sit', 'i was brave on the outside. inside i was a scrambled egg'],
@@ -215,7 +217,8 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     // pick a response that suits the animal + how brave he's feeling
     const k = ev.kind; const brave = courage / 100; const r = Math.random();
     let how = k === 'bear' ? (r < 0.35 ? 'pot' : r < 0.6 ? 'spray' : r < 0.6 + 0.25 * brave ? 'puff' : 'climb') : k === 'lion' ? (r < 0.55 + 0.2 * brave ? 'puff' : r < 0.85 ? 'pot' : 'hide') : (r < 0.45 ? 'pot' : r < 0.8 ? 'puff' : 'hide');
-    if (a.key === 'grizzly' && how === 'climb') how = 'spray'; // grizzlies climb too; spray is the move
+    if (a.key === 'grizzly' && how === 'climb') how = 'spray';
+    if ((k === 'bear' || k === 'lion') && api.warnShot?.can() && Math.random() < 0.55) { how = 'warn'; api.warnShot.start(); } // grizzlies climb too; spray is the move
     ev.how = how; ev.dt = 0; say(LINES[how], 3.5);
     if (how === 'hide') { lock = null; go('hut'); brain.wait = 25; brain.acted = true; }
     else if (how === 'climb') { lock = null; go('tree', 'treehouse'); }
@@ -288,7 +291,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
       else if (a.phase === 'flee') { if (walkTo(a, a.wp[0], dt, 3)) { despawn(a); ev = null; } }
       return;
     }
-    if (e.done) { if (walkTo(a, e.home, dt, a.swim ? 1.4 : 2.4)) { despawn(a); ev = null; } return; }
+    if (e.done) { if (walkTo(a, e.home, dt, (a.swim ? 1.4 : 2.4) * (e.startled ? 1.8 : 1))) { despawn(a); ev = null; } return; }
     if (a.phase === 'in') { if (walkTo(a, a.wp[0], dt, 1.2)) { a.phase = 'watch'; e.t = 0; say(pick(LINES.spot[e.kind]), 4); music.sfx('click'); } return; }
     if (a.phase === 'watch') { // across the river: stare-off. he gets nervous and watches.
       headDown(a, Math.sin(e.t * 0.6) > 0.3); lock = { face: faceM() }; mochi.pose.puff = 0.12 + Math.sin(t * 22) * 0.03;
@@ -305,10 +308,11 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
       if (how === 'puff') { lock = { face: faceM() }; mochi.pose.puff = Math.min(1, e.dt * 1.5); if (Math.random() < dt * 3) mochi.flap(1); }
       if (how === 'pot') { lock = { face: faceM() }; if (pot && pot.parent !== mochi.hold) { mochi.hold.add(pot); pot.position.set(0, 0.2, 0); pot.rotation.set(0, 0, 0); pot.visible = true; } if (Math.floor(e.dt * 3) !== Math.floor((e.dt - dt) * 3)) { music.sfx('clang'); mochi.hop(0.3); } }
       if (how === 'spray') { lock = { face: faceM() }; if (e.dt > 0.8 && !e.sprayed) { e.sprayed = 1; music.sfx('spray'); const dir = p.clone().sub(mp).setY(0).normalize(); spray.forEach((s, i) => { s.visible = true; s.userData = { t: -i * 0.05, o: mp.clone().add(new THREE.Vector3(0, 0.6, 0)).addScaledVector(dir, 0.6), dir }; }); } }
+      if (how === 'warn') { lock = { face: faceM() }; mochi.pose.puff = 0.3; if (api.warnShot?.tick(e, dt)) { e.startled = (e.startled || 0) + 1; a.m.rotation.y += 0.6; ring(p.x, p.z); } }
       if (how === 'hide') { const hz = ZONES.find((q) => q.id === 'hut'); if (Math.hypot(mp.x - hz.spot[0], mp.z - hz.spot[1]) < 0.6) mochi.root.visible = false; }
-      if (e.dt > (how === 'hide' || how === 'climb' ? 10 : 4.5)) { // the predator backs off: turns, trots back, swims home
-        e.home = a.from.clone(); const proud = how === 'puff' || how === 'pot' || how === 'spray';
-        const out = { puff: 'puffed up + flapped my cape; it backed off', pot: 'banged a pot; it backed off', spray: 'bear spray puff; it backed off', hide: 'hid in the hut; it wandered off', climb: 'climbed the treehouse; it wandered off' }[how];
+      if (e.dt > (how === 'hide' || how === 'climb' ? 10 : how === 'warn' ? 3.4 : 4.5)) { if (how === 'warn') { api.warnShot?.end(); say(pick(LINES.warnLeft), 3); } // the predator backs off: turns, trots back, swims home
+        e.home = a.from.clone(); const proud = how === 'puff' || how === 'pot' || how === 'spray' || how === 'warn';
+        const out = { warn: 'fired two warning shots into the sky; it startled and ran home', puff: 'puffed up + flapped my cape; it backed off', pot: 'banged a pot; it backed off', spray: 'bear spray puff; it backed off', hide: 'hid in the hut; it wandered off', climb: 'climbed the treehouse; it wandered off' }[how];
         finishEvent(out, proud);
       }
     }
@@ -328,5 +332,6 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
       if (fishy && Math.random() < 0.45) startEvent(Math.random() < 0.5 ? 'coyote' : 'fox', 'dock'); else if (ok.length) { let k = pick(ok); if (k === 'grizzly' && Math.random() < 0.7) k = 'blackbear'; startEvent(k); } } }
     else updateEvent(dt, t);
   }
-  return { group, update, startEvent, spawn, get lock() { return lock; }, get courage() { return courage; }, get event() { return ev; }, live };
+  const api = { group, update, startEvent, spawn, get lock() { return lock; }, get courage() { return courage; }, get event() { return ev; }, live, warnShot: null };
+  return api;
 }

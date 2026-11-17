@@ -115,9 +115,10 @@ export function createAdventures(scene, { life, mochi, say, music, getWild, feat
     const fi = Object.keys(FIND_KINDS).map((k) => `<li>${FIND_KINDS[k].emoji} ${esc(FIND_KINDS[k].name)} <b>×${D.finds[k]}</b></li>`).join('');
     const lastFind = D.findLog[D.findLog.length - 1];
     return `<h4>Friends</h4><ul class="friends">${fr}</ul><h4>Raft finds <small>(${D.trips} trip${D.trips === 1 ? '' : 's'})</small></h4><ul class="finds">${fi}</ul>${lastFind ? `<p><small>latest: ${esc(FIND_KINDS[lastFind.kind]?.name || lastFind.kind)} on ${esc(lastFind.date)}</small></p>` : '<p><small>no trips yet. the raft is at the dock.</small></p>'}
+      ${(() => { const R = window.__mochi?.range; if (!R) return ''; const d = R.data; return `<h4>Range <small>(${d.rounds} round${d.rounds === 1 ? '' : 's'}, best ${d.best}/8)</small></h4><p><small>guns: ${d.guns.length ? esc(d.guns.join(', ')) : 'none yet'} · caps spent: ${d.capsSpent} · caps left: ${R.caps} · warning shots: ${d.warnings}</small></p>`; })()}
       <p><button class="copyst" title="copy these as STATE fields for mochi">📋 copy for mochi</button></p>`;
   }
-  function stateFields() { const friends = {}; for (const k in D.friends) friends[k] = { score: D.friends[k].score, level: level(D.friends[k].score), last: D.friends[k].last }; return { friends, finds: { ...D.finds }, raftTrips: D.trips }; }
+  function stateFields() { const friends = {}; for (const k in D.friends) friends[k] = { score: D.friends[k].score, level: level(D.friends[k].score), last: D.friends[k].last }; return { friends, finds: { ...D.finds }, raftTrips: D.trips, ...(window.__mochi?.range?.stateFields() || {}) }; }
   function renderPanel() { if (!fDirty) return; fDirty = 0; ui.renderFriends?.(panelHtml()); const b = document.querySelector('#pane-friends .copyst'); if (b) b.onclick = () => { navigator.clipboard?.writeText(JSON.stringify(stateFields(), null, 1)).then(() => (b.textContent = '✓ copied'), () => (b.textContent = 'copy failed')); }; }
 
   // ── danger check (bears / lions anywhere in an event) ──
@@ -164,7 +165,7 @@ export function createAdventures(scene, { life, mochi, say, music, getWild, feat
     if (raftTo) { const d = raftTo.clone().sub(raft.position); d.y = 0; const L = d.length(); if (L < 0.05) raftTo = null; else raft.position.addScaledVector(d.normalize(), Math.min(L, raftSp * dt)); }
     raft.position.y = WATER_Y + 0.05 + Math.sin(t * 1.3) * 0.03; raft.rotation.z = Math.sin(t * 0.9) * 0.03; raft.rotation.x = Math.sin(t * 1.1 + 1) * 0.02;
     if (station && music?.playing) { thump += dt; radioBody.scale.y = 1 + Math.max(0, Math.sin(thump * 9)) * 0.03; } else radioBody.scale.y = 1;
-    pollT -= dt; if (pollT < 0) { pollT = 0.5; poll(); } renderPanel();
+    pollT -= dt; if (pollT < 0) { pollT = 0.5; poll(); if ((t % 3) < 0.5 && document.querySelector('#pane-friends.open')) fDirty = 1; } renderPanel();
   }
   return { group, update, tap, raft, radio, shelf, data: D, refreshShelf, stateFields, befriend, setStation, get riding() { return riding; } };
 }

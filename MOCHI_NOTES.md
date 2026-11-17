@@ -43,3 +43,22 @@ All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.a
   - `"finds": { "pinecone": 3, "feather": 1, "rock": 0, "antler": 1 }`
   - `"friends": { "capybara": { "score": 12 }, "petrel": { "score": 4 }, "fox": 2 }` (number or `{score}`)
   - The Friends tab has a "📋 copy for mochi" button that copies `{ friends, finds, raftTrips }` as JSON so Corey can paste it to Mochi (the site can't write state.json itself).
+
+## Stage D: shooting range + Gun-O-Matic (Nov 2026)
+`src/range.js` (`window.__mochi.range`). Zone `range` ("Shooting Range" 🎯) just north of the Lookout Cliff; the lane points **west, out of the island** (toward the far bank) with an earth berm behind the targets.
+- **Gun-O-Matic** (Cap-O-Matic styling, olive + brass): spends bottle caps on chunky low-poly guns: `.22 rifle` 8, `revolver` 12, `lever-action` 15, `pump shotgun` 18 (clays), `scoped hunting rifle` 25. Activity `gunshop` buys the cheapest gun he doesn't have yet (only if he can afford it); `window` = window shopping when he can't.
+- **Gun rack** by the bench shows every gun he owns.
+- **Target practice** (activity `shoot`; keywords shooting / target practice / range / plinking / clays): ear muffs on, 8 shots, muzzle flash + soft bang, steel plates *ping* and fold back, tin cans *tink* and fly off the log, the shotgun shoots clays from the thrower (orange shards). Score out of 8 → speech bubble + Life log. Targets reset after.
+- **Warning shots**: if a bear or lion wades onto the island and he owns a gun, he sometimes (55%) picks warning shots: ear muffs, gun pointed at the sky, two shots, the animal startles and hurries home. Nothing alive is ever aimed at or hit. No blood, ever.
+- **Caps**: the site can't write state.json, so spending is tracked in localStorage `mochi.range.capsSpent`. On load, caps = `STATE.caps − (capsSpent − STATE.capsSpent)`. Once Mochi copies `capsSpent` into his state (and lowers `caps`), nothing is counted twice.
+- **STATE fields Mochi can write** (merged on load): `ownedGuns: ["rifle22","lever",...]` (ids: rifle22, revolver, lever, shotgun, scoped), `capsSpent: 20`, `rangeBest: 6`. The Friends tab "📋 copy for mochi" button now also copies `ownedGuns, capsSpent, rangeBest, rangeRounds, warningShots`.
+
+## Temporary stake signs (Nov 2026)
+`src/tempsigns.js` (`window.__mochi.tempSigns`). The sign pass had moved every `world.marks` entry onto the MOCHI'S NOTES board, so nothing got planted around the island any more. This brings the little stake signs back, but capped:
+- **At most 6 standing at once.** When a new one goes in, the oldest sinks into the ground. Spots stay off the gravel paths, ≥0.7 from props/obstacles, off zone stand-spots and ≥1.6 apart.
+- **How Mochi places them:** activity `stake` (it can come up at most places). He walks over, holds a tiny hammer, taps 3 times and the sign pops up. What it says:
+  1. **Your newest `world.marks`** (the last 4 that haven't been planted yet), placed near the mark's `at` zone. Long marks get trimmed to the first clause, about 28 characters. The full text still goes on the notice board. To get a stake sign, just add a mark: `{ "text": "worm crossing", "at": "garden" }`. Short and funny works best.
+  2. **Otherwise his own lines** now and then ("squirrel lies", "worm crossing", …), or a comeback right next to a squirrel sign ("mochi smells" → "i smell like pine. ok").
+  - His signs last 24 h (real time), then sink.
+- **The squirrel** plants a petty sign near its tree every ~2.5–6 min (max 2 of its own up at once), with a tiny hammer: "MY TREE", "mochi smells", "no kiwis", "acorns: MINE"… These last 3 h.
+- Saved in localStorage `mochi.tempsigns`, so signs survive reloads until they expire. They use the shared sign atlas (Gochi Hand burned into pine; the squirrel's are walnut).

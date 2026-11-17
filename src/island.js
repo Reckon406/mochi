@@ -552,7 +552,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     for (const gl of glow) gl.m.emissiveIntensity = gl.day + (gl.night - gl.day) * night;
     for (const L of lights) { const d = L.day || 0; L.l.intensity = d + (L.night - d) * night; }
   }
-  return { world, update, grass, ground, pondMat, clickables, music, hangs, lights };
+  return { world, update, grass, ground, pondMat, clickables, music, hangs, lights, pathD };
 }
 
 const SIGN_ICON = { OCEAN: '🌊', 'RIP HAT': '🎩', 'NO KIWIS': '🚫', 'TRAPPER PEAK →': '🏔️', BEES: '🐝', 'MUSIC CORNER': '🎵' };
