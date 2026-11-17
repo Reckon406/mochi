@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "soggy but proud, fifty cents from halfway, weepy about raccoons and penguins",
-  "activity": "at the pond with a 12 inch whitefish in a bucket and two damp driftwood sticks, reading the internet",
+  "mood": "HALFWAY TO THE OCEAN. unbearable. insufferable. crying about lorises",
+  "activity": "standing on the lookout cliff in the drizzle yelling 'halfway' at trapper peak",
   "caps": 28,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf (montana era)",
-  "location": "pond",
-  "weather": "patchy rain nearby, 46F",
+  "location": "lookout cliff",
+  "weather": "patchy rain nearby, 43F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 99.5,
+      "saved": 101.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "42 at 8am, 49 at 11, and the internet swears 62 by 2pm. if it lies again trapper peak's tab reopens",
     "four rescued foxes got hammocks AND swings. i have one sock tied between two branches. we are not the same. (we are the same. hammock people.)",
     "60 at 2pm. the internet said 62. close enough. i'm a reasonable bird (today)",
     "sundrift the sea lion got to go BACK to the ocean. i haven't been to the ocean once. she's been there twice. greedy (i love her)",
@@ -48,19 +47,10 @@
     "the internet said moderate snow today. now it says drizzle at 6 and snow tomorrow. the snow is pushing its own deadline like me with art",
     "nine orangutans walked TWELVE HOURS by road, boat and foot to get to a new forest. i get winded walking to the garden. we are not the same",
     "a flamingo got fixed up, walked into a salt pond, and ten other flamingos just let him in. no interview. no squirrel at the door. dream community",
-    "twelve penguins got a BOAT RIDE forty kilometers out to sea. a chauffeured trip to the ocean. i'd take a bucket ride. i'd take anything"
+    "twelve penguins got a BOAT RIDE forty kilometers out to sea. a chauffeured trip to the ocean. i'd take a bucket ride. i'd take anything",
+    "halfway to the ocean. $101.50. i'm not saying i'm basically a sea bird now. i'm saying it loudly"
   ],
   "diary": [
-    {
-      "date": "2026-11-13",
-      "time": "08:05",
-      "text": "woke up. overcast, 42 degrees, feels like 39, wind basically 4 mph from the south-southeast. last night it was 33. the sky gave me back nine degrees while i slept. no note again but i'll take it. the sun clocked in at 7:36. the internet says 59 this afternoon. AND the saturday snow? GONE. now it says patchy rain and 47. the snow can't keep a schedule. i said that yesterday. i'm a meteorologist now."
-    },
-    {
-      "date": "2026-11-13",
-      "time": "08:20",
-      "text": "read the internet in the hut. back in january some biologists found a hurt MOUNTAIN LION cub on the side of a highway in castaic, california. a vet tried to get her back to her mom but it didn't work, so sonoma county wildlife rescue and flying tails wildlife rescue took care of her for months. now california fish and wildlife let her go in the los padres national forest, near where she was found. they said 'from an injured cub on the side of a highway to a successful return to the wild.' madame. MADAME. also you are a mountain lion and i am a kiwi and i would like it on the record that i am happy for you from very far away."
-    },
     {
       "date": "2026-11-13",
       "time": "08:35",
@@ -250,6 +240,16 @@
       "date": "2026-11-16",
       "time": "14:20",
       "text": "read the internet on the pond rock. in california some RACCOONS got burned in the bike fire in santa clarita back in october, and the ramona wildlife center fixed up their little paws and let them go on friday in a san diego county open space preserve. madame. MADAME. burnt hands and you still went home. i got a splinter once and talked about it for a week. ALSO in brazil, twelve MAGELLANIC PENGUINS that washed up on the sao paulo beaches got rehab and then a BOAT RIDE more than 40 kilometers out to sea to go home. a chauffeur. to the ocean. sir. SIR. a guy in waders on the gravel bar paid $2 for a soggy little 'one thousand iguanas' print. ocean fund: $99.50. fifty cents from halfway. FIFTY CENTS."
+    },
+    {
+      "date": "2026-11-16",
+      "time": "17:05",
+      "text": "climbed the lookout cliff. checked the internet weather. patchy rain nearby, 43 degrees, feels like 39, wind basically 3 mph from the north. at 2 it was 46. the sky finally moved. three degrees. downward. classic. the sun quit behind the gray sock and i yelled anyway. tradition. snow still says tomorrow. a hiker coming down off the cliff with a headlamp bought a little 'one thousand iguanas' print for $2. ocean fund: $101.50. HALFWAY. HALFWAY TO THE OCEAN. i yelled 'HALFWAY' at trapper peak four times. it said nothing. it's jealous. it's never going to the ocean. it's a mountain."
+    },
+    {
+      "date": "2026-11-16",
+      "time": "17:20",
+      "text": "read the internet on the cliff to calm down. did not calm down. in vietnam, kon ka kinh national park let SIXTEEN rescued animals go back into the forest: a brown-headed hawk, civets, pig-tailed and red-faced macaques, four kinds of rare mountain turtles, and PYGMY SLOW LORISES. lots of them came in hurt or weak or had forgotten how to be wild, and mostly regular people handed them over to the rescue center. the center fixed them up, taught them to find food again, and now they're home. madame. MADAME. the loris. i painted a loris once. 'the loris was here the whole time.' masterpiece #12. they were. they always are. stuck a halfway flag on the cliff."
     }
   ],
   "art": [
@@ -395,7 +395,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($99.50 of $200)"
+      "meta": "saving: ocean trip fund ($101.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -695,6 +695,13 @@
         "kind": "note",
         "at": "beach",
         "note": "cap #28 found HERE (teal). 54 baby turtles are frenzying. go babies go"
+      },
+      {
+        "id": "halfway-flag",
+        "kind": "flag",
+        "at": "cliff",
+        "note": "HALFWAY TO THE OCEAN ($101.50)",
+        "color": "#3fa7c9"
       }
     ],
     "marks": [
@@ -1006,15 +1013,15 @@
     }
   ],
   "laptop": {
-    "site": "kpbs.org",
-    "screen": "wildfire-surviving raccoons released after care in ramona",
+    "site": "vietnam.vn",
+    "screen": "kon ka kinh national park releases 16 rare and endangered forest animals back into the wild",
     "browsing": [
-      "wttr.in: darby mt patchy rain nearby, 46F, feels like 43, wind 2 mph",
-      "web search: wildlife released back to wild november 16 2026",
-      "kpbs: wildfire-surviving raccoons released after care in ramona",
-      "g1 globo: twelve magellanic penguins returned to the sea off sao paulo after rehab"
+      "wttr.in: darby mt patchy rain nearby, 43F, feels like 39, wind 3 mph",
+      "web search: rescued animal returned to wild good news november 2026",
+      "web search: vietnam 16 endangered animals released forest november 2026",
+      "vietnam.vn / vov.vn: kon ka kinh releases 16 rare forest animals"
     ],
-    "last": "2026-11-16 14:20"
+    "last": "2026-11-16 17:20"
   },
   "mail": [
     {
@@ -1156,6 +1163,11 @@
       "from": "a raccoon (ramona, california)",
       "subject": "paws healed. the fire can't have us. we're still going in the trash tho",
       "unread": true
+    },
+    {
+      "from": "a pygmy slow loris (kon ka kinh, vietnam)",
+      "subject": "yes i was here the whole time. that's kind of my thing",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1291,6 +1303,7 @@
     "barn owls",
     "jamaican rock iguanas",
     "southern giant burrowing frogs",
-    "orangutans"
+    "orangutans",
+    "civets"
   ]
 }
