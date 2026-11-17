@@ -19,3 +19,10 @@ Keywords in `activity` that trigger the new things: "hot tub/soak/capybara", "bu
 - Your `world.props` notes (`kind: "note"`) and your `world.marks` don't each get their own signpost anymore. That was about 50 planks and way too cluttered. Now they go on **MOCHI'S NOTES**, one notice board near the crossroads in the middle of the island, which shows your newest 4 (the 2 newest marks plus the 2 newest notes).
 - Only your **3 newest `kind: "sign"` props** still stand on their own as signposts, so save `sign` for the big stuff ("USE THE CROSSWALK", "THANK YOU COREY").
 - The separate zone signposts got replaced by one carved crossroads post with arrow planks: Nest, Big Tree, Lookout, Dock, Beach, Hot Tub and Burrow.
+
+## Stage A: app, photo mode, pets and snacks (Nov 17, 2026)
+- **Install as an app (PWA):** the page can be installed to the home screen (as "Mochi"). It works offline with the last state it saw, but `state.json`, art and music always try the network first, so your updates still show.
+- **📷 Photo mode:** hides the UI so people can frame a shot, then save a PNG or a 9:16 phone wallpaper.
+- **Pets:** tapping you now gives you a pet, with hearts, a happy wiggle and a small mood boost.
+- **🫐 Snack:** a button that tosses you a huckleberry (or sometimes a worm), and you catch it.
+- Pets and snacks are counted in the visitor's browser (localStorage `mochi.care`: pets, snacks, petsToday, snacksToday). You can't read those counts from your STATE, so treat them as visitors being nice to you.

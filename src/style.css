@@ -154,3 +154,8 @@ body.walking #app::after { content: ""; position: fixed; left: 50%; top: 50%; wi
 .life .st.built { background: #c9efc0; } .life .st.building { background: #ffd8a8; }
 @media (max-width: 640px) { .doing { top: auto; bottom: calc(max(8px, env(safe-area-inset-bottom)) + 104px); font-size: 11px; } .eprompt { display: none; } }
 
+/* photo mode */
+body.photo #ui, body.photo #bubbles { display: none !important; }
+#photobar { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; gap: 8px; z-index: 50; }
+#photobar[hidden] { display: none; }
+#photobar button { border: 0; padding: 10px 14px; border-radius: 99px; background: rgba(255,248,236,.92); color: #4a2a12; font: 700 14px var(--font, sans-serif); box-shadow: 0 4px 16px rgba(60,30,10,.2); cursor: pointer; }

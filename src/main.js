@@ -19,6 +19,7 @@ import { createWalk } from './controls.js';
 import { seasonOf } from './season.js';
 import { buildFeatures } from './features.js';
 import { buildWishes, applyWishBuilt } from './wishes.js';
+import { createExtras } from './extras.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -293,6 +294,10 @@ async function init() {
   else brain.wait = 1.2;
   if (params.get('ui') === '0') document.getElementById('ui').style.display = 'none';
 
+  // ── stage A: photo mode, petting, snacks ──
+  let extras = null;
+  try { extras = createExtras({ scene, camera, renderer, renderNow: () => composer.render(0), mochi, music, say: (s, d) => say(s, d), feel,
+    onPhoto: (on) => { if (on) { if (walk.on) walk.set(false); follow = false; ui.setFollow(false); controls.autoRotate = false; } } }); } catch (e) { console.warn('extras failed', e); }
   // ── click / tap Mochi ──
   const ray = new THREE.Raycaster(); const ndc = new THREE.Vector2(); let downAt = null;
   renderer.domElement.addEventListener('pointerdown', (e) => { downAt = [e.clientX, e.clientY, performance.now()]; });
@@ -300,7 +305,7 @@ async function init() {
     if (!downAt) return; const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]); const dt = performance.now() - downAt[2]; downAt = null;
     if (moved > 8 || dt > 500) return;
     if (document.pointerLockElement === renderer.domElement) ndc.set(0, 0); else ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
-    if (ray.intersectObject(mochi.hit, false).length) { mochi.hop(0.85); brain.busy = 0.7; music.sfx('hop'); if (Math.random() < 0.8) randomThought(); return; }
+    if (ray.intersectObject(mochi.hit, false).length) { brain.busy = 0.9; if (extras) extras.pet(); else { mochi.hop(0.85); music.sfx('hop'); if (Math.random() < 0.8) randomThought(); } return; }
     // click a hung picture -> open it in the gallery lightbox
     const hit = ray.intersectObjects(island.clickables, false)[0];
     if (hit && hit.distance < 40 && hit.object.userData.artIndex != null) { if (document.pointerLockElement) document.exitPointerLock(); music.sfx('click'); ui.openArt(hit.object.userData.artIndex); }
@@ -406,7 +411,7 @@ async function init() {
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); extras?.update(dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
@@ -429,7 +434,7 @@ async function init() {
     }
     composer.render(dt);
     frames++;
-    if (frames === 3) { document.getElementById('loading').classList.add('gone'); window.__mochiReady = true; }
+    if (frames === 3) { document.getElementById('loading').classList.add('gone'); window.__mochiReady = true; if (import.meta.env.PROD && 'serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch((e) => console.info('sw not registered', e?.message)); }
     if (debugEl) {
       debugAcc += dt; debugN++;
       if (debugAcc >= 0.5) {
@@ -445,7 +450,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { extras, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {
