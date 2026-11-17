@@ -19,7 +19,7 @@ function batch() {
   };
 }
 const softTex = (() => { let t = null; return () => { if (t) return t; const c = document.createElement('canvas'); c.width = c.height = 32; const g = c.getContext('2d'); const gr = g.createRadialGradient(16, 16, 0, 16, 16, 16); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.5, 'rgba(255,255,255,0.45)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, 32, 32); t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; }; })();
-function tag(parent, lines, pos, yaw, width = 0.55, seed = 31, tone = 'cream') { const pk = plank(lines, { width, tone, seed, twoSided: true }); pk.position.set(...pos); pk.rotation.y = yaw; parent.add(pk); return pk; }
+function tag(parent, lines, pos, yaw, width = 0.55, seed = 31, tone = 'pine', icon = '') { const pk = plank(lines, { width, tone, seed, icon, twoSided: true }); pk.position.set(...pos); pk.rotation.y = yaw; parent.add(pk); return pk; }
 
 export function buildWishes(scene, { features, glow = [], snowy = false, mobile = false }) {
   const group = new THREE.Group(); group.name = 'wishlist-builds'; scene.add(group);
@@ -34,7 +34,7 @@ export function buildWishes(scene, { features, glow = [], snowy = false, mobile 
     b.add(new THREE.CylinderGeometry(0.045, 0.06, 0.46, 12), brass, [0, 0.68, -0.05], [-(Math.PI / 2 - 0.22), 0, 0]); // tube tilts up toward the north (-z)
     b.add(new THREE.CylinderGeometry(0.07, 0.07, 0.04, 12), brass, [0, 0.73, -0.27], [-(Math.PI / 2 - 0.22), 0, 0]);
     b.add(new THREE.CylinderGeometry(0.022, 0.026, 0.08, 8), dark, [0, 0.62, 0.2], [-(Math.PI / 2 - 0.22), 0, 0]);
-    b.build(g); tag(g, ['WHALE WATCH', 'canada ↑ (squint)'], [0.42, 0.42, 0.15], -0.5, 0.5, 41, 'pine');
+    b.build(g); tag(g, ['WHALES ↑'], [0.42, 0.42, 0.15], -0.5, 0.42, 41, 'pine');
     { const p = new THREE.Group(); p.position.set(0.42, 0, 0.15); g.add(p); batch().add(new THREE.CylinderGeometry(0.02, 0.02, 0.4, 5), dark, [0, 0.2, -0.03]).build(p); }
     out.scope = { pos: g.position.clone(), stand: new THREE.Vector3(g.position.x, 0, g.position.z + 0.72), face: Math.PI };
   }
@@ -112,7 +112,7 @@ export function buildWishes(scene, { features, glow = [], snowy = false, mobile 
     for (const z of [-0.2, 0.2]) { b.add(new THREE.BoxGeometry(0.16, 0.025, 0.04), iron, [0, -0.005, z]); for (const x of [-0.09, 0.09]) b.add(new THREE.CylinderGeometry(0.032, 0.032, 0.03, 10), mat(0xf6e27a), [x, -0.035, z], [0, 0, Math.PI / 2]); }
     b.add(new THREE.BoxGeometry(0.03, 0.002, 0.1), mat(0xff6b8a), [0, 0.056, 0.12]); b.add(new THREE.BoxGeometry(0.1, 0.002, 0.03), mat(0xff6b8a), [0, 0.056, 0.12]); // little pink bow sticker
     b.build(board);
-    const tg = tag(g, ['🎁 gift from Corey', 'the REAL tiny board'], [0.42, 0.55, -0.1], -0.4, 0.62, 47, 'cream');
+    const tg = tag(g, ['gift from Corey'], [0.42, 0.55, -0.1], -0.4, 0.5, 47, 'pine', '🎁');
     batch().add(new THREE.CylinderGeometry(0.018, 0.018, 0.55, 5), dark, [0.42, 0.27, -0.13]).build(g);
     out.giftBoard = { group: g, board, home: { pos: board.position.clone(), rot: board.rotation.clone() }, tag: tg, note: 'gift from Corey' };
   }

@@ -23,7 +23,7 @@ import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
 import { installHeightFog, MistFog } from './gfx.js';
-import { loadSignFonts, zoneSigns, updateSigns } from './signs.js';
+import { loadSignFonts, zoneSigns, updateSigns, setSignScale } from './signs.js';
 import { buildDetails } from './details.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 installHeightFog();
@@ -68,7 +68,7 @@ async function init() {
   const settings = createSettings(); const S0 = settings.get();
   const qName = params.get('quality') || S0.quality || 'auto';
   const Q = QUALITY[qName] || QUALITY.auto;
-  const lite = (Q.tier ?? 2) <= 0; // Low only — flagship phones on Medium keep fuller trees
+  const lite = (Q.tier ?? 2) <= 0; setSignScale(lite ? 0.5 : 1); // Low only — flagship phones on Medium keep fuller trees
   const dprCap = Math.min(Q.pr, isMobile ? 1.5 : Q.pr);
 
   // ── renderer ──

@@ -240,7 +240,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     add(ramp, eg, new THREE.MeshStandardMaterial({ map: wt, roughness: 0.7, color: snowy ? 0xeef2ff : 0xffffff }));
     for (const sx of [-1, 1]) add(ramp, new THREE.CylinderGeometry(0.06, 0.06, W * 2, 10), mat(0xb8c0c8, { metalness: 0.8, roughness: 0.3 }), [sx * (flatW / 2 + Rr), Rr + 0.1, 0], [Math.PI / 2, 0, 0]);
     // stencilled sign + tiny practice board
-    { const pk = plank(['KICKFLIP ARC', 'skate at own risk'], { width: 1.15, icon: '🛹', tone: 'blue', seed: 4 }); pk.position.set(0, 0.55, W + 0.03); ramp.add(pk); }
+    { const pk = plank(['KICKFLIP ARC'], { width: 1.0, icon: '🛹', tone: 'blue', seed: 4 }); pk.position.set(0, 0.55, W + 0.03); ramp.add(pk); }
     const board = new THREE.Group(); board.position.set(-0.1, 0.06, 0.4); board.rotation.y = 0.4; ramp.add(board);
     add(board, new THREE.CapsuleGeometry(0.12, 0.45, 4, 10), mat(0xff5a5a), [0, 0.05, 0], [0, 0, Math.PI / 2], [1, 0.18, 1]);
     for (const a of [-0.24, 0.24]) for (const b of [-0.08, 0.08]) add(board, new THREE.CylinderGeometry(0.035, 0.035, 0.03, 10), mat(0xffee88), [a, 0.0, b], [Math.PI / 2, 0, 0]);
@@ -257,7 +257,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     // scalloped awning edge
     for (let i = 0; i < 10; i++) add(st, new THREE.CircleGeometry(0.145, 12, Math.PI, Math.PI), new THREE.MeshStandardMaterial({ color: i % 2 ? 0xfff3e0 : 0xff6f6f, side: THREE.DoubleSide }), [-1.305 + i * 0.29, 2.11, 1.05], [0, 0, 0], null, false);
     // sign
-    { const pk = plank(["MOCHI'S ART", 'original masterpieces'], { width: 1.6, icon: '🎨', tone: 'pine', seed: 5 }); pk.position.set(0, 1.95, -0.2); st.add(pk); }
+    { const pk = plank(["MOCHI'S ART"], { width: 1.3, icon: '🎨', tone: 'pine', seed: 5 }); pk.position.set(0, 1.95, -0.2); st.add(pk); }
     // prints from STATE.art on a back board + counter
     add(st, new THREE.BoxGeometry(2.5, 0.95, 0.05), mat(0x8a5a32), [0, 1.42, -0.2]);
     const mk = hangs.market.filter(Boolean);
@@ -342,7 +342,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const tel = new THREE.Group(); tel.position.set(cx - 0.6, cy, cz - 1.0); tel.rotation.y = yaw; world.add(tel);
     for (const a of [0, 2.1, 4.2]) add(tel, new THREE.CylinderGeometry(0.025, 0.025, 1.0, 5), mat(0x7a5232), [Math.sin(a) * 0.18, 0.47, Math.cos(a) * 0.18], [Math.cos(a) * 0.35, 0, -Math.sin(a) * 0.35]);
     add(tel, new THREE.CylinderGeometry(0.07, 0.1, 0.7, 12), mat(0xc8a040, { metalness: 0.8, roughness: 0.3 }), [0, 1.0, 0.05], [Math.PI / 2 - 0.25, 0, 0]);
-    sign(world, ['TRAPPER PK', '10,157 ft →'], [cx + 0.9, cy, cz - 0.8], yaw + Math.PI, 0.7);
+    sign(world, ['TRAPPER PEAK →'], [cx + 0.9, cy, cz - 0.8], yaw + Math.PI, 0.7);
     // log bench + boulders
     add(world, new THREE.CylinderGeometry(0.22, 0.22, 1.4, 12), mat(0x7a5232), [cx + 0.6, cy + 0.2, cz + 0.9], [0, yaw, Math.PI / 2]);
     for (let i = 0; i < 6; i++) { const a = R0() * 6.28, rr = 1.2 + R0() * 1.4; const x = cx + Math.cos(a) * rr, z = cz + Math.sin(a) * rr; add(world, new THREE.DodecahedronGeometry(0.14 + R0() * 0.22, 1), mat(snowy ? 0xe0e4ea : 0x9a9088), [x, topH(x, z) + 0.05, z], [R0(), R0(), R0()], [1, 0.7, 1]); }
@@ -446,7 +446,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     for (const sx of [-1, 1]) add(sh, new THREE.BoxGeometry(rl, 0.1, D + 0.7), roofM, [sx * (W / 4 + 0.09), H + 0.5, 0], [0, 0, -sx * ra]);
     const gab = new THREE.Shape(); gab.moveTo(-W / 2, 0); gab.lineTo(W / 2, 0); gab.lineTo(0, 1.0); gab.closePath();
     for (const sz of [-1, 1]) add(sh, new THREE.ShapeGeometry(gab), new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), side: THREE.DoubleSide }), [0, H, sz * D / 2]);
-    { const pk = plank(["MOCHI'S ART SHOP", 'originals · no refunds · yes hugs'], { width: 2.2, icon: '🖼️', tone: 'oak', seed: 7 }); pk.position.set(0, H + 0.42, D / 2 + 0.04); sh.add(pk); }
+    { const pk = plank(["MOCHI'S ART SHOP", 'no refunds · yes hugs'], { width: 1.9, icon: '🖼️', tone: 'oak', seed: 7 }); pk.position.set(0, H + 0.42, D / 2 + 0.04); sh.add(pk); }
     // pictures: back wall 3, side walls 2 each, outside front 2
     const sl = (k) => hangAt('shop', k); let k = 0; const ins = 0.09;
     [-1.4, 0, 1.4].forEach((px) => { const it = sl(k++); if (it) framed(sh, it, { w: 0.82, h: 1.02, pos: [px, 1.45, -D / 2 + ins], style: k, clickables }); });
@@ -489,7 +489,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     add(hv, new THREE.BoxGeometry(0.7, 0.06, 0.6), mat(0xc0563a), [0, 1.0, 0]);
     const bees = []; for (let i = 0; i < 5; i++) { const b = add(world, new THREE.SphereGeometry(0.035, 6, 4), mat(0xffcc33, { emissive: 0x332200 }), [hx, hy + 1, hz], [0, 0, 0], [1.3, 1, 1], false); bees.push(b); }
     anim.push((t) => bees.forEach((b, i) => { const a = t * (0.9 + i * 0.2) + i * 1.3; b.position.set(hx + Math.cos(a) * (0.8 + i * 0.35), hy + 0.8 + 0.3 * Math.sin(t * 3 + i), hz + Math.sin(a * 1.3) * (0.8 + i * 0.3)); }));
-    sign(world, ['BEES', '(they are cool)'], [cx + 2.4, topH(cx + 2.4, cz + 1.6), cz + 1.6], 2.4, 0.55);
+    if (0) sign(world, ['BEES', '(they are cool)'], [cx + 2.4, topH(cx + 2.4, cz + 1.6), cz + 1.6], 2.4, 0.55);
   }
 
   // ── fishing dock on the river side ──
@@ -532,7 +532,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     for (const sx of [-0.35, 0.35]) add(keys, new THREE.CylinderGeometry(0.02, 0.02, 0.7, 5), mat(0x555555), [sx, 0.35, 0], [0, 0, sx * 0.5]);
     // mic + floating notes when a song plays
     add(mc, new THREE.CylinderGeometry(0.015, 0.02, 1.2, 6), mat(0x444444), [0.0, 0.8, 0.9]); add(mc, new THREE.SphereGeometry(0.06, 10, 8), mat(0x888888, { metalness: 0.7, roughness: 0.3 }), [0.0, 1.42, 0.9]);
-    sign(mc, ['MUSIC CORNER', 'all songs by mochi'], [-1.4, 0.15, 1.1], 0.4, 0.55);
+    if (0) sign(mc, ['MUSIC CORNER', 'all songs by mochi'], [-1.4, 0.15, 1.1], 0.4, 0.55);
     const noteM = new THREE.MeshBasicMaterial({ color: 0x3b2a5a, transparent: true, opacity: 0 }); const notes = [];
     for (let i = 0; i < 6; i++) { const n = new THREE.Group(); add(n, new THREE.SphereGeometry(0.06, 8, 6), noteM, [0, 0, 0], [0, 0, 0], [1.2, 0.9, 0.6], false); add(n, new THREE.BoxGeometry(0.015, 0.22, 0.015), noteM, [0.06, 0.11, 0], [0, 0, 0], null, false); mc.add(n); notes.push(n); }
     let playing = 0; const drumHead = drum.children[1];
@@ -555,7 +555,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   return { world, update, grass, ground, pondMat, clickables, music, hangs, lights };
 }
 
-const SIGN_ICON = { OCEAN: '🌊', 'RIP HAT': '🎩', 'NO KIWIS': '🚫', 'TRAPPER PK': '🏔️', BEES: '🐝', 'MUSIC CORNER': '🎵' };
+const SIGN_ICON = { OCEAN: '🌊', 'RIP HAT': '🎩', 'NO KIWIS': '🚫', 'TRAPPER PEAK →': '🏔️', BEES: '🐝', 'MUSIC CORNER': '🎵' };
 function sign(parent, lines, [x, y, z], yaw = 0, s = 1) {
   return signpost(parent, lines, [x, y, z], yaw, s, { icon: SIGN_ICON[lines[0]] || '', tone: lines[0] === 'RIP HAT' ? 'walnut' : 'oak' });
 }

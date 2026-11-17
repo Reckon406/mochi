@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { ZONES, groundY, ISLAND_R, islandRadius } from './layout.js';
 import { signTex, stripes } from './textures.js';
-import { plank } from './signs.js';
+import { plank, noticeBoard, CROSS } from './signs.js';
 
 const M = {}; const mat = (c, o = {}) => M[c + JSON.stringify(o)] ||= new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...o });
 function add(p, g, m, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, m); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; x.receiveShadow = true; p.add(x); return x; }
@@ -22,7 +22,7 @@ export function resolveSpot(o, i = 0) {
 const BUILD = {
   lantern(g, o, ctx) { add(g, new THREE.CylinderGeometry(0.03, 0.04, 1.1, 6), mat(0x3a2a1a), [0, 0.55, 0]); add(g, new THREE.BoxGeometry(0.4, 0.04, 0.04), mat(0x3a2a1a), [0.15, 1.08, 0]);
     const m = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: new THREE.Color(o.color || 0xffb04a), emissiveIntensity: 0.4 }); ctx.glow.push(m); add(g, new THREE.BoxGeometry(0.16, 0.22, 0.16), m, [0.3, 0.92, 0]); },
-  sign(g, o) { add(g, new THREE.BoxGeometry(0.07, 0.95, 0.07), mat(0x6b4a33), [0, 0.47, -0.04]); const pk = plank(wrap(o.note || o.text || 'hi'), { width: 0.8, hand: true, twoSided: true, tone: 'pine', seed: String(o.note || '').length + 3 }); pk.position.set(0, 0.9, 0); pk.rotation.z = 0.03; g.add(pk); },
+  sign(g, o) { add(g, new THREE.BoxGeometry(0.07, 1.15, 0.07), mat(0x6b4a33), [0, 0.37, -0.04]); const pk = plank(wrap(o.note || o.text || 'hi'), { width: 0.8, hand: true, twoSided: true, tone: 'pine', seed: String(o.note || '').length + 3 }); pk.position.set(0, 0.9, 0); pk.rotation.z = 0.03; g.add(pk); },
   flowers(g, o) { const cols = [0xff9aa2, 0xfff07a, 0xc9b6ff, 0xffffff, 0xffb347]; for (let i = 0; i < 9; i++) { const a = i * 2.4, r = 0.12 + (i % 3) * 0.12; add(g, new THREE.CylinderGeometry(0.01, 0.01, 0.3, 3), mat(0x5a8a2a), [Math.cos(a) * r, 0.15, Math.sin(a) * r]); add(g, new THREE.SphereGeometry(0.06, 8, 6), mat(o.color ? new THREE.Color(o.color).getHex() : cols[i % 5]), [Math.cos(a) * r, 0.31, Math.sin(a) * r]); } },
   cairn(g) { [0.26, 0.21, 0.17, 0.13, 0.09].reduce((y, r, i) => { add(g, new THREE.DodecahedronGeometry(r, 1), mat([0x9a948e, 0x8a8580, 0xb0a89e][i % 3]), [Math.sin(i) * 0.03, y + r * 0.6, 0], [i, i * 2, 0], [1, 0.62, 1]); return y + r * 1.2; }, 0); },
   sockflag(g) { add(g, new THREE.CylinderGeometry(0.02, 0.02, 1.6, 5), mat(0xdddddd), [0, 0.8, 0]); const t = stripes(['#e8463c', '#fff4e0'], 6, false, 32, 128);
@@ -39,22 +39,27 @@ BUILD.flower = BUILD.flowers; BUILD.rocks = BUILD.cairn; BUILD.flag = BUILD.sock
 export const PROP_KINDS = Object.keys(BUILD);
 function wrap(s) { const w = String(s).slice(0, 60).split(/\s+/); const out = ['']; for (const x of w) { if ((out[out.length - 1] + ' ' + x).trim().length > 16 && out.length < 3) out.push(x); else out[out.length - 1] = (out[out.length - 1] + ' ' + x).trim(); } return out; }
 
+// sign pass: Mochi's notes + marks no longer each get a signpost (that was ~50 planks). They go on one notice board
+// at the crossroads (newest 4 shown); only his newest 3 'sign' props stand on their own.
+export const BOARD = { x: CROSS.x - 1.4, z: CROSS.z + 2.9, yaw: 1.75 };
 export function buildWorldState(scene, state) {
   const world = state.world && typeof state.world === 'object' ? state.world : {}; const group = new THREE.Group(); group.name = 'mochi-world-state'; scene.add(group);
-  const ctx = { glow: [] }; const placed = [];
-  (Array.isArray(world.props) ? world.props : []).slice(0, 40).forEach((o, i) => {
-    if (!o || typeof o !== 'object') return; const p = resolveSpot(o, i); if (!p) return; const kind = String(o.kind || '').toLowerCase().replace(/[^a-z]/g, '');
-    const g = new THREE.Group(); g.position.set(p[0], groundY(p[0], p[1]) - 0.02, p[1]); g.rotation.y = num(o.yaw, i * 1.3); group.add(g);
-    (BUILD[kind] || ((gg) => BUILD.sign(gg, { note: o.note || kind || '?' })))(g, o, ctx);
-    if (o.note && kind !== 'sign' && kind !== 'note') g.userData.note = String(o.note);
+  const ctx = { glow: [] }; const placed = []; const notes = [];
+  const props = (Array.isArray(world.props) ? world.props : []).filter((o) => o && typeof o === 'object').slice(-40);
+  const kindOf = (o) => String(o.kind || '').toLowerCase().replace(/[^a-z]/g, '');
+  const signs = props.filter((o) => kindOf(o) === 'sign').slice(-3);
+  props.forEach((o, i) => {
+    const kind = kindOf(o); const isNote = kind === 'note' || (kind === 'sign' && !signs.includes(o)) || !BUILD[kind];
+    if (isNote) { if (o.note || o.text) notes.push(String(o.note || o.text)); return; }
+    const p = resolveSpot(o, i); if (!p) return;
+    const g = new THREE.Group(); g.position.set(p[0], groundY(p[0], p[1]) - 0.02, p[1]); g.rotation.y = kind === 'sign' ? Math.atan2(-p[0], -p[1]) : num(o.yaw, i * 1.3); group.add(g);
+    BUILD[kind](g, o, ctx);
+    if (o.note && kind !== 'sign') g.userData.note = String(o.note);
     placed.push({ id: o.id || `${kind}-${i}`, kind, x: p[0], z: p[1], note: o.note || '' });
   });
-  (Array.isArray(world.marks) ? world.marks : []).slice(0, 16).forEach((m, i) => {
-    if (!m || !m.text) return; const p = resolveSpot(m, i + 7); if (!p) return;
-    const g = new THREE.Group(); g.position.set(p[0], groundY(p[0], p[1]) - 0.02, p[1]); g.rotation.y = Math.atan2(-p[0], -p[1]) + Math.sin(i) * 0.4; group.add(g);
-    add(g, new THREE.BoxGeometry(0.07, 0.8, 0.07), mat(0x6b4a33), [0, 0.4, -0.03], [0.15, 0, 0]);
-    { const pk = plank(wrap(m.text), { width: 0.75, hand: true, twoSided: true, tone: i % 2 ? 'cream' : 'pine', seed: i + 21 }); pk.position.set(0, 0.74, 0.03); pk.rotation.set(-0.15, 0, Math.sin(i * 1.7) * 0.06); g.add(pk); }
-    placed.push({ id: `mark-${i}`, kind: 'mark', x: p[0], z: p[1], note: m.text });
-  });
-  return { group, placed, update(night) { for (const m of ctx.glow) m.emissiveIntensity = 0.4 + night * 4.5; } };
+  const marks = (Array.isArray(world.marks) ? world.marks : []).filter((m) => m && m.text).map((m) => String(m.text));
+  const pick = [...marks.slice(-2), ...notes.slice(-2)].reverse(); while (pick.length < 4 && notes.length + marks.length > pick.length) { const more = [...notes, ...marks].reverse().find((t) => !pick.includes(t)); if (!more) break; pick.push(more); }
+  if (pick.length) { const bd = noticeBoard(group, "MOCHI'S NOTES", pick.map((t) => t.slice(0, 70)), [BOARD.x, groundY(BOARD.x, BOARD.z) - 0.02, BOARD.z], BOARD.yaw, { width: 1.5 });
+    bd.userData.note = pick.join(' · '); placed.push({ id: 'notice-board', kind: 'board', x: BOARD.x, z: BOARD.z, note: pick[0] }); }
+  return { group, placed, notes: [...notes, ...marks], update(night) { for (const m of ctx.glow) m.emissiveIntensity = 0.4 + night * 4.5; } };
 }

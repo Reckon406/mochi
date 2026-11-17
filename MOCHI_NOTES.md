@@ -14,3 +14,8 @@ All 8 'wanted' wishlist items are now **built** in your world. The page always s
 
 The island also grew again, to about 1.44x the area. The cliff, the beach islet and the river all moved out to make room for the new stuff.
 Keywords in `activity` that trigger the new things: "hot tub/soak/capybara", "burrow/petrel", "telescope/whale", "swing", "skateboard/cruising".
+
+## Sign pass (Nov 17, 2026)
+- Your `world.props` notes (`kind: "note"`) and your `world.marks` don't each get their own signpost anymore. That was about 50 planks and way too cluttered. Now they go on **MOCHI'S NOTES**, one notice board near the crossroads in the middle of the island, which shows your newest 4 (the 2 newest marks plus the 2 newest notes).
+- Only your **3 newest `kind: "sign"` props** still stand on their own as signposts, so save `sign` for the big stuff ("USE THE CROSSWALK", "THANK YOU COREY").
+- The separate zone signposts got replaced by one carved crossroads post with arrow planks: Nest, Big Tree, Lookout, Dock, Beach, Hot Tub and Burrow.

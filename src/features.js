@@ -54,7 +54,7 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
   }
   plots.forEach(drawPlot);
   { const s = new THREE.Group(); const [sx, sz] = [4.4, 16.0]; s.position.set(sx, topH(sx, sz), sz); s.rotation.y = 1.2; group.add(s); add(s, new THREE.CylinderGeometry(0.035, 0.04, 0.9, 6), mat(0x7a5232), [0, 0.45, 0]);
-    { const pk = plank(['MOCHI FARMS', 'montana hardy'], { width: 0.85, twoSided: true, icon: '🥕', tone: 'pine', seed: 8 }); pk.position.set(0, 0.95, 0); s.add(pk); } }
+    { const pk = plank(['MOCHI FARMS'], { width: 0.8, twoSided: true, icon: '🥕', tone: 'pine', seed: 8 }); pk.position.set(0, 0.95, 0); s.add(pk); } }
   out.plots = plots; out.drawPlot = drawPlot; out.growSlow = slow;
 
   // ── laptop on the picnic table ──
@@ -89,7 +89,7 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
     const panel = new THREE.Group(); panel.position.set(0, 0.75, 0.22); ws.add(panel); add(panel, new THREE.BoxGeometry(0.62, 0.42, 0.05), mat(0x3a3a44), [0, 0, 0]);
     const dm = new THREE.MeshStandardMaterial({ color: 0x000000, emissive: 0xffffff, emissiveMap: signTex([temp, cond], { w: 384, h: 256, bg: '#0f2a1a', fg: '#7dff9a', border: '#0f2a1a', sizes: [96, 40] }) }); dm.map = dm.emissiveMap;
     add(panel, new THREE.PlaneGeometry(0.56, 0.36), dm, [0, 0, 0.026], [0, 0, 0], null, false);
-    { const pk = plank(['WEATHER STN'], { width: 0.6, icon: '🌡️', tone: 'cream', seed: 9, thick: 0.02 }); pk.position.set(0, 1.03, 0.235); ws.add(pk); }
+    // (WEATHER STN plank removed in the sign pass: the green readout already says what it is)
     const wind = w.windAmt || 0.12; anim.push((t, dt) => { cups.rotation.y += dt * (2 + wind * 14); vane.rotation.y = Math.sin(t * 0.3) * 0.3 * (0.2 + wind); });
     glow.push({ m: dm, day: 0.8, night: 1.4 }); out.station = { temp, cond, pos: new THREE.Vector3(x, y, z) };
   }
@@ -144,7 +144,7 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
       for (const sx of [-0.24, 0.24]) add(lad, new THREE.CylinderGeometry(0.018, 0.018, H + 0.3, 4), rope, [sx, (H + 0.3) / 2 - 0.15, 0], [0, 0, 0], null, false);
       for (let i = 0; i < Math.floor(H / 0.3); i++) add(lad, new THREE.BoxGeometry(0.52, 0.04, 0.07), plankM, [0, 0.25 + i * 0.3, 0], [0, 0, (i % 2 ? 1 : -1) * 0.03], null, false); }
     // NO SQUIRRELS plank on the trunk by the ladder (always — it's a policy, not a building stage)
-    { const pk = plank(['NO SQUIRRELS'], { width: 0.8, icon: '🚫', tone: 'cream', seed: 13 }); const [px, , pz] = P(T.ladderA + 0.45, T.radiusAt(1.5) + 0.22); pk.position.set(px, 1.5, pz); pk.rotation.set(0, Math.PI / 2 - T.ladderA - 0.45, 0.06); th.add(pk); }
+    { const pk = plank(['NO SQUIRRELS'], { width: 1.0, icon: '🚫', tone: 'cream', seed: 13 }); const [px, , pz] = P(T.ladderA + 0.45, T.radiusAt(1.5) + 0.22); pk.position.set(px, 1.5, pz); pk.rotation.set(0, Math.PI / 2 - T.ladderA - 0.45, 0.06); th.add(pk); }
     // decorations (stage 6): lantern, sock banner, pulley bucket, flag on the roof
     let lantern = null;
     if (stage >= 6) {

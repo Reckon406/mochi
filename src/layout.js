@@ -160,6 +160,7 @@ export const OBSTACLES = [
   ob(-3.2, 1.6, 1.3), ob(5.6, 9.4, 1.5), ob(-7.0, 6.6, 1.3),
   { x: 12.5, z: 1.5, r: 0.9 }, { x: -1.5 - 1.2, z: -7.5 - 1.0, r: 0.5 }, { x: MUSIC.x, z: MUSIC.z, r: 1.3 }, { x: VEND.x, z: VEND.z, r: 0.75 },
   { x: SHOP.x, z: SHOP.z, r: Math.hypot(SHOP.w, SHOP.d) / 2 + 0.2, mochiOnly: true },
+  { x: 0.2, z: 2.8, r: 0.45 }, { x: -1.2, z: 5.7, r: 0.85 }, // sign pass: crossroads post + notice board (signs.js CROSS / worldstate.js BOARD)
   { x: WISH.tub.x, z: WISH.tub.z, r: 0.85 }, { x: WISH.burrow.x, z: WISH.burrow.z, r: 1.0 }, { x: WISH.owlbox.x, z: WISH.owlbox.z, r: 0.3 }, { x: WISH.scope.x, z: WISH.scope.z, r: 0.3 },
 ];
 export const WALLS = [];
