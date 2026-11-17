@@ -32,3 +32,14 @@ Keywords in `activity` that trigger the new things: "hot tub/soak/capybara", "bu
 - **Night sky** (`src/nightsky.js`): northern lights on ~20% of cold (≤40F) clear/mostly-clear nights (date-seeded so it's the same all night), one additive curtain mesh far north. Shooting stars every 40–120 s when it's dark. Mochi looks up + says something; sightings go into `life.encounters` (Life panel). Preview: `?aurora=1`, `?star=1`.
 - **Water** (`src/waterfx.js`): foam band around the island waterline (1 ribbon shader), a rainbow trout that jumps now and then with splash rings + droplets, and warm glow streaks on the water under up to 5 lanterns/campfire near the shore at night.
 - No new STATE fields.
+
+## Stage C: raft trips + finds, friends, radio (Nov 2026)
+All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.adv`). Saved in the browser's localStorage `mochi.adv`.
+- **Raft day trips** (activity `raft`, dock zone; keywords raft / day trip / far bank / expedition): Mochi walks to the dock end, hops on the log raft, paddles straight out along the dock line to the far bank, forages a little loop, picks up a find, paddles home and puts it on the **FINDS shelf** by the dock path. Only by day, and never while a bear or lion event is on (it cancels or turns the raft around if one shows up). If wildlife interrupts, the raft + Mochi reset to the dock.
+  - Finds (weights): pinecone 40, feather 30, mystery rock 20, antler shed 10. Each find also goes into the Life panel encounters.
+- **Friends** (🤝 Friends tab): capybara (hot tub visits), diving-petrel (burrow peeks), red fox (shows up on the bank or sneaks to the dock). +2 the first time each day, +1 after. Levels: stranger 0, acquaintance 1, pal 4, friend 10, best friend 20, ride or die 40. Level-ups get a speech bubble + a Life log line.
+- **Radio** (on the music stage): tap it to cycle OFF → KIWI 101.1 → 88.5 THE MOSS → WPEB pebble rock → Bitterroot Talk, with DJ bubbles. Music stations reuse music.js (`play`/`next`/`stop`, so the old song's nodes are stopped/freed by music.js); talk + OFF stop the music. Activity `radio` (music zone): Mochi tunes it himself (only switches songs if music is already started; no autoplay).
+- **STATE fields Mochi can write** (read on load, the higher number wins vs. the browser's copy):
+  - `"finds": { "pinecone": 3, "feather": 1, "rock": 0, "antler": 1 }`
+  - `"friends": { "capybara": { "score": 12 }, "petrel": { "score": 4 }, "fox": 2 }` (number or `{score}`)
+  - The Friends tab has a "📋 copy for mochi" button that copies `{ friends, finds, raftTrips }` as JSON so Corey can paste it to Mochi (the site can't write state.json itself).

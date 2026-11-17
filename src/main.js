@@ -23,6 +23,7 @@ import { createExtras } from './extras.js';
 import { liveWeather, startLiveWeather } from './live.js';
 import { createNightSky } from './nightsky.js';
 import { createWaterFx } from './waterfx.js';
+import { createAdventures } from './adventures.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -160,7 +161,7 @@ async function init() {
   controls.addEventListener('end', () => { lastInteract = performance.now(); });
 
   // keep the pan target near the island
-  const clampTarget = () => { const t = controls.target; t.x = THREE.MathUtils.clamp(t.x, -41, 48); t.z = THREE.MathUtils.clamp(t.z, -44, 41); t.y = THREE.MathUtils.clamp(t.y, -3, 6); };
+  const clampTarget = () => { const t = controls.target; t.x = THREE.MathUtils.clamp(t.x, -46, 48); t.z = THREE.MathUtils.clamp(t.z, -44, 46); t.y = THREE.MathUtils.clamp(t.y, -3, 6); };
 
   // ── Mochi brain ──
   const favored = matchZone(state.location) || ZONES[0];
@@ -300,6 +301,9 @@ async function init() {
   else brain.wait = 1.2;
   if (params.get('ui') === '0') document.getElementById('ui').style.display = 'none';
 
+  // ── stage C: raft trips + finds, friends, radio ──
+  let adv = null;
+  try { adv = createAdventures(scene, { life, mochi, say: (s, d) => say(s, d), music, getWild: () => wild, features, ui, state }); } catch (e) { console.warn('adventures failed', e); }
   // ── stage B: night sky + water polish + live weather refresh ──
   let nightSky = null, waterFx = null;
   try { nightSky = createNightSky(scene, { weather, season, mochi, say: (s, d) => say(s, d), force: params.get('aurora') === '1' ? 'aurora' : params.get('star') === '1' ? 'star' : null,
@@ -318,6 +322,7 @@ async function init() {
     if (moved > 8 || dt > 500) return;
     if (document.pointerLockElement === renderer.domElement) ndc.set(0, 0); else ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
     if (ray.intersectObject(mochi.hit, false).length) { brain.busy = 0.9; if (extras) extras.pet(); else { mochi.hop(0.85); music.sfx('hop'); if (Math.random() < 0.8) randomThought(); } return; }
+    if (adv?.tap(ray)) { brain.busy = 0.5; return; }
     // click a hung picture -> open it in the gallery lightbox
     const hit = ray.intersectObjects(island.clickables, false)[0];
     if (hit && hit.distance < 40 && hit.object.userData.artIndex != null) { if (document.pointerLockElement) document.exitPointerLock(); music.sfx('click'); ui.openArt(hit.object.userData.artIndex); }
@@ -423,7 +428,7 @@ async function init() {
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving); extras?.update(dt); nightSky?.update(t, dt, sky.state.night || 0, camera);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
@@ -462,7 +467,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

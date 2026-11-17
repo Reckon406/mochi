@@ -156,12 +156,12 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
   // which activity makes sense at a zone right now
   function choose(zid, prefer) {
-    if (prefer && A[prefer] && A[prefer].zone === zid) return prefer;
+    if (prefer && A[prefer] && A[prefer].zone === zid && (!A[prefer].ok || A[prefer].ok())) return prefer;
     if (zid === 'garden') { if (plots.some((p) => p.crop && p.stage >= 4)) return 'harvest'; if (plots.some((p) => !p.crop || p.stage === 0) && sum(inv.seeds) > 0 && Math.random() < 0.5) return 'plant'; if (Math.random() < 0.35 && plots.some((p) => p.crop && p.stage > 0 && p.stage < 4)) return 'water'; return 'dig'; }
     if (zid === 'campfire') return sum(inv.fish) > 0 || (Math.random() < 0.4 && ['potato', 'carrot', 'kale'].some((c) => inv.crops[c] > 0)) ? 'cook' : 'warm';
     if (zid === 'hut') return features.mailbox.unread.length ? 'mail' : 'sleep';
     if (zid === 'picnic') return (sum(inv.cooked) > 0 || inv.honey > 0) && Math.random() < 0.5 ? 'eat' : 'browse';
-    const l = BY_ZONE[zid]; return l ? l[Math.floor(Math.random() * l.length)] : null;
+    const l = (BY_ZONE[zid] || []).filter((id) => A[id] && (!A[id].ok || A[id].ok())); return l.length ? l[Math.floor(Math.random() * l.length)] : null;
   }
   // quest chain: what's the next useful place?
   function suggest() {
@@ -204,9 +204,10 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     if (posTarget) { const p = M(); const dx = posTarget.x - p.x, dz = posTarget.z - p.z; const d = Math.hypot(dx, dz); if (d > 0.05) { const st = Math.min(d, dt * 1.8); p.x += (dx / d) * st; p.z += (dz / d) * st; if (face == null) mochi.root.userData.faceTo = Math.atan2(dx, dz); } }
     if (!cur) return; try { cur.el += dt; const s = cur.steps[cur.k]; s.tick?.call(cur.bag, Math.min(1, cur.el / s.d), dt, t); if (cur.el >= s.d) next(); } catch (e) { console.warn('activity crashed, cancelling', e); cancel(); } // one broken activity must never stop the render loop
   }
-  function cancel() { if (!cur) return; const s = cur.steps[cur.k]; try { s?.end?.call(cur.bag); } catch (e) { /* ignore */ } drop(); P.line.visible = false; P.bobber.visible = false; mochi.root.remove(P.board);
+  function cancel() { if (!cur) return; const s = cur.steps[cur.k]; try { s?.end?.call(cur.bag); } catch (e) { /* ignore */ } try { cur.def.onCancel?.(cur.bag); } catch (e) { /* ignore */ } drop(); P.line.visible = false; P.bobber.visible = false; mochi.root.remove(P.board);
     for (const c of [...P.skewer.children]) if (c.userData.food) P.skewer.remove(c); P.skewer.visible = false; liftTarget = 0; face = null; pose.peck = pose.sway = pose.sleep = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); }
   function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); return true; }
   function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toLocaleDateString('en-CA') }); return FISH[k].name; }
-  return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, liftTo(v) { liftTarget = v; }, run(id) { const def = A[id]; if (!def) return false; cancel(); queued = id; return begin(def.zone); } };
+  return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, KEYS, liftTo(v) { liftTarget = v; },
+    ctl: { go(v) { posTarget = v; }, face(f) { face = f; }, lift(v) { liftTarget = v; }, snapLift(v) { liftTarget = lift = v; }, hold, drop, fx, M, pose }, run(id) { const def = A[id]; if (!def) return false; cancel(); queued = id; return begin(def.zone); } };
 }

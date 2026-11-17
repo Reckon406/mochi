@@ -49,12 +49,14 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
         <button data-tab="diary">📔 Diary <i>${(state.diary || []).length}</i></button>
         <button data-tab="art">🎨 Art <i>${(state.art || []).length}</i></button>
         <button data-tab="life">🎒 Life</button>
+        <button data-tab="friends">🤝 Friends</button>
         <button data-tab="goals">⭐ Goals <i>${(state.goals || []).filter((g) => g.done).length}/${(state.goals || []).length}</i></button>
       </div>
       <div class="pane" id="pane-diary">${diaryHtml}</div>
       <div class="pane" id="pane-art">${artHtml}</div>
       <div class="pane" id="pane-goals">${goalsHtml}</div>
       <div class="pane" id="pane-life"></div>
+      <div class="pane" id="pane-friends"></div>
     </div>
   </section>
   <nav class="legend" id="legend">
@@ -109,6 +111,7 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
     setWalk(on) { wb?.classList.toggle('on', on); wb && (wb.textContent = on ? '🛸 orbit' : '🚶 walk'); },
     setDoing(label, bag) { const d = root.querySelector('#doing'); d.hidden = !label && !bag; d.innerHTML = `${label ? `<b>${esc(label)}</b>` : ''}${bag ? `<span>${esc(bag)}</span>` : ''}`; },
     setPrompt(text) { const e = root.querySelector('#eprompt'); e.hidden = !text; if (text) e.textContent = text; },
+    renderFriends(html) { const e = root.querySelector('#pane-friends'); if (e) e.innerHTML = html; },
     renderLife(html) { root.querySelector('#pane-life').innerHTML = html; },
     openArt(i) { const k = artThumbs.findIndex((t) => t.i === i); if (k >= 0) showLb(k); },
     get lightboxOpen() { return !lb.hidden; },
