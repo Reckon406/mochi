@@ -152,7 +152,7 @@ function needleMat(kind, snowy) {
       map: needleCard(kind), alphaTest: 0.35, side: THREE.DoubleSide, roughness: 0.82,
       color: snowy ? 0xd8e4dc : (kind === 'fir' ? 0xe8ffc8 : 0xf0ffd0),
       emissive: snowy ? 0x000000 : 0x3a5820, emissiveIntensity: 0.28,
-      polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
+      polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1, userData: { foliage: true },
     }));
 }
 function leafMat(kind, season, snowy) {
@@ -160,7 +160,7 @@ function leafMat(kind, season, snowy) {
     new THREE.MeshStandardMaterial({
       map: leafCard(kind, season), alphaTest: 0.35, side: THREE.DoubleSide, roughness: 0.78,
       color: snowy ? 0xe8eef0 : 0xffffff, emissive: snowy ? 0x000000 : 0x4a3010, emissiveIntensity: season === 'fall' ? 0.22 : 0.1,
-      polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
+      polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1, userData: { foliage: true },
     }));
 }
 function foliageVolMat(kind, season, snowy) {

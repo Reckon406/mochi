@@ -6,7 +6,7 @@ import * as THREE from 'three';
 const BASE = (import.meta.env?.BASE_URL || './') + 'tex/';
 const loader = new THREE.TextureLoader();
 const SETS = ['grass', 'dirt', 'sand', 'rock', 'bark', 'wood'];
-const U = { uPbrReady: { value: 0 } }; // shared uniforms for every patched material
+const U = { uPbrReady: { value: 0 }, uSunW: { value: new THREE.Vector3(0.3, 0.8, 0.2) }, uSunC: { value: new THREE.Color(1, 0.95, 0.85) } }; // shared uniforms for every patched material
 for (const n of ['grass', 'dirt', 'sand', 'rock']) { U[`u_${n}C`] = { value: null }; U[`u_${n}N`] = { value: null }; U[`u_${n}Avg`] = { value: new THREE.Vector3(0.5, 0.5, 0.5) }; }
 const blank = new THREE.DataTexture(new Uint8Array([128, 128, 255, 255]), 1, 1); blank.needsUpdate = true;
 const blankC = new THREE.DataTexture(new Uint8Array([128, 128, 128, 255]), 1, 1); blankC.needsUpdate = true;
@@ -86,3 +86,16 @@ export function applyPBR(scene, { tier = 2, renderer, onLoaded } = {}) {
   });
 }
 export const PBR_UNIFORMS = U;
+// High/Ultra: leaves glow a little when the sun is behind them (cheap translucency) + a soft rim, on the island's leaf/needle cards
+export function patchFoliage(scene, tier) {
+  if (tier < 2) return 0; let n = 0; const seen = new Set();
+  scene.traverse((o) => { if (!o.isMesh) return; const m = o.material; if (!m || Array.isArray(m) || !m.userData?.foliage || seen.has(m)) return; seen.add(m); n++;
+    const prev = m.onBeforeCompile; const prevKey = m.customProgramCacheKey?.bind(m);
+    m.onBeforeCompile = (sh, r) => { prev?.call(m, sh, r); sh.uniforms.uSunW = U.uSunW; sh.uniforms.uSunC = U.uSunC;
+      sh.fragmentShader = 'uniform vec3 uSunW; uniform vec3 uSunC;\n' + sh.fragmentShader.replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+        { vec3 sv = normalize((viewMatrix * vec4(uSunW, 0.0)).xyz); vec3 vdir = -normalize(vViewPosition);
+          float back = pow(clamp(dot(vdir, sv), 0.0, 1.0), 3.0); float rimL = pow(1.0 - abs(dot(normalize(vNormal), normalize(vViewPosition))), 3.0);
+          totalEmissiveRadiance += diffuseColor.rgb * (uSunC * back * 0.55 + vec3(0.08) * rimL); }`); };
+    m.customProgramCacheKey = () => (prevKey ? prevKey() : '') + 'foliage2'; m.needsUpdate = true; });
+  return n;
+}

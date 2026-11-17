@@ -62,3 +62,18 @@ All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.a
   - His signs last 24 h (real time), then sink.
 - **The squirrel** plants a petty sign near its tree every ~2.5–6 min (max 2 of its own up at once), with a tiny hammer: "MY TREE", "mochi smells", "no kiwis", "acorns: MINE"… These last 3 h.
 - Saved in localStorage `mochi.tempsigns`, so signs survive reloads until they expire. They use the shared sign atlas (Gochi Hand burned into pine; the squirrel's are walnut).
+
+## Graphics pass 2 (Nov 2026)
+`src/pbr.js` + tweaks in main/island/trees/landscape/gfx. All of it is tied to the quality tier:
+| | Low | Medium (Auto on flagship phones, e.g. S24 Ultra) | High | Ultra |
+|---|---|---|---|---|
+| photo detail textures | none | 512 px (~0.8 MB) | 1024 px (~3.2 MB) | 1024 first, then grass/dirt/rock at 2048 lazily after 4 s (+~8 MB) |
+| ground shader | plain vertex colours | grass/dirt/sand/rock detail + normals, top projection | + triplanar rock on cliffs/slopes | same |
+| grass blades | 3.5k | 17k | ×1.45 | ×2 |
+| GTAO | off | off | subtle (8 samples) | 12 samples |
+| colour grade pass | off | off | on (vibrance, warm highlights / cool shadows, vignette) | on |
+| shadow box | as before | as before | tighter (crisper) | tighter |
+| leaf translucency + rim | off | off | on | on |
+- Textures are CC0 from Poly Haven (leafy_grass, forrest_ground_01, coast_sand_01, rocky_terrain_02, bark_brown_02, wood_planks), resized and saved as WebP in `public/tex/`. The service worker caches `/tex/` cache-first.
+- The ground keeps its painted vertex colours. The photo layers only add grain and normals (each one is normalised by its average colour), are picked by colour + slope, and fade out between 22 and 75 m so far terrain doesn't shimmer. Bark and wood materials get the photo normal maps on their painted maps.
+- `?pbr=0` turns the photo detail off (for comparing).

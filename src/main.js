@@ -26,7 +26,7 @@ import { createWaterFx } from './waterfx.js';
 import { createAdventures } from './adventures.js';
 import { createRange } from './range.js';
 import { createTempSigns } from './tempsigns.js';
-import { applyPBR } from './pbr.js';
+import { applyPBR, patchFoliage, PBR_UNIFORMS } from './pbr.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -323,6 +323,7 @@ async function init() {
   try { tempSigns = createTempSigns(scene, { state, island, life, mochi, say: (s, d) => say(s, d), music, squirrel, squirrelPos: squirrelZone.pos }); } catch (e) { console.warn('temp signs failed', e); }
   // ── gfx pass 2: CC0 photo detail (ground/rock triplanar, bark + wood normals), Medium+ only ──
   let pbrInfo = null;
+  try { patchFoliage(scene, Q.tier ?? 2); } catch (e) { console.warn('foliage failed', e); }
   if (params.get('pbr') !== '0') try { applyPBR(scene, { tier: Q.tier ?? 2, renderer })?.then((r) => { pbrInfo = r; }); } catch (e) { console.warn('pbr failed', e); }
   // ── stage B: night sky + water polish + live weather refresh ──
   let nightSky = null, waterFx = null;
@@ -412,6 +413,7 @@ async function init() {
       sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
     land.winMat.color.setRGB(0.25 + 3.5 * night, 0.18 + 2.4 * night, 0.1 + 1.0 * night);
     bloom.strength = 0.35 + night * 0.45;
+    PBR_UNIFORMS.uSunW.value.copy(sky.state.lightDir); PBR_UNIFORMS.uSunC.value.copy(sun.color).multiplyScalar(Math.min(1.5, sun.intensity) * (1 - night));
 
     // brain
     let moving = 0;
