@@ -18,6 +18,7 @@ import { buildUI } from './ui.js';
 import { createWalk } from './controls.js';
 import { seasonOf } from './season.js';
 import { buildFeatures } from './features.js';
+import { buildWishes, applyWishBuilt } from './wishes.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -112,6 +113,7 @@ async function init() {
   const worldState = buildWorldState(scene, state);
   const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
   const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow });
+  try { features.wishes = buildWishes(scene, { features, glow, snowy, mobile: isMobile }); } catch (e) { console.warn('wishlist builds failed', e?.stack || e); features.wishes = null; }
   { const zs = new THREE.Group(); zs.name = 'zone-signs'; scene.add(zs); zoneSigns(zs, ZONES, { groundY, OBSTACLES, BRIDGE }); }
 
   const mochi = createMochi(state.outfit || '');
@@ -144,14 +146,14 @@ async function init() {
   controls.target.set(2.5, 3.0, -3.4);
   const az = (parseFloat(params.get('az') ?? '72') * Math.PI) / 180, el = (parseFloat(params.get('el') ?? (isMobile ? '16' : '10')) * Math.PI) / 180;
   const wideDir = new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)); // az: compass bearing of the camera from the island
-  const wideDist = parseFloat(params.get('dist') ?? (isMobile && innerWidth < innerHeight ? 100 : 72));
+  const wideDist = parseFloat(params.get('dist') ?? (isMobile && innerWidth < innerHeight ? 115 : 84));
   camera.position.copy(controls.target).addScaledVector(wideDir, wideDist);
   let lastInteract = performance.now();
   controls.addEventListener('start', () => { lastInteract = performance.now(); controls.autoRotate = false; follow = false; ui.setFollow(false); });
   controls.addEventListener('end', () => { lastInteract = performance.now(); });
 
   // keep the pan target near the island
-  const clampTarget = () => { const t = controls.target; t.x = THREE.MathUtils.clamp(t.x, -34, 40); t.z = THREE.MathUtils.clamp(t.z, -36, 34); t.y = THREE.MathUtils.clamp(t.y, -3, 6); };
+  const clampTarget = () => { const t = controls.target; t.x = THREE.MathUtils.clamp(t.x, -41, 48); t.z = THREE.MathUtils.clamp(t.z, -44, 41); t.y = THREE.MathUtils.clamp(t.y, -3, 6); };
 
   // ── Mochi brain ──
   const favored = matchZone(state.location) || ZONES[0];
@@ -261,12 +263,12 @@ async function init() {
   let lifeDirty = 1;
   life = createLife({ state, mochi, features, say: (s, d) => say(s, d), music, sky, feel, onChange: (inv, log, label) => { if (label !== undefined) ui.setDoing(label, bagText(inv)); else ui.setDoing(life?.label || '', bagText(inv)); lifeDirty = 1; } });
   ui.setDoing('', bagText(life.inv));
-  const critters = createCritters(scene, { lights: island.lights || [], life, say: (s, d) => say(s, d), music, season });
+  const critters = createCritters(scene, { owlBox: features.wishes?.owlBox, lights: island.lights || [], life, say: (s, d) => say(s, d), music, season });
   if (Array.isArray(state.encounters)) life.encounters.push(...state.encounters.filter((e) => e && e.animal).slice(-30));
   const wild = createWildlife(scene, { state, mochi, life, features, say: (s, d) => say(s, d), music, sky, brain, settings, season, encounters: life.encounters,
     go: (id, act) => { const z = ZONES.find((q) => q.id === id); if (!z) return; planTo(z); if (act) life.interact(id); }, onChange: () => { lifeDirty = 1; } });
   if (params.get('event')) setTimeout(() => wild.startEvent(params.get('event').toLowerCase(), params.get('at') || 'bank'), 4000);
-  const wish = Array.isArray(state.wishlist) ? state.wishlist : [];
+  const wish = applyWishBuilt(Array.isArray(state.wishlist) ? state.wishlist : []);
   function lifeHtml() {
     const inv = life.inv; const kv = (o, fmt = (k) => k) => Object.entries(o).filter(([, v]) => v > 0).map(([k, v]) => `<span>${esc(fmt(k))} ×${v}</span>`).join('') || '<span>—</span>';
     const stg = ['bare', 'sprout', 'leafy', 'budding', 'ripe!'];
@@ -280,7 +282,7 @@ async function init() {
       <h5>Mail</h5>${mail.slice(-5).reverse().map((m) => `<div class="row2">${m.unread || m.read === false ? '🔴 ' : ''}${esc(m.from || 'someone')}<em>${esc(m.subject || m.text || '')}</em></div>`).join('') || '<div class="row2">mailbox empty<em>flag down</em></div>'}
       <h5>Courage</h5><div class="row2">🦸 ${wild.courage}/100<em>${wild.courage >= 70 ? 'ranger energy' : wild.courage >= 45 ? 'steady' : 'a little shaky'}</em></div>
       <h5>Wildlife encounters</h5>${life.encounters.slice(-6).reverse().map((e) => `<div class="row2">${esc(e.animal)}${e.at ? ' · ' + esc(e.at) : ''}<em>${esc(e.outcome || '')}${e.date ? ' · ' + esc(e.date) : ''}</em></div>`).join('') || '<div class="row2">none yet<em>keep an eye on the far bank</em></div>'}
-      ${wish.length ? `<h5>Wishlist</h5>${wish.map((w) => `<div class="row2">${esc(w.item || w.name || w)}<span class="st ${esc(w.status || '')}">${esc(w.status || 'wish')}</span></div>`).join('')}` : ''}</div>`;
+      ${wish.length ? `<h5>Wishlist</h5>${wish.map((w) => `<div class="row2">${esc(w.item || w.name || w)}<span class="st ${esc(String(w.status || '').split(' ')[0])}">${esc(w.status || 'wish')}${w.note ? ' · ' + esc(w.note) : ''}</span></div>`).join('')}` : ''}</div>`;
   }
   // E key in walk mode: send Mochi to do the nearest thing
   const zoneNear = () => { const c = camera.position; let best = null, bd = 7; for (const z of ZONES) { if (!life.BY_ZONE[z.id]) continue; const d = Math.hypot(z.pos[0] - c.x, z.pos[1] - c.z); if (d < bd) { bd = d; best = z; } } return best; };
@@ -362,7 +364,7 @@ async function init() {
     ENV.uRim.value = night; updateSigns(night); details.update(sky);
     if (features.lanternLight) features.lanternLight.intensity = night * 2.4; { const w = 0.4 + ENV.uWind.value * 2; if (features.sock) features.sock.rotation.y = Math.sin(t * 1.7) * 0.45 * w; if (features.flag) features.flag.rotation.y = Math.sin(t * 3.1) * 0.35 * w; if (features.pulley) features.pulley.rotation.z = Math.sin(t * 1.3) * 0.06 * w; }
     // tight shadow box that follows what you're looking at (crisper, softer-edged shadows)
-    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const span = walk.on || follow ? 22 : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * 0.55, 18, 46);
+    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const span = walk.on || follow ? 22 : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * 0.55, 18, 52);
       const sc = sun.shadow.camera; if (sc.right !== span) { sc.left = sc.bottom = -span; sc.right = sc.top = span; sc.updateProjectionMatrix(); }
       const tex = (2 * span) / sun.shadow.mapSize.x; const cx = Math.round(c.x / tex) * tex, cz = Math.round(c.z / tex) * tex;
       sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
@@ -404,7 +406,7 @@ async function init() {
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving);
     squirrel.update(dt); elk.update(dt, t);
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);

@@ -89,7 +89,8 @@ export function signpost(parent, lines, [x, y, z], yaw = 0, s = 1, { icon = '', 
 // zone signposts (for places that don't already have their own big sign), facing the paths in the middle of the island
 const ZSIGN = { hut: ["MOCHI'S NEST", 'knock softly', '🏠'], tree: ['BIG TREE', 'treehouse ↑', '🌳'], pond: ['POND', 'frogs only', '🪷'], pumpkins: ['PUMPKIN PATCH', 'est. this fall', '🎃'],
   beach: ['BEACH ISLET', 'over the bridge →', '🏖️'], squirrel: ['SQUIRREL TREE', 'trades only', '🐿️'], cliff: ['LOOKOUT CLIFF', 'best view in MT', '⛰️'], campfire: ['CAMPFIRE', 'no bears pls', '🔥'],
-  meadow: ['WILDFLOWER MEADOW', 'bees at work', '🌼'], dock: ['FISHING DOCK', "bull trout: let 'em go", '🎣'], picnic: ['PICNIC TABLE', 'wifi: mochinet', '🧺'] };
+  meadow: ['WILDFLOWER MEADOW', 'bees at work', '🌼'], dock: ['FISHING DOCK', "bull trout: let 'em go", '🎣'], picnic: ['PICNIC TABLE', 'wifi: mochinet', '🧺'],
+  hottub: ['HOT TUB', 'capybaras soak free', '♨️'], burrow: ['GUEST BURROW', 'diving-petrels welcome', '🐦'] };
 export function zoneSigns(parent, ZONES, { groundY, OBSTACLES, BRIDGE }) {
   const out = [];
   for (const z of ZONES) { const d = ZSIGN[z.id]; if (!d) continue;

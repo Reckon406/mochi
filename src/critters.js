@@ -6,10 +6,11 @@ import { mv, topH, DOCK, WATER_Y, groundY, islandRadius, BIGTREE } from './layou
 const m = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...o });
 function add(p, g, mat, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, mat); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; p.add(x); return x; }
 
-export function createCritters(scene, { lights = [], life, say, music, season }) {
+export function createCritters(scene, { lights = [], life, say, music, season, owlBox = null }) {
   const group = new THREE.Group(); group.name = 'night-critters'; scene.add(group);
   // ── great horned owl on a branch of the big tree ──
   const perch = BIGTREE.limbPoint(BIGTREE.owlA, 2.0); const owl = new THREE.Group(); owl.position.set(perch.x, perch.y + 0.12, perch.z); owl.rotation.y = Math.atan2(Math.cos(BIGTREE.owlA), Math.sin(BIGTREE.owlA)) - 0.5; group.add(owl);
+  const owlHome = owl.position.clone(), owlHomeYaw = owl.rotation.y, owlF = { want: 0, u: 1 };
   const fe = m(0x7a6248), pale = m(0xd8c8a8);
   add(owl, new THREE.SphereGeometry(0.2, 14, 10), fe, [0, 0.22, 0], [0, 0, 0], [1, 1.35, 0.95]); add(owl, new THREE.SphereGeometry(0.13, 12, 8), pale, [0, 0.18, 0.1], [0, 0, 0], [1, 1.3, 0.6]);
   const head = new THREE.Group(); head.position.y = 0.5; owl.add(head); add(head, new THREE.SphereGeometry(0.15, 14, 10), fe, [0, 0, 0], [0, 0, 0], [1.1, 0.95, 1]);
@@ -39,7 +40,11 @@ export function createCritters(scene, { lights = [], life, say, music, season })
 
   function update(t, dt, night, dusk) {
     // owl: eyes glow + head swivels at night, sleepy by day
-    const awake = night > 0.4; eyeM.emissiveIntensity = awake ? 1.4 : 0; eyes.forEach((e) => (e.scale.y = awake ? 1 : 0.15)); head.rotation.y = awake ? Math.sin(t * 0.4) * 1.2 + (Math.sin(t * 0.13) > 0.95 ? 1.5 : 0) : 0;
+    const awake = night > 0.4;
+    // owl box: at night the owl flies over to the cliff and sits on its box; back to the big tree by day
+    if (owlBox) { const want = awake ? 1 : 0; if (owlF.want !== want) { owlF.want = want; owlF.from = owl.position.clone(); owlF.to = want ? owlBox.perch.clone() : owlHome.clone(); owlF.u = 0; owlF.yaw = want ? owlBox.yaw : owlHomeYaw; }
+      if (owlF.u < 1) { owlF.u = Math.min(1, owlF.u + dt / 7); const k = owlF.u * owlF.u * (3 - 2 * owlF.u); owl.position.lerpVectors(owlF.from, owlF.to, k); owl.position.y += Math.sin(Math.PI * owlF.u) * 4; owl.rotation.y = owlF.u < 0.9 ? Math.atan2(owlF.to.x - owlF.from.x, owlF.to.z - owlF.from.z) : owlF.yaw; } }
+    eyeM.emissiveIntensity = awake ? 1.4 : 0; eyes.forEach((e) => (e.scale.y = awake ? 1 : 0.15)); head.rotation.y = awake ? Math.sin(t * 0.4) * 1.2 + (Math.sin(t * 0.13) > 0.95 ? 1.5 : 0) : 0;
     if (awake) { hootT -= dt; if (hootT < 0) { hootT = 18 + Math.random() * 25; music.sfx('hoot'); } }
     // bats: out from dusk through the night, loop over the river around the island
     const batOn = Math.max(dusk, night) > 0.35 && season !== 'winter'; // they hibernate in winter

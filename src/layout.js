@@ -4,10 +4,12 @@ import { fbm, noise, smoothstep, clamp } from './noise.js';
 
 // v2: the island grew ~1.7x. Old hand-placed spots are mapped with K (centres) / mv (clusters keep their shape)
 export const K = 1.7;
-export const ISLAND_R = 24;
-export const CLIFF = { x: -11.3 * K, z: 3.2 * K, r: 4.2, h: 3.4 };
+// v3: grew again (radius x1.2 = ~1.44x area). Old spots stay put; the new outer ring hosts the wishlist builds
+export const G = 1.2;
+export const ISLAND_R = 24 * G;
+export const CLIFF = { x: -11.3 * K * G, z: 3.2 * K * G, r: 4.2, h: 3.4 };
 export const POND = { x: 2.6 * K, z: -1.2 * K, r: 3.2 };
-export const ISLET = { x: 17.5, z: -30.5, r: 5.2, y: -0.55 };
+export const ISLET = { x: 17.5 * G, z: -30.5 * G, r: 5.2, y: -0.55 };
 // old anchor centres (pre-v2 coords); mv(x, z) moves anything near an anchor along with it
 const ANCHORS = [[-4.2, -8.0], [4.4, -9.0], [2.6, -1.2], [-7.0, 6.4], [9.6, 6.0], [-1.0, 9.6], [-8.2, -3.4], [10.0, -4.6], [5.6, 9.0], [-11.3, 3.2], [-3.2, 1.6], [-8.9, 4.7]];
 export function mv(x, z) { let b = ANCHORS[0], bd = Infinity; for (const a of ANCHORS) { const d = Math.hypot(x - a[0], z - a[1]); if (d < bd) { bd = d; b = a; } } return [x + (K - 1) * b[0], z + (K - 1) * b[1]]; }
@@ -64,8 +66,8 @@ export function isletSurfH(x, z) {
 // boulders in the current
 // the Bitterroot's centreline + half-width (must match the GLSL copy in water.js). Widened in v2 for the bigger island
 export function riverX(z) { return 30 * Math.sin(z / 240) + 12 * Math.sin(z / 83); }
-export function riverW(z) { return 8 + 46 * Math.exp(-Math.pow(z / 100, 2)); }
-export const RIVER_ROCKS = [[-21, -5, 1.0], [-20, 9, 0.75], [-25, 1.5, 0.6], [24, 2, 1.1], [27, 10, 0.8], [21, -9, 0.7], [-10, -27, 0.8], [6, 27, 1.0], [-3, 31, 0.7], [27, -18, 0.9], [-25, 18, 0.7], [16, -31, 0.8], [-16, -18, 0.6], [12, 22, 0.6]].map(([x, z, r]) => [x * K, z * K, r * 1.2]).filter(([x, z]) => Math.abs(x - riverX(z)) < riverW(z) - 6);
+export function riverW(z) { return 8 + 50 * Math.exp(-Math.pow(z / 108, 2)); }
+export const RIVER_ROCKS = [[-21, -5, 1.0], [-20, 9, 0.75], [-25, 1.5, 0.6], [24, 2, 1.1], [27, 10, 0.8], [21, -9, 0.7], [-10, -27, 0.8], [6, 27, 1.0], [-3, 31, 0.7], [27, -18, 0.9], [-25, 18, 0.7], [16, -31, 0.8], [-16, -18, 0.6], [12, 22, 0.6]].map(([x, z, r]) => [x * K * G, z * K * G, r * 1.2]).filter(([x, z]) => Math.abs(x - riverX(z)) < riverW(z) - 6);
 export function rockH(x, z) { let h = -Infinity; for (const [rx, rz, rr] of RIVER_ROCKS) { const d = Math.hypot(x - rx, z - rz); if (d < rr) h = Math.max(h, WATER_Y + 0.3 * rr - 1.6 * rr * (d / rr) * (d / rr)); } return h; }
 
 export function isletH(x, z) {
@@ -113,6 +115,8 @@ export const SHOP = { x: 3.2, z: 8.6, w: 4.8, d: 3.6, h: 2.7 };
 { const L = Math.hypot(SHOP.x, SHOP.z); SHOP.fx = -SHOP.x / L; SHOP.fz = -SHOP.z / L; SHOP.yaw = Math.atan2(SHOP.fx, SHOP.fz); }
 export const MUSIC = { x: 9.0, z: -9.8 };
 export const VEND = { x: -6.8, z: 15.8 }; { const L = Math.hypot(VEND.x + 3, VEND.z - 6); VEND.fx = -(VEND.x + 3) / L; VEND.fz = -(VEND.z - 6) / L; VEND.yaw = Math.atan2(VEND.fx, VEND.fz); }
+// wishlist builds (v3 outer ring): hot tub by the nest, petrel guest burrow north, whale scope + owl box on the cliff, Corey's gift board by the ramp
+export const WISH = { tub: { x: -10.0, z: -17.6 }, burrow: { x: -4.5, z: 22.0 }, scope: { x: CLIFF.x - 1.2, z: CLIFF.z - 2.2 }, owlbox: { x: CLIFF.x + 1.9, z: CLIFF.z + 1.6 }, board: { x: 14.0, z: 7.2 }, swingA: -1.0 };
 // zones. pos = feature centre, spot = where Mochi stands, face = yaw he looks toward (radians, 0 = +z)
 export const ZONES = [
   { id: 'hut', name: 'Hut & Nest', emoji: '🛖', pos: Z(-4.2, -8.0), spot: S(-2.6, -5.9, -4.2, -8.0), keys: ['hut', 'home', 'house', 'nest', 'roof', 'ladder', 'bed', 'sleep', 'inside', 'door'] },
@@ -132,6 +136,8 @@ export const ZONES = [
   { id: 'dock', name: 'Fishing Dock', emoji: '🎣', pos: [DOCK.x0 + DOCK.dx * DOCK.len * 0.5, DOCK.z0 + DOCK.dz * DOCK.len * 0.5], spot: [DOCK.x0 + DOCK.dx * DOCK.len * 0.8, DOCK.z0 + DOCK.dz * DOCK.len * 0.8], keys: ['dock', 'fish', 'pier', 'river', 'rod', 'boat', 'float', 'bitterroot'] },
   { id: 'music', name: 'Music Corner', emoji: '🎸', pos: [MUSIC.x, MUSIC.z], spot: [MUSIC.x + 1.4, MUSIC.z + 1.6], keys: ['music', 'song', 'sing', 'drum', 'guitar', 'uke', 'keys', 'piano', 'band', 'jam', 'concert', 'tune'] },
   { id: 'picnic', name: 'Picnic Table', emoji: '🧺', pos: Z(-3.2, 1.6), spot: S(-2.2, 3.0, -3.2, 1.6), keys: ['picnic', 'table', 'cooler', 'soda', 'snack', 'lunch', 'quarters', 'laptop', 'computer', 'internet', 'browse', 'web', 'online', 'eat'] },
+  { id: 'hottub', name: 'Hot Tub', emoji: '♨️', pos: [WISH.tub.x, WISH.tub.z], spot: [WISH.tub.x + 1.3, WISH.tub.z + 1.2], keys: ['hot tub', 'hottub', 'tub', 'soak', 'capybara', 'bath', 'steam', 'warm water'] },
+  { id: 'burrow', name: 'Petrel Burrow', emoji: '🐦', pos: [WISH.burrow.x, WISH.burrow.z], spot: [WISH.burrow.x + 0.9, WISH.burrow.z - 1.6], keys: ['burrow', 'petrel', 'diving-petrel', 'guest', 'seabird', 'tunnel'] },
   { id: 'vending', name: 'Cap-O-Matic', emoji: '🎰', pos: [VEND.x, VEND.z], spot: [VEND.x + VEND.fx * 1.6, VEND.z + VEND.fz * 1.6], keys: ['vending', 'cap-o-matic', 'capomatic', 'machine', 'trinket', 'spend', 'gacha', 'capsule'] },
 ];
 
@@ -154,6 +160,7 @@ export const OBSTACLES = [
   ob(-3.2, 1.6, 1.3), ob(5.6, 9.4, 1.5), ob(-7.0, 6.6, 1.3),
   { x: 12.5, z: 1.5, r: 0.9 }, { x: -1.5 - 1.2, z: -7.5 - 1.0, r: 0.5 }, { x: MUSIC.x, z: MUSIC.z, r: 1.3 }, { x: VEND.x, z: VEND.z, r: 0.75 },
   { x: SHOP.x, z: SHOP.z, r: Math.hypot(SHOP.w, SHOP.d) / 2 + 0.2, mochiOnly: true },
+  { x: WISH.tub.x, z: WISH.tub.z, r: 0.85 }, { x: WISH.burrow.x, z: WISH.burrow.z, r: 1.0 }, { x: WISH.owlbox.x, z: WISH.owlbox.z, r: 0.3 }, { x: WISH.scope.x, z: WISH.scope.z, r: 0.3 },
 ];
 export const WALLS = [];
 { // shop walls: back, sides, and the two front pieces either side of the doorway

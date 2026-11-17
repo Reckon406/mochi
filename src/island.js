@@ -184,10 +184,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   // ── Bitterroot trees (procedural: cottonwood / ponderosa / fir / aspen) ──
   // Big treehouse cottonwood keeps BIGTREE limb anchors (swing, owl, feeder, cabin).
   { const big = makeBigCottonwood(BIGTREE, { season, snowy, seed: 3, lite: treeLite }); big.position.set(BIGTREE.x, BIGTREE.y - 0.05, BIGTREE.z); world.add(big); bindSway(sways, big); }
-  // swing hanging from the big north-west limb
-  { const hk = BIGTREE.limbPoint(BIGTREE.swingA, 2.5); const L = hk.y - 0.1 - groundY(hk.x, hk.z) - 0.55; const sw = new THREE.Group(); sw.position.copy(hk).y -= 0.1; sw.rotation.y = Math.PI / 2 - BIGTREE.swingA; world.add(sw);
-    for (const s of [-0.3, 0.3]) add(sw, new THREE.CylinderGeometry(0.014, 0.014, L, 3), mat(0xc9a66b), [s, -L / 2, 0], [0, 0, 0], null, false);
-    add(sw, new THREE.BoxGeometry(0.75, 0.06, 0.3), mat(0x8a5a32), [0, -L, 0]); anim.push((t) => { sw.rotation.x = Math.sin(t * 1.4) * 0.12 * (0.4 + ENV.uWind.value * 2); }); }
+  // (the old limb swing moved: the tiny swing now hangs under the treehouse deck, see wishes.js)
   if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 1.7 + R0() * 2.2; const x = BIGTREE.x + Math.cos(a) * rr, z = BIGTREE.z + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
   function plantTree(maker, x, z, opts = {}) {

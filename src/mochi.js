@@ -136,6 +136,17 @@ export function createMochi(outfit = '') {
     extras.hat = hat;
   }
 
+  // tiny backpack (wishlist, for caps. or a seal): on his back, or slung on his right flank when the leaf cape is on
+  { const caped = !!extras.cape; const pack = new THREE.Group(); const dir = caped ? new THREE.Vector3(1, 0.05, -0.25) : new THREE.Vector3(0, 0.12, -1);
+    pack.position.copy(surf(dir, 0.07)); pack.lookAt(pack.position.clone().add(new THREE.Vector3(dir.x, 0, dir.z).normalize())); pivot.add(pack);
+    const pm = new THREE.MeshStandardMaterial({ color: 0xe0a33a, roughness: 0.85 }), fm = new THREE.MeshStandardMaterial({ color: 0xc8553d, roughness: 0.85 }), cm = new THREE.MeshStandardMaterial({ color: 0xd8dde3, metalness: 0.6, roughness: 0.35 });
+    const box = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 0.12, 4, 10), pm); box.scale.set(1, 1, 0.55); pack.add(box);
+    const flap = new THREE.Mesh(new THREE.SphereGeometry(0.152, 12, 6, 0, Math.PI * 2, 0, Math.PI / 2), fm); flap.scale.set(1.02, 0.7, 0.6); flap.position.y = 0.06; pack.add(flap);
+    const pocket = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.1, 0.05), fm); pocket.position.set(0, -0.08, 0.075); pack.add(pocket);
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.012, 12), cm); cap.rotation.x = Math.PI / 2; cap.position.set(0.05, 0.02, 0.085); pack.add(cap); // a bottle cap pin, obviously
+    for (const s of [-1, 1]) { const st = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.012, 4, 12, Math.PI * 0.9), fm); st.position.set(s * 0.08, 0.02, -0.06); st.rotation.set(0, Math.PI / 2, Math.PI * 0.55); pack.add(st); }
+    pack.traverse((o) => { if (o.isMesh) o.castShadow = true; }); extras.backpack = pack; }
+
   // invisible, generous hit target for clicks/taps
   const hit = new THREE.Mesh(new THREE.SphereGeometry(0.95, 8, 6), new THREE.MeshBasicMaterial({ visible: false })); hit.position.y = 0.6; hit.name = 'mochi-hit'; root.add(hit);
 

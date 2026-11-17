@@ -1,7 +1,7 @@
 // Mochi's day-to-day: inventory + an activity at every place, chained into little quests
 // (dig worms in the garden -> fish at the dock -> cook at the campfire -> eat). Reads STATE, simulates the rest live in the page.
 import * as THREE from 'three';
-import { ZONES, groundY, topH, DOCK, WATER_Y, mv, SHOP } from './layout.js';
+import { ZONES, groundY, topH, DOCK, WATER_Y, mv, SHOP, WISH } from './layout.js';
 import { FISH, rollFish, fishMesh, speciesKey } from './fish.js';
 import { CROPS } from './features.js';
 
@@ -86,7 +86,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 2.6, tick(u) { if (TH().stage < 1) return; liftTarget = u * (TH().top.y - TH().ladder.y); pose.sway = 0.5; if (Math.random() < 0.04) music?.sfx?.('step'); } },
     { d: 1.4, start() { pose.sway = 0; if (TH().stage < 1) return; posTarget = TH().top.clone(); }, tick() { if (TH().stage >= 1) liftTarget = upY(); } },
     { d: 1.4, start() { if (TH().stage < 2) return; posTarget = TH().deck.clone(); }, tick() { if (TH().stage >= 1) liftTarget = upY(); }, end() { const c = TH().group.position; if (TH().stage >= 2) face = Math.atan2(M().x - c.x, M().z - c.z); } },
-    { d: 8, start() { const st = TH().stage; this.k = 0; if (st < 6) { hold(P.plank, [0, 0.3, 0.2]); say(STAGE_TALK[st], 3); } else say(['treehouse inspection: passed', 'i can see the squirrel from here. he can see me', 'the owl lives upstairs. we do not talk'][Math.floor(Math.random() * 3)], 3); },
+    { d: 8, start() { const st = TH().stage; this.k = 0; if (st < 6) { hold(P.plank, [0, 0.3, 0.2]); say(STAGE_TALK[st], 3); } else say(['treehouse inspection: passed', 'i can see the squirrel from here. he can see me', 'the owl lives upstairs. we do not talk'][Math.floor(Math.random() * 3)], 3); if (sky.state.night > 0.5 && features.wishes?.readLantern) say('reading the internet by my tiny lantern. cozy mode', 3.5); },
       tick(u, dt, t) { if (TH().stage >= 1) liftTarget = upY(); if (TH().stage >= 6) { if (Math.random() < dt * 0.3) mochi.hop(0.3); return; }
         pose.peck = 0.5 + 0.5 * Math.sin(t * 9); this.k = (this.k || 0) + dt; if (this.k > 0.45) { this.k = 0; const p = ahead(0.45); fx.puff(p.x, M().y + 0.15, p.z, 0xe8c890); music?.sfx?.('thunk'); } },
       end() { pose.peck = 0; drop(); } },
@@ -116,7 +116,44 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 2.5, start() { if (this.no) return; const tr = TRINKETS[Math.floor(Math.random() * TRINKETS.length)]; inv.trinkets.push(tr); if (this.V?.cap) this.V.cap.visible = true; mochi.flap(1); mochi.hop(0.7); say(`GOT: ${tr}!!`, 2.5); changed(); }, end() { if (this.V?.cap) this.V.cap.visible = false; } } ] };
   A.pumpkins = { zone: 'pumpkins', label: '🎃 pumpkin check', steps: [{ d: 4, start() { say('checking on the pumpkins. they are being weird again', 2.5); pose.peck = 0.5; }, end() { pose.peck = 0; } }] };
 
-  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse'], ramp: ['skate'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
+  // ── wishlist builds (v3) ──
+  const WS = () => features.wishes || {}; const _v = new THREE.Vector3();
+  const WHALE = ['scanning for whales. they are in canada. i am squinting', 'is that a whale or a cloud. it is a cloud', 'canada if you can hear me: send whales', 'whale count: 0. vibe count: high'];
+  A.telescope = { zone: 'cliff', label: '🔭 whale watching', steps: [
+    { d: 1.8, start() { const sc = WS().scope; if (!sc) return; posTarget = sc.stand.clone(); face = sc.face; } },
+    { d: 7, start() { if (!WS().scope) return; say(WHALE[Math.floor(Math.random() * WHALE.length)], 3.2); }, tick(u, dt) { pose.peck = 0.25; if (Math.random() < dt * 0.25) mochi.flap(0.3); } },
+    { d: 2.2, start() { pose.peck = 0; say(Math.random() < 0.2 ? 'WAIT. a splash. probably a whale. (it was a duck)' : 'no whales today. maybe tomorrow', 2.4); }, end() { face = null; } } ] };
+  A.swing = { zone: 'tree', label: '🌳 swinging under the treehouse', steps: [
+    { d: 2.2, start() { const sw = WS().swing; if (!sw) return; sw.seat.getWorldPosition(_v); posTarget = new THREE.Vector3(_v.x, 0, _v.z); } },
+    { d: 10, start() { const sw = WS().swing; if (!sw) return; sw.riding = true; mochi.hop(0.45); say(['the fab 4 foxes have swings. now i do too', 'wheeeee (quietly)', 'swing physics: understood'][Math.floor(Math.random() * 3)], 3); },
+      tick() { const sw = WS().swing; if (!sw) return; sw.seat.getWorldPosition(_v); posTarget = null; M().x = _v.x; M().z = _v.z; liftTarget = Math.max(0, _v.y - 0.15 - groundY(_v.x, _v.z)); face = -WISHA(); pose.sway = 0.2; },
+      end() { const sw = WS().swing; if (sw) sw.riding = false; pose.sway = 0; } },
+    { d: 1.0, start() { liftTarget = 0; mochi.hop(0.5); face = null; say('stuck the landing', 1.6); } } ] };
+  const WISHA = () => WISH.swingA;
+  A.soak = { zone: 'hottub', label: '♨️ soaking in the hot tub', steps: [
+    { d: 1.8, start() { const tb = WS().tub; if (!tb) return; posTarget = new THREE.Vector3(tb.pos.x, 0, tb.pos.z + 1.35); face = Math.PI; } },
+    { d: 1.0, start() { const tb = WS().tub; if (!tb) return; mochi.hop(0.9); liftTarget = 0.75; posTarget = new THREE.Vector3(tb.pos.x + 0.2, 0, tb.pos.z + 0.18); } },
+    { d: 11, start() { const tb = WS().tub; if (!tb) return; tb.soaking = true; tb.capyJoin = Math.random() < 0.6; liftTarget = tb.waterY - 0.68 - groundY(tb.pos.x + 0.2, tb.pos.z + 0.18); face = 2.6;
+        say(tb.capy.visible || tb.capyJoin ? 'hot tub with a capybara. this is the peak of my life' : 'warm river water. my feathers are soup. perfect', 3.5); },
+      tick(u) { const tb = WS().tub; if (tb) liftTarget = tb.waterY - 0.68 - groundY(M().x, M().z); pose.sleep = Math.min(0.55, u * 1.5); },
+      end() { const tb = WS().tub; if (tb) { tb.soaking = false; tb.capyJoin = false; } pose.sleep = 0; } },
+    { d: 1.0, start() { const tb = WS().tub; if (!tb) return; liftTarget = 0.75; mochi.hop(0.9); posTarget = new THREE.Vector3(tb.pos.x, 0, tb.pos.z + 1.35); } },
+    { d: 1.2, start() { liftTarget = 0; mochi.flap(1); say('shake shake. 10/10 would soak again', 2); }, end() { face = null; } } ] };
+  A.burrow = { zone: 'burrow', label: '🐦 visiting the petrel burrow', steps: [
+    { d: 1.8, start() { const b = WS().burrow; if (!b) return; const ang = Math.atan2(0.9, -1.6); posTarget = new THREE.Vector3(b.pos.x + Math.sin(ang) * 1.45, 0, b.pos.z + Math.cos(ang) * 1.45); face = ang + Math.PI; } },
+    { d: 6, start() { WS().burrow?.peek(); say(['knock knock. any diving-petrels home?', 'guest burrow inspection. towels: no. vibes: yes', 'they nest in the ground. i nest in a tree. we are learning from each other'][Math.floor(Math.random() * 3)], 3.2); }, tick(u, dt) { pose.peck = 0.35; if (Math.random() < dt * 0.3) mochi.hop(0.2); } },
+    { d: 2, start() { pose.peck = 0; say(WS().burrow?.bird.visible ? 'a petrel said hi. we are friends now' : 'nobody home. leaving a worm as rent', 2.4); }, end() { face = null; } } ] };
+  A.cruise = { zone: 'ramp', label: "🛹 cruising on Corey's skateboard", steps: [
+    { d: 1.8, start() { const gb = WS().giftBoard; if (!gb) return; gb.board.getWorldPosition(_v); posTarget = new THREE.Vector3(_v.x, 0, _v.z); } },
+    { d: 14, start() { const gb = WS().giftBoard; if (!gb) { this.no = true; return; } this.no = false; mochi.root.add(gb.board); gb.board.position.set(0, 0.06, 0); gb.board.rotation.set(0, 0, 0); mochi.hop(0.35);
+        const r = zone('ramp').spot, c = zone('campfire').spot; const p0 = M(); this.pts = [new THREE.Vector2(p0.x, p0.z), new THREE.Vector2(...r), new THREE.Vector2(...c), new THREE.Vector2(...r), new THREE.Vector2(...c), new THREE.Vector2(...r)];
+        this.seg = 0; this.s = 0; say('the REAL tiny skateboard. gift from corey. i am crying and rolling', 3.2); },
+      tick(u, dt) { if (this.no || !this.pts) return; posTarget = null; let step = dt * 2.3; while (step > 0 && this.seg < this.pts.length - 1) { const a = this.pts[this.seg], b = this.pts[this.seg + 1]; const L = a.distanceTo(b) || 1e-3; const left = L - this.s; if (step < left) { this.s += step; step = 0; } else { step -= left; this.seg++; this.s = 0; } }
+        const i = Math.min(this.seg, this.pts.length - 2); const a = this.pts[i], b = this.pts[i + 1]; const k = Math.min(1, this.s / (a.distanceTo(b) || 1)); M().x = a.x + (b.x - a.x) * k; M().z = a.y + (b.y - a.y) * k; face = Math.atan2(b.x - a.x, b.y - a.y); liftTarget = 0.07; pose.sway = 0.25; },
+      end() { const gb = WS().giftBoard; if (gb) { gb.group.add(gb.board); gb.board.position.copy(gb.home.pos); gb.board.rotation.copy(gb.home.rot); } liftTarget = 0; pose.sway = 0; face = null; } },
+    { d: 1.2, start() { if (!this.no) say('parked. thank you corey 🛹', 2); } } ] };
+
+  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
   // which activity makes sense at a zone right now
   function choose(zid, prefer) {
     if (prefer && A[prefer] && A[prefer].zone === zid) return prefer;
@@ -137,11 +174,12 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     if (inv.worms > 0) return 'dock';
     if (plots.some((p) => p.crop && p.stage >= 4)) return 'garden';
     if (inv.caps >= 3 && Math.random() < 0.15) return 'vending';
+    if (Math.random() < 0.25) return ['hottub', 'burrow', 'cliff', 'tree', 'ramp'][Math.floor(Math.random() * 5)]; // wishlist spots
     return Math.random() < 0.6 ? 'garden' : null;
   }
   // STATE.activity / location keywords -> first activity
   const KEYS = [[/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
-    [/brows|laptop|internet|online|web|google|reading the news/, 'browse'], [/sleep|nap|bed|snooz/, 'sleep'], [/skate|kickflip/, 'skate'], [/treehouse|tree house|climb/, 'treehouse'], [/yodel|weather station/, 'yodel'], [/paint|draw/, 'paint'],
+    [/brows|laptop|internet|online|web|google|reading the news/, 'browse'], [/sleep|nap|bed|snooz/, 'sleep'], [/skateboard|cruis/, 'cruise'], [/skate|kickflip/, 'skate'], [/hot ?tub|soak|capybara/, 'soak'], [/burrow|petrel/, 'burrow'], [/telescope|whale/, 'telescope'], [/swing/, 'swing'], [/treehouse|tree house|climb/, 'treehouse'], [/yodel|weather station/, 'yodel'], [/paint|draw/, 'paint'],
     [/music|song|jam|drum|guitar|uke/, 'jam'], [/honey|bee/, 'honey'], [/shell/, 'shells'], [/skip(ping)? (rocks|stones)/, 'skip'], [/vending|cap-o-matic|trinket/, 'vend'], [/mail/, 'mail'], [/dust/, 'dust'], [/trade|squirrel/, 'trade'], [/eat|snack|lunch|dinner/, 'eat']];
   function fromText(s) { const t = String(s || '').toLowerCase(); for (const [re, a] of KEYS) if (re.test(t)) return a; return null; }
   const initial = fromText(state.activity);
@@ -170,5 +208,5 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     for (const c of [...P.skewer.children]) if (c.userData.food) P.skewer.remove(c); P.skewer.visible = false; liftTarget = 0; face = null; pose.peck = pose.sway = pose.sleep = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); }
   function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); return true; }
   function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toLocaleDateString('en-CA') }); return FISH[k].name; }
-  return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, liftTo(v) { liftTarget = v; } };
+  return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, liftTo(v) { liftTarget = v; }, run(id) { const def = A[id]; if (!def) return false; cancel(); queued = id; return begin(def.zone); } };
 }

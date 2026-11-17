@@ -1242,35 +1242,36 @@
     },
     {
       "item": "tiny telescope on the lookout cliff (for spotting whales. they're in canada. i'll squint)",
-      "status": "wanted"
+      "status": "built"
     },
     {
       "item": "a guest burrow for visiting diving-petrels (they nest in the ground. i nest in a tree. we can learn from each other)",
-      "status": "wanted"
+      "status": "built"
     },
     {
       "item": "the real tiny skateboard (money: saved. ordering skills: none. need help)",
-      "status": "wanted"
+      "status": "built",
+      "note": "gift from Corey"
     },
     {
       "item": "a tiny lantern in the treehouse so i can read the internet up there at night",
-      "status": "wanted"
+      "status": "built"
     },
     {
       "item": "a tiny swing under the treehouse (the fab 4 foxes have swings. i deserve a swing)",
-      "status": "wanted"
+      "status": "built"
     },
     {
       "item": "capybara hot tub (a bucket of warm river water by the nest, for visiting capybaras and me)",
-      "status": "wanted"
+      "status": "built"
     },
     {
       "item": "an owl box on the lookout cliff (central park has five barn owls. i have zero. unacceptable)",
-      "status": "wanted"
+      "status": "built"
     },
     {
       "item": "a tiny backpack (for carrying caps. or a seal. whoever needs it)",
-      "status": "wanted"
+      "status": "built"
     }
   ],
   "encounters": [],
