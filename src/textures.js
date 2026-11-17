@@ -66,7 +66,7 @@ export function stripes(colors, n = 10, vertical = false, w = 128, h = 128) {
 
 export function woodTex(base = '#9a6a42', planks = 6, vertical = true) {
   const r = rng(5);
-  return canvasTex(256, 256, (g, w, h) => {
+  const t = canvasTex(256, 256, (g, w, h) => {
     g.fillStyle = base; g.fillRect(0, 0, w, h);
     for (let i = 0; i < planks; i++) {
       const s = (i * (vertical ? w : h)) / planks; const shade = (r() - 0.5) * 40;
@@ -75,7 +75,7 @@ export function woodTex(base = '#9a6a42', planks = 6, vertical = true) {
       g.fillStyle = 'rgba(60,35,20,0.55)'; if (vertical) g.fillRect(s, 0, 2, h); else g.fillRect(0, s, w, 2);
     }
     for (let i = 0; i < 140; i++) { g.strokeStyle = `rgba(70,40,20,${0.08 + r() * 0.1})`; g.lineWidth = 1; g.beginPath(); const x = r() * w, y = r() * h; if (vertical) { g.moveTo(x, y); g.lineTo(x + (r() - 0.5) * 3, y + 20 + r() * 40); } else { g.moveTo(x, y); g.lineTo(x + 20 + r() * 40, y + (r() - 0.5) * 3); } g.stroke(); }
-  }, { repeat: [1, 1] });
+  }, { repeat: [1, 1] }); t.userData.kind = 'wood'; return t;
 }
 
 export function thatchTex() {

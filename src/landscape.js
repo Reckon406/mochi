@@ -81,7 +81,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   // far terrain (sunk under the near patch so they don't fight)
   const far = terrainMesh(3800, mobile ? 170 : 240, 0, 0, snowy, (x, z) => terrainH(x, z) - (Math.max(Math.abs(x), Math.abs(z)) < NEAR - 12 ? 6 : 0));
   group.add(far);
-  const near = terrainMesh(NEAR * 2, mobile ? 170 : 260, 0, 0, snowy, terrainH); near.receiveShadow = true; group.add(near);
+  const near = terrainMesh(NEAR * 2, mobile ? 170 : 260, 0, 0, snowy, terrainH); near.receiveShadow = true; near.material.userData.pbrGround = true; group.add(near);
 
   // ── river: one big water plane, shaded with flow + foam (bed/island depth comes from a baked height map) ──
   const RECT = { x0: -64, z0: -64, size: 128 }; const RES = mobile ? 256 : 420;

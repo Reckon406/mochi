@@ -46,7 +46,7 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
   return g;
 }
 
-export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall', lite = false } = {}) {
+export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall', lite = false, tier = 2 } = {}) {
   const treeLite = !!lite; // Medium phones keep fuller trees; Low still lite
   const world = new THREE.Group(); scene.add(world);
   const anim = []; // per-frame updaters (t, dt)
@@ -89,7 +89,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     },
   });
   const ground = add(world, g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 }), [0, 0, 0], [0, 0, 0], null, true);
-  ground.name = 'ground';
+  ground.name = 'ground'; ground.material.userData.pbrGround = true;
 
   // ── beach islet ──
   const sand = new THREE.Color(0xf1dca6), wetSand = new THREE.Color(0xcdb07a);
@@ -97,7 +97,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     topColor: (x, y, z, f, c) => { shoreColor(x, y, z, c); if (y > WATER_Y + 0.3 && !snowy) c.lerp(sandC, 0.6); },
     sideColor: (x, y, z, t, th, c) => shoreColor(x, y, z, c),
   });
-  add(world, ig, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 }));
+  add(world, ig, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, userData: { pbrGround: true } }));
   // beach umbrella, towel, sandcastle and an aspirational sign
   { const bx = ISLET.x - 2.2, bz = ISLET.z - 1.6; const by = isletH(bx, bz);
     add(world, new THREE.CylinderGeometry(0.04, 0.04, 2.2, 6), mat(0xeeeeee), [bx, by + 1.0, bz], [0.12, 0, 0.1]);
@@ -379,7 +379,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── wind-swaying grass (instanced, cheap) ──
   const grass = (() => {
-    const N = Math.round((mobile || lite ? 3500 : 17000) * detail); const bg = new THREE.PlaneGeometry(0.06, 0.26, 1, 3); bg.translate(0, 0.13, 0);
+    const N = Math.round((mobile || lite ? 3500 : 17000 * (tier >= 3 ? 2.0 : tier >= 2 ? 1.45 : 1)) * detail); /* gfx2: denser blades at High/Ultra */ const bg = new THREE.PlaneGeometry(0.06, 0.26, 1, 3); bg.translate(0, 0.13, 0);
     const p = bg.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i) / 0.26; p.setX(i, p.getX(i) * (1 - yy * 0.85)); }
     const nrm = bg.attributes.normal; for (let i = 0; i < nrm.count; i++) nrm.setXYZ(i, 0, 1, 0);
     const gm = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, side: THREE.DoubleSide });
@@ -389,7 +389,8 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
         float sway = sin(uTime * 2.2 + ip.x * 0.6 + ip.z * 0.4) * 0.5 + sin(uTime * 3.7 + ip.x * 1.3) * 0.25;
         transformed.x += sway * hh * hh * (0.06 + uWind * 0.35);
         transformed.z += cos(uTime * 1.9 + ip.z * 0.7) * hh * hh * (0.03 + uWind * 0.15);`);
-      sh.fragmentShader = sh.fragmentShader.replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\n normal = normalize(vNormal);'); };
+      sh.vertexShader = 'varying float vGH;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n vGH = uv.y;');
+      sh.fragmentShader = 'varying float vGH;\n' + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\n diffuseColor.rgb *= mix(0.62, 1.12, vGH);').replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\n normal = normalize(vNormal);').replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance += diffuseColor.rgb * 0.1 * vGH * vGH; // soft translucent tips'); };
     const im = new THREE.InstancedMesh(bg, gm, N); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), v = new THREE.Vector3(); const c = new THREE.Color(); let k = 0;
     for (let i = 0; i < N * 5 && k < N; i++) {
       const a = R0() * 6.28, rr = Math.sqrt(R0()) * (ISLAND_R + 1.2); const x = Math.cos(a) * rr, z = Math.sin(a) * rr; if (rr > islandRadius(a) - 0.7) continue; if (blocked(x, z)) continue;

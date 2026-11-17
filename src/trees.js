@@ -26,7 +26,7 @@ function volSeg(opts) { return opts.lite ? 0 : 1; } // icosa detail
 
 // ── bark ──
 export function barkTex(kind = 'pine') {
-  return tex('bark-' + kind, 128, 256, (g, w, h) => {
+  const bt = tex('bark-' + kind, 128, 256, (g, w, h) => {
     const r = rng(kind === 'aspen' ? 41 : kind === 'cotton' ? 17 : kind === 'fir' ? 29 : 7);
     if (kind === 'ponderosa') {
       g.fillStyle = '#9a5530'; g.fillRect(0, 0, w, h);
@@ -50,7 +50,7 @@ export function barkTex(kind = 'pine') {
       for (let i = 0; i < 40; i++) { const x = r() * w; g.strokeStyle = r() < 0.5 ? '#4a3a2a' : '#8a7a68'; g.lineWidth = 2 + r() * 3; g.beginPath(); g.moveTo(x, 0); for (let y = 0; y < h; y += 10) g.lineTo(x + Math.sin(y * 0.1 + i) * 4, y); g.stroke(); }
       for (let i = 0; i < 60; i++) { g.fillStyle = 'rgba(30,22,14,0.28)'; g.fillRect(r() * w, r() * h, 4 + r() * 10, 2 + r() * 3); }
     }
-  });
+  }); bt.userData.kind = 'bark'; return bt;
 }
 
 /** Soft irregular needle-cluster card (filled tuft, not sparse lines). */

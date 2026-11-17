@@ -26,6 +26,7 @@ import { createWaterFx } from './waterfx.js';
 import { createAdventures } from './adventures.js';
 import { createRange } from './range.js';
 import { createTempSigns } from './tempsigns.js';
+import { applyPBR } from './pbr.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -118,7 +119,7 @@ async function init() {
   const season = seasonOf(new Date(), params.get('season'));
   const snowy = weather.snow || season === 'winter';
   const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite });
-  const island = buildIsland(scene, { snowy, mobile: isMobile, state, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
+  const island = buildIsland(scene, { snowy, mobile: isMobile, state, tier: Q.tier ?? 2, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
   const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile });
   const worldState = buildWorldState(scene, state);
   const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
@@ -137,7 +138,7 @@ async function init() {
   const rt = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: lite ? THREE.UnsignedByteType : THREE.HalfFloatType, samples: lite ? 0 : (isMobile ? 0 : Q.msaa) });
   const composer = new EffectComposer(renderer, rt);
   composer.addPass(new RenderPass(scene, camera));
-  let ao = null; if (Q.ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.addPass(ao); }
+  let ao = null; if ((Q.ao || (Q.tier ?? 0) >= 2) && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = Q.ao ? 0.85 : 0.55; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: Q.ao ? 12 : 8 }); composer.addPass(ao); }
   // sanitize HDR before bloom: one NaN/Inf pixel (e.g. a degenerate normal) otherwise gets blurred across the whole screen
   const sanitize = new ShaderPass({ uniforms: { tDiffuse: { value: null } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
     fragmentShader: 'uniform sampler2D tDiffuse; varying vec2 vUv; void main(){ vec4 c = texture2D(tDiffuse, vUv); bvec4 bad = bvec4(!(c.r == c.r) || c.r > 6.5e4, !(c.g == c.g) || c.g > 6.5e4, !(c.b == c.b) || c.b > 6.5e4, !(c.a == c.a)); if (any(bad)) c = vec4(0.0, 0.0, 0.0, 1.0); gl_FragColor = vec4(min(c.rgb, vec3(32.0)), c.a); }' });
@@ -145,6 +146,14 @@ async function init() {
   const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.45, 0.55, 1.0);
   composer.addPass(bloom); bloom.enabled = S0.bloom; bloom.userData = { sanitize };
   composer.addPass(new OutputPass());
+  // High/Ultra: gentle colour grade after tonemapping (vibrance, warm highlights / cool shadows, soft vignette). Low/Medium skip it.
+  let grade = null; if ((Q.tier ?? 0) >= 2) { grade = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uVig: { value: 0.22 } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: `uniform sampler2D tDiffuse; uniform float uVig; varying vec2 vUv;
+      void main(){ vec4 c = texture2D(tDiffuse, vUv); vec3 col = c.rgb; float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
+        float mx = max(col.r, max(col.g, col.b)), mn = min(col.r, min(col.g, col.b)); col = mix(vec3(l), col, 1.0 + 0.18 * (1.0 - (mx - mn)));
+        col += vec3(0.018, 0.008, -0.012) * smoothstep(0.45, 1.0, l) + vec3(-0.01, 0.0, 0.016) * (1.0 - smoothstep(0.0, 0.35, l));
+        vec2 d = vUv - 0.5; col *= 1.0 - uVig * smoothstep(0.35, 0.85, length(d * vec2(1.15, 1.0)));
+        gl_FragColor = vec4(clamp(col, 0.0, 1.0), c.a); }` }); composer.addPass(grade); }
 
   // ── controls ──
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -312,6 +321,9 @@ async function init() {
   // ── temporary stake signs (Mochi + the squirrel) ──
   let tempSigns = null;
   try { tempSigns = createTempSigns(scene, { state, island, life, mochi, say: (s, d) => say(s, d), music, squirrel, squirrelPos: squirrelZone.pos }); } catch (e) { console.warn('temp signs failed', e); }
+  // ── gfx pass 2: CC0 photo detail (ground/rock triplanar, bark + wood normals), Medium+ only ──
+  let pbrInfo = null;
+  if (params.get('pbr') !== '0') try { applyPBR(scene, { tier: Q.tier ?? 2, renderer })?.then((r) => { pbrInfo = r; }); } catch (e) { console.warn('pbr failed', e); }
   // ── stage B: night sky + water polish + live weather refresh ──
   let nightSky = null, waterFx = null;
   try { nightSky = createNightSky(scene, { weather, season, mochi, say: (s, d) => say(s, d), force: params.get('aurora') === '1' ? 'aurora' : params.get('star') === '1' ? 'star' : null,
@@ -394,7 +406,7 @@ async function init() {
     ENV.uRim.value = night; updateSigns(night); details.update(sky);
     if (features.lanternLight) features.lanternLight.intensity = night * 2.4; { const w = 0.4 + ENV.uWind.value * 2; if (features.sock) features.sock.rotation.y = Math.sin(t * 1.7) * 0.45 * w; if (features.flag) features.flag.rotation.y = Math.sin(t * 3.1) * 0.35 * w; if (features.pulley) features.pulley.rotation.z = Math.sin(t * 1.3) * 0.06 * w; }
     // tight shadow box that follows what you're looking at (crisper, softer-edged shadows)
-    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const span = walk.on || follow ? 22 : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * 0.55, 18, 52);
+    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const hiS = (Q.tier ?? 0) >= 2; const span = walk.on || follow ? (hiS ? 16 : 22) : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * (hiS ? 0.45 : 0.55), hiS ? 14 : 18, 52);
       const sc = sun.shadow.camera; if (sc.right !== span) { sc.left = sc.bottom = -span; sc.right = sc.top = span; sc.updateProjectionMatrix(); }
       const tex = (2 * span) / sun.shadow.mapSize.x; const cx = Math.round(c.x / tex) * tex, cz = Math.round(c.z / tex) * tex;
       sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
@@ -475,7 +487,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { get pbrInfo() { return pbrInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

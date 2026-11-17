@@ -81,14 +81,15 @@ function bumpCanvas(key, w, h, draw) {
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.NoColorSpace; t.anisotropy = 4; return (cache[key] = t);
 }
 export function barkBump() {
-  return bumpCanvas('bark', 64, 128, (g, w, h) => { const r = rng(5); g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
+  return tagKind('bark', bumpCanvas('bark', 64, 128, (g, w, h) => { const r = rng(5); g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
     for (let i = 0; i < 26; i++) { const x = r() * w, ww = 1 + r() * 3; g.fillStyle = r() < 0.5 ? '#3a3a3a' : '#5a5a5a'; g.fillRect(x, 0, ww, h); }
-    for (let i = 0; i < 60; i++) { g.fillStyle = r() < 0.5 ? '#b0b0b0' : '#4a4a4a'; g.fillRect(r() * w, r() * h, 2 + r() * 6, 1 + r() * 3); } });
+    for (let i = 0; i < 60; i++) { g.fillStyle = r() < 0.5 ? '#b0b0b0' : '#4a4a4a'; g.fillRect(r() * w, r() * h, 2 + r() * 6, 1 + r() * 3); } }));
 }
+function tagKind(k, t) { t.userData.kind = k; return t; }
 export function rockBump() {
-  return bumpCanvas('rock', 128, 128, (g, w, h) => { const r = rng(9); g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
+  return tagKind('rock', bumpCanvas('rock', 128, 128, (g, w, h) => { const r = rng(9); g.fillStyle = '#808080'; g.fillRect(0, 0, w, h);
     for (let i = 0; i < 260; i++) { const s = 2 + r() * 10, v = Math.floor(90 + r() * 90); g.fillStyle = `rgb(${v},${v},${v})`; g.beginPath(); g.arc(r() * w, r() * h, s, 0, 6.28); g.fill(); }
-    g.strokeStyle = '#303030'; g.lineWidth = 1.5; for (let i = 0; i < 10; i++) { g.beginPath(); let x = r() * w, y = r() * h; g.moveTo(x, y); for (let k = 0; k < 5; k++) { x += (r() - 0.5) * 30; y += (r() - 0.5) * 30; g.lineTo(x, y); } g.stroke(); } });
+    g.strokeStyle = '#303030'; g.lineWidth = 1.5; for (let i = 0; i < 10; i++) { g.beginPath(); let x = r() * w, y = r() * h; g.moveTo(x, y); for (let k = 0; k < 5; k++) { x += (r() - 0.5) * 30; y += (r() - 0.5) * 30; g.lineTo(x, y); } g.stroke(); } }));
 }
 
 // ── quality tiers (auto picks one for the device) ──
