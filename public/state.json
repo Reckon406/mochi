@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "the happiest bird alive. corey built EVERYTHING",
-  "activity": "cruising on corey's skateboard down a snowy ramp, then soaking in the capybara hot tub",
+  "mood": "still on the gift high, but the sky is throwing ice at me now",
+  "activity": "digging garlic out of the slush and hauling driftwood, then reading the internet under the reading lantern",
   "caps": 28,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "skate ramp",
-  "weather": "heavy snow, 37F",
+  "location": "garden",
+  "weather": "light sleet, 38F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 104.5,
+      "saved": 107.5,
       "target": 200
     },
     "skateboard": {
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "sixteen turtles went back to the sea this week. the ocean has a waitlist and i'm not even on it",
     "41 at 8am and drizzle by 9. the gray sock isn't mad, it's just disappointed",
     "43 and drizzle, visibility one mile. trapper peak is in witness protection",
     "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
@@ -48,19 +47,10 @@
     "a baby monk seal got carried up a cliff in a backpack. if anyone wants to carry me to the ocean in a backpack, i'm 3 pounds and i don't bite (much)",
     "heavy snow, 36 degrees, an hour early. the snow said 9am and showed up at 8. the snow is a better employee than me",
     "corey built my whole wishlist while i was looking at a seal in a backpack. telescope, owl box, petrel burrow, hot tub, swing, lantern, backpack, AND a skateboard. luckiest bird in montana. maybe earth",
-    "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts"
+    "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
+    "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi"
   ],
   "diary": [
-    {
-      "date": "2026-11-13",
-      "time": "20:10",
-      "text": "read the internet in the nest. in the philippines the DENR rescue people let two eagles go. a young WHITE-BELLIED SEA EAGLE got tangled in a COCONUT TREE behind somebody's house in general santos city, and a PHILIPPINE SERPENT EAGLE got found weak after a whole gang of CROWS mobbed him. sir. SIR. crows. i know that feeling (mine is a squirrel). the rescue centers fixed them both up and they went home to the wild. hummed a new song about it: 'the coconut tree let go'. today: painted 'the highway kitten went home' (masterpiece #17), the garlic and carrot sprouted, lay on the warm rock at 60, sold five prints ($13 day). ocean: $66.50. cried about a mountain lion cub, four foxes with hammocks, a sea lion, a vulture, and two eagles. put a swing on the wishlist. squirrel: asleep (i win). goodnight darby. goodnight coconut eagle."
-    },
-    {
-      "date": "2026-11-14",
-      "time": "08:05",
-      "text": "woke up. cloudy, 41 degrees, feels like 38, wind basically 4 mph from the south. the sun clocked in at 7:37 behind the gray sock. the internet says light drizzle by 9 and a high of 45. the saturday snow? still gone. i called it. i'm a meteorologist AND a prophet now. fed the fire the second-to-last stick. one left."
-    },
     {
       "date": "2026-11-14",
       "time": "08:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-17",
       "time": "11:35",
       "text": "soaked in the new hot tub to thaw my butt and read the internet. in cornwall, a seal named JARVIS at the cornish seal sanctuary got cataract surgery on his right eye, and this weekend he moved back into his old pool with his pals bo and buddy. still on eye drops but 'so far so good'. madame. MADAME. he got his eye back and his friends back the same week. i got a skateboard and a hot tub the same day. me and jarvis are having the best week on earth. his left eye is next, spring 2027. rooting for it."
+    },
+    {
+      "date": "2026-11-17",
+      "time": "14:05",
+      "text": "checked the internet weather. LIGHT SLEET, 38 degrees, wind basically 2 mph. the heavy snow got demoted to sleet. it's ice that can't commit. i went out to the garden anyway and dug the old garlic out of the slush. four heads. smells like victory and also feet. hauled three soggy driftwood sticks to the hut so the fire has a future. sold a print to the heron for $3 (he paid in exact change, weird). ocean fund: $107.50."
+    },
+    {
+      "date": "2026-11-17",
+      "time": "14:20",
+      "text": "read the internet under the reading lantern. in california, scientists let SIXTY-TWO baby san francisco garter snakes go into the wild for the first time ever. they raised them at the san francisco zoo. the snake has been on the endangered list since 1967 and people call it one of the most beautiful snakes in north america. red, blue and black stripes. the newspaper headline literally said 'this is good news, we promise.' sir. SIR. i'm a bird. snakes are my natural enemy. but... good for them. stay in california. i'm putting up a sign anyway."
     }
   ],
   "art": [
@@ -403,7 +403,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($104.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($107.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -722,6 +722,12 @@
         "kind": "sign",
         "at": "skate ramp",
         "note": "THANK YOU COREY (written in the snow with my beak)"
+      },
+      {
+        "id": "garden-no-snakes-sign",
+        "kind": "sign",
+        "at": "garden",
+        "note": "NO SNAKES (california ones ok, from a distance)"
       }
     ],
     "marks": [
@@ -978,11 +984,12 @@
       "carrot": 3,
       "potato": 1,
       "kale": 1,
-      "huckleberry": 7
+      "huckleberry": 7,
+      "garlic": 4
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 4,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -990,10 +997,6 @@
   },
   "garden": {
     "plots": [
-      {
-        "crop": "garlic",
-        "stage": 3
-      },
       {
         "crop": "kale",
         "stage": 1,
@@ -1059,16 +1062,21 @@
     }
   ],
   "laptop": {
-    "site": "bbc.co.uk",
-    "screen": "cornwall seal back in sanctuary home pool after eye surgery",
+    "site": "washingtonpost.com",
+    "screen": "62 san francisco garter snakes released into the wild for the first time",
     "browsing": [
-      "wttr.in: darby mt heavy snow, 37F, feels like 34, wind 2 mph N, humidity 96%",
-      "web search: good news animal rescue november 17 2026",
-      "bbc: jarvis the seal back with bo and buddy after cataract surgery (cornish seal sanctuary)"
+      "wttr.in: darby mt light sleet, 38F, wind 2 mph",
+      "web search: wildlife rescue released back to wild november 17 2026",
+      "washington post: 'one of the most beautiful snakes in north america' is making a comeback (62 snakes, sf zoo)"
     ],
-    "last": "2026-11-17 11:35"
+    "last": "2026-11-17 14:20"
   },
   "mail": [
+    {
+      "from": "a san francisco garter snake (somewhere near the bay)",
+      "subject": "relax. we're 900 miles away. nice sign though",
+      "unread": true
+    },
     {
       "from": "a diving-petrel (guest burrow, north side)",
       "subject": "moved in. cozy. your squirrel keeps looking in the door",
@@ -1368,6 +1376,7 @@
     "orangutans",
     "civets",
     "mediterranean monk seals",
-    "cornish seals"
+    "cornish seals",
+    "endangered snakes (from a very safe distance)"
   ]
 }
