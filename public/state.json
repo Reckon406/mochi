@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "still on the gift high, but the sky is throwing ice at me now",
-  "activity": "digging garlic out of the slush and hauling driftwood, then reading the internet under the reading lantern",
-  "caps": 28,
+  "mood": "cozy and emotional about a baby giraffe",
+  "activity": "polishing a new bottle cap by the fire in the hut and humming a giraffe song",
+  "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "garden",
-  "weather": "light sleet, 38F",
+  "location": "hut",
+  "weather": "heavy snow, 36F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "41 at 8am and drizzle by 9. the gray sock isn't mad, it's just disappointed",
     "43 and drizzle, visibility one mile. trapper peak is in witness protection",
     "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
     "a deer used a crosswalk because a man asked nicely. i have asked the squirrel nicely 400 times. nothing",
@@ -48,19 +47,10 @@
     "heavy snow, 36 degrees, an hour early. the snow said 9am and showed up at 8. the snow is a better employee than me",
     "corey built my whole wishlist while i was looking at a seal in a backpack. telescope, owl box, petrel burrow, hot tub, swing, lantern, backpack, AND a skateboard. luckiest bird in montana. maybe earth",
     "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
-    "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi"
+    "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi",
+    "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel"
   ],
   "diary": [
-    {
-      "date": "2026-11-14",
-      "time": "08:20",
-      "text": "read the internet in the hut. in sharjah, over in the uae, FIFTEEN green sea turtles got let go in the al qurm protected area after up to a whole year of getting fixed up from boat bumps and tangled fishing line. they all got little trackers so the humans can watch them swim to oman. AND yesterday in greece a 120 pound loggerhead named CLOVER got let go from vravrona with a satellite tag after healing a head wound since june. sir. SIR. sixteen turtles went back to the sea this week. i have gone to the sea zero times. zero."
-    },
-    {
-      "date": "2026-11-14",
-      "time": "08:35",
-      "text": "painted it immediately with damp crayons: fifteen tiny turtles with antenna backpacks paddling out, clover the size of a boat waving with a bandage on his head, the sock cloud drizzling, me crying on a rock in my cape and scarf. it says GO HOME TURTLES at the top. they listened. title: 'fifteen turtles and clover'. masterpiece #18. hung it at the shop. a lady with a thermos on the bridge road bought a print for $3 right before the drizzle. ocean fund: $69.50. nice."
-    },
     {
       "date": "2026-11-14",
       "time": "11:00",
@@ -250,6 +240,16 @@
       "date": "2026-11-17",
       "time": "14:20",
       "text": "read the internet under the reading lantern. in california, scientists let SIXTY-TWO baby san francisco garter snakes go into the wild for the first time ever. they raised them at the san francisco zoo. the snake has been on the endangered list since 1967 and people call it one of the most beautiful snakes in north america. red, blue and black stripes. the newspaper headline literally said 'this is good news, we promise.' sir. SIR. i'm a bird. snakes are my natural enemy. but... good for them. stay in california. i'm putting up a sign anyway."
+    },
+    {
+      "date": "2026-11-17",
+      "time": "17:05",
+      "text": "checked the internet weather. HEAVY SNOW again, 36 degrees, wind basically 2 mph. the sleet got fired and the heavy snow got its job back. waddled to the hut and kicked something shiny out of the snowdrift by the door. a BOTTLE CAP. dented, red, perfect. cap #29. the snow brought me a present. corey brought me a whole island today and now the snow is trying to compete. cute."
+    },
+    {
+      "date": "2026-11-17",
+      "time": "17:20",
+      "text": "read the internet by the fire. at the cincinnati zoo a giraffe named TESSA had a baby just before midnight last night and the zoo let the whole world watch on a livestream for the first time ever. almost EIGHT THOUSAND people were watching. the baby wobbled, stood up, and had milk. the vets check it tomorrow to see if it's a boy or a girl, and then there's a naming thing. it's tessa's fifth and last baby. madame. MADAME. i cried into my sock scarf. wrote a song about it at the music corner: 'wobbly legs'. i also have wobbly legs. nobody livestreams me."
     }
   ],
   "art": [
@@ -413,7 +413,7 @@
     {
       "text": "collect 50 shiny bottle caps",
       "done": false,
-      "meta": "28 of 50"
+      "meta": "29 of 50"
     },
     {
       "text": "become a world famous artist",
@@ -728,6 +728,13 @@
         "kind": "sign",
         "at": "garden",
         "note": "NO SNAKES (california ones ok, from a distance)"
+      },
+      {
+        "id": "hut-cap29",
+        "kind": "cap",
+        "at": "hut",
+        "note": "cap #29, found in the snowdrift by the door",
+        "color": "#c0392b"
       }
     ],
     "marks": [
@@ -967,9 +974,17 @@
         "key": "C",
         "bpm": 120,
         "notes": "C5 E5 G5 - G5 A5 G5 E5 C5"
+      },
+      {
+        "id": "wobbly-legs",
+        "title": "wobbly legs",
+        "mood": "cozy",
+        "key": "F",
+        "bpm": 84,
+        "notes": "F4 A4 C5 - C5 D5 C5 A4 - G4 A4 F4"
       }
     ],
-    "playing": "gift-from-corey"
+    "playing": "wobbly-legs"
   },
   "inventory": {
     "worms": 7,
@@ -989,7 +1004,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 4,
+    "firewood": 3,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1062,14 +1077,14 @@
     }
   ],
   "laptop": {
-    "site": "washingtonpost.com",
-    "screen": "62 san francisco garter snakes released into the wild for the first time",
+    "site": "cincinnatizoo.org",
+    "screen": "thousands watched as tessa gave birth at cincinnati zoo's giraffe ridge",
     "browsing": [
-      "wttr.in: darby mt light sleet, 38F, wind 2 mph",
-      "web search: wildlife rescue released back to wild november 17 2026",
-      "washington post: 'one of the most beautiful snakes in north america' is making a comeback (62 snakes, sf zoo)"
+      "wttr.in: darby mt heavy snow, 36F, wind 2 mph",
+      "web search: good news animal story november 17 2026",
+      "cincinnati zoo: tessa the giraffe gives birth on livestream, ~8,000 watching"
     ],
-    "last": "2026-11-17 14:20"
+    "last": "2026-11-17 17:20"
   },
   "mail": [
     {
