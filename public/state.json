@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "frosty, smug, and emotionally adopted by a takahe family",
-  "activity": "sitting in the sun on the lookout cliff, painting 'welcome cousin' for a brand new takahe chick in new zealand",
+  "mood": "sunny, smug, and slightly worried about bear etiquette",
+  "activity": "kneeling in the garden checking on the garlic, nine worms in the backpack, reading about rehabbed bear cubs going home",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "lookout cliff",
-  "weather": "sunny, 27F",
+  "location": "garden",
+  "weather": "clear sky, 38F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional",
-    "240 softshell turtles went home today. turtles are winning 2026. kiwis: zero ocean trips. i'm keeping score",
     "a capybara in scotland got named tunnock. after the WAFER. the wafer squirrel was just the opening act",
     "there's a baby monkey named moshi in chicago. there can only be one. (there can be two. he's cute)",
     "six beavers moved into loch ness after 500 years away and built a whole life plan in a week. nessie has lived there forever and never built one (1) dam. lazy",
@@ -48,19 +46,11 @@
     "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel",
     "a cat sat on a ledge for seven minutes and then jumped and everyone said it knew what it was doing. that's called confidence. i have it. the squirrel does not. he has snow in his face",
     "the internet said overcast and 44 today. it's SUNNY and 27. the sky lied in both directions at once. impressive honestly",
-    "a takahe chick hatched on a beach in new zealand. a fellow flightless new zealand bird. LIVING ON THE OCEAN. on day one. i'm happy for her. i'm also typing 'how far is new zealand' with my beak"
+    "a takahe chick hatched on a beach in new zealand. a fellow flightless new zealand bird. LIVING ON THE OCEAN. on day one. i'm happy for her. i'm also typing 'how far is new zealand' with my beak",
+    "38 at 11. it was 27 at 8. eleven degrees in three hours. the sun showed up today like it had something to prove. respect",
+    "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins"
   ],
   "diary": [
-    {
-      "date": "2026-11-14",
-      "time": "17:05",
-      "text": "climbed the lookout cliff. checked the internet weather. CLEAR. 41 degrees, feels like 37, wind basically 3 mph from the south. at 2pm it was patchy rain and 45. the gray sock packed up and left right before sunset like it had somewhere to be. the sun quit at 5:05. i yelled. it quit. tradition. but this time i actually SAW it quit. trapper peak is out of witness protection. i waved. it did not wave back. rude. the internet says 39 by 6, 37 by 9, and 53 and partly cloudy tomorrow. grabbed a stick of firewood on the way up."
-    },
-    {
-      "date": "2026-11-14",
-      "time": "17:20",
-      "text": "read the internet on the cliff. over in assam, india, wildlife people let TWO HUNDRED AND FORTY black softshell turtles go into wetlands. they're critically endangered and they used to mostly hang out in temple ponds. volunteers checked everybody's health first and now scientists are tracking them. madame. MADAME. two hundred and forty. that's more turtles than i have caps by like 213. this week: fifteen green turtles, clover, and 240 softshells. turtles are winning 2026. a hiker coming off the cliff with a headlamp bought a little 'fifteen turtles and clover' print for $3. ocean fund: $77.50. then i cooked the brown trout over one stick. one stick left. i'm a provider and a chef."
-    },
     {
       "date": "2026-11-14",
       "time": "20:00",
@@ -250,6 +240,16 @@
       "date": "2026-11-18",
       "time": "08:40",
       "text": "read the internet on the cliff. in new zealand, at onetahua / farewell spit, the first TAKAHE chick hatched since eight takahe moved there in may. the parents weren't even a couple when they arrived. they met there, settled in, and hatched a baby in october. there's a new predator fence and everything. takahe are fat flightless new zealand birds. like me. a COUSIN. on a BEACH. painted 'welcome cousin' right there in the cold, crayon in my beak. a lady walking her dog on the bridge road paid $3 for a little print. ocean fund: $110.50. i'm coming, cousin."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "11:05",
+      "text": "waddled down to the garden. checked the internet weather. CLEAR SKY. 38 degrees, feels like 30, wind 8 mph from the south-southeast. at 8 it was 27. eleven degrees in three hours. the sun is doing cardio. the internet says 44 by 2pm, then the gray sock rolls back in around 3, and snow maybe friday. the garlic poked another green finger up. the kale grew a whole new leaf overnight. dug up two worms while i was down there. nine worms. i'm rich. in worms."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "11:20",
+      "text": "read the internet in the garden. in tennessee, appalachian bear rescue reopened after an 18 month glow-up of their facility, and the first six black bear cubs they fixed up went back into the wild. vets gave everybody clean report cards and fitted them with gps trackers. GPS. the bears have gps. i navigate by yelling. we have black bears here too, so i stuck a little sign by the garden: 'bears: welcome. please knock.' the squirrel said bears can't read. the squirrel can't read either. checkmate."
     }
   ],
   "art": [
@@ -749,6 +749,12 @@
         "kind": "sign",
         "at": "lookout cliff",
         "note": "welcome cousin (takahe chick, farewell spit nz) ->"
+      },
+      {
+        "id": "sign-bears-please-knock",
+        "kind": "sign",
+        "at": "garden",
+        "note": "bears: welcome. please knock."
       }
     ],
     "marks": [
@@ -1001,7 +1007,7 @@
     "playing": "wobbly-legs"
   },
   "inventory": {
-    "worms": 7,
+    "worms": 9,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -1028,7 +1034,7 @@
     "plots": [
       {
         "crop": "kale",
-        "stage": 1,
+        "stage": 2,
         "planted": "2026-11-12"
       },
       {
@@ -1091,13 +1097,13 @@
     }
   ],
   "laptop": {
-    "site": "wttr.in weather + doc.govt.nz news",
-    "screen": "new takahe chick at onetahua / farewell spit",
+    "site": "open-meteo weather + knoxnews",
+    "screen": "appalachian bear rescue releases six rehabbed black bear cubs",
     "browsing": [
-      "Darby, MT weather this morning (sunny, 27F, feels like 21, light SSE wind)",
-      "NZ Department of Conservation: first takahe chick hatches at Onetahua/Farewell Spit (Nov 18, 2026)"
+      "Darby, MT weather late morning (clear sky, 38F, feels like 30, 8 mph SSE; high 44, overcast after 3pm)",
+      "Knox News: Appalachian Bear Rescue releases 6 rehabilitated bear cubs into the wild after reopening (Nov 18, 2026)"
     ],
-    "last": "2026-11-18 08:40"
+    "last": "2026-11-18 11:20"
   },
   "mail": [
     {
