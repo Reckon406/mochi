@@ -10,6 +10,7 @@ Rebuilt for the web with `tools/build-models.mjs`. That script thins the leaf ca
 |---|---|---|---|---|
 | trees | ponderosa pines + Douglas firs (Pine 1–5) | Stylized Nature MegaKit [Standard] — `Pine_1..5` | Quaternius | https://quaternius.itch.io/stylized-nature-megakit |
 | trees | cottonwoods + willows (Common Tree 1–5) | Stylized Nature MegaKit [Standard] — `CommonTree_1..5` | Quaternius | https://quaternius.com/packs/stylizednaturemegakit.html |
+| trees | bushes (Medium+) | Stylized Nature MegaKit [Standard] — `Bush_Common_Flowers` | Quaternius | https://quaternius.com/packs/stylizednaturemegakit.html |
 | trees | aspens | Tree Small 02 | Rico Cilliers / Poly Haven | https://polyhaven.com/a/tree_small_02 |
 | rocks | mossy rocks, boulders | Rock Moss Set 01 | Kless Gyzen / Poly Haven | https://polyhaven.com/a/rock_moss_set_01 |
 | rocks | scattered rocks + pebbles | Rock 07, Rock 09 | Jenelle van Heerden / Poly Haven | https://polyhaven.com/a/rock_07 · https://polyhaven.com/a/rock_09 |
@@ -20,6 +21,9 @@ Rebuilt for the web with `tools/build-models.mjs`. That script thins the leaf ca
 | props | crates | Wooden Crate 02 | James Ray Cock, Jurita Burger / Poly Haven | https://polyhaven.com/a/wooden_crate_02 |
 | props | barrels | Wine Barrel 01 | James Ray Cock / Poly Haven | https://polyhaven.com/a/wine_barrel_01 |
 | props | dock bucket | Wooden Bucket 01 | James Ray Cock / Poly Haven | https://polyhaven.com/a/wooden_bucket_01 |
+
+## Treehouse cottonwood bark (`public/tex/bark_c_*.webp`, `bark_n_*.webp`)
+The colour and normal maps of Bark Brown 02 (Rob Tuytel / Poly Haven, CC0, https://polyhaven.com/a/bark_brown_02), resized to 512 px (Medium) and 1024 px (High/Ultra). The tree's shape and its painted leaf sprays are procedural (`src/bigtree.js`).
 
 ## HDRIs (`public/hdri/*.hdr`)
 These were downscaled to 256 px (Medium) and 512 px (High/Ultra), with the sun disc clipped, because the scene keeps its own sun.

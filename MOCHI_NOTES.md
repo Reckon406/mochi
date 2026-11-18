@@ -90,3 +90,9 @@ All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.a
 - **New obstacles:** the props are in `PROP_SPOTS` (layout.js), and those spots are added to `OBSTACLES`, so Mochi walks around them.
 - **Nothing Mochi writes to state.json changed.**
 - **For comparing:** `?real=0` turns the model swap off, and `?hdri=0` turns off the HDRI light.
+
+## Wildflowers, clutter cleanup + treehouse tree (Nov 2026)
+- `src/wildflowers.js`: native Bitterroot-valley wildflowers in clumped patches, kept off the paths, the zone spots, the pond and obstacles. They follow the season. Spring has bitterroot, arrowleaf balsamroot, lupine and Indian paintbrush. Summer has lupine, paintbrush, yarrow, fireweed and a little balsamroot. Fall shows dried yarrow, fireweed and balsamroot seed heads. Winter or snow shows none. Preview a season with `?season=summer`. The old gumball sphere flowers are gone.
+- Clutter: pebbles and twigs are down about 75% and now sit mostly along path edges and the shore. Fall leaf litter is lower (900 → 560). The flat-shaded "orange boulder" was really a fall-tinted bush. Bushes are muted now, and at Medium+ they are swapped for the Quaternius bush model.
+- `src/bigtree.js`: the treehouse cottonwood is rebuilt with a photo-bark trunk, root buttresses, curved forked limbs and small leaf sprays. In winter it has bare branches. Attachment anchors are unchanged (`BIGTREE.radiusAt`, plus `limbPoint` for the straight first 2.6 m of each limb). The old `makeBigCottonwood` in trees.js stays as a fallback.
+- None of this touches state.json.
