@@ -77,3 +77,16 @@ All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.a
 - Textures are CC0 from Poly Haven (leafy_grass, forrest_ground_01, coast_sand_01, rocky_terrain_02, bark_brown_02, wood_planks), resized and saved as WebP in `public/tex/`. The service worker caches `/tex/` cache-first.
 - The ground keeps its painted vertex colours. The photo layers only add grain and normals (each one is normalised by its average colour), are picked by colour + slope, and fade out between 22 and 75 m so far terrain doesn't shimmer. Bark and wood materials get the photo normal maps on their painted maps.
 - `?pbr=0` turns the photo detail off (for comparing).
+
+## Real-look pass (CC0 models + HDRI, Nov 2026)
+`src/realworld.js` swaps the island's procedural trees, rocks, pebbles, logs, stumps and campfire ring for CC0 glTF models. It also adds a few barrels, crates and a bucket by the dock and behind the art shop. A main.js block adds HDRI environment light, and photo mode gets depth of field at High+. Sources are listed in `CREDITS.md`.
+- **Tiers**
+  - Low: nothing changes and nothing extra downloads.
+  - Medium: `models/lo/` (~2.4 MB) plus a 256 px HDRI (~0.2 MB).
+  - High/Ultra: `models/hi/` (~5.2 MB) plus a 512 px HDRI (~0.7 MB).
+  - Everything loads after the world is already showing. If a download fails, the old procedural shapes simply stay.
+- **Positions don't move:** each model is fitted onto the old shape's spot and size. The treehouse cottonwood stays procedural (it has the swing, owl, feeder and cabin on it).
+- **Seasons:** in fall, cottonwood/aspen leaves are tinted gold. In winter, the broadleaf trees lose their leaves.
+- **New obstacles:** the props are in `PROP_SPOTS` (layout.js), and those spots are added to `OBSTACLES`, so Mochi walks around them.
+- **Nothing Mochi writes to state.json changed.**
+- **For comparing:** `?real=0` turns the model swap off, and `?hdri=0` turns off the HDRI light.

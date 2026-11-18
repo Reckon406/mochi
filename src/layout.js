@@ -113,6 +113,14 @@ const S = (x, z, ax, az) => [x + (K - 1) * ax, z + (K - 1) * az];
 // art shop (front faces the island centre) + music corner
 export const SHOP = { x: 3.2, z: 8.6, w: 4.8, d: 3.6, h: 2.7 };
 { const L = Math.hypot(SHOP.x, SHOP.z); SHOP.fx = -SHOP.x / L; SHOP.fz = -SHOP.z / L; SHOP.yaw = Math.atan2(SHOP.fx, SHOP.fz); }
+// CC0 set dressing (realworld.js, Medium+): barrels / crates / a bucket at the dock's land end and behind the art shop
+export const PROP_SPOTS = (() => { const out = []; const px = -DOCK.dz, pz = DOCK.dx; const bx = DOCK.x0 - DOCK.dx * 0.9, bz = DOCK.z0 - DOCK.dz * 0.9;
+  out.push({ kind: 'barrel', x: bx + px * 1.55, z: bz + pz * 1.55, yaw: 0.4, r: 0.45 }, { kind: 'bucket', x: bx + px * 1.55 + DOCK.dx * 0.6, z: bz + pz * 1.55 + DOCK.dz * 0.6, yaw: 1.1, r: 0.2 },
+    { kind: 'crate', x: bx - px * 1.7, z: bz - pz * 1.7, yaw: DOCK.th + 0.2, r: 0.55 });
+  const c = Math.cos(SHOP.yaw), s = Math.sin(SHOP.yaw); const S = (lx, lz) => [SHOP.x + lx * c + lz * s, SHOP.z - lx * s + lz * c];
+  { const [x, z] = S(SHOP.w / 2 + 0.55, -SHOP.d / 2 + 0.45); out.push({ kind: 'barrel', x, z, yaw: 2.0, r: 0.45 }); }
+  { const [x, z] = S(-SHOP.w / 2 - 0.6, -SHOP.d / 2 + 0.5); out.push({ kind: 'crate', x, z, yaw: SHOP.yaw + 0.1, r: 0.55, stack: 1 }); }
+  return out; })();
 export const MUSIC = { x: 9.0, z: -9.8 };
 export const VEND = { x: -6.8, z: 15.8 }; { const L = Math.hypot(VEND.x + 3, VEND.z - 6); VEND.fx = -(VEND.x + 3) / L; VEND.fz = -(VEND.z - 6) / L; VEND.yaw = Math.atan2(VEND.fx, VEND.fz); }
 // wishlist builds (v3 outer ring): hot tub by the nest, petrel guest burrow north, whale scope + owl box on the cliff, Corey's gift board by the ramp
@@ -165,6 +173,7 @@ export const OBSTACLES = [
   { x: SHOP.x, z: SHOP.z, r: Math.hypot(SHOP.w, SHOP.d) / 2 + 0.2, mochiOnly: true },
   { x: 0.2, z: 2.8, r: 0.45 }, { x: -1.2, z: 5.7, r: 0.85 }, // sign pass: crossroads post + notice board (signs.js CROSS / worldstate.js BOARD)
   { x: WISH.tub.x, z: WISH.tub.z, r: 0.85 }, { x: WISH.burrow.x, z: WISH.burrow.z, r: 1.0 }, { x: WISH.owlbox.x, z: WISH.owlbox.z, r: 0.3 }, { x: WISH.scope.x, z: WISH.scope.z, r: 0.3 },
+  ...PROP_SPOTS.map((p) => ({ x: p.x, z: p.z, r: p.r })),
   { x: RANGE.tgt - 0.3, z: RANGE.z, r: 1.6 }, { x: RANGE.bench, z: RANGE.z, r: 0.4 }, { x: RANGE.bench + 0.4, z: RANGE.z - 2.5, r: 0.7 }, { x: RANGE.bench + 0.2, z: RANGE.z + 2.4, r: 0.6 }, { x: RANGE.x - 1.6, z: RANGE.z - 2.2, r: 0.5 }, // range: targets/berm, bench, vending, rack, clay thrower
 ];
 export const WALLS = [];

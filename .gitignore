@@ -3,3 +3,6 @@ shots/
 .DS_Store
 *.log
 dist/
+public/_test/
+*.tmp.html
+*.tmp.mjs

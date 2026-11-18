@@ -46,6 +46,8 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
   return g;
 }
 
+// every procedural tree planted on the island (not the treehouse cottonwood), for the CC0 model swap in realworld.js
+export const TREE_SPOTS = [];
 export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall', lite = false, tier = 2 } = {}) {
   const treeLite = !!lite; // Medium phones keep fuller trees; Low still lite
   const world = new THREE.Group(); scene.add(world);
@@ -133,7 +135,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   const pond = new THREE.Mesh(new THREE.CircleGeometry(POND.r + 0.15, 48).rotateX(-Math.PI / 2), pondMat); pond.position.set(POND.x, POND_Y, POND.z); pond.renderOrder = 2; world.add(pond);
   if (snowy) { pondMat.uniforms.uDeep.value.set(0x9cc6d8); pondMat.uniforms.uShallow.value.set(0xd8eef5); }
   for (let i = 0; i < 14; i++) { const a = i / 14 * 6.283 + R0() * 0.3; const rr = POND.r + 0.25 + R0() * 0.3; const x = POND.x + Math.cos(a) * rr, z = POND.z + Math.sin(a) * rr;
-    add(world, new THREE.DodecahedronGeometry(0.22 + R0() * 0.22, 1), mat(snowy ? 0xdfe4ea : 0x9a948e), [x, topH(x, z) + 0.05, z], [R0(), R0(), R0()], [1, 0.6, 1]); }
+    add(world, new THREE.DodecahedronGeometry(0.22 + R0() * 0.22, 1), mat(snowy ? 0xdfe4ea : 0x9a948e), [x, topH(x, z) + 0.05, z], [R0(), R0(), R0()], [1, 0.6, 1]).userData.real = 'rock'; }
   for (let i = 0; i < 5; i++) { const a = R0() * 6.28, rr = R0() * (POND.r - 0.6); const lp = add(world, new THREE.CircleGeometry(0.28, 16, 0.3, Math.PI * 1.85).rotateX(-Math.PI / 2), mat(0x4f9a3a, { side: THREE.DoubleSide }), [POND.x + Math.cos(a) * rr, POND_Y + 0.02, POND.z + Math.sin(a) * rr], [0, R0() * 6, 0], null, false);
     if (i < 2) add(world, new THREE.SphereGeometry(0.08, 10, 8), mat(0xffb3c8, { emissive: 0xff7aa0, emissiveIntensity: 0.15 }), [lp.position.x, POND_Y + 0.08, lp.position.z], [0, 0, 0], [1, 0.6, 1]); }
   // cattails
@@ -188,7 +190,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 1.7 + R0() * 2.2; const x = BIGTREE.x + Math.cos(a) * rr, z = BIGTREE.z + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
   function plantTree(maker, x, z, opts = {}) {
-    const y = topH(x, z); const g = maker({ ...opts, season, snowy, lite: treeLite }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
+    const y = topH(x, z); const g = maker({ ...opts, season, snowy, lite: treeLite }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); TREE_SPOTS.push({ maker, g }); return g;
   }
   // island conifers: mix of ponderosa + Douglas fir
   [[-9.5, -7.5, 1.15, 'fir'], [-11, -4.5, 0.95, 'pine'], [-7.8, -10.3, 1.05, 'fir'], [12.4, -1.5, 0.85, 'pine'], [-12.5, 7.5, 0.9, 'fir'], [-9.2, 9.6, 1.05, 'pine'], [11.8, 9.0, 0.85, 'fir'], [1.5, 12.8, 0.85, 'pine'], [-13.8, 0.5, 0.8, 'fir'], [-10, 0.8, 0.75, 'pine'],
@@ -344,8 +346,8 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     add(tel, new THREE.CylinderGeometry(0.07, 0.1, 0.7, 12), mat(0xc8a040, { metalness: 0.8, roughness: 0.3 }), [0, 1.0, 0.05], [Math.PI / 2 - 0.25, 0, 0]);
     sign(world, ['TRAPPER PEAK →'], [cx + 0.9, cy, cz - 0.8], yaw + Math.PI, 0.7);
     // log bench + boulders
-    add(world, new THREE.CylinderGeometry(0.22, 0.22, 1.4, 12), mat(0x7a5232), [cx + 0.6, cy + 0.2, cz + 0.9], [0, yaw, Math.PI / 2]);
-    for (let i = 0; i < 6; i++) { const a = R0() * 6.28, rr = 1.2 + R0() * 1.4; const x = cx + Math.cos(a) * rr, z = cz + Math.sin(a) * rr; add(world, new THREE.DodecahedronGeometry(0.14 + R0() * 0.22, 1), mat(snowy ? 0xe0e4ea : 0x9a9088), [x, topH(x, z) + 0.05, z], [R0(), R0(), R0()], [1, 0.7, 1]); }
+    add(world, new THREE.CylinderGeometry(0.22, 0.22, 1.4, 12), mat(0x7a5232), [cx + 0.6, cy + 0.2, cz + 0.9], [0, yaw, Math.PI / 2]).userData.real = 'log';
+    for (let i = 0; i < 6; i++) { const a = R0() * 6.28, rr = 1.2 + R0() * 1.4; const x = cx + Math.cos(a) * rr, z = cz + Math.sin(a) * rr; add(world, new THREE.DodecahedronGeometry(0.14 + R0() * 0.22, 1), mat(snowy ? 0xe0e4ea : 0x9a9088), [x, topH(x, z) + 0.05, z], [R0(), R0(), R0()], [1, 0.7, 1]).userData.real = 'rock'; }
     // tiny flag of conquest
     const flag = new THREE.Group(); flag.position.set(cx + 1.3, topH(cx + 1.3, cz - 1.4), cz - 1.4); world.add(flag);
     add(flag, new THREE.CylinderGeometry(0.02, 0.02, 1.3, 5), mat(0xdddddd), [0, 0.65, 0]);
@@ -409,18 +411,18 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   }
 
   // ── river rocks, cobbles on the bars, driftwood, willows on the island banks ──
-  for (const [rx, rz, rr] of RIVER_ROCKS) { add(world, new THREE.DodecahedronGeometry(rr, 1), mat(snowy ? 0xd8dde4 : 0x8f8a84), [rx, WATER_Y - 0.55 * rr + 0.3 * rr, rz], [R0(), R0(), R0()], [1.1, 0.7, 0.9]); }
+  for (const [rx, rz, rr] of RIVER_ROCKS) { add(world, new THREE.DodecahedronGeometry(rr, 1), mat(snowy ? 0xd8dde4 : 0x8f8a84), [rx, WATER_Y - 0.55 * rr + 0.3 * rr, rz], [R0(), R0(), R0()], [1.1, 0.7, 0.9]).userData.real = 'boulder'; }
   { const cob = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1, 0), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9 }), 520); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), v = new THREE.Vector3(), sc = new THREE.Vector3(); const cc = new THREE.Color(); let k = 0;
     for (let i = 0; i < 9000 && k < 520; i++) { const a = R0() * 6.28; const R = islandRadius(a); const rr = R + R0() * islandSkirtD(a) * 0.7; const x = Math.cos(a) * rr, z = Math.sin(a) * rr; const y = groundOrShore(x, z); if (y < WATER_Y - 0.1 || y > WATER_Y + 0.6) continue;
       const s0 = 0.06 + R0() * 0.14; v.set(x, y + s0 * 0.3, z); q.setFromEuler(new THREE.Euler(R0() * 3, R0() * 3, R0() * 3)); sc.set(s0 * 1.3, s0 * 0.7, s0); m4.compose(v, q, sc); cob.setMatrixAt(k, m4); cob.setColorAt(k, cc.setHSL(0.08, 0.08 + R0() * 0.1, 0.45 + R0() * 0.3)); k++; }
-    cob.count = k; cob.receiveShadow = true; world.add(cob); }
+    cob.count = k; cob.receiveShadow = true; cob.userData.real = 'pebble'; world.add(cob); }
   function groundOrShore(x, z) { const r = Math.hypot(x, z), th = Math.atan2(z, x), R = islandRadius(th); if (r <= R) return topH(x, z); return islandSkirtY(topH(Math.cos(th) * R, Math.sin(th) * R), Math.min(1, (r - R) / islandSkirtD(th)), th); }
   { // driftwood
     const dw = [[-2.0, -18.5, 0.6], [3.5, 18.4, 2.2], [-15.5, -10, 1.2]].map(([x, z, y]) => [x * 1.45, z * 1.45, y]);
-    for (const [x, z, yaw] of dw) { const y = groundOrShore(x, z); const g = new THREE.Group(); g.position.set(x, y + 0.12, z); g.rotation.y = yaw; world.add(g); add(g, new THREE.CylinderGeometry(0.13, 0.18, 2.4, 8), mat(0xb8a890), [0, 0, 0], [0, 0, Math.PI / 2 + 0.05]); add(g, new THREE.CylinderGeometry(0.05, 0.07, 0.8, 5), mat(0xb8a890), [0.6, 0.15, 0.2], [0.6, 0, 1.0]); }
+    for (const [x, z, yaw] of dw) { const y = groundOrShore(x, z); const g = new THREE.Group(); g.position.set(x, y + 0.12, z); g.rotation.y = yaw; world.add(g); add(g, new THREE.CylinderGeometry(0.13, 0.18, 2.4, 8), mat(0xb8a890), [0, 0, 0], [0, 0, Math.PI / 2 + 0.05]).userData.real = 'driftwood'; add(g, new THREE.CylinderGeometry(0.05, 0.07, 0.8, 5), mat(0xb8a890), [0.6, 0.15, 0.2], [0.6, 0, 1.0]).userData.realHide = 'driftwood'; }
   }
   function plantShore(maker, x, z, opts = {}) {
-    const y = groundOrShore(x, z); const g = maker({ ...opts, season, snowy, lite: treeLite }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); return g;
+    const y = groundOrShore(x, z); const g = maker({ ...opts, season, snowy, lite: treeLite }); g.position.set(x, y - 0.05, z); world.add(g); bindSway(sways, g); TREE_SPOTS.push({ maker, g }); return g;
   }
   // willows / alders along the water
   [[-6.5, -13.2, 1.0], [-10.5, -11.5, 0.85], [12.6, 4.6, 0.9], [-2, 14.2, 0.95], [9.5, 11.6, 0.8], [-13.8, -6.8, 0.75], [4, -13.6, 0.9], [13.4, -3, 0.8], [-12, 10, 0.85]].map(([x, z, s]) => [x * K, z * K, s]).filter(([x, z]) => clear(x, z, 3)).forEach(([x, z, s], i) => plantShore(makeWillow, x, z, { scale: s, seed: 50 + i }));
@@ -465,8 +467,8 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── campfire with log seats (warm at night, Mochi likes it when it's cold) ──
   function buildCampfire() {
-    const [x, y, z] = at(12.5, 1.5); const cf = new THREE.Group(); cf.position.set(x, y - 0.03, z); world.add(cf);
-    for (let i = 0; i < 10; i++) { const a = i / 10 * 6.283; add(cf, new THREE.DodecahedronGeometry(0.16, 0), mat(snowy ? 0xd8dde4 : 0x8a8580), [Math.cos(a) * 0.62, 0.08, Math.sin(a) * 0.62], [i, i * 2, 0], [1.2, 0.7, 1]); }
+    const [x, y, z] = at(12.5, 1.5); const cf = new THREE.Group(); cf.position.set(x, y - 0.03, z); world.add(cf); cf.userData.realSpot = 'firepit';
+    for (let i = 0; i < 10; i++) { const a = i / 10 * 6.283; add(cf, new THREE.DodecahedronGeometry(0.16, 0), mat(snowy ? 0xd8dde4 : 0x8a8580), [Math.cos(a) * 0.62, 0.08, Math.sin(a) * 0.62], [i, i * 2, 0], [1.2, 0.7, 1]).userData.realHide = 'firepit'; }
     for (let i = 0; i < 4; i++) add(cf, new THREE.CylinderGeometry(0.06, 0.07, 0.8, 6), mat(0x5a3a22), [0, 0.18, 0], [Math.PI / 2 - 0.5, i * 1.57, 0]);
     const fm = new THREE.MeshStandardMaterial({ color: 0xffa040, emissive: 0xff7a1a, emissiveIntensity: 2.5, transparent: true, opacity: 0.9, depthWrite: false });
     const fl = []; for (let i = 0; i < 4; i++) { const f = add(cf, new THREE.ConeGeometry(0.18 - i * 0.03, 0.6, 7), fm, [Math.cos(i * 2) * 0.08, 0.4, Math.sin(i * 2) * 0.08], [0, 0, 0], null, false); fl.push(f); }

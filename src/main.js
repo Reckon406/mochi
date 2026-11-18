@@ -27,6 +27,7 @@ import { createAdventures } from './adventures.js';
 import { createRange } from './range.js';
 import { createTempSigns } from './tempsigns.js';
 import { applyPBR, patchFoliage, PBR_UNIFORMS } from './pbr.js';
+import { upgradeWorld } from './realworld.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -34,6 +35,8 @@ import { installHeightFog, MistFog } from './gfx.js';
 import { loadSignFonts, zoneSigns, updateSigns, setSignScale } from './signs.js';
 import { buildDetails } from './details.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
+import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js';
 installHeightFog();
 import { FISH } from './fish.js';
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -145,6 +148,8 @@ async function init() {
   composer.addPass(sanitize); sanitize.enabled = S0.bloom;
   const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth / 2, innerHeight / 2), 0.45, 0.55, 1.0);
   composer.addPass(bloom); bloom.enabled = S0.bloom; bloom.userData = { sanitize };
+  // photo mode depth of field (High/Ultra, desktop or phone): focus follows the orbit target (usually Mochi)
+  let bokeh = null; if ((Q.tier ?? 0) >= 2) { bokeh = new BokehPass(scene, camera, { focus: 8, aperture: 0.0016, maxblur: 0.006 }); bokeh.enabled = false; composer.addPass(bokeh); }
   composer.addPass(new OutputPass());
   // High/Ultra: gentle colour grade after tonemapping (vibrance, warm highlights / cool shadows, soft vignette). Low/Medium skip it.
   let grade = null; if ((Q.tier ?? 0) >= 2) { grade = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uVig: { value: 0.22 } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
@@ -324,6 +329,24 @@ async function init() {
   // ── gfx pass 2: CC0 photo detail (ground/rock triplanar, bark + wood normals), Medium+ only ──
   let pbrInfo = null;
   try { patchFoliage(scene, Q.tier ?? 2); } catch (e) { console.warn('foliage failed', e); }
+  // ── HDRI environment light (Poly Haven CC0 pure-sky HDRIs, sun disc clipped; Medium 256px, High+ 512px) ──
+  // our own sky dome stays the background; the HDRI only feeds image-based light + reflections, faded with day/night + clouds
+  const envMaps = {}; let envInfo = null;
+  if ((Q.tier ?? 2) >= 1 && params.get('hdri') !== '0') {
+    const res = (Q.tier ?? 2) >= 2 ? 512 : 256; const pm = new THREE.PMREMGenerator(renderer); const hl = new HDRLoader(); const base = import.meta.env.BASE_URL || './';
+    Promise.all(['day', 'golden'].map((n) => hl.loadAsync(`${base}hdri/${n}_${res}.hdr`).then((tx) => { envMaps[n] = pm.fromEquirectangular(tx).texture; tx.dispose(); })))
+      .then(() => { pm.dispose(); envInfo = { res }; skyTimer = 0; }).catch((e) => console.warn('hdri failed', e));
+  }
+  function applyEnv() {
+    if (!envMaps.day) return; const st = sky.state; const day = 1 - st.night;
+    scene.environment = st.golden > 0.45 && envMaps.golden ? envMaps.golden : envMaps.day;
+    scene.environmentIntensity = Math.max(0.04, day * (0.62 - weather.cloudiness * 0.22) * (weather.rain || weather.snow ? 0.8 : 1));
+    const a = Math.atan2(st.lightDir.z, st.lightDir.x); scene.environmentRotation.y = a - (scene.environment === envMaps.golden ? 0.63 : 0.6);
+    sky.hemi.intensity *= 1 - 0.35 * day; // the HDRI now carries part of the sky fill
+  }
+  // ── real pass: CC0 glTF trees / rocks / logs / fire pit (Medium+, ?real=0 to compare) ──
+  let realInfo = null;
+  if (params.get('real') !== '0' && (Q.tier ?? 2) >= 1) try { upgradeWorld(scene, { tier: Q.tier ?? 2, season, snowy, renderer, onDone: (i) => { realInfo = i; } }); } catch (e) { console.warn('real pass failed', e); }
   if (params.get('pbr') !== '0') try { applyPBR(scene, { tier: Q.tier ?? 2, renderer })?.then((r) => { pbrInfo = r; }); } catch (e) { console.warn('pbr failed', e); }
   // ── stage B: night sky + water polish + live weather refresh ──
   let nightSky = null, waterFx = null;
@@ -398,7 +421,8 @@ async function init() {
   }
   function frameBody() {
     const now = performance.now(); const dt = Math.min((now - lastNow) / 1000, 0.05); lastNow = now; t += dt; ENV.uTime.value = t;
-    skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; }
+    skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; applyEnv(); }
+    if (bokeh) { bokeh.enabled = !!extras?.photo; if (bokeh.enabled) bokeh.uniforms.focus.value = camera.position.distanceTo(follow ? mochi.root.position : controls.target); }
     const night = sky.state.night;
     fogCol.copy(sky.state.fogColor); scene.fog.color.copy(fogCol);
     // dawn/dusk valley mist (more in the morning), a little at night, lots in foggy weather
@@ -489,7 +513,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { get pbrInfo() { return pbrInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

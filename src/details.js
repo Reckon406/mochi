@@ -20,9 +20,9 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
     if (Math.hypot(CLIFF.x - x, CLIFF.z - z) < CLIFF.r * 0.9 && topH(x, z) > 1.2) return pad < 0.4; // only tiny bits on the cliff top
     return true; };
   const onLand = (pad = 0.3, zonePad = 0, edge = 0.94) => { for (let k = 0; k < 30; k++) { const th = R() * TAU, r = Math.sqrt(R()) * islandRadius(th) * edge; const x = Math.cos(th) * r, z = Math.sin(th) * r; if (clear(x, z, pad, zonePad)) return [x, topH(x, z), z]; } return null; };
-  const inst = (geo, mat, N, place, { shadow = false, color = null } = {}) => { N = Math.max(0, Math.round(N)); if (!N) return null; const im = new THREE.InstancedMesh(geo, mat, N); let n = 0;
+  const inst = (geo, mat, N, place, { shadow = false, color = null, real = null } = {}) => { N = Math.max(0, Math.round(N)); if (!N) return null; const im = new THREE.InstancedMesh(geo, mat, N); let n = 0;
     for (let i = 0; i < N * 2 && n < N; i++) { const r = place(n); if (!r) continue; const [p, rot, s, c] = r; e.set(...rot); q.setFromEuler(e); m4.compose(v.set(...p), q, typeof s === 'number' ? sc.setScalar(s) : sc.set(...s)); im.setMatrixAt(n, m4); if (c != null) im.setColorAt(n, col.set(c)); n++; }
-    im.count = n; im.castShadow = shadow; im.receiveShadow = true; im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; g.add(im); return im; };
+    im.count = n; if (real) im.userData[real.startsWith('hide:') ? 'realHide' : 'real'] = real.replace('hide:', ''); im.castShadow = shadow; im.receiveShadow = true; im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true; g.add(im); return im; };
   const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, ...o });
   const pick = (a) => a[Math.floor(R() * a.length)];
 
@@ -44,8 +44,8 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
   // mossy rocks (rock + moss cap share the same instance matrices)
   { const rg = new THREE.DodecahedronGeometry(0.35, 0); rg.scale(1, 0.65, 0.9); const rm = M(0x8a857c, { flatShading: true, bumpMap: rockBump(), bumpScale: 2 });
     const mg = new THREE.SphereGeometry(0.3, 8, 4, 0, TAU, 0, 1.1); mg.scale(1.05, 0.55, 0.95); mg.translate(0, 0.08, 0);
-    const N = Math.round(36 * D); const rocks = inst(rg, rm, N, () => { const p = onLand(0.6, 1.2); if (!p) return null; const s = 0.6 + R() * 1.3; return [[p[0], p[1] + 0.05 * s, p[2]], [0, R() * TAU, (R() - 0.5) * 0.3], s]; }, { shadow: true });
-    if (rocks && !snowy) { const moss = new THREE.InstancedMesh(mg, M(season === 'fall' ? 0x7a8a3a : 0x5f8f3a), rocks.count); for (let i = 0; i < rocks.count; i++) { rocks.getMatrixAt(i, m4); moss.setMatrixAt(i, m4); } moss.receiveShadow = true; g.add(moss); } }
+    const N = Math.round(36 * D); const rocks = inst(rg, rm, N, () => { const p = onLand(0.6, 1.2); if (!p) return null; const s = 0.6 + R() * 1.3; return [[p[0], p[1] + 0.05 * s, p[2]], [0, R() * TAU, (R() - 0.5) * 0.3], s]; }, { shadow: true, real: 'mossrock' });
+    if (rocks && !snowy) { const moss = new THREE.InstancedMesh(mg, M(season === 'fall' ? 0x7a8a3a : 0x5f8f3a), rocks.count); for (let i = 0; i < rocks.count; i++) { rocks.getMatrixAt(i, m4); moss.setMatrixAt(i, m4); } moss.receiveShadow = true; moss.userData.realHide = 'mossrock'; g.add(moss); } }
   // shoreline: find where the island skirt meets the river and plant reeds + cattails, a little driftwood
   const shore = (th) => { const Rr = islandRadius(th), Dd = skirtD(th); for (let r = Rr - 1; r < Rr + Dd; r += 0.15) { const x = Math.cos(th) * r, z = Math.sin(th) * r; if (islandSurfH(x, z) < WATER_Y + 0.12) return [x, z, r]; } return null; };
   const nearDock = (x, z) => Math.hypot(x - (DOCK.x0 + DOCK.dx * DOCK.len / 2), z - (DOCK.z0 + DOCK.dz * DOCK.len / 2)) < DOCK.len / 2 + 1.2;
@@ -62,7 +62,7 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
       { const n = cat.attributes.position.count, c = new Float32Array(n * 3); for (let k = 0; k < n; k++) { const top = cat.attributes.position.getY(k) > 1.04; const cc = top ? [0.36, 0.22, 0.12] : [0.42, 0.55, 0.25]; c.set(cc, k * 3); } cat.setAttribute('color', new THREE.BufferAttribute(c, 3)); }
       inst(cat, addInstancedSway(M(0xffffff, { vertexColors: true }), 0.12, 1.2), clumps.length * 2.5, each((x, y, z) => [[x, y, z], [(R() - 0.5) * 0.2, R() * TAU, (R() - 0.5) * 0.2], [1, 0.7 + R() * 0.5, 1]])); } }
   { const dw = new THREE.CylinderGeometry(0.06, 0.09, 1, 6); dw.rotateZ(Math.PI / 2); const dm = M(0xb8aa98, { bumpMap: rockBump(), bumpScale: 1 });
-    inst(dw, dm, 9 + 6 * D, () => { const th = R() * TAU; const s = shore(th); if (!s || nearDock(s[0], s[1]) || nearBridge(s[0], s[1])) return null; const r = s[2] - 0.5; const x = Math.cos(th) * r, z = Math.sin(th) * r; return [[x, islandSurfH(x, z) + 0.04, z], [0, R() * TAU, (R() - 0.5) * 0.2], [1 + R() * 1.2, 1, 1]]; }, { shadow: true }); }
+    inst(dw, dm, 9 + 6 * D, () => { const th = R() * TAU; const s = shore(th); if (!s || nearDock(s[0], s[1]) || nearBridge(s[0], s[1])) return null; const r = s[2] - 0.5; const x = Math.cos(th) * r, z = Math.sin(th) * r; return [[x, islandSurfH(x, z) + 0.04, z], [0, R() * TAU, (R() - 0.5) * 0.2], [1 + R() * 1.2, 1, 1]]; }, { shadow: true, real: 'driftwood' }); }
   // mushrooms (stem + cap), little stumps, wildflower clusters
   { const stem = new THREE.CylinderGeometry(0.018, 0.024, 0.08, 6).translate(0, 0.04, 0); const cap = new THREE.SphereGeometry(0.05, 8, 4, 0, TAU, 0, 1.4).translate(0, 0.07, 0);
     const N = Math.round(70 * D); const placed = []; for (let i = 0; i < N; i++) { let p; if (i % 3 === 0) { const a = R() * TAU, r = BIGTREE.trunkR + 0.3 + R() * 1.4; const x = BIGTREE.x + Math.cos(a) * r, z = BIGTREE.z + Math.sin(a) * r; p = clear(x, z, 0.05) ? [x, topH(x, z), z] : null; } else { const c = placed.length && R() < 0.6 ? placed[placed.length - 1] : onLand(0.3); p = c && [c[0] + (R() - 0.5) * 0.3, c[1], c[2] + (R() - 0.5) * 0.3]; } if (p) placed.push(p); }
@@ -71,7 +71,7 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
   { const sg = new THREE.CylinderGeometry(0.22, 0.27, 0.32, 9).translate(0, 0.16, 0); const top = new THREE.CircleGeometry(0.22, 9); top.rotateX(-Math.PI / 2); top.translate(0, 0.321, 0);
     const ring = new THREE.CanvasTexture((() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d'); x.fillStyle = '#d9b98a'; x.fillRect(0, 0, 128, 128); x.strokeStyle = 'rgba(120,80,40,0.5)'; for (let r = 6; r < 64; r += 7) { x.lineWidth = 2; x.beginPath(); x.arc(64, 64, r, 0, TAU); x.stroke(); } return c; })()); ring.colorSpace = THREE.SRGBColorSpace;
     const pts = []; for (let i = 0; i < 4 + 4 * D; i++) { const p = onLand(0.8, 1.5); if (p) pts.push([p[0], p[1] - 0.03, p[2], 0.8 + R() * 0.7]); }
-    inst(sg, M(0x6b4a33, { bumpMap: rockBump(), bumpScale: 1 }), pts.length, (i) => [pts[i].slice(0, 3), [0, R() * TAU, 0], pts[i][3]], { shadow: true }); inst(top, M(0xffffff, { map: ring }), pts.length, (i) => [pts[i].slice(0, 3), [0, R() * TAU, 0], pts[i][3]]); }
+    inst(sg, M(0x6b4a33, { bumpMap: rockBump(), bumpScale: 1 }), pts.length, (i) => [pts[i].slice(0, 3), [0, R() * TAU, 0], pts[i][3]], { shadow: true, real: 'stump' }); inst(top, M(0xffffff, { map: ring }), pts.length, (i) => [pts[i].slice(0, 3), [0, R() * TAU, 0], pts[i][3]], { real: 'hide:stump' }); }
   if (!snowy) { const fl = new THREE.IcosahedronGeometry(0.035, 0); const st = new THREE.CylinderGeometry(0.005, 0.005, 0.22, 3).translate(0, 0.11, 0);
     const cols = season === 'fall' ? [0xf0b53a, 0xd4652c, 0xb07ad8, 0xffffff] : [0xff8ab0, 0xffd36b, 0xb07ad8, 0xffffff, 0x6fb0ff, 0xff6b6b];
     const fls = []; for (let c = 0; c < 34 * D; c++) { const p = onLand(0.4, 0.8); if (!p) continue; const cc = pick(cols); for (let i = 0; i < 9; i++) { const x = p[0] + (R() - 0.5) * 1.1, z = p[2] + (R() - 0.5) * 1.1; fls.push([x, topH(x, z), z, R() < 0.75 ? cc : pick(cols), 0.7 + R() * 0.6]); } }
@@ -95,7 +95,7 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
         if (vi >= 2) idx.push(vi - 2, vi - 1, vi, vi - 1, vi + 1, vi);
         if (R() < 0.55 * Math.min(1, D + 0.2)) { const s = R() < 0.5 ? -1 : 1; const x = cx + px * (W / 2 + 0.05) * s, z = cz + pz * (W / 2 + 0.05) * s; edge.push([x, topH(x, z) + 0.02, z]); } }
       flush(); }
-    inst(new THREE.DodecahedronGeometry(0.08, 0), M(0xa8a196, { flatShading: true }), edge.length, (i) => [edge[i], [R() * 3, R() * 3, 0], [1 + R() * 0.6, 0.6, 1 + R() * 0.4], pick([0xa8a196, 0x938c80, 0xbdb5a6])]); }
+    inst(new THREE.DodecahedronGeometry(0.08, 0), M(0xa8a196, { flatShading: true }), edge.length, (i) => [edge[i], [R() * 3, R() * 3, 0], [1 + R() * 0.6, 0.6, 1 + R() * 0.4], pick([0xa8a196, 0x938c80, 0xbdb5a6])], { real: 'pebble' }); }
   // ripple rings where the river runs past rocks (stretched downstream), animated in the shader
   const rippleU = { uTime: ENV.uTime }; { const rocks = RIVER_ROCKS.slice(); const N = rocks.length * 3; const geo = new THREE.PlaneGeometry(1, 1); geo.rotateX(-Math.PI / 2); const ph = new Float32Array(N);
     const rm = new THREE.ShaderMaterial({ uniforms: rippleU, transparent: true, depthWrite: false, fog: false,
