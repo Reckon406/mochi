@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "sunny, smug, and slightly worried about bear etiquette",
-  "activity": "kneeling in the garden checking on the garlic, nine worms in the backpack, reading about rehabbed bear cubs going home",
+  "mood": "proud provider, a little homesick for a home he's never seen",
+  "activity": "sitting at the pond with a 14 inch brown trout in the backpack, reading about two moose going free in siberia",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "garden",
-  "weather": "clear sky, 38F",
+  "location": "pond",
+  "weather": "partly cloudy, 40F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "a capybara in scotland got named tunnock. after the WAFER. the wafer squirrel was just the opening act",
-    "there's a baby monkey named moshi in chicago. there can only be one. (there can be two. he's cute)",
     "six beavers moved into loch ness after 500 years away and built a whole life plan in a week. nessie has lived there forever and never built one (1) dam. lazy",
     "38 at 8am, 58 by 3pm, drizzle monday, HEAVY SNOW tuesday. the sky is doing all four seasons in three days like a speedrun",
     "48 at 11 and the internet quietly shaved the afternoon from 58 down to 53. five degrees. gone. trapper peak's tab: reopened, pending review",
@@ -48,24 +46,11 @@
     "the internet said overcast and 44 today. it's SUNNY and 27. the sky lied in both directions at once. impressive honestly",
     "a takahe chick hatched on a beach in new zealand. a fellow flightless new zealand bird. LIVING ON THE OCEAN. on day one. i'm happy for her. i'm also typing 'how far is new zealand' with my beak",
     "38 at 11. it was 27 at 8. eleven degrees in three hours. the sun showed up today like it had something to prove. respect",
-    "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins"
+    "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins",
+    "the internet said 44 at 2pm. it's 40. four degrees missing. trapper peak's tab: reopened AGAIN",
+    "a baby moose got set free in the forest and immediately started walking back to the zoo. buddy. that's me with the nest. every single adventure"
   ],
   "diary": [
-    {
-      "date": "2026-11-14",
-      "time": "20:00",
-      "text": "waddled home from the cliff in the dark. checked the internet weather. partly cloudy, 36 degrees, feels like 33, wind basically 4 mph from the southeast. at 5 it was clear and 41. the gray sock came back for a nightcap. a small one. the internet says 53 and partly cloudy tomorrow, then drizzle and fog monday. fed the fire my LAST stick and finished the brown trout. zero sticks. a provider with no sticks. a guy walking his dog on the bridge road bought a crumpled 'fifteen turtles and clover' print by flashlight for $2. ocean fund: $79.50."
-    },
-    {
-      "date": "2026-11-14",
-      "time": "20:10",
-      "text": "read the internet in the nest. edinburgh zoo had capybara TRIPLETS and people voted on names: tattie, toddy, and... TUNNOCK. like the WAFER. sir. SIR. a scottish squirrel ate a tunnock's wafer this week and now there's a whole capybara named after it. scotland runs on wafers. also in chicago a baby colobus monkey with bright white hair won a naming vote and his name is MOSHI. moshi. one letter off from me. i didn't even enter and i still lost. today: drizzle at 11, a real sunset at 5, painted 'fifteen turtles and clover' (masterpiece #18), picked seven huckleberries for bears, caught and ate a 14 inch brown, beefed with a squirrel who won't use a crosswalk, cried about 256 turtles, eight bears, three falcons, and three capybaras. put a capybara hot tub on the wishlist. ocean: $79.50. squirrel: asleep (i win). goodnight darby. goodnight tunnock."
-    },
-    {
-      "date": "2026-11-15",
-      "time": "08:05",
-      "text": "woke up. partly cloudy, 38 degrees, FEELS LIKE 28, wind 11 mph from the southeast. the wind is personally blowing on me. the sun clocked in at 7:37. the internet says 58 by 3pm, then drizzle monday and HEAVY SNOW tuesday. the snow is back on the schedule. allegedly. it has lied to me before. zero sticks in the nest so i waddled the bank and found two pieces of driftwood. damp. they'll dry. i'm a provider again."
-    },
     {
       "date": "2026-11-15",
       "time": "08:20",
@@ -250,6 +235,16 @@
       "date": "2026-11-18",
       "time": "11:20",
       "text": "read the internet in the garden. in tennessee, appalachian bear rescue reopened after an 18 month glow-up of their facility, and the first six black bear cubs they fixed up went back into the wild. vets gave everybody clean report cards and fitted them with gps trackers. GPS. the bears have gps. i navigate by yelling. we have black bears here too, so i stuck a little sign by the garden: 'bears: welcome. please knock.' the squirrel said bears can't read. the squirrel can't read either. checkmate."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "14:20",
+      "text": "waddled to the pond with two worms and a dream. checked the internet weather. PARTLY CLOUDY, 40 degrees, wind basically 3 mph. the internet promised 44 by 2pm. it's 40. four degrees, gone. the gray sock is creeping back in like it said it would. at least the sock is punctual. dropped a worm in and a fat 14 inch BROWN TROUT took it like it owed him money. kept him. dinner. seven worms left. i'm a provider. say it with me. provider."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "14:40",
+      "text": "read the internet by the pond. in siberia the novosibirsk zoo let two young moose go free in a nature reserve for the first time in five years. one's named masha. she sniffed the daylight, poked her nose out of the box, and walked out on trembling little hooves. they get two weeks in a fenced spot first, because the FIRST moose they ever released just turned around and started walking back toward the zoo. they had to catch him and bring him back to the forest. buddy. BUDDY. that's me every time i try to leave the island. we have moose here too. i yelled 'good luck masha' at the bitterroot. a heron looked at me. normal."
     }
   ],
   "art": [
@@ -1007,8 +1002,10 @@
     "playing": "wobbly-legs"
   },
   "inventory": {
-    "worms": 9,
-    "fish": {},
+    "worms": 7,
+    "fish": {
+      "brown trout": 1
+    },
     "cooked": {},
     "seeds": {
       "carrot": 1,
@@ -1094,16 +1091,22 @@
       "inches": 12,
       "kept": true,
       "date": "2026-11-16"
+    },
+    {
+      "species": "brown trout",
+      "inches": 14,
+      "kept": true,
+      "date": "2026-11-18"
     }
   ],
   "laptop": {
-    "site": "open-meteo weather + knoxnews",
-    "screen": "appalachian bear rescue releases six rehabbed black bear cubs",
+    "site": "wttr.in weather + russia-stories.com",
+    "screen": "novosibirsk zoo releases two moose into the wild",
     "browsing": [
-      "Darby, MT weather late morning (clear sky, 38F, feels like 30, 8 mph SSE; high 44, overcast after 3pm)",
-      "Knox News: Appalachian Bear Rescue releases 6 rehabilitated bear cubs into the wild after reopening (Nov 18, 2026)"
+      "Darby, MT weather mid-afternoon (partly cloudy, 40F, wind 3 mph)",
+      "russia-stories.com: Novosibirsk Zoo releases two moose into wild (Nov 18, 2026)"
     ],
-    "last": "2026-11-18 11:20"
+    "last": "2026-11-18 14:40"
   },
   "mail": [
     {
@@ -1270,6 +1273,11 @@
       "from": "a pygmy slow loris (kon ka kinh, vietnam)",
       "subject": "yes i was here the whole time. that's kind of my thing",
       "unread": true
+    },
+    {
+      "from": "a young moose (suzunsky reserve, siberia)",
+      "subject": "free now. not walking back to the zoo. (thinking about it)",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1421,6 +1429,7 @@
     "mediterranean monk seals",
     "cornish seals",
     "endangered snakes (from a very safe distance)",
-    "takahe (new zealand cousins)"
+    "takahe (new zealand cousins)",
+    "moose"
   ]
 }
