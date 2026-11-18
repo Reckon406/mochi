@@ -103,13 +103,19 @@ export function upgradeWorld(scene, { tier = 1, season = 'summer', snowy = false
       else continue;
       const m4 = new THREE.Matrix4().compose(p.clone(), new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), yaw), new THREE.Vector3().setScalar(H * k * (0.92 + hash(p.x, p.z, 5) * 0.16)));
       push(proto, fall, m4); g.visible = false; g.userData.realHidden = true; info.trees++; }
+    // round shrubs → Quaternius Bush_Common (fitted onto the old flat-shaded domes; kept procedural under snow)
+    if (T.bush && !snowy) { const list = []; const im4 = new THREE.Matrix4(), w4 = new THREE.Matrix4();
+      scene.traverse((o) => { if (o.userData.real !== 'bush' || !o.isInstancedMesh) return; if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+        for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, im4); w4.multiplyMatrices(o.matrixWorld, im4); list.push(w4.clone().multiply(fit(o.geometry.boundingBox, T.bush.box, { bottom: true, iso: 0.7, k: 1.15 }))); }
+        o.visible = false; });
+      instanced(T.bush.parts, list, group, { shadow: tier >= 2, matFor: matFor(fallAmt * 0.15) }); info.bushes = list.length; }
     for (const { proto, fall, list } of buckets.values()) { const parts = bare && fall > 0 ? proto.parts.filter((pt) => !(pt.mat.alphaTest > 0 || /lea/i.test(pt.mat.name))) : proto.parts; instanced(parts, list, group, { matFor: matFor(fall) }); }
   });
 
   // rocks / logs / stumps / driftwood: fitted onto every tagged procedural mesh or instance
   const KINDS = { pebble: 'rocks', rock: 'rocks', boulder: 'rocks', mossrock: 'rocks', log: 'wood', driftwood: 'wood', stump: 'wood' };
-  const POOL = { pebble: ['peb7', 'peb9', 'pebS'], rock: ['rock07', 'rock09', 'stone01', 'moss_1', 'moss_4'], boulder: ['stone01', 'moss_0', 'moss_2', 'moss_3'], mossrock: ['moss_0', 'moss_1', 'moss_2', 'moss_3', 'moss_4', 'moss_5'], log: ['log'], driftwood: ['log', 'log2'], stump: ['stump'] };
-  const OPTS = { pebble: { iso: 0.5, k: 1.0 }, rock: { iso: 0.5, k: 1.0 }, boulder: { iso: 0.5, k: 1.05 }, mossrock: { iso: 0.5, k: 1.1 }, log: { iso: 1, k: 1 }, driftwood: { iso: 1, k: 1 }, stump: { bottom: true, iso: 0.8, k: 1.15 } };
+  const POOL = { pebble: ['pebS'], rock: ['rock07', 'rock09', 'stone01', 'moss_1', 'moss_4'], boulder: ['stone01', 'moss_0', 'moss_2', 'moss_3'], mossrock: ['moss_0', 'moss_1', 'moss_2', 'moss_3', 'moss_4', 'moss_5'], log: ['log'], driftwood: ['log', 'log2'], stump: ['stump'] };
+  const OPTS = { pebble: { iso: 0.5, k: 0.85 }, rock: { iso: 0.5, k: 1.0 }, boulder: { iso: 0.5, k: 1.05 }, mossrock: { iso: 0.5, k: 1.1 }, log: { iso: 1, k: 1 }, driftwood: { iso: 1, k: 1 }, stump: { bottom: true, iso: 0.8, k: 1.15 } };
   const doFitted = Promise.all([load('rocks'), load('wood')]).then(([R, W]) => {
     const P = { ...R, ...W }; const buckets = new Map(); const hide = [];
     scene.updateMatrixWorld(true); const im4 = new THREE.Matrix4(), w4 = new THREE.Matrix4();

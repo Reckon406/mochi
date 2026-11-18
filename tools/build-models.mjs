@@ -49,7 +49,7 @@ async function pack(name, tier, list, tex) {
 }
 const Q = (n) => `qt/glTF/${n}.gltf`;
 const PACKS = {
-  trees: (hi) => [...[1, 2, 3, 4, 5].map((i) => [`pine${i}`, Q(`Pine_${i}`), {}]), ...[1, 2, 3, 4, 5].map((i) => [`common${i}`, Q(`CommonTree_${i}`), {}]),
+  trees: (hi) => [...[1, 2, 3, 4, 5].map((i) => [`pine${i}`, Q(`Pine_${i}`), {}]), ...[1, 2, 3, 4, 5].map((i) => [`common${i}`, Q(`CommonTree_${i}`), {}]), ['bush', Q('Bush_Common_Flowers'), {}],
     ['aspen', 'tree_small_02', hi ? { leafKeep: 0.045, leafMaxScale: 3.0, ratio: 0.08, error: 0.02 } : { leafKeep: 0.03, leafMaxScale: 3.2, ratio: 0.05, error: 0.03 }]],
   rocks: (hi) => [['moss', 'rock_moss_set_01', { split: true, ratio: hi ? 0.25 : 0.1, error: hi ? 0.004 : 0.01, dropRough: !hi }], ['rock07', 'rock_07', { ratio: hi ? 0.25 : 0.08, error: hi ? 0.004 : 0.01, dropRough: !hi }],
     ['rock09', 'rock_09', { ratio: hi ? 0.25 : 0.08, error: hi ? 0.004 : 0.01, dropRough: !hi }], ['stone01', 'stone_01', { ratio: hi ? 0.08 : 0.03, error: hi ? 0.004 : 0.01, dropRough: !hi }],
