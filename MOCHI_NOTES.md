@@ -96,3 +96,16 @@ All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.a
 - Clutter: pebbles and twigs are down about 75% and now sit mostly along path edges and the shore. Fall leaf litter is lower (900 → 560). The flat-shaded "orange boulder" was really a fall-tinted bush. Bushes are muted now, and at Medium+ they are swapped for the Quaternius bush model.
 - `src/bigtree.js`: the treehouse cottonwood is rebuilt with a photo-bark trunk, root buttresses, curved forked limbs and small leaf sprays. In winter it has bare branches. Attachment anchors are unchanged (`BIGTREE.radiusAt`, plus `limbPoint` for the straight first 2.6 m of each limb). The old `makeBigCottonwood` in trees.js stays as a fallback.
 - None of this touches state.json.
+
+## AI texture pass (Nov 2026)
+- `src/aitex.js` + `tools/aitex.py`: AI-generated thatch, log wall, board siding, shingles, deck planks, fence wood (colour + derived normal + roughness), the sign-board grain and the Bitterroot backdrop.
+- Tiers:
+  - Low: the old painted textures.
+  - Medium: 512 (~0.8 MB).
+  - High: 1024 (~2.4 MB).
+  - Ultra: 1024, then 2048 loaded lazily after 5 s (+6 MB).
+- `?aitex=0` compares against the painted look.
+- Materials opt in with `aiTex(mat, kind, { mode: 'uv', rep } | { mpt, rot, tint })`. The 'tri' mode projects in object space along the dominant axis, at real metres per tile.
+- The round hut wall and its cone roof use their own UVs.
+- Backdrop: a 1850 m ring that follows the camera. The Bitterroots are full height in the west and drop to 62% for the Sapphires in the east. Its bottom fades out, and it is hazed and tinted from `sky.state` (golden, night, fog) and the weather.
+- With the backdrop on (Medium+), `setLowMountains(true)` presses the procedural ranges above 42 m down to 16%. Everything that uses `terrainH` stays consistent: pines, wildlife and the raft bank.

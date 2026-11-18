@@ -25,6 +25,9 @@ Rebuilt for the web with `tools/build-models.mjs`. That script thins the leaf ca
 ## Treehouse cottonwood bark (`public/tex/bark_c_*.webp`, `bark_n_*.webp`)
 The colour and normal maps of Bark Brown 02 (Rob Tuytel / Poly Haven, CC0, https://polyhaven.com/a/bark_brown_02), resized to 512 px (Medium) and 1024 px (High/Ultra). The tree's shape and its painted leaf sprays are procedural (`src/bigtree.js`).
 
+## AI-generated textures (`public/tex/ai/`)
+These were generated with an AI image model on Corey's request (Nov 2026) for surfaces that CC0 packs didn't cover: hut thatch, the hut's log wall, cabin/shop board siding, roof shingles, deck planks, weathered fence/dock wood, the sign-board grain and the Bitterroot mountain backdrop. They aren't from any third-party asset pack. `tools/aitex.py` seam-fixed them, flattened their lighting, and derived the normal and roughness maps. The sources stay on the build box (`ai-tex-src/`, gitignored), and `ai-tex-src/WANTED.md` lists what was asked for.
+
 ## HDRIs (`public/hdri/*.hdr`)
 These were downscaled to 256 px (Medium) and 512 px (High/Ultra), with the sun disc clipped, because the scene keeps its own sun.
 
