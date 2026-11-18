@@ -8,7 +8,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import './style.css';
 import { ENV } from './water.js';
 import { createSky } from './sky.js';
-import { buildLandscape, TRAPPER_DIR } from './landscape.js';
+import { buildLandscape, TRAPPER_DIR, setLowMountains } from './landscape.js';
 import { buildIsland } from './island.js';
 import { createMochi } from './mochi.js';
 import { createSquirrel, createElk } from './creatures.js';
@@ -33,7 +33,8 @@ import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
 import { installHeightFog, MistFog } from './gfx.js';
-import { loadSignFonts, zoneSigns, updateSigns, setSignScale } from './signs.js';
+import { loadSignFonts, zoneSigns, updateSigns, setSignScale, setSignBoard } from './signs.js';
+import { initAITex, loadSignBoard, buildBackdrop, AI_INFO } from './aitex.js';
 import { buildDetails } from './details.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
@@ -79,10 +80,11 @@ async function init() {
   if (params.get('outfit')) state.outfit = params.get('outfit');
   const hour = params.has('hour') ? parseFloat(params.get('hour')) : null;
   const weather = parseWeather(state.weather);
-  await loadSignFonts();
   const settings = createSettings(); const S0 = settings.get();
   const qName = params.get('quality') || S0.quality || 'auto';
   const Q = QUALITY[qName] || QUALITY.auto;
+  const aiOn = params.get('aitex') !== '0'; // ?aitex=0 compares with the painted textures
+  { const [, board] = await Promise.all([loadSignFonts(), aiOn ? loadSignBoard(Q.tier ?? 2) : null]); setSignBoard(board); }
   const lite = (Q.tier ?? 2) <= 0; setSignScale(lite ? 0.5 : 1); // Low only — flagship phones on Medium keep fuller trees
   const dprCap = Math.min(Q.pr, isMobile ? 1.5 : Q.pr);
 
@@ -122,7 +124,10 @@ async function init() {
   scene.fog = new MistFog(0xc6dcec, fogBase);
   const season = seasonOf(new Date(), params.get('season'));
   const snowy = weather.snow || season === 'winter';
+  if (aiOn) try { initAITex(Q.tier ?? 2, renderer); } catch (e) { console.warn('ai textures failed', e); }
+  if (aiOn && (Q.tier ?? 2) >= 1) setLowMountains(true);
   const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite });
+  let backdrop = null; if (aiOn) try { backdrop = buildBackdrop(scene, { tier: Q.tier ?? 2, weather }); } catch (e) { console.warn('backdrop failed', e); }
   const island = buildIsland(scene, { snowy, mobile: isMobile, state, tier: Q.tier ?? 2, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
   const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile, pathD: island.pathD });
   let flowers = null; try { flowers = buildWildflowers(scene, { season, snowy, tier: Q.tier ?? 2, pathD: island.pathD }); } catch (e) { console.warn('wildflowers failed', e); }
@@ -426,7 +431,7 @@ async function init() {
     skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; applyEnv(); }
     if (bokeh) { bokeh.enabled = !!extras?.photo; if (bokeh.enabled) bokeh.uniforms.focus.value = camera.position.distanceTo(follow ? mochi.root.position : controls.target); }
     const night = sky.state.night;
-    fogCol.copy(sky.state.fogColor); scene.fog.color.copy(fogCol);
+    fogCol.copy(sky.state.fogColor); scene.fog.color.copy(fogCol); backdrop?.update(sky.state, camera.position);
     // dawn/dusk valley mist (more in the morning), a little at night, lots in foggy weather
     scene.fog.mist = sky.state.golden * (new Date().getHours() < 12 || (hour != null && hour < 12) ? 0.75 : 0.45) + night * 0.12 + (weather.fog ? 0.35 : 0);
     renderer.toneMappingExposure = EXPO * (1 + night * 0.3);
@@ -515,7 +520,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { flowers, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { flowers, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

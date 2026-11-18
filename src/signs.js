@@ -18,6 +18,10 @@ TONES.cream = TONES.pine; TONES.blue = TONES.oak;
 const SIGN_MATS = [];
 export function updateSigns(night) { for (const m of SIGN_MATS) m.emissiveIntensity = 0.05 + night * 0.5; }
 let SCALE = 1; export function setSignScale(s) { SCALE = s; }
+let BOARD = null; // { im, tint(hex) } — set before any sign is drawn
+export function setSignBoard(im) { if (!im) return; const c = document.createElement('canvas'); c.width = c.height = 8; const g = c.getContext('2d'); g.drawImage(im, 0, 0, 8, 8);
+  const d = g.getImageData(0, 0, 8, 8).data; let r = 0, gg = 0, b = 0; for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; } const avg = [r / 64, gg / 64, b / 64];
+  BOARD = { im, tint: (hex) => { const t = new THREE.Color(hex); const k = (v, a) => Math.min(255, Math.round(255 * (v * 255) / a * 1.05)); return `rgb(${k(t.r, avg[0])},${k(t.g, avg[1])},${k(t.b, avg[2])})`; } }; }
 
 // ── atlas: shelf-packed pages ──
 const PAGES = [];
@@ -44,12 +48,19 @@ function plankShape(g, w, h, r, seed, arrow = 0) { // slightly irregular rounded
 function woodPanel(g, w, h, tone, seed, arrow = 0, rad = 22) {
   const R = rng(seed * 13 + 7); const [base, mid, dark] = TONES[tone] || TONES.oak;
   g.save(); plankShape(g, w, h, rad, seed, arrow); g.clip();
-  const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, base); gr.addColorStop(1, mid); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  if (BOARD) { // AI sign-board grain (Medium+): a random crop per sign, tinted toward the tone
+    const iw = BOARD.im.width, ih = BOARD.im.height; let sw = iw, shh = iw * h / w; if (shh > ih) { shh = ih; sw = ih * w / h; }
+    g.drawImage(BOARD.im, R() * (iw - sw), R() * (ih - shh), sw, shh, 0, 0, w, h);
+    g.globalCompositeOperation = 'multiply'; g.fillStyle = BOARD.tint(base); g.fillRect(0, 0, w, h); g.globalCompositeOperation = 'source-over';
+    const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255,240,210,0.08)'); gr.addColorStop(1, 'rgba(60,30,10,0.12)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  } else { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, base); gr.addColorStop(1, mid); g.fillStyle = gr; g.fillRect(0, 0, w, h); }
   // board seams (two or three planks)
+  if (!BOARD) {
   const nb = h > 200 ? 3 : h > 120 ? 2 : 1; g.strokeStyle = 'rgba(60,30,10,0.35)'; g.lineWidth = 3; for (let i = 1; i < nb; i++) { const y = (h * i) / nb + (R() - 0.5) * 4; g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); g.strokeStyle = 'rgba(255,230,190,0.25)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(0, y + 2.5); g.lineTo(w, y + 2.5); g.stroke(); g.strokeStyle = 'rgba(60,30,10,0.35)'; g.lineWidth = 3; }
   // grain
   g.globalAlpha = 0.16; g.strokeStyle = dark; for (let i = 0; i < Math.round(h / 9); i++) { g.lineWidth = 0.8 + R() * 1.6; g.beginPath(); const y0 = R() * h; g.moveTo(0, y0); for (let x = 0; x <= w; x += 24) g.lineTo(x, y0 + Math.sin(x * 0.012 + i * 1.7) * 4 + (R() - 0.5) * 1.5); g.stroke(); }
   for (let i = 0; i < 2; i++) { const x = 40 + R() * (w - 80), y = 12 + R() * (h - 24); g.globalAlpha = 0.22; g.fillStyle = dark; g.beginPath(); g.ellipse(x, y, 8 + R() * 7, 3 + R() * 3, 0, 0, 6.28); g.fill(); }
+  }
   // burnt-edge vignette
   g.globalAlpha = 1; g.shadowColor = 'rgba(50,22,5,0.9)'; g.shadowBlur = 22; g.lineWidth = 14; g.strokeStyle = 'rgba(70,32,8,0.55)'; plankShape(g, w, h, rad, seed, arrow); g.stroke(); g.shadowBlur = 0;
   const vg = g.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.35, w / 2, h / 2, Math.max(w, h) * 0.62); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(50,22,5,0.28)'); g.fillStyle = vg; g.fillRect(0, 0, w, h);

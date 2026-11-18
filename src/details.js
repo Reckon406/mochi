@@ -2,6 +2,7 @@
 // shoreline, driftwood, mushrooms, stumps, fence posts, wildflower clusters, worn dirt paths with edge stones, ripples
 // around river rocks and sunlit pollen. Everything is instanced; density follows the quality tier × the "Grass & flowers" slider.
 import * as THREE from 'three';
+import { aiTex } from './aitex.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { islandRadius, topH, islandSurfH, skirtD, OBSTACLES, POND, ZONES, CLIFF, RIVER_ROCKS, WATER_Y, BRIDGE, BIGTREE, ISLET, isletH, DOCK } from './layout.js';
 import { rng } from './noise.js';
@@ -81,9 +82,9 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
   // fence posts (+ two rails) around the pumpkin patch and along the garden
   { const segs = []; for (const id of ['pumpkins', 'garden']) { const z = ZONES.find((q) => q.id === id); if (!z) continue; const [cx, cz] = z.pos; const rr = id === 'pumpkins' ? 2.6 : 2.9; const a0 = Math.atan2(-cz, -cx) + 0.9;
       for (let i = 0; i <= 8; i++) { const a = a0 + i * 0.5; const x = cx + Math.cos(a) * rr, zz = cz + Math.sin(a) * rr; if (!clear(x, zz, 0.15)) { segs.push(null); continue; } segs.push([x, topH(x, zz), zz]); } segs.push(null); }
-    const posts = segs.filter(Boolean); inst(new THREE.BoxGeometry(0.09, 0.62, 0.09).translate(0, 0.28, 0), M(0x8a6a4a, { bumpMap: rockBump(), bumpScale: 0.6 }), posts.length, (i) => [posts[i], [0, R(), (R() - 0.5) * 0.12], 1], { shadow: true });
+    const posts = segs.filter(Boolean); inst(new THREE.BoxGeometry(0.09, 0.62, 0.09).translate(0, 0.28, 0), aiTex(M(0x8a6a4a, { bumpMap: rockBump(), bumpScale: 0.6 }), 'fence', { tint: 0xb8a890, mpt: 0.9 }), posts.length, (i) => [posts[i], [0, R(), (R() - 0.5) * 0.12], 1], { shadow: true });
     const rails = []; for (let i = 0; i + 1 < segs.length; i++) if (segs[i] && segs[i + 1]) for (const hh of [0.22, 0.46]) { const a = segs[i], b = segs[i + 1]; const L = Math.hypot(b[0] - a[0], b[2] - a[2]); rails.push([[(a[0] + b[0]) / 2, (a[1] + b[1]) / 2 + hh, (a[2] + b[2]) / 2], [0, -Math.atan2(b[2] - a[2], b[0] - a[0]), Math.atan2(b[1] - a[1], L)], [L, 1, 1]]); }
-    inst(new THREE.BoxGeometry(1, 0.05, 0.04), M(0xa07a52), rails.length, (i) => rails[i]); }
+    inst(new THREE.BoxGeometry(1, 0.05, 0.04), aiTex(M(0xa07a52), 'fence', { tint: 0xc8b498, mpt: 0.9 }), rails.length, (i) => rails[i]); }
   // worn dirt paths from the hut to the main spots, edged with little stones
   { const hut = ZONES.find((z) => z.id === 'hut'); const from = hut.spot || hut.pos; const dests = ['tree', 'pond', 'market', 'campfire', 'dock', 'shop', 'garden', 'music', 'meadow'].map((id) => ZONES.find((z) => z.id === id)).filter(Boolean).map((z) => z.spot || z.pos);
     dests.push([BRIDGE.ax, BRIDGE.az]); const pathT = new THREE.CanvasTexture((() => { const c = document.createElement('canvas'); c.width = 64; c.height = 256; const x = c.getContext('2d'); const gr = x.createLinearGradient(0, 0, 64, 0); gr.addColorStop(0, 'rgba(150,115,75,0)'); gr.addColorStop(0.28, 'rgba(150,115,75,0.75)'); gr.addColorStop(0.5, 'rgba(165,128,85,0.9)'); gr.addColorStop(0.72, 'rgba(150,115,75,0.75)'); gr.addColorStop(1, 'rgba(150,115,75,0)'); x.fillStyle = gr; x.fillRect(0, 0, 64, 256); for (let i = 0; i < 260; i++) { x.fillStyle = `rgba(${R() < 0.5 ? '90,65,40' : '200,170,120'},${0.2 + R() * 0.3})`; x.fillRect(8 + R() * 48, R() * 256, 2, 2); } return c; })());

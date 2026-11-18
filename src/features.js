@@ -1,5 +1,6 @@
 // Interactive set pieces: garden plots, laptop, weather station, Cap-O-Matic, treehouse, mailbox flag + activity props
 import * as THREE from 'three';
+import { aiTex } from './aitex.js';
 import { topH, groundY, mv, CLIFF, ZONES, VEND, DOCK, WATER_Y, BIGTREE } from './layout.js';
 import { canvasTex, signTex, woodTex, shingleTex } from './textures.js';
 import { plank } from './signs.js';
@@ -113,12 +114,12 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
     const tcfg = state.treehouse && typeof state.treehouse === 'object' ? state.treehouse : {}; const stage = Math.max(0, Math.min(6, Math.round(Number.isFinite(+tcfg.stage) ? +tcfg.stage : 2)));
     const parts = new Set((Array.isArray(tcfg.parts) ? tcfg.parts : []).map((p) => String(p).toLowerCase().replace(/[\s_-]+/g, ' ').trim()));
     const H = T.deckH, R = T.deckR; const P = (a, r, h = 0) => [Math.cos(a) * r, h, Math.sin(a) * r];
-    const wm = new THREE.MeshStandardMaterial({ map: woodTex('#b98a5a', 6, false), roughness: 0.85 }); const dark = mat(0x6b4a33), rope = mat(0xc9a66b), plankM = mat(0xa87a4c);
+    const wm = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#b98a5a', 6, false), roughness: 0.85 }), 'deck'); const dark = mat(0x6b4a33), rope = mat(0xc9a66b), plankM = mat(0xa87a4c);
     // beams (stage >= 1): two crossing joists bolted to the trunk + diagonal braces
     if (stage >= 1) { for (const a of [T.ladderA, T.ladderA + Math.PI / 2]) add(th, new THREE.BoxGeometry(R * 2.05, 0.14, 0.16), dark, [0, H - 0.12, 0], [0, -a, 0]);
       for (const a of stage >= 2 ? [0.2, 1.77, 3.34, 4.91] : [T.ladderA - 0.3, T.ladderA + 0.3]) { const b = add(th, new THREE.CylinderGeometry(0.06, 0.07, 2.1, 6), dark, P(a, 1.25, H - 0.85)); b.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(Math.cos(a) * 0.62, 1, Math.sin(a) * 0.62).normalize()); } }
     if (stage === 1) for (let i = 0; i < 4; i++) add(th, new THREE.BoxGeometry(0.34, 0.06, 1.5 - i * 0.12), plankM, P(T.ladderA, R - 0.25 - i * 0.37, H - 0.02 + (i % 2) * 0.01), [0, -T.ladderA, (i - 1.5) * 0.02]);
-    if (stage >= 2) { const dk = add(th, new THREE.CylinderGeometry(R, R, 0.12, 8), wm, [0, H, 0], [0, Math.PI / 8, 0]); dk.material.map.repeat.set(2, 2);
+    if (stage >= 2) { const dk = add(th, new THREE.CylinderGeometry(R, R, 0.12, 8), wm, [0, H, 0], [0, Math.PI / 8, 0]); dk.material.map?.repeat.set(2, 2);
       add(th, new THREE.CylinderGeometry(R + 0.02, R + 0.02, 0.06, 8, 1, true), dark, [0, H - 0.06, 0], [0, Math.PI / 8, 0]); }
     // railings (stage >= 3): posts at the octagon corners, two rails per side, a gap at the ladder
     const corner = (i) => { const a = i / 8 * Math.PI * 2; return [Math.cos(a) * R * 0.96, Math.sin(a) * R * 0.96]; };
@@ -129,9 +130,9 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
       for (let k = 1; k < 4; k++) add(th, new THREE.BoxGeometry(0.04, 0.34, 0.03), plankM, [x0 + (x1 - x0) * k / 4, H + 0.24, z0 + (z1 - z0) * k / 4], [0, yaw, 0], null, false); }
     // cabin (walls stage >= 4; roof, door and window stage >= 5)
     let winM = null; const cab = new THREE.Group(); { const [cx, , cz] = P(T.cabinA, 1.3); cab.position.set(cx, H + 0.06, cz); cab.rotation.y = Math.PI / 2 - T.cabinA; th.add(cab); }
-    if (stage >= 4) { const cw = new THREE.MeshStandardMaterial({ map: woodTex('#c99a66', 7, true), roughness: 0.85 }); add(cab, new THREE.BoxGeometry(1.45, 1.05, 1.0), cw, [0, 0.52, 0]);
+    if (stage >= 4) { const cw = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c99a66', 7, true), roughness: 0.85 }), 'cabin', { tint: 0xf0dcc0 }); add(cab, new THREE.BoxGeometry(1.45, 1.05, 1.0), cw, [0, 0.52, 0]);
       for (const x of [-0.72, 0.72]) for (const z of [-0.5, 0.5]) add(cab, new THREE.BoxGeometry(0.08, 1.08, 0.08), dark, [x, 0.54, z], [0, 0, 0], null, false); }
-    if (stage >= 5) { const rf = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#e8eef8' : '#9a4b32'), roughness: 0.9 });
+    if (stage >= 5) { const rf = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#e8eef8' : '#9a4b32'), roughness: 0.9 }); if (!snowy) aiTex(rf, 'shingles', { mpt: 1.2 });
       for (const sd of [-1, 1]) add(cab, new THREE.BoxGeometry(1.75, 0.07, 0.78), rf, [0, 1.3, sd * 0.32], [sd * 0.62, 0, 0]);
       const gab = new THREE.Shape(); gab.moveTo(-0.62, 0); gab.lineTo(0.62, 0); gab.lineTo(0, 0.42); gab.closePath(); const gg = new THREE.ShapeGeometry(gab); gg.rotateY(Math.PI / 2);
       for (const x of [-0.72, 0.72]) add(cab, gg, mat(0xc99a66, { side: THREE.DoubleSide }), [x, 1.05, 0], [0, 0, 0], null, false);

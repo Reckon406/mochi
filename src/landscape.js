@@ -17,7 +17,11 @@ export const TRAPPER_DIR = new THREE.Vector2(Math.sin(BEAR), -Math.cos(BEAR));
 import { riverX, riverW } from './layout.js';
 export { riverX, riverW };
 
-export function terrainH(x, z) {
+// with the AI Bitterroot backdrop on (Medium+), the big procedural ranges are pressed down so the photo range reads behind them
+let LOWM = 0; export function setLowMountains(on) { LOWM = on ? 1 : 0; }
+const MCAP = 42, MK = 0.16;
+export function terrainH(x, z) { const h0 = terrainH0(x, z); if (!LOWM) return h0; const rel = h0 - FLOOR_Y; return rel > MCAP ? FLOOR_Y + MCAP + (rel - MCAP) * MK : h0; }
+function terrainH0(x, z) {
   const dx = x - riverX(z), adx = Math.abs(dx);
   const west = smoothstep(220, 760, -dx);            // Bitterroot Range (big)
   const east = smoothstep(260, 900, dx);             // Sapphire Mountains (rounder)

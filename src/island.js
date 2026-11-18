@@ -6,6 +6,7 @@ import { planHangs, framed } from './hang.js';
 import { canopy as seasonCanopy } from './season.js';
 import { makeBigCottonwood, makePonderosa, makeFir, makeCottonwood, makeAspen, makeWillow, bindSway } from './trees.js';
 import { makeBigCottonwood2 } from './bigtree.js';
+import { aiTex } from './aitex.js';
 import { barkBump, rockBump } from './gfx.js';
 import { plank, signpost } from './signs.js';
 const BARK = new Set([0x6b4a33, 0x5a3a24, 0x6a4a30]); const ROCK = new Set([0x9a948e, 0x8f8a84, 0x8a8580, 0x8a8490, 0x7a7670]);
@@ -116,7 +117,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   }
 
   // ── rope bridge ──
-  { const n = 34; const plank = new THREE.BoxGeometry(1.15, 0.06, 0.3); const pm = new THREE.MeshStandardMaterial({ map: woodTex('#a77a4c', 3, true), roughness: 0.9 });
+  { const n = 34; const plank = new THREE.BoxGeometry(1.15, 0.06, 0.3); const pm = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#a77a4c', 3, true), roughness: 0.9 }), 'fence', { rot: true, tint: 0xd8c8b0 });
     const yaw = Math.atan2(BRIDGE.dx, BRIDGE.dz); const px = -BRIDGE.dz, pz = BRIDGE.dx; // lateral unit vector
     const br = new THREE.Group(); world.add(br);
     for (let i = 0; i <= n; i++) { const t = i / n; const [x, z] = bridgePoint(t); add(br, plank, pm, [x, bridgeYt(t) - 0.03, z], [0, yaw, (R0() - 0.5) * 0.06]); }
@@ -147,9 +148,9 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   // ── hut with nest + ladder ──
   { const [hx, hy, hz] = atm(-4.2, -8.0); const hut = new THREE.Group(); hut.position.set(hx, hy - 0.05, hz); hut.rotation.y = 0.5; world.add(hut);
     const wt = woodTex('#a8784a', 14, true); wt.repeat.set(2, 1);
-    add(hut, new THREE.CylinderGeometry(1.5, 1.6, 1.8, 28), new THREE.MeshStandardMaterial({ map: wt, roughness: 0.9 }), [0, 0.9, 0]);
+    add(hut, new THREE.CylinderGeometry(1.5, 1.6, 1.8, 28), aiTex(new THREE.MeshStandardMaterial({ map: wt, roughness: 0.9 }), 'logwall', { mode: 'uv', rep: [3, 0.55] }), [0, 0.9, 0]);
     const roofT = thatchTex(); const roofM = new THREE.MeshStandardMaterial({ map: roofT, roughness: 1, color: snowy ? 0xffffff : 0xffffff });
-    add(hut, new THREE.ConeGeometry(2.25, 1.7, 28, 3), roofM, [0, 2.55, 0]);
+    if (!snowy) aiTex(roofM, 'thatch', { mode: 'uv', rep: [9, 2.2] }); add(hut, new THREE.ConeGeometry(2.25, 1.7, 28, 3), roofM, [0, 2.55, 0]);
     if (snowy) add(hut, new THREE.ConeGeometry(2.0, 1.1, 28, 1, true), mat(0xf6f8ff), [0, 2.85, 0]);
     add(hut, new THREE.TorusGeometry(2.05, 0.1, 6, 36), mat(0xb0874a), [0, 1.72, 0], [Math.PI / 2, 0, 0]);
     // door
@@ -162,7 +163,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const hl = new THREE.PointLight(0xffa850, 0, 7, 1.6); hl.position.set(0, 1.2, 2.0); hut.add(hl); lights.push({ l: hl, night: 6 });
     // nest on the roof
     const nest = new THREE.Group(); nest.position.set(0, 3.32, 0); hut.add(nest);
-    const twig = new THREE.MeshStandardMaterial({ map: thatchTex(), color: 0x9a6a3a, roughness: 1 });
+    const twig = aiTex(new THREE.MeshStandardMaterial({ map: thatchTex(), color: 0x9a6a3a, roughness: 1 }), 'thatch', { mode: 'uv', rep: [5, 1], tint: 0x9a7a52 });
     add(nest, new THREE.TorusGeometry(0.55, 0.22, 10, 24), twig, [0, 0.0, 0], [Math.PI / 2, 0, 0]);
     add(nest, new THREE.CylinderGeometry(0.5, 0.4, 0.2, 16), mat(0x6b4524), [0, -0.05, 0]);
     for (let i = 0; i < 10; i++) { const a = i / 10 * 6.28; add(nest, new THREE.CylinderGeometry(0.015, 0.015, 0.5, 3), mat(0x7a5230), [Math.cos(a) * 0.6, 0.12, Math.sin(a) * 0.6], [R0() - 0.5, a, 1.2 + R0() * 0.4], null, false); }
@@ -251,7 +252,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── art market stall + easel ──
   { const [x, y, z] = atm(-1.0, 9.9); const st = new THREE.Group(); st.position.set(x, y - 0.05, z); st.rotation.y = Math.PI + 0.05; world.add(st);
-    const wm = new THREE.MeshStandardMaterial({ map: woodTex('#b9855a', 6, false), roughness: 0.85 });
+    const wm = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#b9855a', 6, false), roughness: 0.85 }), 'cabin', { tint: 0xe0c8a8 });
     add(st, new THREE.BoxGeometry(2.6, 0.9, 0.8), wm, [0, 0.45, 0.2]);
     add(st, new THREE.BoxGeometry(2.7, 0.06, 0.9), mat(0x8a5a32), [0, 0.92, 0.2]);
     for (const sx of [-1.25, 1.25]) for (const sz of [-0.2, 0.55]) add(st, new THREE.CylinderGeometry(0.05, 0.06, 2.3, 8), mat(0x7a5232), [sx, 1.15, sz]);
@@ -286,7 +287,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   // ── cap museum ──
   const caps = Math.max(0, Math.floor(state.caps || 0));
   { const [x, y, z] = atm(-8.5, -3.8); const mu = new THREE.Group(); mu.position.set(x, y - 0.05, z); mu.rotation.y = 0.85; world.add(mu);
-    const wm = new THREE.MeshStandardMaterial({ map: woodTex('#9a6a42', 5, true), roughness: 0.85 });
+    const wm = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#9a6a42', 5, true), roughness: 0.85 }), 'logwall', { mpt: 2.2, tint: 0xc8a888 });
     const W = 2.2, Hh = 2.0, D = 0.5; const rows = Math.max(3, Math.ceil(caps / 9));
     add(mu, new THREE.BoxGeometry(W, Hh, 0.06), wm, [0, Hh / 2, -D / 2]);
     for (const sx of [-1, 1]) add(mu, new THREE.BoxGeometry(0.08, Hh, D), wm, [sx * W / 2, Hh / 2, 0]);
@@ -359,7 +360,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── picnic table + soda cooler ──
   { const [x, y, z] = atm(-3.2, 1.6); const pt = new THREE.Group(); pt.position.set(x, y - 0.03, z); pt.rotation.y = 0.3; world.add(pt);
-    const wm = new THREE.MeshStandardMaterial({ map: woodTex('#b88a5a', 5, false), roughness: 0.85 });
+    const wm = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#b88a5a', 5, false), roughness: 0.85 }), 'deck', { mpt: 1.4 });
     add(pt, new THREE.BoxGeometry(1.8, 0.07, 0.9), wm, [0, 0.75, 0]);
     for (const sz of [-0.75, 0.75]) add(pt, new THREE.BoxGeometry(1.8, 0.06, 0.3), wm, [0, 0.42, sz]);
     for (const sx of [-0.7, 0.7]) for (const s of [-1, 1]) add(pt, new THREE.BoxGeometry(0.07, 0.95, 0.07), mat(0x8a5a32), [sx, 0.4, s * 0.35], [s * 0.55, 0, 0]);
@@ -438,7 +439,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   function buildShop() {
     const [x, , z] = at(SHOP.x, SHOP.z); let y = -9; for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) y = Math.max(y, topH(x + i * 0.45, z + j * 0.45));
     const sh = new THREE.Group(); sh.position.set(x, y - 0.03, z); sh.rotation.y = SHOP.yaw; world.add(sh);
-    const { w: W, d: D, h: H } = SHOP; const wall = new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), roughness: 0.9 }); const trim = mat(0x7a4a2a);
+    const { w: W, d: D, h: H } = SHOP; const wall = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), roughness: 0.9 }), 'cabin', { tint: 0xf2d2a8 }); const trim = mat(0x7a4a2a);
     const plaster = mat(0xf7efe2, { roughness: 0.95 });
     add(sh, new THREE.BoxGeometry(W + 0.3, 0.16, D + 0.3), mat(0x9a6a42), [0, 0.0, 0]); // floor deck
     add(sh, new THREE.BoxGeometry(W, H, 0.12), wall, [0, H / 2, -D / 2]); add(sh, new THREE.BoxGeometry(W - 0.2, H - 0.2, 0.02), plaster, [0, H / 2 + 0.05, -D / 2 + 0.07], [0, 0, 0], null, false);
@@ -446,10 +447,10 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
       add(sh, new THREE.BoxGeometry(W / 2 - 1.0, H, 0.12), wall, [sx * (W / 4 + 0.5), H / 2, D / 2]); }
     add(sh, new THREE.BoxGeometry(2.0, 0.35, 0.14), wall, [0, H - 0.17, D / 2]); // lintel
     // gable roof
-    const rl = Math.hypot(W / 2 + 0.35, 1.0); const ra = Math.atan2(1.0, W / 2 + 0.35); const roofM = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#eef2fa' : '#c0563a', 10), roughness: 0.85 }); roofM.map = roofM.map.clone(); roofM.map.wrapS = roofM.map.wrapT = THREE.RepeatWrapping; roofM.map.repeat.set(2.5, 1.6); roofM.map.needsUpdate = true;
+    const rl = Math.hypot(W / 2 + 0.35, 1.0); const ra = Math.atan2(1.0, W / 2 + 0.35); const roofM = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#eef2fa' : '#c0563a', 10), roughness: 0.85 }); roofM.map = roofM.map.clone(); roofM.map.wrapS = roofM.map.wrapT = THREE.RepeatWrapping; roofM.map.repeat.set(2.5, 1.6); if (!snowy) aiTex(roofM, 'shingles', { rot: true }); roofM.map.needsUpdate = true;
     for (const sx of [-1, 1]) add(sh, new THREE.BoxGeometry(rl, 0.1, D + 0.7), roofM, [sx * (W / 4 + 0.09), H + 0.5, 0], [0, 0, -sx * ra]);
     const gab = new THREE.Shape(); gab.moveTo(-W / 2, 0); gab.lineTo(W / 2, 0); gab.lineTo(0, 1.0); gab.closePath();
-    for (const sz of [-1, 1]) add(sh, new THREE.ShapeGeometry(gab), new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), side: THREE.DoubleSide }), [0, H, sz * D / 2]);
+    for (const sz of [-1, 1]) add(sh, new THREE.ShapeGeometry(gab), aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), side: THREE.DoubleSide }), 'cabin', { tint: 0xf2d2a8 }), [0, H, sz * D / 2]);
     { const pk = plank(["MOCHI'S ART SHOP", 'no refunds · yes hugs'], { width: 1.9, icon: '🖼️', tone: 'oak', seed: 7 }); pk.position.set(0, H + 0.42, D / 2 + 0.04); sh.add(pk); }
     // pictures: back wall 3, side walls 2 each, outside front 2
     const sl = (k) => hangAt('shop', k); let k = 0; const ins = 0.09;
@@ -499,7 +500,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   // ── fishing dock on the river side ──
   function buildDock() {
     const dk = new THREE.Group(); dk.position.set(DOCK.x0, DOCK.y, DOCK.z0); dk.rotation.y = Math.atan2(DOCK.dx, DOCK.dz); world.add(dk);
-    const pm = new THREE.MeshStandardMaterial({ map: woodTex('#a47a50', 3, true), roughness: 0.9 }); const n = Math.round(DOCK.len / 0.32);
+    const pm = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#a47a50', 3, true), roughness: 0.9 }), 'fence', { rot: true, tint: 0xd0c0a8 }); const n = Math.round(DOCK.len / 0.32);
     for (let i = 0; i < n; i++) add(dk, new THREE.BoxGeometry(DOCK.w, 0.07, 0.28), pm, [0, -0.04, 0.16 + i * 0.32], [0, 0, (R0() - 0.5) * 0.03]);
     for (let i = 0; i <= 3; i++) for (const sx of [-1, 1]) add(dk, new THREE.CylinderGeometry(0.08, 0.09, 2.6, 8), mat(0x6b4a33), [sx * (DOCK.w / 2 - 0.05), -1.1 + (i === 3 ? 0.35 : 0), 0.3 + i * (DOCK.len - 0.6) / 3]);
     // lantern post at the end, bucket + rod
@@ -520,7 +521,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   // ── music corner: stage, drum, uke, keys, mic ──
   function buildMusic() {
     const [x, y, z] = at(MUSIC.x, MUSIC.z); const mc = new THREE.Group(); mc.position.set(x, y - 0.04, z); mc.rotation.y = Math.atan2(-MUSIC.x, -MUSIC.z); world.add(mc);
-    add(mc, new THREE.CylinderGeometry(1.5, 1.6, 0.2, 24), new THREE.MeshStandardMaterial({ map: woodTex('#b98a5a', 8, false), roughness: 0.8 }), [0, 0.1, 0]);
+    add(mc, new THREE.CylinderGeometry(1.5, 1.6, 0.2, 24), aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#b98a5a', 8, false), roughness: 0.8 }), 'deck'), [0, 0.1, 0]);
     // drum
     const drum = new THREE.Group(); drum.position.set(-0.6, 0.2, -0.3); mc.add(drum);
     add(drum, new THREE.CylinderGeometry(0.38, 0.38, 0.45, 24), mat(0xd23c3c, { roughness: 0.4 }), [0, 0.42, 0]); add(drum, new THREE.CylinderGeometry(0.385, 0.385, 0.02, 24), mat(0xf6efe0), [0, 0.655, 0]);

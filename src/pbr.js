@@ -70,7 +70,7 @@ export function applyPBR(scene, { tier = 2, renderer, onLoaded } = {}) {
   if (tier <= 0) return null;
   const size = tier >= 2 ? 1024 : 512; const hq = tier >= 2; const aniso = Math.min(tier >= 2 ? 8 : 4, renderer?.capabilities?.getMaxAnisotropy?.() || 4);
   const mats = { ground: new Set(), rock: new Set(), bark: new Set(), wood: new Set() };
-  scene.traverse((o) => { if (!o.isMesh) return; const ms = Array.isArray(o.material) ? o.material : [o.material]; for (const m of ms) { if (!m || !m.isMeshStandardMaterial) continue;
+  scene.traverse((o) => { if (!o.isMesh) return; const ms = Array.isArray(o.material) ? o.material : [o.material]; for (const m of ms) { if (!m || !m.isMeshStandardMaterial || m.userData.aiTex) continue;
     if (m.userData.pbrGround) mats.ground.add(m);
     const k = m.map?.userData?.kind || m.bumpMap?.userData?.kind; if (k && mats[k]) mats[k].add(m); } });
   for (const m of mats.ground) patchDetail(m, 'ground', hq);
