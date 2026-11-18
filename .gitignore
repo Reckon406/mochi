@@ -6,3 +6,7 @@ dist/
 public/_test/
 *.tmp.html
 *.tmp.mjs
+
+# AI texture sources stay on the box (outputs live in public/tex/ai/); rebuild with tools/aitex.py
+ai-tex-src/*.jpg
+ai-tex-src/*.png
