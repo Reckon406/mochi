@@ -5,6 +5,7 @@ import { ISLAND_R, islandRadius, topH, isletH, CLIFF, POND, POND_Y, ISLET, LAGOO
 import { planHangs, framed } from './hang.js';
 import { canopy as seasonCanopy } from './season.js';
 import { makeBigCottonwood, makePonderosa, makeFir, makeCottonwood, makeAspen, makeWillow, bindSway } from './trees.js';
+import { makeBigCottonwood2 } from './bigtree.js';
 import { barkBump, rockBump } from './gfx.js';
 import { plank, signpost } from './signs.js';
 const BARK = new Set([0x6b4a33, 0x5a3a24, 0x6a4a30]); const ROCK = new Set([0x9a948e, 0x8f8a84, 0x8a8580, 0x8a8490, 0x7a7670]);
@@ -185,7 +186,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── Bitterroot trees (procedural: cottonwood / ponderosa / fir / aspen) ──
   // Big treehouse cottonwood keeps BIGTREE limb anchors (swing, owl, feeder, cabin).
-  { const big = makeBigCottonwood(BIGTREE, { season, snowy, seed: 3, lite: treeLite }); big.position.set(BIGTREE.x, BIGTREE.y - 0.05, BIGTREE.z); world.add(big); bindSway(sways, big); }
+  { const big = makeBigCottonwood2(BIGTREE, { season, snowy, seed: 3, lite: treeLite, tier }); big.position.set(BIGTREE.x, BIGTREE.y - 0.05, BIGTREE.z); world.add(big); bindSway(sways, big); }
   // (the old limb swing moved: the tiny swing now hangs under the treehouse deck, see wishes.js)
   if (season === 'fall') for (let i = 0; i < 26; i++) { const a = R0() * 6.28, rr = 1.7 + R0() * 2.2; const x = BIGTREE.x + Math.cos(a) * rr, z = BIGTREE.z + Math.sin(a) * rr; add(world, new THREE.CircleGeometry(0.09, 5).rotateX(-Math.PI / 2), mat([0xe58a2f, 0xf0b53a, 0xd4652c][i % 3], { side: THREE.DoubleSide }), [x, topH(x, z) + 0.02, z], [0, R0() * 6, 0], null, false); }
 
