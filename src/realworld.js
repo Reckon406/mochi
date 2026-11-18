@@ -28,7 +28,7 @@ function leafify(m, { sway = 0.012, fall = 0 } = {}) {
         transformed.z += cos(uTime * 1.1 + ip.z * 0.2 + position.z * 4.0) * hh * hh * ${(sway * 0.5).toFixed(4)} * (0.4 + uWind * 2.0);
       #endif`);
     sh.fragmentShader = 'uniform float uFall;\n' + sh.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
-      { float l = dot(diffuseColor.rgb, vec3(0.3, 0.59, 0.11)); vec3 gold = vec3(1.0, 0.7, 0.2) * l * 2.3; diffuseColor.rgb = mix(diffuseColor.rgb, gold, uFall); }`); };
+      { float l = dot(diffuseColor.rgb, vec3(0.3, 0.59, 0.11)); vec3 gold = vec3(1.0, 0.7, 0.2) * clamp(l * 3.0 + 0.12, 0.0, 1.2); diffuseColor.rgb = mix(diffuseColor.rgb, gold, uFall); }`); };
   const pk = m.customProgramCacheKey?.bind(m); m.customProgramCacheKey = () => (pk ? pk() : '') + 'leaf' + sway + '_' + fall; m.needsUpdate = true; return m;
 }
 
