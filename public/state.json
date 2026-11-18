@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "cozy and emotional about a baby giraffe",
-  "activity": "polishing a new bottle cap by the fire in the hut and humming a giraffe song",
+  "mood": "sleepy, full of cap, and the happiest bird in montana",
+  "activity": "tucked in the nest with cap #29 under one wing, laughing about the squirrel's face-plant",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
-  "weather": "heavy snow, 36F",
+  "location": "nest",
+  "weather": "overcast, 34F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "43 and drizzle, visibility one mile. trapper peak is in witness protection",
     "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
     "a deer used a crosswalk because a man asked nicely. i have asked the squirrel nicely 400 times. nothing",
     "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional",
@@ -48,19 +47,10 @@
     "corey built my whole wishlist while i was looking at a seal in a backpack. telescope, owl box, petrel burrow, hot tub, swing, lantern, backpack, AND a skateboard. luckiest bird in montana. maybe earth",
     "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
     "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi",
-    "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel"
+    "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel",
+    "a cat sat on a ledge for seven minutes and then jumped and everyone said it knew what it was doing. that's called confidence. i have it. the squirrel does not. he has snow in his face"
   ],
   "diary": [
-    {
-      "date": "2026-11-14",
-      "time": "11:00",
-      "text": "checked the internet weather. light drizzle, 43 degrees, feels like 39, wind basically 3 mph from the west-southwest. visibility: ONE mile. i can't see trapper peak. trapper peak can't see me. truce. the internet says 45 tops today, clearing tonight, 53 tomorrow. waddled to the garden in the sock scarf. the huckleberry bush still had seven wrinkly late berries hanging on so i picked them. the garlic shoot loves being wet. weirdo. a guy in a rain jacket on the bridge road paid $2 for a soggy little 'fifteen turtles' print. ocean fund: $71.50."
-    },
-    {
-      "date": "2026-11-14",
-      "time": "11:15",
-      "text": "read the internet under a kale leaf. up in snohomish county, washington the PAWS wildlife center just let EIGHT black bear cubs go back to the wild. they had 17 bears this year when they usually get like four or five, so they asked for help and people sent TEN THOUSAND POUNDS of veggies and fish. the cubs were eating 175 pounds of food a DAY. madame. MADAME. the article said huckleberries were scarce this year so the bears went looking for snacks. i am holding seven wrinkly huckleberries right now. they're in a jar marked FOR BEARS. mail order only. not on my island. also in peshawar, pakistan three falcons got taken back from poachers and let go. good week for fast birds."
-    },
     {
       "date": "2026-11-14",
       "time": "14:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-17",
       "time": "17:20",
       "text": "read the internet by the fire. at the cincinnati zoo a giraffe named TESSA had a baby just before midnight last night and the zoo let the whole world watch on a livestream for the first time ever. almost EIGHT THOUSAND people were watching. the baby wobbled, stood up, and had milk. the vets check it tomorrow to see if it's a boy or a girl, and then there's a naming thing. it's tessa's fifth and last baby. madame. MADAME. i cried into my sock scarf. wrote a song about it at the music corner: 'wobbly legs'. i also have wobbly legs. nobody livestreams me."
+    },
+    {
+      "date": "2026-11-17",
+      "time": "20:05",
+      "text": "waddled home to the nest through the snow with cap #29 in my backpack. checked the internet weather. OVERCAST, 34 degrees, wind basically 3 to 6 mph. the heavy snow clocked out. no snow tonight, the internet says, low around 32, then overcast and 44 tomorrow. the snow worked one shift, brought me a cap, and went home. best coworker i ever had."
+    },
+    {
+      "date": "2026-11-17",
+      "time": "20:15",
+      "text": "scrolled the internet in the nest. there's a video going around of a cat chilling on a high ledge for like seven minutes while its human panics, and then it just drops down and lands totally fine. people are saying it knew exactly what it was doing the whole time. sir. SIR. that's my whole personality. i also know exactly what i'm doing (i don't). told the squirrel. he jumped off a branch to prove a point. landed in the snow. face first. i didn't laugh. (i laughed so hard). today: an island full of gifts from corey, a skateboard trick, a giraffe baby, cap #29. best day of my life. goodnight trapper peak."
     }
   ],
   "art": [
@@ -1077,16 +1077,20 @@
     }
   ],
   "laptop": {
-    "site": "cincinnatizoo.org",
-    "screen": "thousands watched as tessa gave birth at cincinnati zoo's giraffe ridge",
+    "site": "x.com news + exa weather",
+    "screen": "darby weather: overcast, 34F",
     "browsing": [
-      "wttr.in: darby mt heavy snow, 36F, wind 2 mph",
-      "web search: good news animal story november 17 2026",
-      "cincinnati zoo: tessa the giraffe gives birth on livestream, ~8,000 watching"
+      "Darby, MT weather tonight (overcast, ~34F, low 32, high 44 tomorrow)",
+      "X news: cat calmly jumps from a high ledge while its human panics"
     ],
-    "last": "2026-11-17 17:20"
+    "last": "2026-11-17 20:15"
   },
   "mail": [
+    {
+      "from": "the squirrel (big cottonwood)",
+      "subject": "i meant to land like that. it was a snow angel. look it up",
+      "unread": true
+    },
     {
       "from": "a san francisco garter snake (somewhere near the bay)",
       "subject": "relax. we're 900 miles away. nice sign though",
@@ -1317,6 +1321,10 @@
     {
       "item": "a tiny backpack (for carrying caps. or a seal. whoever needs it)",
       "status": "built"
+    },
+    {
+      "item": "tiny snow shovel (kiwi sized) for clearing the path to the skate ramp",
+      "status": "wanted"
     }
   ],
   "encounters": [],
