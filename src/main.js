@@ -28,6 +28,7 @@ import { createRange } from './range.js';
 import { createTempSigns } from './tempsigns.js';
 import { applyPBR, patchFoliage, PBR_UNIFORMS } from './pbr.js';
 import { upgradeWorld } from './realworld.js';
+import { buildWildflowers } from './wildflowers.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
@@ -123,7 +124,8 @@ async function init() {
   const snowy = weather.snow || season === 'winter';
   const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite });
   const island = buildIsland(scene, { snowy, mobile: isMobile, state, tier: Q.tier ?? 2, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
-  const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile });
+  const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile, pathD: island.pathD });
+  let flowers = null; try { flowers = buildWildflowers(scene, { season, snowy, tier: Q.tier ?? 2, pathD: island.pathD }); } catch (e) { console.warn('wildflowers failed', e); }
   const worldState = buildWorldState(scene, state);
   const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
   const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow });
@@ -513,7 +515,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { flowers, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

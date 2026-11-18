@@ -9,7 +9,7 @@ import { ENV, } from './water.js';
 import { addInstancedSway, rockBump } from './gfx.js';
 
 const TAU = Math.PI * 2;
-export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', snowy = false, mobile = false } = {}) {
+export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', snowy = false, mobile = false, pathD = null } = {}) {
   const D = [0.35, 0.6, 1, 1.35][tier] * detail; const R = rng(77); const g = new THREE.Group(); g.name = 'details'; scene.add(g);
   const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), sc = new THREE.Vector3(), col = new THREE.Color();
   const spots = ZONES.map((z) => z.spot || z.pos);
@@ -26,13 +26,14 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
   const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, ...o });
   const pick = (a) => a[Math.floor(R() * a.length)];
 
-  // pebbles + twigs
-  inst(new THREE.IcosahedronGeometry(0.06, 0), M(0xffffff, { flatShading: true }), 520 * D, () => { const p = onLand(0.15); if (!p) return null; const s = 0.5 + R() * 1.4; return [[p[0], p[1] + 0.01, p[2]], [R() * 3, R() * 3, R() * 3], [s, s * 0.6, s * (0.8 + R() * 0.4)], pick([0x9a958c, 0xb4ada0, 0x7f7a72, 0xc9c0ae])]; });
+  // pebbles + twigs: sparse, mostly along path edges and near the shore (not confetti across the grass)
+  const edgeSpot = (pad) => { for (let k = 0; k < 14; k++) { const p = onLand(pad); if (!p) return null; const d = pathD ? pathD(p[0], p[2]) : 9; const th = Math.atan2(p[2], p[0]); if ((d > 0.45 && d < 1.3) || Math.hypot(p[0], p[2]) > islandRadius(th) * 0.86 || R() < 0.06) return p; } return null; };
+  inst(new THREE.IcosahedronGeometry(0.05, 0), M(0xffffff, { flatShading: true }), 130 * D, () => { const p = edgeSpot(0.15); if (!p) return null; const s = 0.5 + R() * 1.4; return [[p[0], p[1] + 0.01, p[2]], [R() * 3, R() * 3, R() * 3], [s, s * 0.6, s * (0.8 + R() * 0.4)], pick([0x9a958c, 0xb4ada0, 0x7f7a72, 0xc9c0ae])]; });
   { const tg = new THREE.CylinderGeometry(0.01, 0.016, 0.4, 4); tg.rotateZ(Math.PI / 2);
-    inst(tg, M(0x6b4a33), 180 * D, () => { const p = onLand(0.2); if (!p) return null; return [[p[0], p[1] + 0.015, p[2]], [0, R() * TAU, (R() - 0.5) * 0.1], [0.6 + R() * 0.9, 1, 1]]; }); }
+    inst(tg, M(0x6b4a33), 60 * D, () => { const p = edgeSpot(0.2); if (!p) return null; return [[p[0], p[1] + 0.015, p[2]], [0, R() * TAU, (R() - 0.5) * 0.1], [0.6 + R() * 0.9, 1, 1]]; }); }
   // fallen leaves (lots in fall, some in summer, few in spring, none under snow)
   if (!snowy) { const lg = new THREE.CircleGeometry(0.06, 5); lg.rotateX(-Math.PI / 2); lg.scale(1, 1, 1.6);
-    const n = { fall: 900, summer: 160, spring: 90, winter: 120 }[season] * D; const cols = season === 'fall' ? [0xe58a2f, 0xf0b53a, 0xd4652c, 0xc7a03a, 0xa8432a] : season === 'winter' ? [0x8a6a48, 0x7a5a3a] : [0x6fae48, 0x8a9a40, 0xc7a03a];
+    const n = { fall: 560, summer: 120, spring: 90, winter: 120 }[season] * D; const cols = season === 'fall' ? [0xe58a2f, 0xf0b53a, 0xd4652c, 0xc7a03a, 0xa8432a] : season === 'winter' ? [0x8a6a48, 0x7a5a3a] : [0x6fae48, 0x8a9a40, 0xc7a03a];
     inst(lg, M(0xffffff, { side: THREE.DoubleSide }), n, () => { let p; if (R() < 0.6) { const a = R() * TAU, r = BIGTREE.trunkR + 0.5 + R() * 4; const x = BIGTREE.x + Math.cos(a) * r, z = BIGTREE.z + Math.sin(a) * r; if (!clear(x, z, 0.1)) return null; p = [x, topH(x, z), z]; } else p = onLand(0.1); if (!p) return null;
       return [[p[0], p[1] + 0.02 + R() * 0.01, p[2]], [(R() - 0.5) * 0.3, R() * TAU, (R() - 0.5) * 0.3], 0.7 + R() * 0.6, pick(cols)]; }); }
   // ferns (fronds merged into one geometry) + round bushes, both swaying a little
@@ -40,7 +41,7 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
     const fg = mergeGeometries(fr); fg.computeVertexNormals(); const fm = addInstancedSway(M(0xffffff, { side: THREE.DoubleSide }), 0.08, 0.6);
     inst(fg, fm, 90 * D, () => { const p = onLand(0.35, 1.0); if (!p) return null; return [[p[0], p[1], p[2]], [0, R() * TAU, 0], 0.7 + R() * 0.7, season === 'fall' ? pick([0x9a8a3a, 0x6f8a3a, 0xb07a30]) : pick([0x4f8a36, 0x5f9a3e, 0x3f7a30])]; });
     const bg = new THREE.IcosahedronGeometry(0.4, 1); { const p = bg.attributes.position; for (let k = 0; k < p.count; k++) { v.fromBufferAttribute(p, k); v.multiplyScalar(1 + Math.sin(v.x * 9 + v.z * 7) * 0.08); if (v.y < -0.15) v.y = -0.15; p.setXYZ(k, v.x, v.y, v.z); } bg.translate(0, 0.15, 0); bg.computeVertexNormals(); }
-    inst(bg, addInstancedSway(M(0xffffff, { flatShading: true }), 0.03, 0.6), 60 * D, () => { const p = onLand(0.6, 1.4); if (!p) return null; const s = 0.6 + R() * 0.9; return [[p[0], p[1], p[2]], [0, R() * TAU, 0], [s, s * (0.7 + R() * 0.3), s], snowy ? 0xdfe6ee : season === 'fall' ? pick([0x8a7a30, 0xa8662a, 0x6f8a3a]) : pick([0x4a7f34, 0x5a8f3c, 0x3f7030])]; }, { shadow: tier >= 2 }); }
+    inst(bg, addInstancedSway(M(0xffffff, { flatShading: true }), 0.03, 0.6), 60 * D, () => { const p = onLand(0.6, 1.4); if (!p) return null; const s = 0.6 + R() * 0.9; return [[p[0], p[1], p[2]], [0, R() * TAU, 0], [s, s * (0.7 + R() * 0.3), s], snowy ? 0xdfe6ee : season === 'fall' ? pick([0x7f7a34, 0x86733a, 0x6f8a3a]) : pick([0x4a7f34, 0x5a8f3c, 0x3f7030])]; }, { shadow: tier >= 2, real: 'bush' }); }
   // mossy rocks (rock + moss cap share the same instance matrices)
   { const rg = new THREE.DodecahedronGeometry(0.35, 0); rg.scale(1, 0.65, 0.9); const rm = M(0x8a857c, { flatShading: true, bumpMap: rockBump(), bumpScale: 2 });
     const mg = new THREE.SphereGeometry(0.3, 8, 4, 0, TAU, 0, 1.1); mg.scale(1.05, 0.55, 0.95); mg.translate(0, 0.08, 0);
@@ -72,7 +73,7 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
     const ring = new THREE.CanvasTexture((() => { const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d'); x.fillStyle = '#d9b98a'; x.fillRect(0, 0, 128, 128); x.strokeStyle = 'rgba(120,80,40,0.5)'; for (let r = 6; r < 64; r += 7) { x.lineWidth = 2; x.beginPath(); x.arc(64, 64, r, 0, TAU); x.stroke(); } return c; })()); ring.colorSpace = THREE.SRGBColorSpace;
     const pts = []; for (let i = 0; i < 4 + 4 * D; i++) { const p = onLand(0.8, 1.5); if (p) pts.push([p[0], p[1] - 0.03, p[2], 0.8 + R() * 0.7]); }
     inst(sg, M(0x6b4a33, { bumpMap: rockBump(), bumpScale: 1 }), pts.length, (i) => [pts[i].slice(0, 3), [0, R() * TAU, 0], pts[i][3]], { shadow: true, real: 'stump' }); inst(top, M(0xffffff, { map: ring }), pts.length, (i) => [pts[i].slice(0, 3), [0, R() * TAU, 0], pts[i][3]], { real: 'hide:stump' }); }
-  if (!snowy) { const fl = new THREE.IcosahedronGeometry(0.035, 0); const st = new THREE.CylinderGeometry(0.005, 0.005, 0.22, 3).translate(0, 0.11, 0);
+  if (false) { /* old icosahedron flower clusters: replaced by wildflowers.js */ const fl = new THREE.IcosahedronGeometry(0.035, 0); const st = new THREE.CylinderGeometry(0.005, 0.005, 0.22, 3).translate(0, 0.11, 0);
     const cols = season === 'fall' ? [0xf0b53a, 0xd4652c, 0xb07ad8, 0xffffff] : [0xff8ab0, 0xffd36b, 0xb07ad8, 0xffffff, 0x6fb0ff, 0xff6b6b];
     const fls = []; for (let c = 0; c < 34 * D; c++) { const p = onLand(0.4, 0.8); if (!p) continue; const cc = pick(cols); for (let i = 0; i < 9; i++) { const x = p[0] + (R() - 0.5) * 1.1, z = p[2] + (R() - 0.5) * 1.1; fls.push([x, topH(x, z), z, R() < 0.75 ? cc : pick(cols), 0.7 + R() * 0.6]); } }
     inst(st, addInstancedSway(M(0x5a8f3c), 0.1, 0.25), fls.length, (i) => [fls[i].slice(0, 3), [0, 0, 0], [1, fls[i][4], 1]]);
@@ -93,7 +94,7 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
       for (let i = 1; i < n - 1; i++) { const t = i / n; const wob = Math.sin(t * 9 + d[0]) * 0.35; const cx = from[0] + ux * L * t + px * wob, cz = from[1] + uz * L * t + pz * wob; if (!clear(cx, cz, 0.05) || topH(cx, cz) > 1.3) { flush(); continue; }
         const vi = pos.length / 3; for (const s of [-1, 1]) { const x = cx + px * W / 2 * s, z = cz + pz * W / 2 * s; pos.push(x, topH(x, z) + 0.035, z); uv.push(s < 0 ? 0 : 1, t * L / 2.5); }
         if (vi >= 2) idx.push(vi - 2, vi - 1, vi, vi - 1, vi + 1, vi);
-        if (R() < 0.55 * Math.min(1, D + 0.2)) { const s = R() < 0.5 ? -1 : 1; const x = cx + px * (W / 2 + 0.05) * s, z = cz + pz * (W / 2 + 0.05) * s; edge.push([x, topH(x, z) + 0.02, z]); } }
+        if (R() < 0.22 * Math.min(1, D + 0.2)) { const s = R() < 0.5 ? -1 : 1; const x = cx + px * (W / 2 + 0.05) * s, z = cz + pz * (W / 2 + 0.05) * s; edge.push([x, topH(x, z) + 0.02, z]); } }
       flush(); }
     inst(new THREE.DodecahedronGeometry(0.08, 0), M(0xa8a196, { flatShading: true }), edge.length, (i) => [edge[i], [R() * 3, R() * 3, 0], [1 + R() * 0.6, 0.6, 1 + R() * 0.4], pick([0xa8a196, 0x938c80, 0xbdb5a6])], { real: 'pebble' }); }
   // ripple rings where the river runs past rocks (stretched downstream), animated in the shader

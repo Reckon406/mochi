@@ -374,7 +374,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   { const fl = [0xffffff, 0xffd6e8, 0xfff07a, 0xc9b6ff, 0xff9aa2]; const stemG = new THREE.CylinderGeometry(0.01, 0.01, 0.25, 3); stemG.translate(0, 0.125, 0); const headG = new THREE.SphereGeometry(0.05, 6, 4);
     const N = snowy ? 0 : Math.round(420 * detail); const heads = new THREE.InstancedMesh(headG, new THREE.MeshStandardMaterial({ roughness: 0.8 }), N); const m4 = new THREE.Matrix4(); const c = new THREE.Color(); let k = 0;
     for (let i = 0; i < N * 4 && k < N; i++) { const a = R0() * 6.28, rr = Math.sqrt(R0()) * (ISLAND_R - 2); const x = Math.cos(a) * rr, z = Math.sin(a) * rr; if (blocked(x, z)) continue; m4.makeTranslation(x, topH(x, z) + 0.2, z); heads.setMatrixAt(k, m4); heads.setColorAt(k, c.set(fl[k % fl.length])); k++; }
-    heads.count = k; world.add(heads);
+    heads.count = k; heads.dispose(); // old sphere flowers retired (wildflowers.js); loop kept so the R0 sequence below is unchanged
     for (let i = 0; i < 12; i++) { const a = R0() * 6.28, rr = 4 + R0() * 16; const x = Math.cos(a) * rr, z = Math.sin(a) * rr; if (blocked(x, z)) continue; const y = topH(x, z);
       add(world, new THREE.CylinderGeometry(0.04, 0.05, 0.15, 6), mat(0xf6efe0), [x, y + 0.07, z]); add(world, new THREE.SphereGeometry(0.11, 12, 6, 0, 6.29, 0, 1.6), mat(0xe8463c), [x, y + 0.14, z], [0, 0, 0], [1, 0.7, 1]); }
   }
@@ -485,7 +485,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const fl = [0xffffff, 0xfff07a, 0xff9aa2, 0xc9b6ff, 0xffb347, 0x9ad0ff]; const heads = new THREE.InstancedMesh(new THREE.SphereGeometry(0.06, 6, 4), new THREE.MeshStandardMaterial({ roughness: 0.8 }), Math.max(1, N));
     const m4 = new THREE.Matrix4(); const c = new THREE.Color(); let k = 0;
     for (let i = 0; i < N; i++) { const a = R0() * 6.28, rr = Math.sqrt(R0()) * 3.6; const x = cx + Math.cos(a) * rr, z = cz + Math.sin(a) * rr; m4.makeTranslation(x, topH(x, z) + 0.18 + R0() * 0.1, z); heads.setMatrixAt(k, m4); heads.setColorAt(k, c.set(fl[k % fl.length])); k++; }
-    heads.count = k; world.add(heads);
+    heads.count = k; heads.dispose(); // meadow flowers now come from wildflowers.js
     const [hx, hy, hz] = at(cx - 1.2, cz - 1.0); const hv = new THREE.Group(); hv.position.set(hx, hy, hz); hv.rotation.y = 0.6; world.add(hv);
     for (const sx of [-0.2, 0.2]) add(hv, new THREE.BoxGeometry(0.06, 0.5, 0.06), mat(0x7a5232), [sx, 0.25, 0]);
     [0, 1, 2].forEach((i) => add(hv, new THREE.BoxGeometry(0.6 - i * 0.04, 0.24, 0.5 - i * 0.04), mat(i % 2 ? 0xf6c23a : 0xf2e2b0), [0, 0.62 + i * 0.25, 0]));
