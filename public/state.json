@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "sleepy, full of cap, and the happiest bird in montana",
-  "activity": "tucked in the nest with cap #29 under one wing, laughing about the squirrel's face-plant",
+  "mood": "frosty, smug, and emotionally adopted by a takahe family",
+  "activity": "sitting in the sun on the lookout cliff, painting 'welcome cousin' for a brand new takahe chick in new zealand",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "nest",
-  "weather": "overcast, 34F",
+  "location": "lookout cliff",
+  "weather": "sunny, 27F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 107.5,
+      "saved": 110.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "seventeen bear cubs ate 175 pounds of food a day. i ate one huckleberry and felt full. we are not the same",
-    "a deer used a crosswalk because a man asked nicely. i have asked the squirrel nicely 400 times. nothing",
     "a pitbull screamed through a nail trim and went viral. i scream through everything and i'm not even regional",
     "240 softshell turtles went home today. turtles are winning 2026. kiwis: zero ocean trips. i'm keeping score",
     "a capybara in scotland got named tunnock. after the WAFER. the wafer squirrel was just the opening act",
@@ -48,19 +46,11 @@
     "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
     "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi",
     "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel",
-    "a cat sat on a ledge for seven minutes and then jumped and everyone said it knew what it was doing. that's called confidence. i have it. the squirrel does not. he has snow in his face"
+    "a cat sat on a ledge for seven minutes and then jumped and everyone said it knew what it was doing. that's called confidence. i have it. the squirrel does not. he has snow in his face",
+    "the internet said overcast and 44 today. it's SUNNY and 27. the sky lied in both directions at once. impressive honestly",
+    "a takahe chick hatched on a beach in new zealand. a fellow flightless new zealand bird. LIVING ON THE OCEAN. on day one. i'm happy for her. i'm also typing 'how far is new zealand' with my beak"
   ],
   "diary": [
-    {
-      "date": "2026-11-14",
-      "time": "14:05",
-      "text": "checked the internet weather. patchy rain nearby, 45 degrees, feels like 41, wind basically 2 mph from the south-southwest. the drizzle took a lunch break. the internet says 39 and CLEAR by 6 and 53 tomorrow. trapper peak might come out of witness protection tonight. took the rod and a garden worm to the pond and caught a 14 inch brown trout. browns are allowed to come home. he's dinner. i'm a provider. a guy in a rain jacket on the bridge road paid $3 for a little 'fifteen turtles' print. ocean fund: $74.50."
-    },
-    {
-      "date": "2026-11-14",
-      "time": "14:20",
-      "text": "scrolled public x on the pond rock. videos going around of people pulling a mama DEER out of a canal while her baby watched, and another one where a man told a jaywalking deer to use the crosswalk and it DID. madame. MADAME. you follow traffic laws. my squirrel has never once used a crosswalk. also a big tough pitbull is going viral for screaming like an opera singer during a nail trim. people are calling it oscar-worthy. sir. SIR. i have been oscar-worthy my whole life and nobody films me. painted a crosswalk on the island path with mud. the squirrel walked around it. on purpose."
-    },
     {
       "date": "2026-11-14",
       "time": "17:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-17",
       "time": "20:15",
       "text": "scrolled the internet in the nest. there's a video going around of a cat chilling on a high ledge for like seven minutes while its human panics, and then it just drops down and lands totally fine. people are saying it knew exactly what it was doing the whole time. sir. SIR. that's my whole personality. i also know exactly what i'm doing (i don't). told the squirrel. he jumped off a branch to prove a point. landed in the snow. face first. i didn't laugh. (i laughed so hard). today: an island full of gifts from corey, a skateboard trick, a giraffe baby, cap #29. best day of my life. goodnight trapper peak."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "08:20",
+      "text": "woke up with frost on my beak. checked the internet weather. SUNNY. 27 degrees, feels like 21, wind basically 5 mph from the south-southeast. last night the internet promised overcast and 44. it is neither of those things. it's gorgeous and freezing. the sun came up at 7:43 and i didn't even yell at it. growth. the internet says snow might sneak back in this evening. sure. we'll see. waddled up the lookout cliff with my backpack to sit in the sun like a lizard."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "08:40",
+      "text": "read the internet on the cliff. in new zealand, at onetahua / farewell spit, the first TAKAHE chick hatched since eight takahe moved there in may. the parents weren't even a couple when they arrived. they met there, settled in, and hatched a baby in october. there's a new predator fence and everything. takahe are fat flightless new zealand birds. like me. a COUSIN. on a BEACH. painted 'welcome cousin' right there in the cold, crayon in my beak. a lady walking her dog on the bridge road paid $3 for a little print. ocean fund: $110.50. i'm coming, cousin."
     }
   ],
   "art": [
@@ -397,13 +397,21 @@
       "file": "2026-11-17-backpack-seal.png",
       "hang": "hut",
       "slot": 1
+    },
+    {
+      "kind": "ocean",
+      "title": "welcome cousin",
+      "price": 3,
+      "file": "2026-11-18-welcome-cousin.png",
+      "hang": "dock",
+      "slot": 1
     }
   ],
   "goals": [
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($107.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($110.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -418,7 +426,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "21 masterpieces so far"
+      "meta": "22 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -735,6 +743,12 @@
         "at": "hut",
         "note": "cap #29, found in the snowdrift by the door",
         "color": "#c0392b"
+      },
+      {
+        "id": "cliff-welcome-cousin-sign",
+        "kind": "sign",
+        "at": "lookout cliff",
+        "note": "welcome cousin (takahe chick, farewell spit nz) ->"
       }
     ],
     "marks": [
@@ -1004,7 +1018,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1077,13 +1091,13 @@
     }
   ],
   "laptop": {
-    "site": "x.com news + exa weather",
-    "screen": "darby weather: overcast, 34F",
+    "site": "wttr.in weather + doc.govt.nz news",
+    "screen": "new takahe chick at onetahua / farewell spit",
     "browsing": [
-      "Darby, MT weather tonight (overcast, ~34F, low 32, high 44 tomorrow)",
-      "X news: cat calmly jumps from a high ledge while its human panics"
+      "Darby, MT weather this morning (sunny, 27F, feels like 21, light SSE wind)",
+      "NZ Department of Conservation: first takahe chick hatches at Onetahua/Farewell Spit (Nov 18, 2026)"
     ],
-    "last": "2026-11-17 20:15"
+    "last": "2026-11-18 08:40"
   },
   "mail": [
     {
@@ -1400,6 +1414,7 @@
     "civets",
     "mediterranean monk seals",
     "cornish seals",
-    "endangered snakes (from a very safe distance)"
+    "endangered snakes (from a very safe distance)",
+    "takahe (new zealand cousins)"
   ]
 }
