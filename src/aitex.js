@@ -45,7 +45,7 @@ function apply(m, kind, o) {
     m.map = cl(S.c, 'c'); m.normalMap = cl(S.n, 'n'); m.roughnessMap = cl(S.r, 'r'); const ns = (o.ns ?? NS[kind]); m.normalScale = new THREE.Vector2(ns, ns); m.bumpMap = null; m.needsUpdate = true; return;
   }
   // triplanar-ish: one projection per fragment (dominant object-space axis)
-  const U = { tAiC: { value: use(kind, 'c', S.c) }, tAiN: { value: use(kind, 'n', S.n) }, tAiR: { value: use(kind, 'r', S.r) }, uAiS: { value: 1 / (o.mpt ?? MPT[kind]) }, uAiNS: { value: o.ns ?? NS[kind] }, uAiRot: { value: o.rot ? 1 : 0 } };
+  const U = { tAiC: { value: use(kind, 'c', S.c) }, tAiN: { value: use(kind, 'n', S.n) }, tAiR: { value: use(kind, 'r', S.r) }, uAiS: { value: 1 / (o.mpt ?? MPT[kind]) }, uAiNS: { value: o.ns ?? NS[kind] }, uAiRot: { value: o.rot ? 1 : 0 }, uAiPaint: { value: o.paint || 0 } };
   m.map = null; m.bumpMap = null; m.normalMap = null; m.roughnessMap = null; m.userData.aiU = U;
   const prev = m.onBeforeCompile; const prevKey = m.customProgramCacheKey?.bind(m);
   m.onBeforeCompile = (sh, r) => { prev?.call(m, sh, r); Object.assign(sh.uniforms, U);
@@ -56,12 +56,12 @@ function apply(m, kind, o) {
         #endif
         vAiP = position * aiS; vAiN = normal; mat3 aiMV = mat3(modelViewMatrix) * aiI;
         vAiX = normalize(aiMV * vec3(1.0, 0.0, 0.0)); vAiY = normalize(aiMV * vec3(0.0, 1.0, 0.0)); vAiZ = normalize(aiMV * vec3(0.0, 0.0, 1.0)); }`);
-    sh.fragmentShader = `uniform sampler2D tAiC; uniform sampler2D tAiN; uniform sampler2D tAiR; uniform float uAiS; uniform float uAiNS; uniform float uAiRot;
+    sh.fragmentShader = `uniform sampler2D tAiC; uniform sampler2D tAiN; uniform sampler2D tAiR; uniform float uAiS; uniform float uAiNS; uniform float uAiRot; uniform float uAiPaint;
       varying vec3 vAiP; varying vec3 vAiN; varying vec3 vAiX; varying vec3 vAiY; varying vec3 vAiZ;\n` + sh.fragmentShader
       .replace('#include <map_fragment>', `vec3 aiA = abs(vAiN); vec2 aiUV; vec3 aiT; vec3 aiB;
         if (aiA.y >= aiA.x && aiA.y >= aiA.z) { aiUV = vAiP.xz; aiT = vAiX; aiB = vAiZ; } else if (aiA.x >= aiA.z) { aiUV = vec2(-vAiP.z * sign(vAiN.x), vAiP.y); aiT = -vAiZ * sign(vAiN.x); aiB = vAiY; } else { aiUV = vec2(vAiP.x * sign(vAiN.z), vAiP.y); aiT = vAiX * sign(vAiN.z); aiB = vAiY; }
         if (uAiRot > 0.5) { aiUV = aiUV.yx; vec3 aiTmp = aiT; aiT = aiB; aiB = aiTmp; }
-        aiUV *= uAiS; vec4 aiC = texture2D(tAiC, aiUV); diffuseColor.rgb *= aiC.rgb;`)
+        aiUV *= uAiS; vec4 aiC = texture2D(tAiC, aiUV); aiC.rgb = mix(aiC.rgb, vec3(0.86 + 0.5 * (dot(aiC.rgb, vec3(0.33)) - 0.42)), uAiPaint); diffuseColor.rgb *= aiC.rgb;`)
       .replace('#include <roughnessmap_fragment>', 'float roughnessFactor = roughness * texture2D(tAiR, aiUV).g;')
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
         { vec3 aiTN = texture2D(tAiN, aiUV).xyz * 2.0 - 1.0; aiTN.xy *= uAiNS; vec3 aiNN = normal; vec3 aiTT = normalize(aiT - aiNN * dot(aiNN, aiT)); vec3 aiBB = normalize(aiB - aiNN * dot(aiNN, aiB) - aiTT * dot(aiTT, aiB));

@@ -50,6 +50,13 @@ function landmass({ cx = 0, cz = 0, R, H, skirtD, skirtY, rings = 40, under = 22
 
 // every procedural tree planted on the island (not the treehouse cottonwood), for the CC0 model swap in realworld.js
 export const TREE_SPOTS = [];
+// twisted three-strand manila rope: diagonal strands + fibre noise, tiled along the tube's length (u)
+function ropeTex(rep) { const c = document.createElement('canvas'); c.width = 64; c.height = 64; const g = c.getContext('2d'); g.fillStyle = '#8a6a40'; g.fillRect(0, 0, 64, 64);
+  for (let k = -3; k < 6; k++) { const x0 = k * 21.3; const gr = g.createLinearGradient(x0, 0, x0 + 21, 0); gr.addColorStop(0, '#6e5230'); gr.addColorStop(0.45, '#d9b884'); gr.addColorStop(1, '#6e5230');
+    g.fillStyle = gr; g.beginPath(); g.moveTo(x0, 64); g.lineTo(x0 + 21.3, 64); g.lineTo(x0 + 21.3 + 64, 0); g.lineTo(x0 + 64, 0); g.closePath(); g.fill(); }
+  for (let i = 0; i < 400; i++) { g.fillStyle = `rgba(${Math.random() < 0.5 ? '40,28,14' : '240,220,180'},${0.12 + Math.random() * 0.15})`; const x = Math.random() * 64, y = Math.random() * 64; g.fillRect(x, y, 2, 1); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, 1); t.anisotropy = 4; return t; }
+
 export function buildIsland(scene, { snowy = false, mobile = false, state, detail = 1, season = 'fall', lite = false, tier = 2 } = {}) {
   const treeLite = !!lite; // Medium phones keep fuller trees; Low still lite
   const world = new THREE.Group(); scene.add(world);
@@ -121,7 +128,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const yaw = Math.atan2(BRIDGE.dx, BRIDGE.dz); const px = -BRIDGE.dz, pz = BRIDGE.dx; // lateral unit vector
     const br = new THREE.Group(); world.add(br);
     for (let i = 0; i <= n; i++) { const t = i / n; const [x, z] = bridgePoint(t); add(br, plank, pm, [x, bridgeYt(t) - 0.03, z], [0, yaw, (R0() - 0.5) * 0.06]); }
-    const ropeM = mat(0xc9a66b, { roughness: 1 });
+    const ropeM = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 }); ropeM.map = ropeTex(Math.round(BRIDGE.len / 0.07) || 300); ropeM.bumpMap = ropeM.map; ropeM.bumpScale = 1.5;
     for (const side of [-0.6, 0.6]) {
       for (const hh of [0.0, 0.72]) {
         const pts = []; for (let i = 0; i <= 30; i++) { const t = -0.03 + (i / 30) * 1.06; const tt = clamp(t, 0, 1); const [x, z] = bridgePoint(t); pts.push(new THREE.Vector3(x + px * side, bridgeYt(tt) + hh + (hh > 0 ? 0.25 * Math.sin(Math.PI * tt) : 0), z + pz * side)); }
@@ -334,8 +341,9 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
       for (let i = 0; i < 12; i++) { const a = i / 12 * 6.28; add(head, new THREE.SphereGeometry(0.07, 6, 4), mat(0xf6c23a), [Math.cos(a) * 0.19, Math.sin(a) * 0.19, 0], [0, 0, a], [1.6, 0.6, 0.3], false); }
       const ph = R0() * 6; anim.push((t) => { f.rotation.z = Math.sin(t * 1.2 + ph) * 0.05 * (0.4 + ENV.uWind.value * 2); }); }
     // little picket fence
-    for (let i = 0; i < 9; i++) add(gd, new THREE.BoxGeometry(0.08, 0.5, 0.04), mat(0xf6efe0), [-1.6 + i * 0.4, 0.25, -1.3]);
-    add(gd, new THREE.BoxGeometry(3.4, 0.06, 0.03), mat(0xf6efe0), [0, 0.36, -1.32]);
+    const picket = aiTex(new THREE.MeshStandardMaterial({ color: 0xf6efe0, roughness: 0.85 }), 'fence', { tint: 0xf6efe0, paint: 0.82, mpt: 0.7 }); // whitewashed boards: grain + knots show through the paint
+    for (let i = 0; i < 9; i++) add(gd, new THREE.BoxGeometry(0.08, 0.5, 0.04), picket, [-1.6 + i * 0.4, 0.25, -1.3]);
+    add(gd, new THREE.BoxGeometry(3.4, 0.06, 0.03), aiTex(new THREE.MeshStandardMaterial({ color: 0xf6efe0, roughness: 0.85 }), 'fence', { tint: 0xf6efe0, paint: 0.82, mpt: 0.7, rot: true }), [0, 0.36, -1.32]);
     add(gd, new THREE.CylinderGeometry(0.12, 0.14, 0.22, 12), mat(0x5aa0c8, { metalness: 0.5, roughness: 0.4 }), [-1.7, 0.11, 1.2]); add(gd, new THREE.CylinderGeometry(0.02, 0.03, 0.3, 6), mat(0x5aa0c8, { metalness: 0.5 }), [-1.55, 0.22, 1.2], [0, 0, -0.9]);
   }
 
@@ -441,7 +449,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const sh = new THREE.Group(); sh.position.set(x, y - 0.03, z); sh.rotation.y = SHOP.yaw; world.add(sh);
     const { w: W, d: D, h: H } = SHOP; const wall = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), roughness: 0.9 }), 'cabin', { tint: 0xfbeee2 }); const trim = mat(0x7a4a2a);
     const plaster = mat(0xf7efe2, { roughness: 0.95 });
-    add(sh, new THREE.BoxGeometry(W + 0.3, 0.16, D + 0.3), mat(0x9a6a42), [0, 0.0, 0]); // floor deck
+    add(sh, new THREE.BoxGeometry(W + 0.3, 0.16, D + 0.3), aiTex(new THREE.MeshStandardMaterial({ color: 0x9a6a42, roughness: 0.85 }), 'deck', { mpt: 1.4, tint: 0xd8c0a0 }), [0, 0.0, 0]); // floor deck
     add(sh, new THREE.BoxGeometry(W, H, 0.12), wall, [0, H / 2, -D / 2]); add(sh, new THREE.BoxGeometry(W - 0.2, H - 0.2, 0.02), plaster, [0, H / 2 + 0.05, -D / 2 + 0.07], [0, 0, 0], null, false);
     for (const sx of [-1, 1]) { add(sh, new THREE.BoxGeometry(0.12, H, D), wall, [sx * W / 2, H / 2, 0]); add(sh, new THREE.BoxGeometry(0.02, H - 0.2, D - 0.2), plaster, [sx * (W / 2 - 0.07), H / 2 + 0.05, 0], [0, 0, 0], null, false);
       add(sh, new THREE.BoxGeometry(W / 2 - 1.0, H, 0.12), wall, [sx * (W / 4 + 0.5), H / 2, D / 2]); }
