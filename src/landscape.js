@@ -47,7 +47,9 @@ const PAL = { snow: C(0xf4f7ff), rock: [C(0x8a8490), C(0x6a6474)], forest: [C(0x
 function colorAt(x, z, h, slope, snowy) {
   const n = noise(x * 0.01, z * 0.01); const c = new THREE.Color(); const rel = h - FLOOR_Y;
   const snowLine = (snowy ? 36 : 70) + 22 * n;
-  const field = PAL.fields[Math.abs(Math.floor(x * 0.018 + 0.7 * Math.sin(z * 0.01)) * 7 + Math.floor(z * 0.018)) % 4].clone();
+  // fields: soft domain-warped blend between hay / pasture / dry / sage instead of hard patchwork blocks, plus fine mottling
+  const fw = 0.5 + 0.5 * noise(x * 0.009 + 2.6 * noise(x * 0.003 + 7, z * 0.003), z * 0.009 + 2.6 * noise(x * 0.003, z * 0.003 - 4)); const fi = Math.min(2.999, fw * 3.2);
+  const fa = Math.floor(fi), ft = smoothstep(0.25, 0.75, fi - fa); const field = PAL.fields[fa].clone().lerp(PAL.fields[fa + 1], ft).multiplyScalar(0.92 + 0.16 * (0.5 + 0.5 * noise(x * 0.06, z * 0.06)));
   const forest = PAL.forest[0].clone().lerp(PAL.forest[1], 0.5 + 0.5 * n), rock = PAL.rock[0].clone().lerp(PAL.rock[1], 0.5 + 0.5 * n);
   if (rel < 14) c.copy(field).lerp(forest, smoothstep(5, 14, rel) * 0.7);
   else if (rel < 90) c.copy(forest).lerp(rock, smoothstep(50, 95, rel + 30 * slope));
@@ -84,7 +86,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   const group = new THREE.Group(); scene.add(group);
   // far terrain (sunk under the near patch so they don't fight)
   const far = terrainMesh(3800, mobile ? 170 : 240, 0, 0, snowy, (x, z) => terrainH(x, z) - (Math.max(Math.abs(x), Math.abs(z)) < NEAR - 12 ? 6 : 0));
-  group.add(far);
+  far.material.userData.pbrGround = true; group.add(far);
   const near = terrainMesh(NEAR * 2, mobile ? 170 : 260, 0, 0, snowy, terrainH); near.receiveShadow = true; near.material.userData.pbrGround = true; group.add(near);
 
   // ── river: one big water plane, shaded with flow + foam (bed/island depth comes from a baked height map) ──
@@ -112,7 +114,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
     const sc = 2.2 + r() * 2.4; p.set(x, h - 0.5, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (1 + r() * 0.4), sc);
     m4.compose(p, q, s); pines.setMatrixAt(placed, m4); const pineCols = seasonColors('pine', season, snowy); pc.set(pineCols[Math.floor(r() * pineCols.length)]); if (snowy) pc.lerp(PAL.snow, 0.35); pines.setColorAt(placed, pc); placed++;
   }
-  pines.count = placed; pines.castShadow = !sparse; group.add(pines);
+  pines.count = placed; pines.castShadow = !sparse; pines.userData.realLand = 'pine'; group.add(pines);
 
   // ── bank trees: cottonwoods, aspens, willows (LOD + wind sway on canopies) ──
   const NC = sparse ? (L ? 90 : 140) : 380, NA = sparse ? (L ? 50 : 80) : 220, NWl = sparse ? (L ? 60 : 90) : 260;
@@ -138,7 +140,9 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   placeBank(cw, NC, golds, 2, 70, 2.1, 700, 95);
   placeBank(asp, NA, aspenC, 4, 90, 1.7, 650, 90);
   placeBank(wl, NWl, willowC, -0.5, 14, 1.35, 500, 62);
-  cw.castShadow = asp.castShadow = !sparse; group.add(cw, asp, wl);
+  // cottonwood gallery: a near-continuous strip of big cottonwoods right on the water's edge, both banks, up and down the valley
+  const NG = sparse ? (L ? 60 : 200) : 460; const gal = new THREE.InstancedMesh(cwGeo, canopyM, NG); placeBank(gal, NG, golds, 0.5, 12, 1.95, 950, 58);
+  cw.castShadow = asp.castShadow = gal.castShadow = !sparse; cw.userData.realLand = gal.userData.realLand = 'cotton'; asp.userData.realLand = 'aspen'; group.add(cw, asp, wl, gal);
 
   // ── tiny Darby, Montana on the east bench, lights on at night ──
   const houseGeo = new THREE.BoxGeometry(1, 1, 1); houseGeo.translate(0, 0.5, 0);

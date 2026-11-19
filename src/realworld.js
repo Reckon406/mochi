@@ -11,6 +11,7 @@ import { PROP_SPOTS, topH } from './layout.js';
 import { makePonderosa, makeFir, makeCottonwood, makeAspen, makeWillow } from './trees.js';
 import { ENV } from './water.js';
 import { patchFoliage } from './pbr.js';
+import { bakeImpostor, impostorMesh } from './impostor.js';
 
 const hash = (x, z, k = 0) => { const s = Math.sin(x * 12.9898 + z * 78.233 + k * 37.719) * 43758.5453; return s - Math.floor(s); };
 const pickOf = (arr, x, z, k) => arr[Math.floor(hash(x, z, k) * arr.length) % arr.length];
@@ -77,6 +78,27 @@ function fit(src, mdl, { bottom = false, iso = 0.6, k = 1 } = {}) {
   return new THREE.Matrix4().makeTranslation(sc0.x, sc0.y, sc0.z).multiply(new THREE.Matrix4().makeScale(...S)).multiply(P).multiply(new THREE.Matrix4().makeTranslation(-mc.x, -mc.y, -mc.z));
 }
 
+function landTrees(scene, group, { pines, commons, aspen, bare, fallAmt, snowy, tier, renderer, matFor, push, info }) {
+  const srcs = []; scene.traverse((o) => { if (o.userData.realLand && o.isInstancedMesh && o.count) srcs.push(o); }); if (!srcs.length) return;
+  const strip = (P, fall) => (bare && fall >= 0 ? P.parts.filter((pt) => !(pt.mat.alphaTest > 0 || /lea/i.test(pt.mat.name))) : P.parts);
+  const cache = new Map(); const imp = (P, fall) => { const k = P.H + '_' + fall; if (!cache.has(k)) cache.set(k, bakeImpostor(renderer, strip(P, fall), { res: tier >= 2 ? 384 : 256, env: scene.environment, matFor: matFor(fall) })); return cache.get(k); };
+  const KIND = { pine: { pool: [pines[0], pines[1], pines[2], pines[3], pines[4]], fall: -1, k: 1.0 }, cotton: { pool: [commons[0], commons[1], commons[4]], fall: fallAmt, k: 1.05 }, aspen: { pool: [commons[2], commons[3]], fall: fallAmt, k: 1.0 } };
+  const nearN = tier >= 3 ? 600 : tier >= 2 ? 260 : 0; const lists = new Map(); const near = [];
+  const m4 = new THREE.Matrix4(), p = new THREE.Vector3(), q = new THREE.Quaternion(), s = new THREE.Vector3(), c = new THREE.Color(), up = new THREE.Vector3(0, 1, 0);
+  const snowC = new THREE.Color(0xeef2f8);
+  for (const o of srcs) { const K = KIND[o.userData.realLand]; if (!K) continue; if (!o.geometry.boundingBox) o.geometry.computeBoundingBox(); const gh = o.geometry.boundingBox.max.y - o.geometry.boundingBox.min.y;
+    for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, m4); m4.decompose(p, q, s); const H = gh * s.y * K.k; const P = pickOf(K.pool, p.x, p.z, 7); const fall = K.fall < 0 ? 0 : K.fall;
+      const v = 0.82 + hash(p.x, p.z, 9) * 0.26; c.setRGB(v, v * (0.97 + hash(p.x, p.z, 4) * 0.06), v); if (snowy) c.lerp(snowC, 0.3);
+      const tm = new THREE.Matrix4().compose(p.clone().setY(p.y + 0.15), new THREE.Quaternion().setFromAxisAngle(up, hash(p.x, p.z, 2) * 6.283), new THREE.Vector3(H, H, H));
+      near.push({ d: Math.hypot(p.x, p.z), P, fall, tm, c: c.clone() }); }
+    o.visible = false; o.userData.realHidden = true; }
+  near.sort((a, b) => a.d - b.d);
+  near.forEach((t, i) => { if (i < nearN) { push(t.P, t.fall, t.tm); info.trees++; return; } const key = cacheKey(t); if (!lists.has(key)) lists.set(key, { t, list: [] }); lists.get(key).list.push({ m4: t.tm, c: t.c }); });
+  function cacheKey(t) { return t.P.H + '_' + t.fall; }
+  for (const { t, list } of lists.values()) group.add(impostorMesh(imp(t.P, t.fall), list));
+  info.impostors = near.length - Math.min(nearN, near.length); info.impostorTex = cache.size;
+}
+
 export function upgradeWorld(scene, { tier = 1, season = 'summer', snowy = false, renderer, onDone } = {}) {
   if (tier < 1) return null; const set = tier >= 2 ? 'hi' : 'lo'; const base = (import.meta.env?.BASE_URL || '/') + 'models/' + set + '/';
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder); const t0 = performance.now();
@@ -109,6 +131,8 @@ export function upgradeWorld(scene, { tier = 1, season = 'summer', snowy = false
         for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, im4); w4.multiplyMatrices(o.matrixWorld, im4); list.push(w4.clone().multiply(fit(o.geometry.boundingBox, T.bush.box, { bottom: true, iso: 0.7, k: 1.15 }))); }
         o.visible = false; });
       instanced(T.bush.parts, list, group, { shadow: tier >= 2, matFor: matFor(fallAmt * 0.15) }); info.bushes = list.length; }
+    // valley trees (foothill pines, bank cottonwoods / aspens): baked impostors far, real instanced models for the nearest at High+
+    if (renderer) try { landTrees(scene, group, { pines, commons, aspen, bare, fallAmt, snowy, tier, renderer, matFor, push, info }); } catch (e) { console.warn('[real] impostors', e.message); }
     for (const { proto, fall, list } of buckets.values()) { const parts = bare && fall > 0 ? proto.parts.filter((pt) => !(pt.mat.alphaTest > 0 || /lea/i.test(pt.mat.name))) : proto.parts; instanced(parts, list, group, { matFor: matFor(fall) }); }
   });
 

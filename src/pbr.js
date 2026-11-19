@@ -11,6 +11,7 @@ for (const n of ['grass', 'dirt', 'sand', 'rock']) { U[`u_${n}C`] = { value: nul
 const blank = new THREE.DataTexture(new Uint8Array([128, 128, 255, 255]), 1, 1); blank.needsUpdate = true;
 const blankC = new THREE.DataTexture(new Uint8Array([128, 128, 128, 255]), 1, 1); blankC.needsUpdate = true;
 for (const n of ['grass', 'dirt', 'sand', 'rock']) { U[`u_${n}C`].value = blankC; U[`u_${n}N`].value = blank; }
+U.u_bankC = { value: blankC }; U.u_bankAvg = { value: new THREE.Vector3(0.5, 0.5, 0.5) }; U.uBankReady = { value: 0 };
 const TEX = {};
 function avgColor(img) { try { const c = document.createElement('canvas'); c.width = c.height = 8; const g = c.getContext('2d'); g.drawImage(img, 0, 0, 8, 8); const d = g.getImageData(0, 0, 8, 8).data; let r = 0, gg = 0, b = 0; for (let i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; } const s = (v) => Math.pow(v / 64 / 255, 2.2); return new THREE.Vector3(s(r), s(gg), s(b)); } catch (e) { return new THREE.Vector3(0.3, 0.3, 0.3); } }
 function load(name, kind, size, aniso) {
@@ -20,6 +21,7 @@ function load(name, kind, size, aniso) {
 const VERT_DECL = 'varying vec3 vPWP; varying vec3 vPWN;\n';
 const VERT_BODY = '\n  vPWP = (modelMatrix * vec4(transformed, 1.0)).xyz; vPWN = normalize(mat3(modelMatrix) * objectNormal);';
 const FRAG_DECL = `varying vec3 vPWP; varying vec3 vPWN; uniform float uPbrReady;
+uniform sampler2D u_bankC; uniform vec3 u_bankAvg; uniform float uBankReady;
 uniform sampler2D u_grassC, u_grassN, u_dirtC, u_dirtN, u_sandC, u_sandN, u_rockC, u_rockN; uniform vec3 u_grassAvg, u_dirtAvg, u_sandAvg, u_rockAvg;
 vec3 pbrDetail(vec3 d, vec3 avg) { return clamp(d / max(avg, vec3(0.02)), vec3(0.45), vec3(1.7)); }
 vec3 topN(sampler2D t, vec2 uv, vec3 wn) { vec3 n = texture2D(t, uv).xyz * 2.0 - 1.0; n = vec3(n.xy + wn.xz, abs(n.z) * wn.y); return n.xzy; }
@@ -51,7 +53,13 @@ const FRAG_COLOR = (mode, hq) => `
     det *= mix(1.0, clamp(macro, 0.75, 1.25), 0.5);
     diffuseColor.rgb = vc * mix(vec3(1.0), det, ${mode === 'rock' ? '0.75' : '0.62'} * pFade);
     pbrNW = normalize(mix(pwn, normalize(nW + 1e-4), ${hq ? '0.85' : '0.6'} * pFade));
-  }`;
+  }
+  ${mode === 'ground' ? `// far banks / fields (AI riverbank_ground): dry grass + cobbles + a big-scale colour wander, past the close detail range
+  { float bF = uBankReady * smoothstep(14.0, 40.0, pDist) * (1.0 - smoothstep(320.0, 700.0, pDist)) * (1.0 - smoothstep(0.55, 0.85, 1.0 - pwn.y));
+    if (bF > 0.001) { vec2 bu = vPWP.xz * 0.16; vec3 bc = texture2D(u_bankC, bu).rgb; vec3 bc2 = texture2D(u_bankC, mat2(0.6, -0.8, 0.8, 0.6) * vPWP.xz * 0.045).rgb;
+      vec3 bd = mix(pbrDetail(bc, u_bankAvg), pbrDetail(bc2, u_bankAvg), 0.45); float wander = dot(texture2D(u_bankC, vPWP.xz * 0.0045 + 0.37).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
+      vec3 dry = vec3(1.08, 0.98, 0.82), lush = vec3(0.86, 1.02, 0.86); vec3 tint = mix(lush, dry, smoothstep(0.85, 1.15, wander));
+      diffuseColor.rgb *= mix(vec3(1.0), bd * tint, 0.72 * bF); } }` : ''}`;
 const FRAG_NORMAL = `
   if (pFade > 0.001) normal = normalize(mix(normal, normalize((viewMatrix * vec4(pbrNW, 0.0)).xyz), pFade));`;
 
@@ -77,6 +85,7 @@ export function applyPBR(scene, { tier = 2, renderer, onLoaded } = {}) {
   for (const m of mats.rock) { patchDetail(m, 'rock', hq); m.bumpMap = null; m.needsUpdate = true; }
   const jobs = [];
   for (const n of ['grass', 'dirt', 'sand', 'rock']) jobs.push(Promise.all([load(n, 'c', size, aniso), load(n, 'n', size, aniso)]).then(([c, nn]) => { if (c) { TEX[n + 'C'] = c; U[`u_${n}C`].value = c; U[`u_${n}Avg`].value = avgColor(c.image); } if (nn) { TEX[n + 'N'] = nn; U[`u_${n}N`].value = nn; } }));
+  jobs.push(load('ai/riverbank_ground', 'c', size, aniso).then((c) => { if (!c) return; U.u_bankC.value = c; U.u_bankAvg.value = avgColor(c.image); U.uBankReady.value = 1; }));
   // bark + wood: tangent-space normal maps on their existing UVs (painted colour maps stay)
   for (const k of ['bark', 'wood']) if (mats[k].size) jobs.push(load(k, 'n', size >= 1024 ? 1024 : 512, aniso).then((nt) => { if (!nt) return; TEX[k + 'N'] = nt;
     for (const m of mats[k]) { const t = m.map || m.bumpMap; const rep = k === 'bark' ? [1, 2] : [1, 1]; const n2 = nt.clone(); n2.repeat.set(rep[0] * (t?.repeat.x || 1), rep[1] * (t?.repeat.y || 1)); n2.needsUpdate = true; m.normalMap = n2; m.normalScale = new THREE.Vector2(k === 'bark' ? 1.1 : 0.7, k === 'bark' ? 1.1 : 0.7); if (m.bumpMap?.userData?.kind === k) m.bumpMap = null; m.needsUpdate = true; } }));
