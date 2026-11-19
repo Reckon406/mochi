@@ -461,10 +461,10 @@ async function init() {
       sun.shadow.normalBias = tex * 1.6; sun.shadow.bias = -0.00025; sun.shadow.radius = THREE.MathUtils.clamp((hiS ? 0.05 : 0.07) / tex, 2, hiS ? 9 : 5); const cx = Math.round(c.x / tex) * tex, cz = Math.round(c.z / tex) * tex;
       sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
     land.winMat.color.setRGB(0.25 + 3.5 * night, 0.18 + 2.4 * night, 0.1 + 1.0 * night);
-    bloom.strength = 0.35 + night * 0.45;
+    bloom.strength = 0.26 + night * 0.54; bloom.threshold = 1.0 + (1 - night) * 0.45; // day: only the sun disc / glints bloom, not the whole bright sky
     if (rays) { const sd = sky.state.sunDir; const sp = _sunV.copy(sd).multiplyScalar(3000).add(camera.position).project(camera); const fwd = camera.getWorldDirection(_sunF).dot(sd);
       const on = fwd > 0.1 && sp.x > -1.4 && sp.x < 1.4 && sp.y > -1.4 && sp.y < 1.4 ? (1 - night) * THREE.MathUtils.smoothstep(sd.y, -0.02, 0.08) * (1 - (weather.cloudiness || 0) * 0.6) * (weather.fog ? 0.3 : 1) : 0;
-      rays.enabled = on > 0.01; rays.uniforms.uK.value = on * (0.38 + sky.state.golden * 0.5); rays.uniforms.uSun.value.set(sp.x * 0.5 + 0.5, sp.y * 0.5 + 0.5); rays.uniforms.uTint.value.copy(sun.color); }
+      rays.enabled = on > 0.01; rays.uniforms.uK.value = on * (0.3 + sky.state.golden * 0.45) * THREE.MathUtils.smoothstep(1.4 - Math.max(Math.abs(sp.x), Math.abs(sp.y)), 0, 0.7); /* fade out as the sun leaves the frame */ rays.uniforms.uSun.value.set(sp.x * 0.5 + 0.5, sp.y * 0.5 + 0.5); rays.uniforms.uTint.value.copy(sun.color); }
     PBR_UNIFORMS.uSunW.value.copy(sky.state.lightDir); PBR_UNIFORMS.uSunC.value.copy(sun.color).multiplyScalar(Math.min(1.5, sun.intensity) * (1 - night));
 
     // brain
