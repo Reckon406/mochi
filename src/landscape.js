@@ -159,6 +159,16 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
       const sc = 0.35 + Math.pow(r(), 2.2) * 1.4; p.set(x, h - 0.12 * sc, z); q.setFromEuler(new THREE.Euler((r() - 0.5) * 0.4, r() * 6.28, (r() - 0.5) * 0.4)); s.set(sc * (1 + r() * 0.5), sc * (0.6 + r() * 0.4), sc);
       m4.compose(p, q, s); rocks.setMatrixAt(k++, m4); }
     rocks.count = k; rocks.castShadow = !sparse; rocks.receiveShadow = true; rocks.userData.real = 'rock'; group.add(rocks); }
+  /* driftwood: bleached logs stranded on the cobble bands (both banks, densest near home) + a few more on the island shore; the real pass swaps in the scanned logs */
+  if (!L) { const ND = sparse ? 45 : 110; const dg = new THREE.CylinderGeometry(0.14, 0.18, 2.4, 6); dg.rotateZ(Math.PI / 2);
+    const drift = new THREE.InstancedMesh(dg, new THREE.MeshStandardMaterial({ color: 0x8a7c68, roughness: 0.95 }), ND); let k = 0, tr = 0;
+    while (k < ND && tr < ND * 80) { tr++; let x, z, h;
+      if (r() < 0.25) { const th = r() * 6.283, rr = 22 + r() * 24; x = Math.cos(th) * rr; z = Math.sin(th) * rr; h = islandSurfH(x, z); }
+      else { z = (r() < 0.5 ? -1 : 1) * Math.pow(r(), 2.2) * 260; const side = r() < 0.5 ? -1 : 1; x = riverX(z) + side * (riverW(z) + 0.2 + r() * 3.5); h = terrainH(x, z); if (Math.hypot(x, z) < 34) continue; }
+      if (!isFinite(h) || h < WATER_Y - 0.1 || h > WATER_Y + 0.7) continue;
+      const sc = 0.55 + r() * 0.8; p.set(x, h + 0.08, z); q.setFromEuler(new THREE.Euler((r() - 0.5) * 0.12, r() * 6.28, (r() - 0.5) * 0.12)); s.set(sc, 0.8 + r() * 0.4, 0.8 + r() * 0.4);
+      m4.compose(p, q, s); drift.setMatrixAt(k++, m4); }
+    drift.count = k; drift.castShadow = !sparse; drift.receiveShadow = true; drift.userData.real = 'driftwood'; group.add(drift); }
 
   // ── tiny Darby, Montana on the east bench, lights on at night ──
   const houseGeo = new THREE.BoxGeometry(1, 1, 1); houseGeo.translate(0, 0.5, 0);
