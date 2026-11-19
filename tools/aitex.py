@@ -107,6 +107,8 @@ def ring():
     def seg(name, b0, b1, peak_m, flip=False, thr=0.018):
         a = np.asarray(Image.open(f'{SRC}/{name}.jpg').convert('RGB')).astype(np.float32) / 255
         al, tops = sky_alpha(a, thr); top = int(np.percentile(tops, 2)); a = grade(a)
+        if name == 'mtn_east':  # Sapphires: further away -> cooler, bluer, less brown
+            l = (a @ np.array([0.299, 0.587, 0.114], np.float32))[..., None]; a = l + (a - l) * 0.7; a = np.clip(a * 0.8 + np.array([0.60, 0.66, 0.78], np.float32) * 0.2, 0, 1)
         rgba = np.concatenate([a, al[..., None]], -1)[max(0, top - 6):]
         if flip: rgba = rgba[:, ::-1]
         hpx = int(peak_m / 0.946); wpx = int((b1 - b0) / 360 * WT)
@@ -123,8 +125,8 @@ def ring():
     seg('mtn_west_b', 222, 276, 380)
     seg('mtn_west_a', 264, 322, 360)
     seg('mountain_backdrop', 308, 364, 280, flip=True)
-    seg('mtn_east', 350, 448, 170, thr=0.012)          # 350°..88° (wraps)
-    seg('mtn_east', 76, 192, 150, flip=True, thr=0.012)
+    seg('mtn_east', 350, 448, 240, thr=0.012)          # 350°..88° (wraps)
+    seg('mtn_east', 76, 192, 215, flip=True, thr=0.012)
     out = np.empty_like(acc); out[..., :3] = acc[..., :3] / np.maximum(acc[..., 3:], 1e-4); out[..., 3:] = acc[..., 3:] / np.maximum(wsum, 1.0)  # premultiplied blend; partial cover fades
     for k in range(6):
         sl = out[:, k * WT // 6:(k + 1) * WT // 6]; im = Image.fromarray(np.clip(sl * 255 + 0.5, 0, 255).astype(np.uint8), 'RGBA')
