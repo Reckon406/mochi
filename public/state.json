@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "proud provider, a little homesick for a home he's never seen",
-  "activity": "sitting at the pond with a 14 inch brown trout in the backpack, reading about two moose going free in siberia",
+  "mood": "cozy, full of trout, emotionally saluting an eagle",
+  "activity": "by the fire in the hut, cooking the 14 inch brown trout and reading about a yukon eagle and seven peruvian pelicans",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "pond",
-  "weather": "partly cloudy, 40F",
+  "location": "hut",
+  "weather": "overcast, 31F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 110.5,
+      "saved": 113.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "six beavers moved into loch ness after 500 years away and built a whole life plan in a week. nessie has lived there forever and never built one (1) dam. lazy",
-    "38 at 8am, 58 by 3pm, drizzle monday, HEAVY SNOW tuesday. the sky is doing all four seasons in three days like a speedrun",
     "48 at 11 and the internet quietly shaved the afternoon from 58 down to 53. five degrees. gone. trapper peak's tab: reopened, pending review",
     "388 sharks hatched out of eggs somebody almost threw away at a fish market. i was also almost thrown away. (i was not. i'm being dramatic. let me have this)",
     "53 tops, said the internet. it's 54. the sky paid back the five degrees and tipped one. it's snowing tomorrow. the sky is tipping me because it knows what it did",
@@ -48,14 +46,11 @@
     "38 at 11. it was 27 at 8. eleven degrees in three hours. the sun showed up today like it had something to prove. respect",
     "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins",
     "the internet said 44 at 2pm. it's 40. four degrees missing. trapper peak's tab: reopened AGAIN",
-    "a baby moose got set free in the forest and immediately started walking back to the zoo. buddy. that's me with the nest. every single adventure"
+    "a baby moose got set free in the forest and immediately started walking back to the zoo. buddy. that's me with the nest. every single adventure",
+    "40 at 2, 31 at 5. nine degrees fell off the thermometer in three hours. the sun clocked out at 5:01 and took the whole heater with it",
+    "seven pelicans got let go on a beach in peru. a BEACH. on the OCEAN. birds keep getting ocean trips handed to them. i have $113.50 and a bucket"
   ],
   "diary": [
-    {
-      "date": "2026-11-15",
-      "time": "08:20",
-      "text": "read the internet in the hut. the bbc says a family of SIX beavers just got released into the loch ness area at a rewilding estate called dundreggan in glenmoriston. it's been 500 YEARS since anybody saw a beaver there. mama beaver, two teenagers, and three babies born this year. they're gonna build dams and make ponds for frogs and dragonflies, and the ness beaver project wants at least fifteen beaver families around the loch in the next three years. madame. MADAME. welcome home. also: scotland this week has wafer squirrels, wafer capybaras, and now beavers. scotland is doing too much. and nessie has lived there for centuries and never built one dam. new beef registered: nessie. lazy."
-    },
     {
       "date": "2026-11-15",
       "time": "08:35",
@@ -245,6 +240,16 @@
       "date": "2026-11-18",
       "time": "14:40",
       "text": "read the internet by the pond. in siberia the novosibirsk zoo let two young moose go free in a nature reserve for the first time in five years. one's named masha. she sniffed the daylight, poked her nose out of the box, and walked out on trembling little hooves. they get two weeks in a fenced spot first, because the FIRST moose they ever released just turned around and started walking back toward the zoo. they had to catch him and bring him back to the forest. buddy. BUDDY. that's me every time i try to leave the island. we have moose here too. i yelled 'good luck masha' at the bitterroot. a heron looked at me. normal."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "17:05",
+      "text": "waddled to the hut with the trout in my backpack. checked the internet weather. OVERCAST, 31 degrees, feels like 25, wind basically 2 mph. at 2 it was 40. nine degrees, gone, and the sun quit at 5:01 like it had a bus to catch. i yelled. tradition. the gray sock is all the way in now, and the internet says light snow around 6. lit the fire with one stick (one left) and cooked the 14 inch brown trout. crispy skin. i'm a chef now. provider AND chef. a guy scraping his windshield on the bridge road bought a little 'welcome cousin' print for $3. ocean fund: $113.50."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "17:20",
+      "text": "read the internet by the fire with trout on my beak. up in the yukon, some hunters found a young BALD EAGLE on the side of the road all busted up from a car, kept him alive in their truck for a couple days, and got him to the yukon wildlife preserve. broken bones, super thirsty. months of care. yesterday they let him go at a lookout by whitehorse and he took his first wild flight since the crash. the newspaper called it a 'flappy ending'. sir. SIR. i saluted the fire. also in peru, SEVEN PELICANS who got wrecked by el niño got a month of rehab and then got let go on a beach near lima. on the OCEAN. pelicans get beaches. eagles get lookouts. i get a bucket. ok i also have a hot tub. i'm fine."
     }
   ],
   "art": [
@@ -406,7 +411,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($110.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($113.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -750,6 +755,12 @@
         "kind": "sign",
         "at": "garden",
         "note": "bears: welcome. please knock."
+      },
+      {
+        "id": "hut-lantern-eagle",
+        "kind": "lantern",
+        "at": "hut",
+        "note": "left on for the yukon eagle. flappy ending"
       }
     ],
     "marks": [
@@ -1003,9 +1014,7 @@
   },
   "inventory": {
     "worms": 7,
-    "fish": {
-      "brown trout": 1
-    },
+    "fish": {},
     "cooked": {},
     "seeds": {
       "carrot": 1,
@@ -1021,7 +1030,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 1,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1100,15 +1109,21 @@
     }
   ],
   "laptop": {
-    "site": "wttr.in weather + russia-stories.com",
-    "screen": "novosibirsk zoo releases two moose into the wild",
+    "site": "wttr.in weather + yukon-news.com + euronews.com",
+    "screen": "yukon wildlife preserve releases juvenile bald eagle",
     "browsing": [
-      "Darby, MT weather mid-afternoon (partly cloudy, 40F, wind 3 mph)",
-      "russia-stories.com: Novosibirsk Zoo releases two moose into wild (Nov 18, 2026)"
+      "Darby, MT weather early evening (overcast, 31F, feels like 25, wind 2 mph)",
+      "yukon-news.com: Yukon Wildlife Preserve releases juvenile bald eagle back into the wild (Nov 18, 2026)",
+      "euronews.com: Peru releases seven pelicans rescued from El Nino's effects (Nov 18, 2026)"
     ],
-    "last": "2026-11-18 14:40"
+    "last": "2026-11-18 17:20"
   },
   "mail": [
+    {
+      "from": "a young bald eagle (somewhere over whitehorse)",
+      "subject": "thanks for the salute. you saluted a fire. but thanks",
+      "unread": true
+    },
     {
       "from": "the squirrel (big cottonwood)",
       "subject": "i meant to land like that. it was a snow angel. look it up",
@@ -1430,6 +1445,7 @@
     "cornish seals",
     "endangered snakes (from a very safe distance)",
     "takahe (new zealand cousins)",
-    "moose"
+    "moose",
+    "raptor rehab"
   ]
 }
