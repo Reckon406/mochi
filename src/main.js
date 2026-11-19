@@ -13,7 +13,8 @@ import { buildIsland } from './island.js';
 import { createMochi } from './mochi.js';
 import { createSquirrel, createElk } from './creatures.js';
 import { parseWeather, createWeather } from './weather.js';
-import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF } from './layout.js';
+import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF, PROP_SPOTS } from './layout.js';
+import { createBlobShadows } from './blobs.js';
 import { buildUI } from './ui.js';
 import { createWalk } from './controls.js';
 import { seasonOf } from './season.js';
@@ -115,7 +116,7 @@ async function init() {
   // ── world ──
   const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0, hq: (Q.tier ?? 2) >= 2 });
   const sun = sky.sun;
-  const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min(1024, Q.shadow) : Q.shadow;
+  const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min((Q.tier ?? 0) >= 1 ? 2048 : 1024, Q.shadow) : Q.shadow; // phones: Medium+ get a 2048 camera-fitted map
   sun.shadow.mapSize.set(S, S); sun.shadow.radius = Q.tier >= 2 ? 5 : 3; sun.shadow.blurSamples = Q.tier >= 2 ? 16 : 8; sun.castShadow = S0.shadows;
   Object.assign(sun.shadow.camera, { left: -46, right: 46, top: 46, bottom: -46, near: 1, far: 160 });
   sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.04;
@@ -144,12 +145,15 @@ async function init() {
   const squirrel = createSquirrel(squirrelZone.pos); scene.add(squirrel.root);
   const elk = createElk(); scene.add(elk.root);
   if (params.get('elk') === '1') elk.start(0.35);
+  // soft contact/blob shadows (Medium+): grounds Mochi, critters and props where the shadow map is coarse or the sun is behind
+  let blobs = null; if ((Q.tier ?? 0) >= 1 && params.get('blobs') !== '0') try { blobs = createBlobShadows(scene, { strength: (Q.tier ?? 0) >= 2 ? 0.75 : 1 });
+    blobs.follow(mochi.root, 0.55); blobs.follow(squirrel.root, 0.22, 0.7); blobs.follow(elk.root, 0.95, 0.75); blobs.statics(PROP_SPOTS.map((sp) => ({ x: sp.x, z: sp.z, r: 0.5 }))); } catch (e) { console.warn('blob shadows', e); }
 
   // ── post ──
   const rt = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { type: lite ? THREE.UnsignedByteType : THREE.HalfFloatType, samples: lite ? 0 : (isMobile ? 0 : Q.msaa) });
   const composer = new EffectComposer(renderer, rt);
   composer.addPass(new RenderPass(scene, camera));
-  let ao = null; if ((Q.ao || (Q.tier ?? 0) >= 2) && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = Q.ao ? 0.85 : 0.55; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: Q.ao ? 12 : 8 }); composer.addPass(ao); }
+  let ao = null; if ((Q.ao || (Q.tier ?? 0) >= 2) && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = Q.ao ? 0.9 : 0.7; ao.updateGtaoMaterial({ radius: 0.85, distanceExponent: 1.6, thickness: 1.4, scale: 1.0, samples: Q.ao ? 16 : 10 }); composer.addPass(ao); }
   // sanitize HDR before bloom: one NaN/Inf pixel (e.g. a degenerate normal) otherwise gets blurred across the whole screen
   const sanitize = new ShaderPass({ uniforms: { tDiffuse: { value: null } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
     fragmentShader: 'uniform sampler2D tDiffuse; varying vec2 vUv; void main(){ vec4 c = texture2D(tDiffuse, vUv); bvec4 bad = bvec4(!(c.r == c.r) || c.r > 6.5e4, !(c.g == c.g) || c.g > 6.5e4, !(c.b == c.b) || c.b > 6.5e4, !(c.a == c.a)); if (any(bad)) c = vec4(0.0, 0.0, 0.0, 1.0); gl_FragColor = vec4(min(c.rgb, vec3(32.0)), c.a); }' });
@@ -450,9 +454,11 @@ async function init() {
     ENV.uRim.value = night; updateSigns(night); details.update(sky);
     if (features.lanternLight) features.lanternLight.intensity = night * 2.4; { const w = 0.4 + ENV.uWind.value * 2; if (features.sock) features.sock.rotation.y = Math.sin(t * 1.7) * 0.45 * w; if (features.flag) features.flag.rotation.y = Math.sin(t * 3.1) * 0.35 * w; if (features.pulley) features.pulley.rotation.z = Math.sin(t * 1.3) * 0.06 * w; }
     // tight shadow box that follows what you're looking at (crisper, softer-edged shadows)
-    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const hiS = (Q.tier ?? 0) >= 2; const span = walk.on || follow ? (hiS ? 16 : 22) : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * (hiS ? 0.45 : 0.55), hiS ? 14 : 18, 52);
+    { const c = walk.on ? camera.position : follow ? mochi.root.position : controls.target; const hiS = (Q.tier ?? 0) >= 2; const span = walk.on || follow ? (hiS ? 13 : 15) : THREE.MathUtils.clamp(camera.position.distanceTo(controls.target) * (hiS ? 0.4 : 0.45), hiS ? 13 : 14, 46);
       const sc = sun.shadow.camera; if (sc.right !== span) { sc.left = sc.bottom = -span; sc.right = sc.top = span; sc.updateProjectionMatrix(); }
-      const tex = (2 * span) / sun.shadow.mapSize.x; const cx = Math.round(c.x / tex) * tex, cz = Math.round(c.z / tex) * tex;
+      const tex = (2 * span) / sun.shadow.mapSize.x;
+      // bias + softness scale with the texel size: no acne when the box is wide, no peter-panning when it's tight; ~constant world-space penumbra
+      sun.shadow.normalBias = tex * 1.6; sun.shadow.bias = -0.00025; sun.shadow.radius = THREE.MathUtils.clamp((hiS ? 0.05 : 0.07) / tex, 2, hiS ? 9 : 5); const cx = Math.round(c.x / tex) * tex, cz = Math.round(c.z / tex) * tex;
       sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
     land.winMat.color.setRGB(0.25 + 3.5 * night, 0.18 + 2.4 * night, 0.1 + 1.0 * night);
     bloom.strength = 0.35 + night * 0.45;
@@ -495,7 +501,7 @@ async function init() {
     mochi.root.position.y = groundY(mochi.root.position.x, mochi.root.position.z) + life.lift;
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving); extras?.update(dt); nightSky?.update(t, dt, sky.state.night || 0, camera);
-    squirrel.update(dt); elk.update(dt, t);
+    squirrel.update(dt); elk.update(dt, t); blobs?.update();
     island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
