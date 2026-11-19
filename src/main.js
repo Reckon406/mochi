@@ -464,7 +464,7 @@ async function init() {
     bloom.strength = 0.35 + night * 0.45;
     if (rays) { const sd = sky.state.sunDir; const sp = _sunV.copy(sd).multiplyScalar(3000).add(camera.position).project(camera); const fwd = camera.getWorldDirection(_sunF).dot(sd);
       const on = fwd > 0.1 && sp.x > -1.4 && sp.x < 1.4 && sp.y > -1.4 && sp.y < 1.4 ? (1 - night) * THREE.MathUtils.smoothstep(sd.y, -0.02, 0.08) * (1 - (weather.cloudiness || 0) * 0.6) * (weather.fog ? 0.3 : 1) : 0;
-      rays.enabled = on > 0.01; rays.uniforms.uK.value = on * (0.55 + sky.state.golden * 0.6); rays.uniforms.uSun.value.set(sp.x * 0.5 + 0.5, sp.y * 0.5 + 0.5); rays.uniforms.uTint.value.copy(sun.color); }
+      rays.enabled = on > 0.01; rays.uniforms.uK.value = on * (0.38 + sky.state.golden * 0.5); rays.uniforms.uSun.value.set(sp.x * 0.5 + 0.5, sp.y * 0.5 + 0.5); rays.uniforms.uTint.value.copy(sun.color); }
     PBR_UNIFORMS.uSunW.value.copy(sky.state.lightDir); PBR_UNIFORMS.uSunC.value.copy(sun.color).multiplyScalar(Math.min(1.5, sun.intensity) * (1 - night));
 
     // brain

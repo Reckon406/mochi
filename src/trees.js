@@ -133,7 +133,7 @@ function leafPalette(kind, season) {
     return [0x78b850, 0x68a840, 0x88c860, 0x5a9838];
   }
   if (kind === 'willow') {
-    if (season === 'fall') return [0xc0bc58, 0xb0b450, 0xd0c060];
+    if (season === 'fall') return [0xd0b030, 0xc8a828, 0xdcb83a, 0xb8a830];
     if (season === 'winter') return [0x9a9070, 0x8a8468];
     return [0x92c058, 0x82b04c, 0xa4c868];
   }

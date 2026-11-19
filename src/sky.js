@@ -55,8 +55,8 @@ void main(){
   vec2 sxz = normalize(uSunDir.xz + 1e-4); float toward = clamp(dot(normalize(d.xz + 1e-4), sxz) * 0.5 + 0.5, 0.0, 1.0); // clamp: pow() of a hair-below-zero value = NaN (black dotted seam opposite the sun, bloom smears it into a blue screen)
   // sunset: warm band on the sun side, pink/violet afterglow above it, cool on the far side
   float band = exp(-max(y, 0.0) * 7.0);
-  col += lowSun * pow(tw0, 2.5) * exp(-max(y, 0.0) * 4.5) * vec3(1.0, 0.68, 0.38) * 0.3 * (1.0 - uCloudy * 0.6); // warm gold/peach glow on the sun side
-  col += lowSun * pow(sd0, 12.0) * vec3(1.0, 0.75, 0.45) * 0.35 * (1.0 - uCloudy * 0.6);
+  col += lowSun * pow(tw0, 2.5) * exp(-max(y, 0.0) * 4.5) * vec3(1.0, 0.68, 0.38) * 0.18 * (1.0 - uCloudy * 0.6); // warm gold/peach glow on the sun side
+  col += lowSun * pow(sd0, 12.0) * vec3(1.0, 0.75, 0.45) * 0.2 * (1.0 - uCloudy * 0.6);
   col += uGolden * band * mix(vec3(-0.04, -0.02, 0.05), vec3(0.32, 0.12, -0.02), pow(toward, 1.5));
   col += uGolden * exp(-abs(y - 0.16) * 9.0) * vec3(0.16, 0.05, 0.14) * toward;
   float glow = pow(sd, 6.0) * 0.45 + pow(sd, 40.0) * 0.5 + pow(sd, 400.0) * 1.2;
