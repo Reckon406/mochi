@@ -10,7 +10,7 @@ export function createWaterFx(scene, { lights = [], mobile = false, music }) {
   const N = mobile ? 140 : 220; const pos = [], uv = [], idx = [];
   for (let i = 0; i <= N; i++) { const th = (i / N) * TAU; const R = islandRadius(th), D = skirtD(th); let rw = R + D * 0.5;
     for (let r = R - 1; r < R + D; r += 0.12) { if (islandSurfH(Math.cos(th) * r, Math.sin(th) * r) < WATER_Y + 0.02) { rw = r; break; } }
-    for (const [o, v] of [[-0.35, 0], [1.3, 1]]) { pos.push(Math.cos(th) * (rw + o), WATER_Y + 0.025, Math.sin(th) * (rw + o)); uv.push(i / N * 60, v); }
+    for (const [o, v] of [[-0.12, 0], [0.5, 1]]) { pos.push(Math.cos(th) * (rw + o), WATER_Y + 0.025, Math.sin(th) * (rw + o)); uv.push(i / N * 60, v); }
     if (i < N) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); } }
   const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); fg.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); fg.setIndex(idx);
   const FU = { uT: { value: 0 }, uN: { value: 0 } };
@@ -21,7 +21,7 @@ export function createWaterFx(scene, { lights = [], mobile = false, music }) {
       void main(){ float v = vUv.y; float wave = 0.5 + 0.5 * sin(vUv.x * 2.1 + uT * 0.9) * sin(vUv.x * 0.7 - uT * 0.5);
         float front = smoothstep(0.0, 0.12, v) * (1.0 - smoothstep(0.25 + 0.35 * wave, 0.75 + 0.2 * wave, v));
         float bubbles = step(0.55, fract(sin(floor(vUv.x * 9.0) * 12.9 + floor(v * 14.0 - uT * 0.6) * 78.2) * 43758.5)) * (1.0 - v);
-        float a = clamp(front * 0.55 + bubbles * 0.12, 0.0, 0.7); gl_FragColor = vec4(mix(vec3(0.95, 0.98, 1.0), vec3(0.55, 0.62, 0.75), uN), a); }` }));
+        float a = clamp(front * 0.16 + bubbles * 0.05, 0.0, 0.25); gl_FragColor = vec4(mix(vec3(0.95, 0.98, 1.0), vec3(0.55, 0.62, 0.75), uN), a); }` }));
   foam.renderOrder = 2; group.add(foam);
   // ── jumping fish + splash rings + droplets ──
   const fish = fishMesh('rainbow'); fish.scale.setScalar(0.5); fish.visible = false; group.add(fish);

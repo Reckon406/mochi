@@ -75,7 +75,7 @@ const FRAG_COLOR = (mode, hq) => `
       float lum = dot((g1 * 0.65 + g2 * 0.35) / max(u_bankAvg, vec3(0.02)), vec3(0.333));
       vec3 cob = mix(vec3(0.42, 0.40, 0.36), vec3(0.55, 0.50, 0.42), g2.r / max(u_bankAvg.r, 0.02) - 0.5) * clamp(lum, 0.45, 1.7);
       diffuseColor.rgb = mix(diffuseColor.rgb, cob, sB * 0.8 * uBankReady); }
-    pbrWet = smoothstep(mix(0.4, 0.8, farB), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
+    pbrWet = smoothstep(min(mix(0.62, 0.8, farB) + pDist * 0.006, 1.3), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
     diffuseColor.rgb *= mix(1.0, 0.5, pbrWet * pbrWet * (3.0 - 2.0 * pbrWet)); }` : ''}`;
 const FRAG_NORMAL = `
   if (pFade > 0.001) normal = normalize(mix(normal, normalize((viewMatrix * vec4(pbrNW, 0.0)).xyz), pFade));`;
@@ -85,7 +85,7 @@ function patchDetail(material, mode, hq) {
   const prev = material.onBeforeCompile; const prevKey = material.customProgramCacheKey?.bind(material);
   material.onBeforeCompile = (sh, r) => { prev?.call(material, sh, r); Object.assign(sh.uniforms, U);
     sh.vertexShader = VERT_DECL + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>' + VERT_BODY);
-    sh.fragmentShader = FRAG_DECL + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>' + FRAG_COLOR(mode, hq)).replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>' + FRAG_NORMAL).replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\n  roughnessFactor = mix(roughnessFactor, 0.22, pbrWet);'); };
+    sh.fragmentShader = FRAG_DECL + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>' + FRAG_COLOR(mode, hq)).replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>' + FRAG_NORMAL).replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\n  roughnessFactor = mix(roughnessFactor, 0.42, pbrWet);'); };
   material.customProgramCacheKey = () => (prevKey ? prevKey() : '') + `pbr_${mode}_${hq ? 1 : 0}`;
   material.needsUpdate = true;
 }

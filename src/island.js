@@ -74,12 +74,13 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
 
   // ── main island ──
   const grassA = new THREE.Color(0x7dab4a), grassB = new THREE.Color(0xa8b84c), grassC = new THREE.Color(0x5f9440), rock = new THREE.Color(0x9a8774);
-  const sandC = new THREE.Color(0xdcc89a), gravelC = new THREE.Color(0xa89a86), cobbleC = new THREE.Color(0x8c8478), wetC = new THREE.Color(0x7a6e58), bedC = new THREE.Color(0x5f5c46);
+  const sandC = new THREE.Color(0xdcc89a), gravelC = new THREE.Color(0x968c7c), cobbleC = new THREE.Color(0x857e72), wetC = new THREE.Color(0x4a4334), bedC = new THREE.Color(0x3c3c2c), dryCob = new THREE.Color(0x9a9282);
   const shoreColor = (x, y, z, c) => { // sand above the waterline, cobbles at it, wet gravel/bed below
     const n = noise(x * 0.9, z * 0.9), n2 = noise(x * 3.1 + 4, z * 3.1);
-    if (y > WATER_Y + 0.18) c.copy(sandC).lerp(gravelC, clamp(0.5 + n, 0, 1) * 0.7).lerp(cobbleC, smoothstep(0.35, 0.7, n2) * 0.6);
-    else if (y > WATER_Y - 0.25) c.copy(gravelC).lerp(wetC, 0.6).lerp(cobbleC, smoothstep(0.2, 0.6, n2) * 0.5);
-    else c.copy(wetC).lerp(bedC, smoothstep(WATER_Y - 0.25, WATER_Y - 1.2, y));
+    // grey river cobbles above the waterline, a dark wet band at it, green-brown silty bed below (matches the far bank)
+    if (y > WATER_Y + 0.35) c.copy(dryCob).lerp(gravelC, clamp(0.5 + n, 0, 1) * 0.45).lerp(cobbleC, smoothstep(0.35, 0.7, n2) * 0.6);
+    else if (y > WATER_Y - 0.2) c.copy(cobbleC).lerp(wetC, smoothstep(WATER_Y + 0.35, WATER_Y - 0.05, y) * 0.85).lerp(cobbleC.clone().multiplyScalar(0.7), smoothstep(0.2, 0.6, n2) * 0.4);
+    else c.copy(wetC).lerp(bedC, smoothstep(WATER_Y - 0.2, WATER_Y - 1.0, y));
     if (snowy && y > WATER_Y + 0.05) c.lerp(snowC, 0.7);
   };
   const g = landmass({

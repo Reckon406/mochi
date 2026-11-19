@@ -143,13 +143,13 @@ void main(){
   vec3 rd = reflect(-v, n);
   vec3 refl = mix(uHorizon, uSkyColor, clamp(rd.y * 1.5, 0.0, 1.0));
   float shoreRefl = smoothstep(1.6, 0.25, depth) * (1.0 - uNight);
-  refl = mix(refl, vec3(0.22, 0.30, 0.18), shoreRefl * 0.45);
+  refl = mix(refl, vec3(0.16, 0.22, 0.13), shoreRefl * 0.7);
   #ifdef HQ
   // mirror of the Bitterroot / Sapphire ring: reflected ray -> bearing + elevation on the 1850 m backdrop cylinder
   if (uRingOn > 0.5) { vec3 r2 = normalize(vec3(rd.x, abs(rd.y), rd.z)); float br = atan(r2.x, -r2.z) / 6.2831853; float lv = (r2.y / max(0.05, length(r2.xz)) * 1850.0 + 40.0) / 560.0;
     vec4 rc = texture2D(uRing, vec2(fract(br), 1.0 - lv)); rc.a *= smoothstep(0.02, 0.14, lv) * step(lv, 1.0);
     vec3 rcol = mix(rc.rgb * uRLight, uRFog, clamp(uRHaze + 0.15, 0.0, 1.0)); refl = mix(refl, rcol, rc.a * (1.0 - shoreRefl * 0.5)); }
-  col = mix(col, refl, clamp(0.08 + 0.9 * fres, 0.0, 0.85));
+  col = mix(col, refl, clamp(0.08 + 0.9 * fres, 0.0, 0.85) * (1.0 - 0.35 * shoreRefl));
   #else
   col = mix(col, refl, 0.1 + 0.42 * fres);
   #endif
@@ -164,12 +164,12 @@ void main(){
   col += vec3(0.6,0.7,1.0) * pow(max(dot(n, normalize(vec3(-0.3,0.5,0.2) + v)), 0.0), 300.0) * 1.5 * uNight;
   // foam: waterline + riffles over shallows + wakes trailing downstream of rocks/bars/the island
   float fn = vnoise(qa * vec2(3.0, 1.2)) * 0.6 + vnoise(qa * vec2(7.0, 2.5) + 3.0) * 0.4;
-  float foam = smoothstep(0.16, 0.0, depth) * 0.95;
-  foam += smoothstep(0.45, 0.05, depth) * smoothstep(0.55, 0.95, sin(depth * 22.0 - t * 2.2 + fn * 4.0) * 0.5 + 0.5) * 0.45; // lapping shoreline bands
-  foam += smoothstep(0.5, 0.12, depth) * smoothstep(0.6, 0.88, fn) * 0.6;
+  float foam = smoothstep(0.06, 0.0, depth) * 0.35;
+  foam += smoothstep(0.3, 0.04, depth) * smoothstep(0.6, 0.95, sin(depth * 22.0 - t * 2.2 + fn * 4.0) * 0.5 + 0.5) * 0.28; // lapping shoreline bands
+  foam += smoothstep(0.35, 0.1, depth) * smoothstep(0.65, 0.9, fn) * 0.35;
   float wake = 0.0;
   for (int k = 1; k <= 4; k++) { float fk = float(k); float du = uWaterY - bedH(p - fd * fk * 0.9); wake += smoothstep(0.25, 0.0, du) * (1.0 - fk * 0.2); }
-  foam += clamp(wake, 0.0, 1.0) * smoothstep(0.5, 0.8, fn + 0.12) * 0.85;
+  foam += clamp(wake, 0.0, 1.0) * smoothstep(0.55, 0.85, fn + 0.08) * smoothstep(0.12, 0.35, depth) * 0.55;
   foam += smoothstep(0.8, 0.97, vnoise(qa * vec2(0.9, 0.22) + 11.0)) * 0.14 * (0.6 + uWind) * smoothstep(0.3, 1.0, depth); // drifting current streaks
   col = mix(col, vec3(0.95, 0.97, 1.0) * mix(1.0, 0.35, uNight) * (0.7 + 0.3 * sunUp), clamp(foam, 0.0, 0.9));
   // ice shelf along the banks in snowy weather
@@ -180,7 +180,7 @@ void main(){
 export function makeRiverMaterial({ depthTex, rect, snowy = false, hq = false }) {
   const uniforms = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
     uDepth: { value: null }, uRect: { value: new THREE.Vector3(rect.x0, rect.z0, rect.size) },
-    uDeep: { value: new THREE.Color(0x1f5560) }, uShallow: { value: new THREE.Color(0x5f9e8e) }, uBed: { value: new THREE.Color(0xa09068) },
+    uDeep: { value: new THREE.Color(0x1f5560) }, uShallow: { value: new THREE.Color(0x3f6a56) }, uBed: { value: new THREE.Color(0x645a40) },
     uWaterY: { value: -0.9 }, uFloorY: { value: 0.5 }, uBedY: { value: -2.8 }, uIce: { value: snowy ? 1 : 0 },
   }]);
   uniforms.uDepth.value = depthTex;
