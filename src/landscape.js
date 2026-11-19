@@ -143,8 +143,11 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   placeBank(asp, NA, aspenC, 4, 90, 1.7, 650, 90);
   placeBank(wl, NWl, willowC, -0.5, 14, 1.35, 500, 62);
   // cottonwood gallery: a near-continuous strip of big cottonwoods right on the water's edge, both banks, up and down the valley
-  const NG = sparse ? (L ? 60 : 200) : 460; const gal = new THREE.InstancedMesh(cwGeo, canopyM, NG); placeBank(gal, NG, golds, 0.5, 12, 1.95, 950, 58);
+  const NG = sparse ? (L ? 60 : 280) : 900; const gal = new THREE.InstancedMesh(cwGeo, canopyM, NG); placeBank(gal, NG, golds, 0.5, 14, 1.95, 950, 42);
   cw.castShadow = asp.castShadow = gal.castShadow = !sparse; cw.userData.realLand = gal.userData.realLand = 'cotton'; asp.userData.realLand = 'aspen'; wl.userData.realLand = 'willow'; group.add(cw, asp, wl, gal);
+  /* near-home band: the gallery is spread over ±950 m, so the reach seen from the dock/shore gets its own denser strip */
+  if (!L) { const NN = sparse ? 110 : 260; const galN = new THREE.InstancedMesh(cwGeo, canopyM, NN); placeBank(galN, NN, golds.concat(willowC), 0.3, 22, 1.8, 150, 40);
+    galN.castShadow = !sparse; galN.userData.realLand = 'cotton'; group.add(galN); }
 
   // ── shoreline rocks: scattered along the waterline of both banks + the island (procedural stand-ins; the real pass swaps in scanned rocks) ──
   if (!L) { const NR = sparse ? 220 : 640; const rg = new THREE.DodecahedronGeometry(0.5, 0); rg.translate(0, 0.25, 0);
