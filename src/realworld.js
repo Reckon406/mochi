@@ -87,14 +87,14 @@ function landTrees(scene, group, { pines, commons, aspen, bare, fallAmt, snowy, 
   const srcs = []; scene.traverse((o) => { if (o.userData.realLand && o.isInstancedMesh && o.count) srcs.push(o); }); if (!srcs.length) return;
   const strip = (P, fall) => (bare && fall >= 0 ? P.parts.filter((pt) => !(pt.mat.alphaTest > 0 || /lea/i.test(pt.mat.name))) : P.parts);
   const cache = new Map(); const imp = (P, fall) => { const k = P.H + '_' + fall; if (!cache.has(k)) cache.set(k, bakeImpostor(renderer, strip(P, fall), { res: tier >= 2 ? 384 : 256, env: scene.environment, matFor: matFor(fall) })); return cache.get(k); };
-  const KIND = { pine: { pool: [pines[0], pines[1], pines[2], pines[3], pines[4]], fall: -1, k: 1.0 }, cotton: { pool: [commons[0], commons[1], commons[4]], fall: fallAmt, k: 1.05 }, aspen: { pool: [commons[2], commons[3]], fall: fallAmt, k: 1.0 } };
+  const KIND = { pine: { pool: [pines[0], pines[1], pines[2], pines[3], pines[4]], fall: -1, k: 1.0 }, cotton: { pool: [commons[0], commons[1], commons[4]], fall: fallAmt, k: 1.05 }, aspen: { pool: [commons[2], commons[3]], fall: fallAmt, k: 1.0 }, willow: { pool: [commons[0], commons[1]], fall: fallAmt * 0.85, k: 0.75, squash: 0.8 } };
   const nearN = tier >= 3 ? 600 : tier >= 2 ? 260 : 0; const lists = new Map(); const near = [];
   const m4 = new THREE.Matrix4(), p = new THREE.Vector3(), q = new THREE.Quaternion(), s = new THREE.Vector3(), c = new THREE.Color(), up = new THREE.Vector3(0, 1, 0);
   const snowC = new THREE.Color(0xeef2f8);
   for (const o of srcs) { const K = KIND[o.userData.realLand]; if (!K) continue; if (tier < 2 && o.userData.realLand !== 'pine') continue; /* Medium: broadleaf impostors read as slabs from above (lo pack) -> keep the LOD canopies */ if (!o.geometry.boundingBox) o.geometry.computeBoundingBox(); const gh = o.geometry.boundingBox.max.y - o.geometry.boundingBox.min.y;
     for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, m4); m4.decompose(p, q, s); const H = gh * s.y * K.k; const P = pickOf(K.pool, p.x, p.z, 7); const fall = K.fall < 0 ? 0 : K.fall;
       const v = 0.82 + hash(p.x, p.z, 9) * 0.26; c.setRGB(v, v * (0.97 + hash(p.x, p.z, 4) * 0.06), v); if (K.fall > 0) { const hh = hash(p.x, p.z, 11); if (hh < 0.33) c.multiply(_lemon); else if (hh < 0.66) c.multiply(_burnt); } if (snowy) c.lerp(snowC, 0.3);
-      const tm = new THREE.Matrix4().compose(p.clone().setY(p.y + 0.15), new THREE.Quaternion().setFromAxisAngle(up, hash(p.x, p.z, 2) * 6.283), new THREE.Vector3(H, H, H));
+      const tm = new THREE.Matrix4().compose(p.clone().setY(p.y + 0.15), new THREE.Quaternion().setFromAxisAngle(up, hash(p.x, p.z, 2) * 6.283), new THREE.Vector3(H * (K.squash ? 1.3 : 1), H, H * (K.squash ? 1.3 : 1)));
       near.push({ d: Math.hypot(p.x, p.z), P, fall, tm, c: c.clone() }); }
     o.visible = false; o.userData.realHidden = true; }
   near.sort((a, b) => a.d - b.d);
