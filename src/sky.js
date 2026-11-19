@@ -42,14 +42,21 @@ void main(){
   vec3 d = normalize(vDir);
   float y = d.y;
   // three-stop gradient: horizon -> soft mid band -> zenith
-  vec3 mid = mix(uHorizon, uZenith, 0.62);
-  vec3 col = mix(uHorizon, mid, smoothstep(0.0, 0.12, y));
+  float sd0 = max(dot(d, uSunDir), 0.0); vec2 sxz0 = normalize(uSunDir.xz + 1e-4); float tw0 = clamp(dot(normalize(d.xz + 1e-4), sxz0) * 0.5 + 0.5, 0.0, 1.0);
+  // horizon: peach toward a low sun, clean pale blue away from it (blending peach into blue is what read lavender)
+  float lowSun = (1.0 - smoothstep(0.12, 0.6, uSunDir.y)) * (1.0 - uNight);
+  vec3 horC = mix(mix(uHorizon, vec3(dot(uHorizon, vec3(0.3, 0.59, 0.11))) * vec3(0.84, 0.95, 1.1), lowSun * 0.7 * (1.0 - tw0)), uHorizon, 0.0);
+  vec3 mid = mix(horC, uZenith, 0.62); mid = mix(mid, vec3(dot(mid, vec3(0.3, 0.59, 0.11))) * vec3(0.8, 0.95, 1.12), 0.3 * lowSun * (1.0 - tw0 * 0.6));
+  vec3 col = mix(horC, mid, smoothstep(0.0, 0.12, y));
   col = mix(col, uZenith, smoothstep(0.1, 0.6, y));
+  { float gFix = max(col.g, 0.5 * (col.r + col.b) * 0.985); col.g = mix(col.g, gFix, 1.0 - uNight); } // peach horizon x blue zenith must not blend through lavender/magenta
   col = mix(col, uGround, smoothstep(0.0, -0.25, y));
   float sd = max(dot(d, uSunDir), 0.0);
   vec2 sxz = normalize(uSunDir.xz + 1e-4); float toward = clamp(dot(normalize(d.xz + 1e-4), sxz) * 0.5 + 0.5, 0.0, 1.0); // clamp: pow() of a hair-below-zero value = NaN (black dotted seam opposite the sun, bloom smears it into a blue screen)
   // sunset: warm band on the sun side, pink/violet afterglow above it, cool on the far side
   float band = exp(-max(y, 0.0) * 7.0);
+  col += lowSun * pow(tw0, 2.5) * exp(-max(y, 0.0) * 4.5) * vec3(1.0, 0.68, 0.38) * 0.3 * (1.0 - uCloudy * 0.6); // warm gold/peach glow on the sun side
+  col += lowSun * pow(sd0, 12.0) * vec3(1.0, 0.75, 0.45) * 0.35 * (1.0 - uCloudy * 0.6);
   col += uGolden * band * mix(vec3(-0.04, -0.02, 0.05), vec3(0.32, 0.12, -0.02), pow(toward, 1.5));
   col += uGolden * exp(-abs(y - 0.16) * 9.0) * vec3(0.16, 0.05, 0.14) * toward;
   float glow = pow(sd, 6.0) * 0.45 + pow(sd, 40.0) * 0.5 + pow(sd, 400.0) * 1.2;
