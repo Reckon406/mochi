@@ -109,3 +109,11 @@ All in `src/adventures.js` (created in main.js after wildlife; `window.__mochi.a
 - The round hut wall and its cone roof use their own UVs.
 - Backdrop: a 1850 m ring that follows the camera. The Bitterroots are full height in the west and drop to 62% for the Sapphires in the east. Its bottom fades out, and it is hazed and tinted from `sky.state` (golden, night, fog) and the weather.
 - With the backdrop on (Medium+), `setLowMountains(true)` presses the procedural ranges above 42 m down to 16%. Everything that uses `terrainH` stays consistent: pines, wildlife and the raft bank.
+
+## Graphics upgrade (Nov 2026)
+- Backdrop: `ring_{0..5}_{1024,2048}.webp` is a 360° ring of six 60° arcs (k=0 starts at north and runs clockwise). `tools/aitex.py ring` rebuilds it from `ai-tex-src/mtn_*`. `buildBackdrop` also builds a combined 2048×128 strip for the water reflections (`onRing`).
+- Far bank: the ground shader's `u_bankC` layer (riverbank_ground) fades in from 14 to 40 m and out from 320 to 700 m. `colorAt` fields use a domain-warped blend instead of floor() blocks.
+- Valley trees: landscape meshes tagged `userData.realLand` (pine / cotton / aspen) are replaced by `realworld.landTrees`. `src/impostor.js` bakes the Quaternius models to crossed-quad impostors at load. High uses real models for the nearest 260 trees; Ultra uses them for the nearest 600. A cottonwood gallery (`gal`) lines both banks.
+- River: `makeRiverMaterial({hq})` defines HQ at High+. That adds the `tex/water_n.webp` normal layers, Schlick fresnel and the ring reflection.
+- Light: ACES is the default; `?tm=agx` gives the old look. At High+ the sky uses HQ self-shadowed clouds, and a god-rays ShaderPass sits before OutputPass. The grade has an S-curve.
+- `aiTex(..., {paint})` whitewashes a texture (used on the picket fence).

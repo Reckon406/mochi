@@ -26,7 +26,9 @@ Rebuilt for the web with `tools/build-models.mjs`. That script thins the leaf ca
 The colour and normal maps of Bark Brown 02 (Rob Tuytel / Poly Haven, CC0, https://polyhaven.com/a/bark_brown_02), resized to 512 px (Medium) and 1024 px (High/Ultra). The tree's shape and its painted leaf sprays are procedural (`src/bigtree.js`).
 
 ## AI-generated textures (`public/tex/ai/`)
-These were generated with an AI image model on Corey's request (Nov 2026) for surfaces that CC0 packs didn't cover: hut thatch, the hut's log wall, cabin/shop board siding, roof shingles, deck planks, weathered fence/dock wood, the sign-board grain and the Bitterroot mountain backdrop. They aren't from any third-party asset pack. `tools/aitex.py` seam-fixed them, flattened their lighting, and derived the normal and roughness maps. The sources stay on the build box (`ai-tex-src/`, gitignored), and `ai-tex-src/WANTED.md` lists what was asked for.
+These were generated with an AI image model on Corey's request (Nov 2026) for surfaces that CC0 packs didn't cover: hut thatch, the hut's log wall, cabin/shop board siding, roof shingles, deck planks, weathered fence/dock wood, the sign-board grain, the riverbank dry-grass/cobble ground, and the 360° mountain ring (Bitterroot crest, Trapper Peak-like pyramid, Sapphire Range). They aren't from any third-party asset pack. `tools/aitex.py` seam-fixed them, flattened their lighting, and derived the normal and roughness maps. The sources stay on the build box (`ai-tex-src/`, gitignored), and `ai-tex-src/WANTED.md` lists what was asked for.
+
+`public/tex/water_n.webp` (river ripple normal map) was generated procedurally by a script (a sum of periodic sine waves); it is not from any asset pack.
 
 ## HDRIs (`public/hdri/*.hdr`)
 These were downscaled to 256 px (Medium) and 512 px (High/Ultra), with the sun disc clipped, because the scene keeps its own sun.
