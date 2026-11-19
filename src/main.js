@@ -96,7 +96,7 @@ async function init() {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap; // r18x: PCFSoftShadowMap was folded into PCF + shadow.radius (soft Vogel-disk filtering)
   const TM = { aces: THREE.ACESFilmicToneMapping, agx: THREE.AgXToneMapping, neutral: THREE.NeutralToneMapping };
-  renderer.toneMapping = TM[params.get('tm')] ?? THREE.AgXToneMapping;
+  renderer.toneMapping = TM[params.get('tm')] ?? THREE.ACESFilmicToneMapping; // ACES: AgX read hazy / grey on this palette
   const EXPO = renderer.toneMapping === THREE.AgXToneMapping ? 1.25 : 1.0; renderer.toneMappingExposure = EXPO;
   // iOS Safari / memory pressure: don't silently freeze — ask for a tap-reload
   canvas.addEventListener('webglcontextlost', (e) => {
@@ -113,7 +113,7 @@ async function init() {
   const camera = new THREE.PerspectiveCamera(isMobile && innerWidth < innerHeight ? 55 : 42, innerWidth / innerHeight, 0.1, 9000);
 
   // ── world ──
-  const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0 });
+  const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0, hq: (Q.tier ?? 2) >= 2 });
   const sun = sky.sun;
   const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min(1024, Q.shadow) : Q.shadow;
   sun.shadow.mapSize.set(S, S); sun.shadow.radius = Q.tier >= 2 ? 5 : 3; sun.shadow.blurSamples = Q.tier >= 2 ? 16 : 8; sun.castShadow = S0.shadows;
@@ -158,12 +158,22 @@ async function init() {
   composer.addPass(bloom); bloom.enabled = S0.bloom; bloom.userData = { sanitize };
   // photo mode depth of field (High/Ultra, desktop or phone): focus follows the orbit target (usually Mochi)
   let bokeh = null; if ((Q.tier ?? 0) >= 2) { bokeh = new BokehPass(scene, camera, { focus: 8, aperture: 0.0016, maxblur: 0.006 }); bokeh.enabled = false; composer.addPass(bokeh); }
+  // High/Ultra: screen-space god rays — bright sky / sun pixels smeared radially from the sun's screen position (HDR, before tonemapping)
+  let rays = null; if ((Q.tier ?? 0) >= 2 && !lite) { rays = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uSun: { value: new THREE.Vector2(0.5, 0.5) }, uK: { value: 0 }, uTint: { value: new THREE.Color(1, 0.9, 0.75) } },
+    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
+    fragmentShader: `uniform sampler2D tDiffuse; uniform vec2 uSun; uniform float uK; uniform vec3 uTint; varying vec2 vUv;
+      void main(){ vec4 c = texture2D(tDiffuse, vUv); if (uK < 0.002) { gl_FragColor = c; return; }
+        vec2 d = (uSun - vUv) / 28.0; vec2 p = vUv; float acc = 0.0, w = 1.0; float j = fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453);
+        p += d * j; for (int i = 0; i < 28; i++) { p += d; vec3 s = texture2D(tDiffuse, clamp(p, 0.001, 0.999)).rgb; acc += smoothstep(1.1, 2.6, dot(s, vec3(0.3, 0.5, 0.2))) * w; w *= 0.955; }
+        float fall = 1.0 - smoothstep(0.0, 0.9, length((vUv - uSun) * vec2(1.0, 0.6)));
+        gl_FragColor = vec4(c.rgb + uTint * acc / 28.0 * uK * fall * 1.6, c.a); }` }); rays.enabled = false; composer.addPass(rays); }
   composer.addPass(new OutputPass());
   // High/Ultra: gentle colour grade after tonemapping (vibrance, warm highlights / cool shadows, soft vignette). Low/Medium skip it.
   let grade = null; if ((Q.tier ?? 0) >= 2) { grade = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uVig: { value: 0.22 } }, vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
     fragmentShader: `uniform sampler2D tDiffuse; uniform float uVig; varying vec2 vUv;
       void main(){ vec4 c = texture2D(tDiffuse, vUv); vec3 col = c.rgb; float l = dot(col, vec3(0.2126, 0.7152, 0.0722));
         float mx = max(col.r, max(col.g, col.b)), mn = min(col.r, min(col.g, col.b)); col = mix(vec3(l), col, 1.0 + 0.18 * (1.0 - (mx - mn)));
+        col = mix(col, col * col * (3.0 - 2.0 * col), 0.22); // gentle S-curve: deeper shadows, less milky mid-tones
         col += vec3(0.018, 0.008, -0.012) * smoothstep(0.45, 1.0, l) + vec3(-0.01, 0.0, 0.016) * (1.0 - smoothstep(0.0, 0.35, l));
         vec2 d = vUv - 0.5; col *= 1.0 - uVig * smoothstep(0.35, 0.85, length(d * vec2(1.15, 1.0)));
         gl_FragColor = vec4(clamp(col, 0.0, 1.0), c.a); }` }); composer.addPass(grade); }
@@ -427,6 +437,7 @@ async function init() {
     try { frameBody(); } catch (e) { console.warn('frame error (skipped)', e); }
     if (!raf && !paused && !document.hidden) raf = requestAnimationFrame(frame);
   }
+  const _sunV = new THREE.Vector3(), _sunF = new THREE.Vector3();
   function frameBody() {
     const now = performance.now(); const dt = Math.min((now - lastNow) / 1000, 0.05); lastNow = now; t += dt; ENV.uTime.value = t;
     skyTimer -= dt; if (skyTimer <= 0) { sky.update(t); skyTimer = 2; applyEnv(); }
@@ -445,6 +456,9 @@ async function init() {
       sun.target.position.set(cx, 0, cz); sun.position.copy(sky.state.lightDir).multiplyScalar(70).add(sun.target.position); sun.target.updateMatrixWorld(); }
     land.winMat.color.setRGB(0.25 + 3.5 * night, 0.18 + 2.4 * night, 0.1 + 1.0 * night);
     bloom.strength = 0.35 + night * 0.45;
+    if (rays) { const sd = sky.state.sunDir; const sp = _sunV.copy(sd).multiplyScalar(3000).add(camera.position).project(camera); const fwd = camera.getWorldDirection(_sunF).dot(sd);
+      const on = fwd > 0.1 && sp.x > -1.4 && sp.x < 1.4 && sp.y > -1.4 && sp.y < 1.4 ? (1 - night) * THREE.MathUtils.smoothstep(sd.y, -0.02, 0.08) * (1 - (weather.cloudiness || 0) * 0.6) * (weather.fog ? 0.3 : 1) : 0;
+      rays.enabled = on > 0.01; rays.uniforms.uK.value = on * (0.55 + sky.state.golden * 0.6); rays.uniforms.uSun.value.set(sp.x * 0.5 + 0.5, sp.y * 0.5 + 0.5); rays.uniforms.uTint.value.copy(sun.color); }
     PBR_UNIFORMS.uSunW.value.copy(sky.state.lightDir); PBR_UNIFORMS.uSunC.value.copy(sun.color).multiplyScalar(Math.min(1.5, sun.intensity) * (1 - night));
 
     // brain

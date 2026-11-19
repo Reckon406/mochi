@@ -42,9 +42,9 @@ void main(){
   vec3 d = normalize(vDir);
   float y = d.y;
   // three-stop gradient: horizon -> soft mid band -> zenith
-  vec3 mid = mix(uHorizon, uZenith, 0.55);
-  vec3 col = mix(uHorizon, mid, smoothstep(0.0, 0.18, y));
-  col = mix(col, uZenith, smoothstep(0.12, 0.75, y));
+  vec3 mid = mix(uHorizon, uZenith, 0.62);
+  vec3 col = mix(uHorizon, mid, smoothstep(0.0, 0.12, y));
+  col = mix(col, uZenith, smoothstep(0.1, 0.6, y));
   col = mix(col, uGround, smoothstep(0.0, -0.25, y));
   float sd = max(dot(d, uSunDir), 0.0);
   vec2 sxz = normalize(uSunDir.xz + 1e-4); float toward = clamp(dot(normalize(d.xz + 1e-4), sxz) * 0.5 + 0.5, 0.0, 1.0); // clamp: pow() of a hair-below-zero value = NaN (black dotted seam opposite the sun, bloom smears it into a blue screen)
@@ -52,7 +52,7 @@ void main(){
   float band = exp(-max(y, 0.0) * 7.0);
   col += uGolden * band * mix(vec3(-0.04, -0.02, 0.05), vec3(0.32, 0.12, -0.02), pow(toward, 1.5));
   col += uGolden * exp(-abs(y - 0.16) * 9.0) * vec3(0.16, 0.05, 0.14) * toward;
-  float glow = pow(sd, 6.0) * 0.45 + pow(sd, 40.0) * 0.5;
+  float glow = pow(sd, 6.0) * 0.45 + pow(sd, 40.0) * 0.5 + pow(sd, 400.0) * 1.2;
   col += uSunColor * glow * (1.0 - uCloudy * 0.6);
   float disc = smoothstep(0.9993, 0.9997, sd);
   col += uSunColor * disc * 10.0 * (1.0 - uCloudy * 0.85);
@@ -73,7 +73,16 @@ void main(){
     float c = smoothstep(cov, cov + 0.22, n) * smoothstep(0.0, 0.12, y);
     vec3 lit = mix(vec3(1.0, 0.99, 0.97), uSunColor * 1.2 + vec3(0.2, 0.1, 0.1), uGolden * 0.8);
     vec3 shade = mix(uHorizon * 0.85, uZenith * 0.6, 0.4);
-    vec3 cc = mix(shade, lit, 0.45 + 0.55 * pow(sd, 3.0) + 0.25 * (n - cov));
+    float dens = smoothstep(cov, cov + 0.35, n); // thicker cores
+    #ifdef HQ
+    // march a step toward the sun: denser cloud there = this point is self-shadowed (darker belly, bright sun-facing rims)
+    float n2 = fbm((uv + normalize(uSunDir.xz + 1e-4) * 0.09) * 1.3); float occ = clamp((n2 - n) * 3.0 + 0.5, 0.0, 1.0);
+    float light = mix(1.0, 0.35, occ) + pow(sd, 4.0) * 0.6 * (1.0 - dens);
+    #else
+    float light = 0.75 + 0.25 * (1.0 - dens) + pow(sd, 3.0) * 0.4;
+    #endif
+    vec3 cc = mix(shade * 0.92, lit, clamp(light * (0.75 - 0.35 * dens) + 0.25 * (n - cov) + 0.2 * (1.0 - dens), 0.0, 1.2));
+    cc += lit * smoothstep(0.35, 0.0, abs(n - cov - 0.05)) * pow(sd, 2.0) * 0.35; // silver lining toward the sun
     cc = mix(cc, vec3(0.1, 0.12, 0.2), uNight * 0.85);
     col = mix(col, cc, c * 0.85);
   }
@@ -84,10 +93,10 @@ const KEYS = [ // alt in degrees -> zenith, horizon, sun color, sun intensity, h
   { a: -18, zen: 0x060c22, hor: 0x18244a, sun: 0x000000, si: 0, hs: 0x4a5c9a, hg: 0x1a1c2a, hi: 0.6, fog: 0x141c3a },
   { a: -6, zen: 0x14214e, hor: 0x4a3f72, sun: 0x000000, si: 0, hs: 0x4a5890, hg: 0x1c1e2c, hi: 0.6, fog: 0x2e3360 },
   { a: -1.5, zen: 0x2a3f80, hor: 0xf08a58, sun: 0xff6a3a, si: 0.2, hs: 0x7a70a8, hg: 0x2e2232, hi: 0.6, fog: 0x9a7080 },
-  { a: 4, zen: 0x4a74c0, hor: 0xffb47a, sun: 0xffa258, si: 2.8, hs: 0xc0b8d8, hg: 0x6a4a30, hi: 0.95, fog: 0xeab98e },
-  { a: 12, zen: 0x3c7fd0, hor: 0xffe0b8, sun: 0xffd2a0, si: 3.0, hs: 0xb8d2f2, hg: 0x6a5a3a, hi: 0.95, fog: 0xd8dcd8 },
-  { a: 30, zen: 0x3a84d8, hor: 0xcfe6f6, sun: 0xfff1de, si: 3.0, hs: 0xc4def8, hg: 0x6b5f40, hi: 1.0, fog: 0xc6dcec },
-  { a: 90, zen: 0x2f78d0, hor: 0xc0def4, sun: 0xffffff, si: 3.2, hs: 0xc8e2fa, hg: 0x6b5f40, hi: 1.0, fog: 0xc0daf0 },
+  { a: 4, zen: 0x3f6cc0, hor: 0xffa860, sun: 0xff9a48, si: 2.9, hs: 0xc0b8d8, hg: 0x6a4a30, hi: 0.95, fog: 0xeab98e },
+  { a: 12, zen: 0x2f74d0, hor: 0xf6d8b4, sun: 0xffc890, si: 3.1, hs: 0xb0ccf0, hg: 0x6a5a3a, hi: 0.9, fog: 0xc8d4e0 },
+  { a: 30, zen: 0x2a78d8, hor: 0xbcdcf4, sun: 0xfff0d8, si: 3.1, hs: 0xbcd8f8, hg: 0x6b5f40, hi: 0.95, fog: 0xbcd4ea },
+  { a: 90, zen: 0x266ed0, hor: 0xb4d6f2, sun: 0xffffff, si: 3.2, hs: 0xc8e2fa, hg: 0x6b5f40, hi: 1.0, fog: 0xc0daf0 },
 ];
 function sample(altDeg) {
   let i = 0; while (i < KEYS.length - 2 && altDeg > KEYS[i + 1].a) i++;
@@ -96,12 +105,12 @@ function sample(altDeg) {
   return { zen: c('zen'), hor: c('hor'), sun: c('sun'), si: lerp(A.si, B.si, t), hs: c('hs'), hg: c('hg'), hi: lerp(A.hi, B.hi, t), fog: c('fog') };
 }
 
-export function createSky(scene, { hour = null, cloudy = 0, storm = 0 } = {}) {
+export function createSky(scene, { hour = null, cloudy = 0, storm = 0, hq = false } = {}) {
   const uniforms = {
     uZenith: { value: new THREE.Color() }, uHorizon: { value: new THREE.Color() }, uGround: { value: new THREE.Color(0x40485a) },
     uSunDir: ENV.uSunDir, uSunColor: { value: new THREE.Color() }, uMoonDir: { value: new THREE.Vector3() }, uNight: ENV.uNight, uCloudy: { value: cloudy }, uTime: ENV.uTime, uGolden: { value: 0 },
   };
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(4000, 48, 24), new THREE.ShaderMaterial({ uniforms, vertexShader: skyVert, fragmentShader: skyFrag, side: THREE.BackSide, depthWrite: false, fog: false }));
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(4000, 48, 24), new THREE.ShaderMaterial({ uniforms, defines: hq ? { HQ: 1 } : {}, vertexShader: skyVert, fragmentShader: skyFrag, side: THREE.BackSide, depthWrite: false, fog: false }));
   dome.renderOrder = -1; dome.frustumCulled = false; scene.add(dome);
 
   // stars
