@@ -21,15 +21,19 @@ const FALL = { value: 0 };
 function leafify(m, { sway = 0.012, fall = 0 } = {}) {
   m.userData.foliage = true; const prev = m.onBeforeCompile;
   m.onBeforeCompile = (sh, r) => { prev?.call(m, sh, r); sh.uniforms.uTime = ENV.uTime; sh.uniforms.uWind = ENV.uWind; sh.uniforms.uFall = { value: fall };
-    sh.vertexShader = 'uniform float uTime; uniform float uWind;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+    sh.vertexShader = 'uniform float uTime; uniform float uWind; varying float vFallH;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+      vFallH = 0.5;
       #ifdef USE_INSTANCING
+        vFallH = fract(sin(dot(instanceMatrix[3].xz, vec2(12.9898, 78.233))) * 43758.5453);
         vec3 ip = instanceMatrix[3].xyz; float hh = clamp(position.y, 0.0, 1.2);
         float sw = sin(uTime * 1.3 + ip.x * 0.15 + ip.z * 0.11) + 0.4 * sin(uTime * 2.7 + ip.x * 0.3 + position.x * 4.0);
         transformed.x += sw * hh * hh * ${sway.toFixed(4)} * (0.4 + uWind * 2.0);
         transformed.z += cos(uTime * 1.1 + ip.z * 0.2 + position.z * 4.0) * hh * hh * ${(sway * 0.5).toFixed(4)} * (0.4 + uWind * 2.0);
       #endif`);
-    sh.fragmentShader = 'uniform float uFall;\n' + sh.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
-      { float l = dot(diffuseColor.rgb, vec3(0.3, 0.59, 0.11)); vec3 gold = vec3(1.0, 0.7, 0.2) * clamp(l * 3.0 + 0.12, 0.0, 1.2); diffuseColor.rgb = mix(diffuseColor.rgb, gold, uFall); }`); };
+    sh.fragmentShader = 'uniform float uFall; varying float vFallH;\n' + sh.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
+      { float l = dot(diffuseColor.rgb, vec3(0.3, 0.59, 0.11)); // per-tree autumn hue: lemon / gold / burnt orange, saturated (linear space)
+        vec3 pal = vFallH < 0.33 ? vec3(0.95, 0.62, 0.03) : vFallH < 0.72 ? vec3(1.0, 0.45, 0.02) : vec3(0.98, 0.26, 0.015);
+        vec3 gold = pal * clamp(l * 2.6 + 0.22, 0.3, 1.15); diffuseColor.rgb = mix(diffuseColor.rgb, gold, uFall); }`); };
   const pk = m.customProgramCacheKey?.bind(m); m.customProgramCacheKey = () => (pk ? pk() : '') + 'leaf' + sway + '_' + fall; m.needsUpdate = true; return m;
 }
 
@@ -78,6 +82,7 @@ function fit(src, mdl, { bottom = false, iso = 0.6, k = 1 } = {}) {
   return new THREE.Matrix4().makeTranslation(sc0.x, sc0.y, sc0.z).multiply(new THREE.Matrix4().makeScale(...S)).multiply(P).multiply(new THREE.Matrix4().makeTranslation(-mc.x, -mc.y, -mc.z));
 }
 
+const _lemon = new THREE.Color(1, 1.12, 1.15), _burnt = new THREE.Color(1.05, 0.78, 0.55);
 function landTrees(scene, group, { pines, commons, aspen, bare, fallAmt, snowy, tier, renderer, matFor, push, info }) {
   const srcs = []; scene.traverse((o) => { if (o.userData.realLand && o.isInstancedMesh && o.count) srcs.push(o); }); if (!srcs.length) return;
   const strip = (P, fall) => (bare && fall >= 0 ? P.parts.filter((pt) => !(pt.mat.alphaTest > 0 || /lea/i.test(pt.mat.name))) : P.parts);
@@ -86,9 +91,9 @@ function landTrees(scene, group, { pines, commons, aspen, bare, fallAmt, snowy, 
   const nearN = tier >= 3 ? 600 : tier >= 2 ? 260 : 0; const lists = new Map(); const near = [];
   const m4 = new THREE.Matrix4(), p = new THREE.Vector3(), q = new THREE.Quaternion(), s = new THREE.Vector3(), c = new THREE.Color(), up = new THREE.Vector3(0, 1, 0);
   const snowC = new THREE.Color(0xeef2f8);
-  for (const o of srcs) { const K = KIND[o.userData.realLand]; if (!K) continue; if (tier < 2 && o.userData.realLand !== 'pine') continue; // Medium: broadleaf impostors read as slabs from above (lo pack) -> keep the LOD canopies if (!o.geometry.boundingBox) o.geometry.computeBoundingBox(); const gh = o.geometry.boundingBox.max.y - o.geometry.boundingBox.min.y;
+  for (const o of srcs) { const K = KIND[o.userData.realLand]; if (!K) continue; if (tier < 2 && o.userData.realLand !== 'pine') continue; /* Medium: broadleaf impostors read as slabs from above (lo pack) -> keep the LOD canopies */ if (!o.geometry.boundingBox) o.geometry.computeBoundingBox(); const gh = o.geometry.boundingBox.max.y - o.geometry.boundingBox.min.y;
     for (let i = 0; i < o.count; i++) { o.getMatrixAt(i, m4); m4.decompose(p, q, s); const H = gh * s.y * K.k; const P = pickOf(K.pool, p.x, p.z, 7); const fall = K.fall < 0 ? 0 : K.fall;
-      const v = 0.82 + hash(p.x, p.z, 9) * 0.26; c.setRGB(v, v * (0.97 + hash(p.x, p.z, 4) * 0.06), v); if (snowy) c.lerp(snowC, 0.3);
+      const v = 0.82 + hash(p.x, p.z, 9) * 0.26; c.setRGB(v, v * (0.97 + hash(p.x, p.z, 4) * 0.06), v); if (K.fall > 0) { const hh = hash(p.x, p.z, 11); if (hh < 0.33) c.multiply(_lemon); else if (hh < 0.66) c.multiply(_burnt); } if (snowy) c.lerp(snowC, 0.3);
       const tm = new THREE.Matrix4().compose(p.clone().setY(p.y + 0.15), new THREE.Quaternion().setFromAxisAngle(up, hash(p.x, p.z, 2) * 6.283), new THREE.Vector3(H, H, H));
       near.push({ d: Math.hypot(p.x, p.z), P, fall, tm, c: c.clone() }); }
     o.visible = false; o.userData.realHidden = true; }
@@ -110,7 +115,7 @@ export function upgradeWorld(scene, { tier = 1, season = 'summer', snowy = false
   const doTrees = load('trees').then((T) => {
     const pines = [1, 2, 3, 4, 5].map((i) => unitTree(T['pine' + i])), commons = [1, 2, 3, 4, 5].map((i) => unitTree(T['common' + i])), aspen = unitTree(T.aspen);
     const bare = snowy; const fallAmt = season === 'fall' ? 1 : 0;
-    const leafMats = new Map(); const matFor = (fall) => (m) => { tune(m); if (!(m.alphaTest > 0 || /lea|twig/i.test(m.name))) return m; const k = m.uuid + fall;
+    const leafMats = new Map(); const matFor = (fall) => (m) => { tune(m); if (/bark|trunk|branch/i.test(m.name) || !(m.alphaTest > 0 || /lea|twig/i.test(m.name))) return m; const k = m.uuid + fall;
       if (!leafMats.has(k)) leafMats.set(k, leafify(m.clone(), { fall })); return leafMats.get(k); };
     const buckets = new Map(); const push = (proto, fall, m4) => { const k = proto; if (!buckets.has(k)) buckets.set(k, { proto, fall, list: [] }); buckets.get(k).list.push(m4); };
     scene.updateMatrixWorld(true);

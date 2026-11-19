@@ -127,7 +127,7 @@ function leafCard(kind, season) {
 
 function leafPalette(kind, season) {
   if (kind === 'aspen') {
-    if (season === 'fall') return [0xf2c848, 0xebac38, 0xffd868, 0xd89828, 0xf8d060];
+    if (season === 'fall') return [0xffc81e, 0xf5b014, 0xffd83a, 0xe89a12, 0xfcc02a];
     if (season === 'winter') return BARE;
     if (season === 'spring') return SPRING;
     return [0x78b850, 0x68a840, 0x88c860, 0x5a9838];
@@ -137,7 +137,7 @@ function leafPalette(kind, season) {
     if (season === 'winter') return [0x9a9070, 0x8a8468];
     return [0x92c058, 0x82b04c, 0xa4c868];
   }
-  if (season === 'fall') return [0xf0c848, 0xe0a838, 0xf8d458, 0xd0a840, 0xe8bc60];
+  if (season === 'fall') return [0xf2b01e, 0xe88a18, 0xffc828, 0xd69e14, 0xf4a028, 0xc8ae2a];
   if (season === 'winter') return BARE;
   if (season === 'spring') return SPRING;
   return GREENS;
