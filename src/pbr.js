@@ -73,9 +73,12 @@ const FRAG_COLOR = (mode, hq) => `
     float farB = smoothstep(48.0, 64.0, length(vPWP.xz)); float sB = smoothstep(mix(0.85, 1.75, farB), 0.3, hy + wob * 1.5) * smoothstep(-1.0, -0.35, hy) * smoothstep(0.35, 0.7, pwn.y) * notPond;
     if (sB > 0.001) { vec3 g1 = texture2D(u_bankC, vPWP.xz * 0.6).rgb; vec3 g2 = texture2D(u_bankC, vPWP.zx * 0.23 + 0.5).rgb;
       float lum = dot((g1 * 0.65 + g2 * 0.35) / max(u_bankAvg, vec3(0.02)), vec3(0.333));
-      vec3 cob = mix(vec3(0.42, 0.40, 0.36), vec3(0.55, 0.50, 0.42), g2.r / max(u_bankAvg.r, 0.02) - 0.5) * clamp(lum, 0.45, 1.7);
-      diffuseColor.rgb = mix(diffuseColor.rgb, cob, sB * 0.8 * uBankReady); }
-    pbrWet = smoothstep(min(mix(0.62, 0.8, farB) + pDist * 0.006, 1.3), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
+      // linear-space greys (the old 0.42-0.55 rendered near-white): blue-grey river stone / warm sandy gravel, varied per patch
+      float pv = dot(texture2D(u_bankC, vPWP.xz * 0.021 + 0.13).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
+      vec3 cob = mix(vec3(0.15, 0.15, 0.14), vec3(0.24, 0.20, 0.15), smoothstep(0.85, 1.15, pv)) * clamp(lum, 0.5, 1.6);
+      float keep = farB * smoothstep(1.02, 1.22, pv) * 0.75; // far bank: grassy / sandy patches survive in the gravel band
+      diffuseColor.rgb = mix(diffuseColor.rgb, cob, sB * 0.85 * uBankReady * (1.0 - keep)); }
+    pbrWet = smoothstep(min(mix(0.72, 0.8, farB) + pDist * 0.006, 1.3), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
     diffuseColor.rgb *= mix(1.0, 0.5, pbrWet * pbrWet * (3.0 - 2.0 * pbrWet)); }` : ''}`;
 const FRAG_NORMAL = `
   if (pFade > 0.001) normal = normalize(mix(normal, normalize((viewMatrix * vec4(pbrNW, 0.0)).xyz), pFade));`;
@@ -85,7 +88,7 @@ function patchDetail(material, mode, hq) {
   const prev = material.onBeforeCompile; const prevKey = material.customProgramCacheKey?.bind(material);
   material.onBeforeCompile = (sh, r) => { prev?.call(material, sh, r); Object.assign(sh.uniforms, U);
     sh.vertexShader = VERT_DECL + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>' + VERT_BODY);
-    sh.fragmentShader = FRAG_DECL + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>' + FRAG_COLOR(mode, hq)).replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>' + FRAG_NORMAL).replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\n  roughnessFactor = mix(roughnessFactor, 0.42, pbrWet);'); };
+    sh.fragmentShader = FRAG_DECL + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>' + FRAG_COLOR(mode, hq)).replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>' + FRAG_NORMAL).replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\n  roughnessFactor = mix(roughnessFactor, 0.72, pbrWet);'); };
   material.customProgramCacheKey = () => (prevKey ? prevKey() : '') + `pbr_${mode}_${hq ? 1 : 0}`;
   material.needsUpdate = true;
 }

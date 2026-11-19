@@ -149,9 +149,10 @@ void main(){
   if (uRingOn > 0.5) { vec3 r2 = normalize(vec3(rd.x, abs(rd.y), rd.z)); float br = atan(r2.x, -r2.z) / 6.2831853; float lv = (r2.y / max(0.05, length(r2.xz)) * 1850.0 + 40.0) / 560.0;
     vec4 rc = texture2D(uRing, vec2(fract(br), 1.0 - lv)); rc.a *= smoothstep(0.02, 0.14, lv) * step(lv, 1.0);
     vec3 rcol = mix(rc.rgb * uRLight, uRFog, clamp(uRHaze + 0.15, 0.0, 1.0)); refl = mix(refl, rcol, rc.a * (1.0 - shoreRefl * 0.5)); }
-  col = mix(col, refl, clamp(0.08 + 0.9 * fres, 0.0, 0.85) * (1.0 - 0.35 * shoreRefl));
+  float shallowK = mix(0.2, 1.0, smoothstep(0.1, 1.6, depth)); // shallow water shows the bed, not the sky (no light-teal rim at grazing angles)
+  col = mix(col, refl, clamp(0.08 + 0.9 * fres, 0.0, 0.85) * (1.0 - 0.35 * shoreRefl) * shallowK);
   #else
-  col = mix(col, refl, 0.1 + 0.42 * fres);
+  col = mix(col, refl, (0.1 + 0.42 * fres) * mix(0.35, 1.0, smoothstep(0.05, 0.9, depth)));
   #endif
   // depth colour: deep pools go a richer teal, shallows warm over the gravel
   col = mix(col, col * vec3(0.78, 0.92, 0.95), smoothstep(1.2, 2.2, depth) * 0.6);
@@ -169,9 +170,12 @@ void main(){
   foam += smoothstep(0.35, 0.1, depth) * smoothstep(0.65, 0.9, fn) * 0.35;
   float wake = 0.0;
   for (int k = 1; k <= 4; k++) { float fk = float(k); float du = uWaterY - bedH(p - fd * fk * 0.9); wake += smoothstep(0.25, 0.0, du) * (1.0 - fk * 0.2); }
-  foam += clamp(wake, 0.0, 1.0) * smoothstep(0.55, 0.85, fn + 0.08) * smoothstep(0.12, 0.35, depth) * 0.55;
+  foam += clamp(wake, 0.0, 1.0) * smoothstep(0.55, 0.85, fn + 0.08) * smoothstep(0.45, 0.9, depth) * 0.5; // wakes only behind rocks in open water, not along every bank
   foam += smoothstep(0.8, 0.97, vnoise(qa * vec2(0.9, 0.22) + 11.0)) * 0.14 * (0.6 + uWind) * smoothstep(0.3, 1.0, depth); // drifting current streaks
   col = mix(col, vec3(0.95, 0.97, 1.0) * mix(1.0, 0.35, uNight) * (0.7 + 0.3 * sunUp), clamp(foam, 0.0, 0.9));
+  col = mix(col, col * vec3(0.92, 0.84, 0.62), (1.0 - smoothstep(0.2, 1.4, depth)) * 0.6 * (1.0 - uNight)); // silty green-brown shallows, not teal
+  // water's edge: fade to the wet, dark cobble/silt it's lapping over (reads as transparent shallows, no bright rim)
+  { vec3 wetEdge = vec3(0.12, 0.115, 0.085) * (0.55 + 0.45 * sunUp) * mix(1.0, 0.4, uNight); float ek = smoothstep(0.0, 0.45, depth + 0.05 * (fn - 0.5)); col = mix(wetEdge, col, ek); }
   // ice shelf along the banks in snowy weather
   col = mix(col, vec3(0.85, 0.92, 0.98) * mix(1.0, 0.4, uNight), uIce * smoothstep(0.5, 0.1, depth) * smoothstep(0.4, 0.6, vnoise(p * 0.8)));
   gl_FragColor = vec4(min(col, vec3(1.1)), 1.0);
