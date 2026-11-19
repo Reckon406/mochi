@@ -42,14 +42,16 @@ function terrainH0(x, z) {
 }
 
 const C = (h) => new THREE.Color(h);
+const FIELD = { green: C(0x7e9c48), dry: C(0xb4a560), sage: C(0x8f9c72) };
 const PAL = { snow: C(0xf4f7ff), rock: [C(0x8a8490), C(0x6a6474)], forest: [C(0x2c5634), C(0x46703a)],
-  fields: [C(0xd2b45e), C(0x86a64c), C(0xb08a5a), C(0x9cb860)], gravel: C(0xb5a58e), sand: C(0xd9c79a), bed: C(0x6d6a4e), bank: C(0x7f9a4e) };
+  fields: [C(0xd2b45e), C(0x86a64c), C(0xb08a5a), C(0x9cb860)], gravel: C(0x8c8474), sand: C(0xa89a7c), bed: C(0x5d5a44), bank: C(0x6f8a44) };
 function colorAt(x, z, h, slope, snowy) {
   const n = noise(x * 0.01, z * 0.01); const c = new THREE.Color(); const rel = h - FLOOR_Y;
   const snowLine = (snowy ? 36 : 70) + 22 * n;
-  // fields: soft domain-warped blend between hay / pasture / dry / sage instead of hard patchwork blocks, plus fine mottling
-  const fw = 0.5 + 0.5 * noise(x * 0.009 + 2.6 * noise(x * 0.003 + 7, z * 0.003), z * 0.009 + 2.6 * noise(x * 0.003, z * 0.003 - 4)); const fi = Math.min(2.999, fw * 3.2);
-  const fa = Math.floor(fi), ft = smoothstep(0.25, 0.75, fi - fa); const field = PAL.fields[fa].clone().lerp(PAL.fields[fa + 1], ft).multiplyScalar(0.92 + 0.16 * (0.5 + 0.5 * noise(x * 0.06, z * 0.06)));
+  // fields: mottled pasture — green grass / dry bunchgrass / sage patches at several scales (no broad bands), plus fine speckle
+  const w1 = noise(x * 0.004 + 1.7 * noise(x * 0.0017 + 7, z * 0.0017), z * 0.004 - 3), w2 = noise(x * 0.017 + 11, z * 0.017 - 5), w3 = noise(x * 0.07 - 2, z * 0.07 + 9);
+  const field = FIELD.green.clone().lerp(FIELD.dry, smoothstep(-0.55, 0.55, w1 * 0.65 + w2 * 0.35)).lerp(FIELD.sage, smoothstep(0.25, 0.75, noise(x * 0.011 - 40, z * 0.011 + 13)) * 0.55)
+    .multiplyScalar(0.93 + 0.1 * w3 + 0.05 * w2);
   const forest = PAL.forest[0].clone().lerp(PAL.forest[1], 0.5 + 0.5 * n), rock = PAL.rock[0].clone().lerp(PAL.rock[1], 0.5 + 0.5 * n);
   if (rel < 14) c.copy(field).lerp(forest, smoothstep(5, 14, rel) * 0.7);
   else if (rel < 90) c.copy(forest).lerp(rock, smoothstep(50, 95, rel + 30 * slope));
@@ -143,6 +145,17 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   // cottonwood gallery: a near-continuous strip of big cottonwoods right on the water's edge, both banks, up and down the valley
   const NG = sparse ? (L ? 60 : 200) : 460; const gal = new THREE.InstancedMesh(cwGeo, canopyM, NG); placeBank(gal, NG, golds, 0.5, 12, 1.95, 950, 58);
   cw.castShadow = asp.castShadow = gal.castShadow = !sparse; cw.userData.realLand = gal.userData.realLand = 'cotton'; asp.userData.realLand = 'aspen'; group.add(cw, asp, wl, gal);
+
+  // ── shoreline rocks: scattered along the waterline of both banks + the island (procedural stand-ins; the real pass swaps in scanned rocks) ──
+  if (!L) { const NR = sparse ? 220 : 640; const rg = new THREE.DodecahedronGeometry(0.5, 0); rg.translate(0, 0.25, 0);
+    const rocks = new THREE.InstancedMesh(rg, new THREE.MeshStandardMaterial({ color: 0x77736a, roughness: 0.95, flatShading: true }), NR); let k = 0, tr = 0;
+    while (k < NR && tr < NR * 60) { tr++; let x, z, h;
+      if (r() < 0.3) { const th = r() * 6.283, rr = 20 + r() * 26; x = Math.cos(th) * rr; z = Math.sin(th) * rr; h = islandSurfH(x, z); }
+      else { z = (r() < 0.5 ? -1 : 1) * Math.pow(r(), 1.8) * 420; const side = r() < 0.5 ? -1 : 1; x = riverX(z) + side * (riverW(z) + (r() - 0.6) * 6); h = terrainH(x, z); if (Math.hypot(x, z) < 34) continue; }
+      if (!isFinite(h) || h < WATER_Y - 0.3 || h > WATER_Y + 0.55) continue;
+      const sc = 0.35 + Math.pow(r(), 2.2) * 1.4; p.set(x, h - 0.12 * sc, z); q.setFromEuler(new THREE.Euler((r() - 0.5) * 0.4, r() * 6.28, (r() - 0.5) * 0.4)); s.set(sc * (1 + r() * 0.5), sc * (0.6 + r() * 0.4), sc);
+      m4.compose(p, q, s); rocks.setMatrixAt(k++, m4); }
+    rocks.count = k; rocks.castShadow = !sparse; rocks.receiveShadow = true; rocks.userData.real = 'rock'; group.add(rocks); }
 
   // ── tiny Darby, Montana on the east bench, lights on at night ──
   const houseGeo = new THREE.BoxGeometry(1, 1, 1); houseGeo.translate(0, 0.5, 0);

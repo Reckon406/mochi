@@ -2,6 +2,7 @@
 // bark_brown_02, wood_planks), tiered: Low = none, Medium = 512, High = 1024, Ultra = 1024 then 2048 lazily (ground layers).
 // Ground keeps its painted vertex colours; the photo layers only add grain + normals, and fade out with distance.
 import * as THREE from 'three';
+import { WATER_Y, POND } from './layout.js';
 
 const BASE = (import.meta.env?.BASE_URL || './') + 'tex/';
 const loader = new THREE.TextureLoader();
@@ -54,12 +55,28 @@ const FRAG_COLOR = (mode, hq) => `
     diffuseColor.rgb = vc * mix(vec3(1.0), det, ${mode === 'rock' ? '0.75' : '0.62'} * pFade);
     pbrNW = normalize(mix(pwn, normalize(nW + 1e-4), ${hq ? '0.85' : '0.6'} * pFade));
   }
-  ${mode === 'ground' ? `// far banks / fields (AI riverbank_ground): dry grass + cobbles + a big-scale colour wander, past the close detail range
-  { float bF = uBankReady * smoothstep(14.0, 40.0, pDist) * (1.0 - smoothstep(320.0, 700.0, pDist)) * (1.0 - smoothstep(0.55, 0.85, 1.0 - pwn.y));
-    if (bF > 0.001) { vec2 bu = vPWP.xz * 0.16; vec3 bc = texture2D(u_bankC, bu).rgb; vec3 bc2 = texture2D(u_bankC, mat2(0.6, -0.8, 0.8, 0.6) * vPWP.xz * 0.045).rgb;
-      vec3 bd = mix(pbrDetail(bc, u_bankAvg), pbrDetail(bc2, u_bankAvg), 0.45); float wander = dot(texture2D(u_bankC, vPWP.xz * 0.0045 + 0.37).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
-      vec3 dry = vec3(1.08, 0.98, 0.82), lush = vec3(0.86, 1.02, 0.86); vec3 tint = mix(lush, dry, smoothstep(0.85, 1.15, wander));
-      diffuseColor.rgb *= mix(vec3(1.0), bd * tint, 0.72 * bF); } }` : ''}`;
+  float pbrWet = 0.0;
+  ${mode === 'ground' ? `// far banks / fields (AI riverbank_ground): dry grass + cobbles; finer tiles near, coarser tiles + macro mottling far so it never mips flat
+  { float bF = uBankReady * smoothstep(14.0, 40.0, pDist) * (1.0 - smoothstep(600.0, 1200.0, pDist)) * (1.0 - smoothstep(0.55, 0.85, 1.0 - pwn.y));
+    if (bF > 0.001) { float d1 = smoothstep(45.0, 200.0, pDist);
+      vec3 cA = texture2D(u_bankC, vPWP.xz * 0.16).rgb, cB = texture2D(u_bankC, mat2(0.6, -0.8, 0.8, 0.6) * vPWP.xz * 0.035).rgb, cC = texture2D(u_bankC, mat2(0.8, 0.6, -0.6, 0.8) * vPWP.xz * 0.0095 + 0.21).rgb;
+      vec3 bd = mix(mix(pbrDetail(cA, u_bankAvg), pbrDetail(cB, u_bankAvg), 0.35 + 0.4 * d1), pbrDetail(cC, u_bankAvg), 0.45 * d1);
+      bd = mix(vec3(1.0), bd, 1.0 + 0.6 * d1); // keep contrast at range (mips average it away)
+      float wander = dot(texture2D(u_bankC, vPWP.xz * 0.0045 + 0.37).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
+      float m2 = dot(texture2D(u_bankC, vPWP.xz * 0.0017 + 0.71).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
+      vec3 dry = vec3(1.1, 0.98, 0.78), lush = vec3(0.84, 1.04, 0.84), sage = vec3(0.9, 0.98, 0.92);
+      vec3 tint = mix(lush, dry, smoothstep(0.8, 1.2, wander)); tint = mix(tint, sage, smoothstep(0.95, 1.2, m2) * 0.6); tint *= 0.86 + 0.28 * smoothstep(0.7, 1.3, m2);
+      diffuseColor.rgb *= mix(vec3(1.0), bd * tint, 0.85 * bF); } }
+  // shoreline (island + both river banks): grey cobble/gravel band above the water, then a dark wet band right at the edge
+  { float hy = vPWP.y - ${WATER_Y.toFixed(2)}; float wob = 0.07 * sin(vPWP.x * 0.9 + vPWP.z * 0.6) + 0.05 * sin(vPWP.z * 2.3 - vPWP.x * 1.1);
+    float notPond = smoothstep(${(POND.r + 0.8).toFixed(2)}, ${(POND.r + 2.5).toFixed(2)}, length(vPWP.xz - vec2(${POND.x.toFixed(3)}, ${POND.z.toFixed(3)})));
+    float farB = smoothstep(48.0, 64.0, length(vPWP.xz)); float sB = smoothstep(mix(0.85, 1.75, farB), 0.3, hy + wob * 1.5) * smoothstep(-1.0, -0.35, hy) * smoothstep(0.35, 0.7, pwn.y) * notPond;
+    if (sB > 0.001) { vec3 g1 = texture2D(u_bankC, vPWP.xz * 0.6).rgb; vec3 g2 = texture2D(u_bankC, vPWP.zx * 0.23 + 0.5).rgb;
+      float lum = dot((g1 * 0.65 + g2 * 0.35) / max(u_bankAvg, vec3(0.02)), vec3(0.333));
+      vec3 cob = mix(vec3(0.42, 0.40, 0.36), vec3(0.55, 0.50, 0.42), g2.r / max(u_bankAvg.r, 0.02) - 0.5) * clamp(lum, 0.45, 1.7);
+      diffuseColor.rgb = mix(diffuseColor.rgb, cob, sB * 0.8 * uBankReady); }
+    pbrWet = smoothstep(mix(0.4, 0.8, farB), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
+    diffuseColor.rgb *= mix(1.0, 0.5, pbrWet * pbrWet * (3.0 - 2.0 * pbrWet)); }` : ''}`;
 const FRAG_NORMAL = `
   if (pFade > 0.001) normal = normalize(mix(normal, normalize((viewMatrix * vec4(pbrNW, 0.0)).xyz), pFade));`;
 
@@ -68,7 +85,7 @@ function patchDetail(material, mode, hq) {
   const prev = material.onBeforeCompile; const prevKey = material.customProgramCacheKey?.bind(material);
   material.onBeforeCompile = (sh, r) => { prev?.call(material, sh, r); Object.assign(sh.uniforms, U);
     sh.vertexShader = VERT_DECL + sh.vertexShader.replace('#include <project_vertex>', '#include <project_vertex>' + VERT_BODY);
-    sh.fragmentShader = FRAG_DECL + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>' + FRAG_COLOR(mode, hq)).replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>' + FRAG_NORMAL); };
+    sh.fragmentShader = FRAG_DECL + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>' + FRAG_COLOR(mode, hq)).replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>' + FRAG_NORMAL).replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\n  roughnessFactor = mix(roughnessFactor, 0.22, pbrWet);'); };
   material.customProgramCacheKey = () => (prevKey ? prevKey() : '') + `pbr_${mode}_${hq ? 1 : 0}`;
   material.needsUpdate = true;
 }
