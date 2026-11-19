@@ -126,8 +126,9 @@ async function init() {
   const snowy = weather.snow || season === 'winter';
   if (aiOn) try { initAITex(Q.tier ?? 2, renderer); } catch (e) { console.warn('ai textures failed', e); }
   if (aiOn && (Q.tier ?? 2) >= 1) setLowMountains(true);
-  const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite });
+  const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite, hq: (Q.tier ?? 2) >= 2 });
   let backdrop = null; if (aiOn) try { backdrop = buildBackdrop(scene, { tier: Q.tier ?? 2, weather }); } catch (e) { console.warn('backdrop failed', e); }
+  try { land.riverMat?.userData.attachRing?.(backdrop); } catch (e) { /* optional */ }
   const island = buildIsland(scene, { snowy, mobile: isMobile, state, tier: Q.tier ?? 2, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
   const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile, pathD: island.pathD });
   let flowers = null; try { flowers = buildWildflowers(scene, { season, snowy, tier: Q.tier ?? 2, pathD: island.pathD }); } catch (e) { console.warn('wildflowers failed', e); }

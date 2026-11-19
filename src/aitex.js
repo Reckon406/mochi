@@ -82,6 +82,11 @@ export function buildBackdrop(scene, { tier = 2, weather = {} } = {}) {
   const R = 1850, H = 560; const w = tier >= 2 ? 2048 : 1024;
   const U = { uLight: { value: new THREE.Color(1, 1, 1) }, uFog: { value: new THREE.Color(0xc6dcec) }, uHaze: { value: 0.3 } };
   const group = new THREE.Group(); group.name = 'bitterroot-backdrop'; scene.add(group); let loaded = 0;
+  // one small combined strip of the whole ring (for water reflections), built once all six arcs are in
+  const imgs = []; const ring = { tex: null, cbs: [] };
+  const combine = () => { const W = 2048, Hc = 128, c = document.createElement('canvas'); c.width = W; c.height = Hc; const g = c.getContext('2d');
+    imgs.forEach((im, k) => g.drawImage(im, k * W / 6, 0, W / 6, Hc)); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping;
+    ring.tex = t; ring.cbs.forEach((f) => f(t)); };
   for (let k = 0; k < 6; k++) { // arc k covers bearings k*60°..(k+1)*60° clockwise from north (-z); cylinder theta = 180° - bearing
     const geo = new THREE.CylinderGeometry(R, R, H, 24, 1, true, Math.PI - (k + 1) * Math.PI / 3, Math.PI / 3); geo.translate(0, H / 2 - 40, 0);
     const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, 1 - uv.getX(i));
@@ -92,11 +97,11 @@ export function buildBackdrop(scene, { tier = 2, weather = {} } = {}) {
         diffuseColor.rgb = mix(diffuseColor.rgb * uLight, uFog, clamp(uHaze + (1.0 - vMapUv.y) * 0.12, 0.0, 1.0));`); };
     m.customProgramCacheKey = () => 'backdrop2';
     const mesh = new THREE.Mesh(geo, m); mesh.renderOrder = -1; mesh.frustumCulled = false; mesh.visible = false; group.add(mesh);
-    loader.load(`${BASE}ring_${k}_${w}.webp`, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; t.wrapS = THREE.ClampToEdgeWrapping; m.map = t; m.needsUpdate = true; mesh.visible = true; loaded++; });
+    loader.load(`${BASE}ring_${k}_${w}.webp`, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; t.wrapS = THREE.ClampToEdgeWrapping; m.map = t; m.needsUpdate = true; mesh.visible = true; loaded++; imgs[k] = t.image; if (loaded === 6) try { combine(); } catch (e) { /* optional */ } });
   }
   const golden = new THREE.Color(1.0, 0.8, 0.62), nightC = new THREE.Color(0.07, 0.09, 0.16);
   const baseHaze = weather.fog ? 1 : (weather.rain || weather.snow ? (weather.heavy ? 0.85 : 0.6) : 0.08) + (weather.cloudiness || 0) * 0.15;
-  return { mesh: group, get loaded() { return loaded; }, update(st, camPos) { if (camPos) group.position.set(camPos.x * 0.98, 0, camPos.z * 0.98); // ~fixed to the camera so the ring never parallaxes
+  return { mesh: group, U, onRing(f) { if (ring.tex) f(ring.tex); else ring.cbs.push(f); }, get loaded() { return loaded; }, update(st, camPos) { if (camPos) group.position.set(camPos.x * 0.98, 0, camPos.z * 0.98); // ~fixed to the camera so the ring never parallaxes
       U.uFog.value.copy(st.fogColor); U.uLight.value.setRGB(1, 1, 1).lerp(golden, (st.golden || 0) * 0.5).lerp(nightC, st.night || 0);
       U.uHaze.value = Math.min(1, baseHaze * (1 - 0.5 * (st.night || 0))); } };
 }

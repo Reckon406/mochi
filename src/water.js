@@ -43,7 +43,11 @@ void main(){
   float h0 = H(p); float hx = H(p + vec2(e, 0.)); float hz = H(p + vec2(0., e));
   vec3 n = normalize(vec3(-(hx - h0) / e * 0.18, 1.0, -(hz - h0) / e * 0.18));
   vec3 v = normalize(cameraPosition - vWorld);
+  #ifdef HQ
+  float fres = 0.02 + 0.98 * pow(1.0 - max(dot(n, v), 0.0), 5.0);
+  #else
   float fres = pow(1.0 - max(dot(n, v), 0.0), 4.0);
+  #endif
   vec3 col = mix(uDeep, uShallow, 0.35 + 0.3 * h0);
   vec3 refl = mix(uHorizon, uSkyColor, clamp(reflect(-v, n).y * 1.6, 0.0, 1.0));
   col = mix(col, refl, 0.25 + 0.6 * fres);
@@ -89,6 +93,9 @@ void main(){ vec4 wp = modelMatrix * vec4(position, 1.0); vWorld = wp.xyz; vec4 
 }`;
 const riverFrag = /* glsl */`
 uniform float uTime; uniform vec3 uSunDir; uniform vec3 uSunColor; uniform vec3 uSkyColor; uniform vec3 uHorizon; uniform float uNight; uniform float uWind;
+#ifdef HQ
+uniform sampler2D uNrm; uniform sampler2D uRing; uniform float uRingOn; uniform vec3 uRLight; uniform vec3 uRFog; uniform float uRHaze;
+#endif
 uniform sampler2D uDepth; uniform vec3 uRect; uniform vec3 uDeep; uniform vec3 uShallow; uniform vec3 uBed; uniform float uWaterY; uniform float uFloorY; uniform float uBedY; uniform float uIce;
 varying vec3 vWorld;
 #include <fog_pars_fragment>
@@ -120,6 +127,13 @@ void main(){
   vec2 gw = pr * g.x + fd * g.y;
   vec3 n = normalize(vec3(-gw.x, 1.0, -gw.y));
   vec3 v = normalize(cameraPosition - vWorld);
+  #ifdef HQ
+  // two normal-map layers scrolling with the current (fast fine chop + slow broad swell), fading with distance
+  { float dist = length(cameraPosition - vWorld); float nf = 1.0 - smoothstep(30.0, 160.0, dist);
+    vec2 qa2 = q - vec2(0.0, t * spd * 1.15); vec3 n1 = texture2D(uNrm, qa2 * vec2(0.22, 0.12)).xyz * 2.0 - 1.0; vec3 n2 = texture2D(uNrm, (qa2 * 0.6 + vec2(0.37, t * 0.05)) * vec2(0.06, 0.035)).xyz * 2.0 - 1.0;
+    vec2 tg = (n1.xy * 0.55 * nf + n2.xy * 0.45) * (0.55 + uWind * 0.6) * smoothstep(0.05, 0.6, depth + 0.2);
+    vec2 tw = pr * tg.x + fd * tg.y; n = normalize(n + vec3(tw.x, 0.0, tw.y) * 0.5); }
+  #endif
   float fres = pow(1.0 - max(dot(n, v), 0.0), 4.0);
   float dk = smoothstep(0.0, 1.8, depth);
   vec3 col = mix(mix(uBed, uShallow, 0.55), uShallow, smoothstep(0.0, 0.5, depth));
@@ -130,7 +144,15 @@ void main(){
   vec3 refl = mix(uHorizon, uSkyColor, clamp(rd.y * 1.5, 0.0, 1.0));
   float shoreRefl = smoothstep(1.6, 0.25, depth) * (1.0 - uNight);
   refl = mix(refl, vec3(0.22, 0.30, 0.18), shoreRefl * 0.45);
+  #ifdef HQ
+  // mirror of the Bitterroot / Sapphire ring: reflected ray -> bearing + elevation on the 1850 m backdrop cylinder
+  if (uRingOn > 0.5) { vec3 r2 = normalize(vec3(rd.x, abs(rd.y), rd.z)); float br = atan(r2.x, -r2.z) / 6.2831853; float lv = (r2.y / max(0.05, length(r2.xz)) * 1850.0 + 40.0) / 560.0;
+    vec4 rc = texture2D(uRing, vec2(fract(br), 1.0 - lv)); rc.a *= smoothstep(0.02, 0.14, lv) * step(lv, 1.0);
+    vec3 rcol = mix(rc.rgb * uRLight, uRFog, clamp(uRHaze + 0.15, 0.0, 1.0)); refl = mix(refl, rcol, rc.a * (1.0 - shoreRefl * 0.5)); }
+  col = mix(col, refl, clamp(0.08 + 0.9 * fres, 0.0, 0.85));
+  #else
   col = mix(col, refl, 0.1 + 0.42 * fres);
+  #endif
   // depth colour: deep pools go a richer teal, shallows warm over the gravel
   col = mix(col, col * vec3(0.78, 0.92, 0.95), smoothstep(1.2, 2.2, depth) * 0.6);
   float sunUp = smoothstep(-0.05, 0.12, uSunDir.y);
@@ -155,7 +177,7 @@ void main(){
   gl_FragColor = vec4(min(col, vec3(1.1)), 1.0);
   #include <fog_fragment>
 }`;
-export function makeRiverMaterial({ depthTex, rect, snowy = false }) {
+export function makeRiverMaterial({ depthTex, rect, snowy = false, hq = false }) {
   const uniforms = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
     uDepth: { value: null }, uRect: { value: new THREE.Vector3(rect.x0, rect.z0, rect.size) },
     uDeep: { value: new THREE.Color(0x1f5560) }, uShallow: { value: new THREE.Color(0x5f9e8e) }, uBed: { value: new THREE.Color(0xa09068) },
@@ -163,5 +185,11 @@ export function makeRiverMaterial({ depthTex, rect, snowy = false }) {
   }]);
   uniforms.uDepth.value = depthTex;
   Object.assign(uniforms, ENV);
-  return new THREE.ShaderMaterial({ uniforms, vertexShader: riverVert, fragmentShader: riverFrag, fog: true });
+  const defines = {};
+  if (hq) { defines.HQ = 1; const nt = new THREE.TextureLoader().load((import.meta.env?.BASE_URL || '/') + 'tex/water_n.webp'); nt.wrapS = nt.wrapT = THREE.RepeatWrapping; nt.anisotropy = 4;
+    Object.assign(uniforms, { uNrm: { value: nt }, uRing: { value: null }, uRingOn: { value: 0 }, uRLight: { value: new THREE.Color(1, 1, 1) }, uRFog: { value: new THREE.Color(0xc6dcec) }, uRHaze: { value: 0.1 } }); }
+  const m = new THREE.ShaderMaterial({ uniforms, defines, vertexShader: riverVert, fragmentShader: riverFrag, fog: true });
+  // hook the backdrop's combined ring strip in (shares its light / fog / haze uniforms)
+  m.userData.attachRing = (bd) => { if (!hq || !bd) return; uniforms.uRLight = bd.U.uLight; uniforms.uRFog = bd.U.uFog; uniforms.uRHaze = bd.U.uHaze; bd.onRing((t) => { uniforms.uRing.value = t; uniforms.uRingOn.value = 1; }); };
+  return m;
 }

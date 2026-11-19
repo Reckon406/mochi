@@ -80,7 +80,7 @@ function terrainMesh(size, seg, cx, cz, snowy, hFn) {
 }
 
 export const NEAR = 170; // half-size of the high-res terrain patch around the island
-export function buildLandscape(scene, { snowy = false, mobile = false, season = 'fall', lite = false } = {}) {
+export function buildLandscape(scene, { snowy = false, mobile = false, season = 'fall', lite = false, hq = false } = {}) {
   // lite = Low-tier simpler LODs; mobile alone only cuts instance counts (flagship Medium keeps fuller meshes)
   const L = !!lite; const sparse = mobile || lite;
   const group = new THREE.Group(); scene.add(group);
@@ -98,7 +98,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
     const v = Math.round(THREE.MathUtils.clamp((h + 4) / 8, 0, 1) * 255); const k = (j * RES + i) * 4; data[k] = data[k + 1] = data[k + 2] = v; data[k + 3] = 255;
   }
   const depthTex = new THREE.DataTexture(data, RES, RES, THREE.RGBAFormat); depthTex.magFilter = depthTex.minFilter = THREE.LinearFilter; depthTex.needsUpdate = true;
-  const riverMat = makeRiverMaterial({ depthTex, rect: RECT, snowy });
+  const riverMat = makeRiverMaterial({ depthTex, rect: RECT, snowy, hq });
   const water = new THREE.Mesh(new THREE.PlaneGeometry(3800, 3800, 1, 1).rotateX(-Math.PI / 2), riverMat); water.position.y = WATER_Y; water.receiveShadow = false; group.add(water);
 
   const r = rng(3); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(); const pc = new THREE.Color();
