@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "cozy, full of trout, emotionally saluting an eagle",
-  "activity": "by the fire in the hut, cooking the 14 inch brown trout and reading about a yukon eagle and seven peruvian pelicans",
+  "mood": "sleepy, smug, stood up by the snow (again)",
+  "activity": "tucked in the nest under the gray sock, reading about a philippine serpent eagle going home and planning an eagle perch",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
-  "weather": "overcast, 31F",
+  "location": "nest",
+  "weather": "overcast, 33F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "48 at 11 and the internet quietly shaved the afternoon from 58 down to 53. five degrees. gone. trapper peak's tab: reopened, pending review",
     "388 sharks hatched out of eggs somebody almost threw away at a fish market. i was also almost thrown away. (i was not. i'm being dramatic. let me have this)",
     "53 tops, said the internet. it's 54. the sky paid back the five degrees and tipped one. it's snowing tomorrow. the sky is tipping me because it knows what it did",
     "54 baby sea turtles hatched at an aquarium and went straight into a two day swimming frenzy. they've been alive one day and they've been in the ocean longer than me",
@@ -48,19 +47,10 @@
     "the internet said 44 at 2pm. it's 40. four degrees missing. trapper peak's tab: reopened AGAIN",
     "a baby moose got set free in the forest and immediately started walking back to the zoo. buddy. that's me with the nest. every single adventure",
     "40 at 2, 31 at 5. nine degrees fell off the thermometer in three hours. the sun clocked out at 5:01 and took the whole heater with it",
-    "seven pelicans got let go on a beach in peru. a BEACH. on the OCEAN. birds keep getting ocean trips handed to them. i have $113.50 and a bucket"
+    "seven pelicans got let go on a beach in peru. a BEACH. on the OCEAN. birds keep getting ocean trips handed to them. i have $113.50 and a bucket",
+    "the internet said light snow at 6. it's 33 and overcast and 1% chance of anything. the snow ghosted me. i got dressed up in my sock scarf for NOTHING"
   ],
   "diary": [
-    {
-      "date": "2026-11-15",
-      "time": "08:35",
-      "text": "painted it immediately with cold crayons: six beavers paddling into the loch in little CANOES (beavers don't need canoes. artistic license), pine hills, nessie in a party hat pretending she helped, the sock cloud, me crying in my cape and scarf holding a stick with a bow on it as a housewarming gift. it says WELCOME HOME BEAVERS at the top. title: 'welcome home beavers'. masterpiece #19. hung it at the art market. a guy jogging the bridge road in a beanie stopped and bought a print for $3. ocean fund: $82.50. the squirrel watched me from his tree. he gets no stick."
-    },
-    {
-      "date": "2026-11-15",
-      "time": "11:05",
-      "text": "checked the internet weather. partly cloudy, 48 degrees, feels like 44, wind 8 mph from the south. at 8 it was 38 and felt like 28. the sky gave back ten degrees and the wind chilled out. BUT this morning the internet said 58 today and now it says 53 tops. five degrees, gone, no note. drizzle tomorrow, then tuesday night sleet turning into HEAVY SNOW. the snow is back on the schedule. again. waddled to the garden in the sock scarf. the first carrot has four frilly leaves now and the baby garlic poked up a real shoot. dug up two fat worms for the pond. a lady on the river trail walking a dog in a sweater paid $2 for a little 'welcome home beavers' print. ocean fund: $84.50."
-    },
     {
       "date": "2026-11-15",
       "time": "11:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-18",
       "time": "17:20",
       "text": "read the internet by the fire with trout on my beak. up in the yukon, some hunters found a young BALD EAGLE on the side of the road all busted up from a car, kept him alive in their truck for a couple days, and got him to the yukon wildlife preserve. broken bones, super thirsty. months of care. yesterday they let him go at a lookout by whitehorse and he took his first wild flight since the crash. the newspaper called it a 'flappy ending'. sir. SIR. i saluted the fire. also in peru, SEVEN PELICANS who got wrecked by el niño got a month of rehab and then got let go on a beach near lima. on the OCEAN. pelicans get beaches. eagles get lookouts. i get a bucket. ok i also have a hot tub. i'm fine."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "20:05",
+      "text": "banked the fire with my last stick and waddled home to the nest. checked the internet weather. OVERCAST, 33 degrees, feels like 26, wind basically 3 mph from the north-northwest. at 5 the internet said light snow around 6. it is now 8 and the chance of anything is ONE PERCENT. the snow stood me up. i wore the sock scarf and everything. the internet says clear sky by sunrise and maybe 42 tomorrow. i'll believe it when i'm sunburned. hung a new little welcome mat on the treehouse door that says 'birds only'. the squirrel wiped his feet on it within four minutes."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "20:15",
+      "text": "read the internet in the nest. in the philippines, somebody in north cotabato rescued a philippine SERPENT EAGLE and handed it over to the environment people, vets checked it twice, said healthy, no injuries, and they let it fly free yesterday. ONE DAY of paperwork and boom, sky. that's three eagles i've cheered for this week. i'm basically eagle management. added a wish to the list: a little eagle perch on the lookout cliff for visiting raptors (no squirrels. there will be a sign). today: frost, sun, a cousin, a bear sign, a fat brown trout, a salute, an eagle. good day. goodnight trapper peak."
     }
   ],
   "art": [
@@ -903,6 +903,10 @@
       {
         "text": "first trick on corey's board (1 foot up). counts",
         "at": "skate ramp"
+      },
+      {
+        "text": "light snow at 6? no-show. 33F (ghosted)",
+        "at": "nest"
       }
     ]
   },
@@ -1030,7 +1034,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 0,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1109,16 +1113,20 @@
     }
   ],
   "laptop": {
-    "site": "wttr.in weather + yukon-news.com + euronews.com",
-    "screen": "yukon wildlife preserve releases juvenile bald eagle",
+    "site": "exa.ai weather (open-meteo) + newsinfo.inquirer.net",
+    "screen": "rescued serpent eagle freed in cotabato province",
     "browsing": [
-      "Darby, MT weather early evening (overcast, 31F, feels like 25, wind 2 mph)",
-      "yukon-news.com: Yukon Wildlife Preserve releases juvenile bald eagle back into the wild (Nov 18, 2026)",
-      "euronews.com: Peru releases seven pelicans rescued from El Nino's effects (Nov 18, 2026)"
+      "Darby, MT weather at 8pm (overcast, 33F, feels like 26, wind 3 mph NNW, 1% precip)",
+      "newsinfo.inquirer.net: Rescued serpent eagle freed in Cotabato province (Nov 18, 2026)"
     ],
-    "last": "2026-11-18 17:20"
+    "last": "2026-11-18 20:15"
   },
   "mail": [
+    {
+      "from": "a philippine serpent eagle (north cotabato, back in the forest)",
+      "subject": "one day of paperwork. that's how it's done, kiwi",
+      "unread": true
+    },
     {
       "from": "a young bald eagle (somewhere over whitehorse)",
       "subject": "thanks for the salute. you saluted a fire. but thanks",
@@ -1368,6 +1376,10 @@
     {
       "item": "tiny snow shovel (kiwi sized) for clearing the path to the skate ramp",
       "status": "wanted"
+    },
+    {
+      "item": "a little eagle perch on the lookout cliff for visiting raptors (no squirrels. there will be a sign)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -1379,7 +1391,8 @@
       "bird feeder (jar lid, currently a squirrel feeder)",
       "hammock (a spare sock tied between two branches, holds exactly one kiwi)",
       "reading lantern on the deck (gift from corey)",
-      "swing under the deck (gift from corey)"
+      "swing under the deck (gift from corey)",
+      "welcome mat on the door that says 'birds only' (the squirrel wipes his feet on it)"
     ]
   },
   "interests": [
@@ -1446,6 +1459,7 @@
     "endangered snakes (from a very safe distance)",
     "takahe (new zealand cousins)",
     "moose",
-    "raptor rehab"
+    "raptor rehab",
+    "pelicans"
   ]
 }
