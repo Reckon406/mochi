@@ -9,7 +9,7 @@ from PIL import Image, ImageFilter
 SRC = os.path.join(os.path.dirname(__file__), '..', 'ai-tex-src'); OUT = os.path.join(os.path.dirname(__file__), '..', 'public', 'tex', 'ai')
 os.makedirs(OUT, exist_ok=True)
 # name: (normal strength, base roughness, flatten amount)
-TILE = {'hut_thatch': (5.0, 0.95, 0.6), 'hut_logwall': (3.0, 0.82, 0.5), 'cabin_boards': (2.5, 0.8, 0.6), 'roof_shingles': (4.0, 0.88, 0.5),
+TILE = {'riverbank_ground': (3.5, 0.92, 0.6), 'hut_thatch': (5.0, 0.95, 0.6), 'hut_logwall': (3.0, 0.82, 0.5), 'cabin_boards': (2.5, 0.8, 0.6), 'roof_shingles': (4.0, 0.88, 0.5),
         'deck_planks': (3.0, 0.84, 0.6), 'fence_wood': (4.0, 0.9, 0.5)}
 
 def blur(a, r):
@@ -82,8 +82,60 @@ def mountains():
         if sh: im = im.filter(ImageFilter.UnsharpMask(radius=1.6, percent=50, threshold=2))
         p = f'{OUT}/mountains_{w}.webp'; im.save(p, 'WEBP', quality=80, method=6); print('mountains', w, 'x', h, os.path.getsize(p) // 1024, 'K')
 
+def sky_alpha(a, thr=0.018):
+    H, W, _ = a.shape; lum = blur(a @ np.array([0.299, 0.587, 0.114], np.float32), 0.8)
+    edge = np.maximum(np.abs(np.roll(lum, -1, 0) - lum), np.abs(np.roll(lum, -1, 1) - lum)); edge[-1] = 1; edge[:, -1] = edge[:, -2]
+    tops = np.zeros(W, int)
+    for x in range(W):
+        e = edge[:, x] > thr; y = 2
+        while y < H - 2 and not (e[y] and e[y + 1]): y += 1
+        tops[x] = y
+    pad = np.pad(tops, 6, mode='edge'); med = np.array([np.median(pad[i:i + 13]) for i in range(W)]).astype(int)  # drop specks/spikes in the sky
+    tops = np.where(np.abs(tops - med) > 6, med, tops)
+    alpha = (np.arange(H)[:, None] >= tops[None, :]).astype(np.float32)
+    alpha = np.clip((blur(alpha, 1.0) - 0.2) / 0.6, 0, 1); return alpha, tops
+
+def grade(a, contrast=1.18, sat=1.15, gamma=1.06):
+    m = a.reshape(-1, 3).mean(0); a = np.clip((a - m) * contrast + m, 0, 1); l = (a @ np.array([0.299, 0.587, 0.114], np.float32))[..., None]
+    return np.clip(l + (a - l) * sat, 0, 1) ** gamma
+
+def ring():
+    """360° Bitterroot/Sapphire backdrop: west half = old backdrop | mtn_west_b (Trapper, WSW) | mtn_west_a | flipped old; east = Sapphires.
+    Strip x = bearing clockwise from north. Exported as 6 arcs of 60°: ring_<k>_<w>.webp (k=0 starts at north)."""
+    WT, HT, BASE = 12288, 592, 548  # ~0.95 m per px on the 1850 m ring (High); BASE = valley-floor row (~5 m)
+    acc = np.zeros((HT, WT, 4), np.float32); wsum = np.zeros((HT, WT, 1), np.float32)
+    def seg(name, b0, b1, peak_m, flip=False, thr=0.018):
+        a = np.asarray(Image.open(f'{SRC}/{name}.jpg').convert('RGB')).astype(np.float32) / 255
+        al, tops = sky_alpha(a, thr); top = int(np.percentile(tops, 2)); a = grade(a)
+        rgba = np.concatenate([a, al[..., None]], -1)[max(0, top - 6):]
+        if flip: rgba = rgba[:, ::-1]
+        hpx = int(peak_m / 0.946); wpx = int((b1 - b0) / 360 * WT)
+        im = Image.fromarray((rgba * 255).astype(np.uint8), 'RGBA').resize((wpx, hpx), Image.LANCZOS); r = np.asarray(im).astype(np.float32) / 255
+        y0 = BASE - hpx; x0 = int(b0 / 360 * WT); F = int(10 / 360 * WT)  # 10° cross-fade at each end
+        w = np.ones(wpx, np.float32); ramp = np.linspace(0, 1, F); w[:F] = np.minimum(w[:F], ramp); w[-F:] = np.minimum(w[-F:], ramp[::-1])
+        xs = (np.arange(wpx) + x0) % WT; yy = slice(max(0, y0), BASE); ry = slice(max(0, -y0), hpx)
+        pm = r[ry].copy(); pm[..., :3] *= pm[..., 3:]; acc[yy, xs] += pm * w[None, :, None]; wsum[yy, xs] += w[None, :, None]
+        # under the base: continue the bottom rows (dark valley/forest) down to the ring floor, fading
+        bot = r[-1:].repeat(HT - BASE, 0); fade = np.linspace(1, 0.2, HT - BASE)[:, None, None]; bot = bot.copy(); bot[..., 3:] *= fade
+        bot[..., :3] *= bot[..., 3:]; acc[BASE:, xs] += bot * w[None, :, None]; wsum[BASE:, xs] += w[None, :, None]
+        print('  ring seg', name, 'flip' if flip else '', f'{b0}-{b1}°', 'peak', peak_m, 'm')
+    seg('mountain_backdrop', 178, 236, 300)
+    seg('mtn_west_b', 222, 276, 380)
+    seg('mtn_west_a', 264, 322, 360)
+    seg('mountain_backdrop', 308, 364, 280, flip=True)
+    seg('mtn_east', 350, 448, 170, thr=0.012)          # 350°..88° (wraps)
+    seg('mtn_east', 76, 192, 150, flip=True, thr=0.012)
+    out = np.empty_like(acc); out[..., :3] = acc[..., :3] / np.maximum(acc[..., 3:], 1e-4); out[..., 3:] = acc[..., 3:] / np.maximum(wsum, 1.0)  # premultiplied blend; partial cover fades
+    for k in range(6):
+        sl = out[:, k * WT // 6:(k + 1) * WT // 6]; im = Image.fromarray(np.clip(sl * 255 + 0.5, 0, 255).astype(np.uint8), 'RGBA')
+        for w in (1024, 2048):
+            p = f'{OUT}/ring_{k}_{w}.webp'; im.resize((w, round(HT * w / 2048)), Image.LANCZOS).save(p, 'WEBP', quality=82, method=6)
+    tot = {w: sum(os.path.getsize(f'{OUT}/ring_{k}_{w}.webp') for k in range(6)) // 1024 for w in (1024, 2048)}
+    print('ring arcs', tot, 'K'); prev = Image.fromarray(np.clip(out * 255, 0, 255).astype(np.uint8), 'RGBA'); bg = Image.new('RGBA', prev.size, (120, 160, 220, 255)); bg.alpha_composite(prev); bg.convert('RGB').resize((2048, 99)).save('/tmp/ring_preview.png')
+
 only = sys.argv[1:]
 for k, v in TILE.items():
     if not only or k in only: tileable(k, *v)
 if not only or 'sign_board' in only: sign_board()
-if not only or 'mountains' in only: mountains()
+if 'mountains' in only: mountains()
+if not only or 'ring' in only: ring()

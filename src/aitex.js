@@ -75,28 +75,28 @@ export function loadSignBoard(tier) {
   return new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = `${BASE}sign_board_1024.webp`; setTimeout(() => res(null), 6000); });
 }
 
-// ── Bitterroot backdrop: wrapped strip on a far ring behind the far terrain, faded at the bottom, hazed + darkened by sky/weather ──
+// ── Bitterroot backdrop: one non-repeating 360° ring (6 arcs of 60°, tools/aitex.py ring()): Bitterroots west (Trapper Peak WSW),
+// Sapphires east, blended through north/south. Behind the far terrain, bottom faded, hazed + darkened by sky/weather. Unlit, not tone-mapped.
 export function buildBackdrop(scene, { tier = 2, weather = {} } = {}) {
   if (tier < 1) return null;
-  const R = 1850, H = 560, SEG = 9; // 9 wraps around the valley; peaks ~9° up from the island
-  const geo = new THREE.CylinderGeometry(R, R, H, 128, 1, true); geo.translate(0, H / 2 - 40, 0);
-  { const p = geo.attributes.position; for (let i = 0; i < p.count; i++) { const x = p.getX(i), z = p.getZ(i), y = p.getY(i); // Bitterroots (west, -x) tall + jagged; Sapphires (east) lower
-    const west = THREE.MathUtils.smoothstep(-x / R, -0.6, 0.6); p.setY(i, -40 + (y + 40) * (0.62 + 0.38 * west)); } }
-  const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, uv.getX(i) * SEG);
+  const R = 1850, H = 560; const w = tier >= 2 ? 2048 : 1024;
   const U = { uLight: { value: new THREE.Color(1, 1, 1) }, uFog: { value: new THREE.Color(0xc6dcec) }, uHaze: { value: 0.3 } };
-  const m = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, side: THREE.BackSide, fog: false, alphaTest: 0.02 });
-  m.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, U); sh.fragmentShader = 'uniform vec3 uLight; uniform vec3 uFog; uniform float uHaze;\n' + sh.fragmentShader
-    .replace('#include <map_fragment>', `#include <map_fragment>
-      float bot = smoothstep(0.02, 0.2, vMapUv.y); diffuseColor.a *= bot; // fade into the far terrain / valley haze
-      diffuseColor.rgb = mix(diffuseColor.rgb * uLight, uFog, clamp(uHaze + (1.0 - vMapUv.y) * 0.25, 0.0, 1.0));`); };
-  m.customProgramCacheKey = () => 'backdrop1';
-  const mesh = new THREE.Mesh(geo, m); mesh.renderOrder = -1; mesh.frustumCulled = false; mesh.visible = false; mesh.name = 'bitterroot-backdrop'; scene.add(mesh);
-  const w = tier >= 3 ? 2560 : tier >= 2 ? 2560 : 2048;
-  loader.load(`${BASE}mountains_${w}.webp`, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.wrapS = THREE.RepeatWrapping; t.anisotropy = 4; m.map = t; m.needsUpdate = true; mesh.visible = true;
-    if (tier >= 3) setTimeout(() => loader.load(`${BASE}mountains_4096.webp`, (t2) => { t2.colorSpace = THREE.SRGBColorSpace; t2.wrapS = THREE.RepeatWrapping; t2.anisotropy = 8; m.map = t2; t.dispose(); m.needsUpdate = true; }), 6000); });
-  const golden = new THREE.Color(1.0, 0.78, 0.6), nightC = new THREE.Color(0.1, 0.13, 0.22);
-  const baseHaze = weather.fog ? 1 : (weather.rain || weather.snow ? (weather.heavy ? 0.85 : 0.65) : 0.14) + (weather.cloudiness || 0) * 0.15;
-  return { mesh, update(st, camPos) { if (camPos) mesh.position.set(camPos.x * 0.98, 0, camPos.z * 0.98); // ~fixed to the camera so the ring never parallaxes
-      U.uFog.value.copy(st.fogColor); U.uLight.value.setRGB(1, 1, 1).lerp(golden, (st.golden || 0) * 0.45).lerp(nightC, st.night || 0);
+  const group = new THREE.Group(); group.name = 'bitterroot-backdrop'; scene.add(group); let loaded = 0;
+  for (let k = 0; k < 6; k++) { // arc k covers bearings k*60°..(k+1)*60° clockwise from north (-z); cylinder theta = 180° - bearing
+    const geo = new THREE.CylinderGeometry(R, R, H, 24, 1, true, Math.PI - (k + 1) * Math.PI / 3, Math.PI / 3); geo.translate(0, H / 2 - 40, 0);
+    const uv = geo.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setX(i, 1 - uv.getX(i));
+    const m = new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, side: THREE.BackSide, fog: false, alphaTest: 0.02, toneMapped: false });
+    m.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, U); sh.fragmentShader = 'uniform vec3 uLight; uniform vec3 uFog; uniform float uHaze;\n' + sh.fragmentShader
+      .replace('#include <map_fragment>', `#include <map_fragment>
+        diffuseColor.a *= smoothstep(0.02, 0.14, vMapUv.y); // fade into the far terrain / valley haze
+        diffuseColor.rgb = mix(diffuseColor.rgb * uLight, uFog, clamp(uHaze + (1.0 - vMapUv.y) * 0.12, 0.0, 1.0));`); };
+    m.customProgramCacheKey = () => 'backdrop2';
+    const mesh = new THREE.Mesh(geo, m); mesh.renderOrder = -1; mesh.frustumCulled = false; mesh.visible = false; group.add(mesh);
+    loader.load(`${BASE}ring_${k}_${w}.webp`, (t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; t.wrapS = THREE.ClampToEdgeWrapping; m.map = t; m.needsUpdate = true; mesh.visible = true; loaded++; });
+  }
+  const golden = new THREE.Color(1.0, 0.8, 0.62), nightC = new THREE.Color(0.07, 0.09, 0.16);
+  const baseHaze = weather.fog ? 1 : (weather.rain || weather.snow ? (weather.heavy ? 0.85 : 0.6) : 0.08) + (weather.cloudiness || 0) * 0.15;
+  return { mesh: group, get loaded() { return loaded; }, update(st, camPos) { if (camPos) group.position.set(camPos.x * 0.98, 0, camPos.z * 0.98); // ~fixed to the camera so the ring never parallaxes
+      U.uFog.value.copy(st.fogColor); U.uLight.value.setRGB(1, 1, 1).lerp(golden, (st.golden || 0) * 0.5).lerp(nightC, st.night || 0);
       U.uHaze.value = Math.min(1, baseHaze * (1 - 0.5 * (st.night || 0))); } };
 }
