@@ -130,7 +130,7 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
       for (let k = 1; k < 4; k++) add(th, new THREE.BoxGeometry(0.04, 0.34, 0.03), plankM, [x0 + (x1 - x0) * k / 4, H + 0.24, z0 + (z1 - z0) * k / 4], [0, yaw, 0], null, false); }
     // cabin (walls stage >= 4; roof, door and window stage >= 5)
     let winM = null; const cab = new THREE.Group(); { const [cx, , cz] = P(T.cabinA, 1.3); cab.position.set(cx, H + 0.06, cz); cab.rotation.y = Math.PI / 2 - T.cabinA; th.add(cab); }
-    if (stage >= 4) { const cw = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c99a66', 7, true), roughness: 0.85 }), 'cabin', { tint: 0xf0dcc0 }); add(cab, new THREE.BoxGeometry(1.45, 1.05, 1.0), cw, [0, 0.52, 0]);
+    if (stage >= 4) { const cw = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c99a66', 7, true), roughness: 0.85 }), 'cabin', { tint: 0xf8ece0 }); add(cab, new THREE.BoxGeometry(1.45, 1.05, 1.0), cw, [0, 0.52, 0]);
       for (const x of [-0.72, 0.72]) for (const z of [-0.5, 0.5]) add(cab, new THREE.BoxGeometry(0.08, 1.08, 0.08), dark, [x, 0.54, z], [0, 0, 0], null, false); }
     if (stage >= 5) { const rf = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#e8eef8' : '#9a4b32'), roughness: 0.9 }); if (!snowy) aiTex(rf, 'shingles', { mpt: 1.2 });
       for (const sd of [-1, 1]) add(cab, new THREE.BoxGeometry(1.75, 0.07, 0.78), rf, [0, 1.3, sd * 0.32], [sd * 0.62, 0, 0]);

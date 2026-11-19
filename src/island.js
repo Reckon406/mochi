@@ -439,7 +439,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   function buildShop() {
     const [x, , z] = at(SHOP.x, SHOP.z); let y = -9; for (let i = -3; i <= 3; i++) for (let j = -3; j <= 3; j++) y = Math.max(y, topH(x + i * 0.45, z + j * 0.45));
     const sh = new THREE.Group(); sh.position.set(x, y - 0.03, z); sh.rotation.y = SHOP.yaw; world.add(sh);
-    const { w: W, d: D, h: H } = SHOP; const wall = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), roughness: 0.9 }), 'cabin', { tint: 0xf2d2a8 }); const trim = mat(0x7a4a2a);
+    const { w: W, d: D, h: H } = SHOP; const wall = aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), roughness: 0.9 }), 'cabin', { tint: 0xfbeee2 }); const trim = mat(0x7a4a2a);
     const plaster = mat(0xf7efe2, { roughness: 0.95 });
     add(sh, new THREE.BoxGeometry(W + 0.3, 0.16, D + 0.3), mat(0x9a6a42), [0, 0.0, 0]); // floor deck
     add(sh, new THREE.BoxGeometry(W, H, 0.12), wall, [0, H / 2, -D / 2]); add(sh, new THREE.BoxGeometry(W - 0.2, H - 0.2, 0.02), plaster, [0, H / 2 + 0.05, -D / 2 + 0.07], [0, 0, 0], null, false);
@@ -450,7 +450,7 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     const rl = Math.hypot(W / 2 + 0.35, 1.0); const ra = Math.atan2(1.0, W / 2 + 0.35); const roofM = new THREE.MeshStandardMaterial({ map: shingleTex(snowy ? '#eef2fa' : '#c0563a', 10), roughness: 0.85 }); roofM.map = roofM.map.clone(); roofM.map.wrapS = roofM.map.wrapT = THREE.RepeatWrapping; roofM.map.repeat.set(2.5, 1.6); if (!snowy) aiTex(roofM, 'shingles', { rot: true }); roofM.map.needsUpdate = true;
     for (const sx of [-1, 1]) add(sh, new THREE.BoxGeometry(rl, 0.1, D + 0.7), roofM, [sx * (W / 4 + 0.09), H + 0.5, 0], [0, 0, -sx * ra]);
     const gab = new THREE.Shape(); gab.moveTo(-W / 2, 0); gab.lineTo(W / 2, 0); gab.lineTo(0, 1.0); gab.closePath();
-    for (const sz of [-1, 1]) add(sh, new THREE.ShapeGeometry(gab), aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), side: THREE.DoubleSide }), 'cabin', { tint: 0xf2d2a8 }), [0, H, sz * D / 2]);
+    for (const sz of [-1, 1]) add(sh, new THREE.ShapeGeometry(gab), aiTex(new THREE.MeshStandardMaterial({ map: woodTex('#c9a27a', 10, true), side: THREE.DoubleSide }), 'cabin', { tint: 0xfbeee2 }), [0, H, sz * D / 2]);
     { const pk = plank(["MOCHI'S ART SHOP", 'no refunds · yes hugs'], { width: 1.9, icon: '🖼️', tone: 'oak', seed: 7 }); pk.position.set(0, H + 0.42, D / 2 + 0.04); sh.add(pk); }
     // pictures: back wall 3, side walls 2 each, outside front 2
     const sl = (k) => hangAt('shop', k); let k = 0; const ins = 0.09;
