@@ -151,7 +151,7 @@ async function init() {
   const mochi = createMochi(state.outfit || '', { style: params.get('mochi') || S0.mochiStyle });
   scene.add(mochi.root);
   const squirrelZone = ZONES.find((z) => z.id === 'squirrel');
-  const squirrel = createSquirrel(squirrelZone.pos); scene.add(squirrel.root);
+  const squirrel = createSquirrel(squirrelZone.pos, { style: params.get('squirrel') || S0.squirrelStyle || 'new' }); scene.add(squirrel.root);
   const elk = createElk(); scene.add(elk.root);
   if (params.get('elk') === '1') elk.start(0.35);
   // soft contact/blob shadows (Medium+): grounds Mochi, critters and props where the shadow map is coarse or the sun is behind
@@ -296,6 +296,7 @@ async function init() {
     if ('quality' in patch) { const q = QUALITY[st.quality]; const cap = Math.min(q.pr, isMobile ? 1.5 : q.pr); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, cap)); composer.setSize(innerWidth, innerHeight);
       const sz = (q.tier ?? 2) <= 0 ? Math.min(512, q.shadow) : isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('mochiStyle' in patch) mochi.setStyle(st.mochiStyle);
+    if ('squirrelStyle' in patch) squirrel.setStyle?.(st.squirrelStyle);
     if ('shadows' in patch) sun.castShadow = st.shadows;
     if ('bloom' in patch) { bloom.enabled = st.bloom; bloom.userData.sanitize.enabled = st.bloom; }
     if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();
@@ -552,7 +553,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk')) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { flowers, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { flowers, squirrel, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

@@ -52,6 +52,7 @@ All of these are from Poly Haven: https://polyhaven.com/textures
 - `public/models/mochi.glb`: AI-generated 3D model of Mochi (image-to-3D with Microsoft TRELLIS, from Corey's Mochi reference), optimized with glTF-Transform (meshopt + WebP). The original procedural Mochi stays in `src/mochi.js` as the Classic style and the fallback.
 - `public/models/girlkiwi.glb`: AI-generated 3D model of the girl kiwi across the river (image-to-3D with Microsoft TRELLIS from an AI reference image), optimized with glTF-Transform (meshopt + WebP). Her cottage, nest, rowboat and wake are procedural.
 - `public/models/cat.glb`: AI-generated 3D model of Mochi's pet cat (image-to-3D with Microsoft TRELLIS), optimized with glTF-Transform (meshopt + WebP). The other pet kinds (pika, chipmunk, bunny, hedgehog) are procedural.
+- `public/models/squirrel.glb`: AI-generated 3D model of the rival squirrel (image-to-3D with Microsoft TRELLIS), simplified and optimized with glTF-Transform (meshopt + WebP, 512px). The original procedural squirrel in `src/creatures.js` is the Classic style (Settings → Squirrel style, or `?squirrel=classic`) and the fallback.
 
 ## Licences
 - Poly Haven assets: CC0. See https://polyhaven.com/license

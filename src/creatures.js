@@ -2,11 +2,14 @@
 import * as THREE from 'three';
 import { topH } from './layout.js';
 import { smoothstep } from './noise.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 const m = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...o });
 function add(p, g, mat, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, mat); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; p.add(x); return x; }
 
-export function createSquirrel(treePos) {
+const SQ_YAW = 0;
+export function createSquirrel(treePos, { style = 'new' } = {}) {
   const root = new THREE.Group(); const body = new THREE.Group(); root.add(body);
   const fur = m(0xb8582a), belly = m(0xf3dcb8), dark = m(0x1a0f0a, { roughness: 0.2 });
   add(body, new THREE.SphereGeometry(0.16, 20, 14), fur, [0, 0.18, 0], [0, 0, 0], [0.9, 1.1, 1.2]);
@@ -28,6 +31,14 @@ export function createSquirrel(treePos) {
   // acorn in hand
   const acorn = new THREE.Group(); acorn.position.set(0, 0.26, 0.17); body.add(acorn); add(acorn, new THREE.SphereGeometry(0.035, 10, 8), m(0xa8743a), [0, 0, 0], [0, 0, 0], [1, 1.25, 1]); add(acorn, new THREE.SphereGeometry(0.038, 10, 6, 0, 6.29, 0, 1.4), m(0x6b4524), [0, 0.02, 0]);
   root.scale.setScalar(1.25);
+  // the scanned squirrel (AI-generated, TRELLIS) replaces the procedural one when it loads; the procedural one is the
+  // Classic style and the fallback if the model fails
+  const proc = body.children.slice(); let model = null, cur = style;
+  const apply = () => { const useModel = cur !== 'classic' && !!model; proc.forEach((o) => (o.visible = !useModel)); if (model) model.visible = useModel; };
+  { const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder);
+    L.load((import.meta.env?.BASE_URL || '/') + 'models/squirrel.glb', (g) => { try { const sc = g.scene; sc.rotation.y = SQ_YAW; sc.updateMatrixWorld(true); let bb = new THREE.Box3().setFromObject(sc); const h = bb.max.y - bb.min.y || 1; sc.scale.setScalar(0.62 / h); sc.updateMatrixWorld(true); bb = new THREE.Box3().setFromObject(sc); sc.position.y -= bb.min.y; sc.position.x -= (bb.min.x + bb.max.x) / 2; sc.position.z -= (bb.min.z + bb.max.z) / 2;
+      sc.traverse((o) => { if (o.isMesh) { if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals(); o.material = new THREE.MeshStandardMaterial({ map: o.material.map, color: new THREE.Color(1.35, 1.32, 1.3), roughness: 0.9, metalness: 0 }); o.castShadow = true; } });
+      model = sc; body.add(sc); apply(); } catch (e) { console.warn('[squirrel] model failed', e.message); } }, undefined, (e) => console.warn('[squirrel] model load failed', e?.message || e)); }
 
   const [tx, tz] = treePos; const ty = topH(tx, tz);
   const trunkR = 0.45; const climbH = 2.35;
@@ -52,7 +63,7 @@ export function createSquirrel(treePos) {
     legs.forEach((l, i) => (l.rotation.x = run ? Math.sin(hopPh + (i < 2 ? 0 : Math.PI)) * 0.8 : 0));
     acorn.visible = k !== 1 && k !== 2 && k !== 4;
   }
-  return { root, update };
+  return { root, update, setStyle(s) { cur = s; apply(); }, get loaded() { return !!model; } };
 }
 
 export function createElk() {
