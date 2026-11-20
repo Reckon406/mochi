@@ -50,6 +50,7 @@ All of these are from Poly Haven: https://polyhaven.com/textures
 
 ## Mochi model
 - `public/models/mochi.glb`: AI-generated 3D model of Mochi (image-to-3D with Microsoft TRELLIS, from Corey's Mochi reference), optimized with glTF-Transform (meshopt + WebP). The original procedural Mochi stays in `src/mochi.js` as the Classic style and the fallback.
+- `public/models/girlkiwi.glb`: AI-generated 3D model of the girl kiwi across the river (image-to-3D with Microsoft TRELLIS from an AI reference image), optimized with glTF-Transform (meshopt + WebP). Her cottage, nest, rowboat and wake are procedural.
 
 ## Licences
 - Poly Haven assets: CC0. See https://polyhaven.com/license

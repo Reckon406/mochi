@@ -12,6 +12,7 @@ import { buildLandscape, TRAPPER_DIR, setLowMountains } from './landscape.js';
 import { buildIsland } from './island.js';
 import { createMochi } from './mochi.js';
 import { createGaming } from './gaming.js';
+import { createCrush } from './crush.js';
 import { createSquirrel, createElk } from './creatures.js';
 import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF, PROP_SPOTS } from './layout.js';
@@ -137,6 +138,7 @@ async function init() {
   const worldState = buildWorldState(scene, state);
   const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
   const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow }); try { features.gaming = createGaming(scene, { state, glow, tier: Q.tier ?? 2 }); } catch (e) { console.warn('gaming failed', e); }
+  try { features.crush = createCrush(scene, { state, tier: Q.tier ?? 2 }); } catch (e) { console.warn('crush failed', e); }
   try { features.wishes = buildWishes(scene, { features, glow, snowy, mobile: isMobile }); } catch (e) { console.warn('wishlist builds failed', e?.stack || e); features.wishes = null; }
   { const zs = new THREE.Group(); zs.name = 'zone-signs'; scene.add(zs); zoneSigns(zs, ZONES, { groundY, OBSTACLES, BRIDGE }); }
 
@@ -500,11 +502,11 @@ async function init() {
       if (brain.wait < 0 && params.get('stay') !== '1') pickNext();
     }
     if (!life.current) life.update(dt, t);
-    mochi.root.position.y = groundY(mochi.root.position.x, mochi.root.position.z) + life.lift;
+    { const ry = life.rideY, mp = mochi.root.position; mp.y = (ry ? ry(mp.x, mp.z) : groundY(mp.x, mp.z)) + life.lift; }
     mochi.root.rotation.y = brain.heading;
     mochi.update(dt, moving); extras?.update(dt); nightSky?.update(t, dt, sky.state.night || 0, camera);
     squirrel.update(dt); elk.update(dt, t); blobs?.update();
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.gaming?.update(t, dt, night); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.gaming?.update(t, dt, night); features.crush?.update(t, dt, night, mochi.root.position); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);

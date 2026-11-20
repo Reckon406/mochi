@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { ZONES, groundY, topH, DOCK, WATER_Y, mv, SHOP, WISH } from './layout.js';
 import { FISH, rollFish, fishMesh, speciesKey } from './fish.js';
 import { CROPS } from './features.js';
+import { giftMesh } from './crush.js';
 
 const N = (v) => (Number.isFinite(+v) ? Math.max(0, Math.floor(+v)) : 0);
 const zone = (id) => ZONES.find((z) => z.id === id);
@@ -21,7 +22,7 @@ const sum = (o) => Object.values(o).reduce((a, b) => a + b, 0);
 export function createLife({ state, mochi, features, say, music, sky, feel, onChange = () => {} }) {
   const inv = normInventory(state); const fishLog = (Array.isArray(state.fishLog) ? state.fishLog : []).slice(-50).map((f) => ({ ...f }));
   const encounters = []; const P = features.props; const plots = features.plots;
-  let cur = null, lift = 0, liftTarget = 0, face = null, held = null, posTarget = null, last = '';
+  let rideY = null; let cur = null, lift = 0, liftTarget = 0, face = null, held = null, posTarget = null, last = '';
   const ctx = { t: 0 };
   const changed = () => onChange(inv, fishLog);
   function hold(obj, rot = [0, 0, 0], sc = 1) { drop(); if (!obj) return; held = obj; obj.position.set(0, 0, 0); obj.rotation.set(...rot); obj.scale.setScalar(sc); obj.visible = true; mochi.hold.add(obj); }
@@ -115,6 +116,43 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 2, start() { const V = features.vend; if (inv.caps < 3) { this.no = true; say(`${inv.caps} caps. need 3. the machine mocks me`, 2.5); return; } inv.caps -= 3; say('3 caps in. come on come on', 2); changed(); this.V = V; }, tick(u, dt) { if (this.V?.knob) this.V.knob.rotation.z += dt * 6; } },
     { d: 2.5, start() { if (this.no) return; const tr = TRINKETS[Math.floor(Math.random() * TRINKETS.length)]; inv.trinkets.push(tr); if (this.V?.cap) this.V.cap.visible = true; mochi.flap(1); mochi.hop(0.7); say(`GOT: ${tr}!!`, 2.5); changed(); }, end() { if (this.V?.cap) this.V.cap.visible = false; } } ] };
   // 🎮 gaming nook: sit on the beanbag, pad in his wings, button-mash, flap at the good bits, rage-shiver when he gets PLUCKED
+  // 💕 visiting the girl kiwi: row over from the dock (wake behind), hand over a gift, row home. At 'dating' she comes to him instead.
+  const CR = () => features.crush;
+  const boatY = () => CR().boat.position.y + 0.05;
+  const seatAt = () => { const b = CR().boatState; return new THREE.Vector3(b.x - Math.sin(b.yaw) * 0.15, 0, b.z - Math.cos(b.yaw) * 0.15); };
+  const sail = (fromF, toF) => ({ d: 11, start() { const C = CR(); this.from = fromF(); this.to = toF(); C.boatState.row = 1; C.wake(true); posTarget = null; },
+    tick(u) { const C = CR(), b = C.boatState, from = this.from, to = this.to; const e = u * u * (3 - 2 * u); const want = Math.atan2(to.x - from.x, to.z - from.z); let dh = want - b.yaw; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); b.yaw += dh * Math.min(1, 0.06 + u);
+      b.x = from.x + (to.x - from.x) * e; b.z = from.z + (to.z - from.z) * e; const p = M(), s = seatAt(); p.x = s.x; p.z = s.z; face = b.yaw; pose.sway = 0.12; },
+    end() { const C = CR(); C.boatState.row = 0; C.wake(false); pose.sway = 0; } });
+  const HER = { stranger: ['oh. hi? who are you', 'um. hello, little round stranger', '...do i know you?'], friend: ['MOCHI! hi!!', 'hey you! rowed all the way over?', 'my favourite neighbour'], crush: ['*fluffs feathers* oh. it\'s you. hi', 'you came back!! i mean. cool. hi', 'i was just thinking about you. about. boats.'] };
+  const pickGift = () => { const o = ['flowers', 'flowers']; if (Math.random() < 0.35) o.push('art'); if (inv.worms > 0) o.push('worms'); if (sum(inv.fish) > 0) o.push('fish'); return o[Math.floor(Math.random() * o.length)]; };
+  A.visit = { zone: 'dock', label: '⛵ rowing over to visit her', ok: () => !!features.crush && features.crush.stage !== 'dating',
+    onCancel() { const C = CR(); if (!C) return; Object.assign(C.boatState, { x: C.moor.x, z: C.moor.z, yaw: C.yawOut, row: 0 }); C.wake(false); C.lookAt(null); rideY = null; const p = M(); p.x = C.boardPt.x; p.z = C.boardPt.z; if (this.gp) this.gp.parent?.remove(this.gp); },
+    steps: [
+    { d: 1, start() { const C = CR(); this.gift = pickGift(); hold(giftMesh(this.gift), [0, 0, 0], 1.2); walkTo(C.boardPt.clone()); say(this.gift === 'flowers' ? 'picked some flowers. for no reason. for a friend. normal' : `bringing ${C.name === '???' ? 'the kiwi across the river' : C.name} some ${this.gift}`, 3); } },
+    { d: 0.7, start() { const C = CR(); face = Math.atan2(C.moor.x - M().x, C.moor.z - M().z); mochi.hop(0.5); }, end() { rideY = boatY; const s = seatAt(), p = M(); p.x = s.x; p.z = s.z; } },
+    sail(() => CR().moor, () => CR().beach),
+    { d: 0.7, start() { mochi.hop(0.5); }, end() { const C = CR(); rideY = C.rideY; const p = M(); p.x = C.landing.x + Math.sin(C.yawOut) * 0.9; p.z = C.landing.z + Math.cos(C.yawOut) * 0.9; } },
+    { d: 1, start() { const C = CR(); C.lookAt(M()); walkTo(C.herFront()); } },
+    { d: 4, start() { const C = CR(); const h = C.her.position; face = Math.atan2(h.x - M().x, h.z - M().z); const st = C.stage;
+        const pref = { flowers: 0.15, art: 0.25, worms: 0.05, fish: -0.15 }[this.gift] ?? 0; this.good = Math.random() < 0.55 + pref + (st === 'crush' ? 0.15 : st === 'friend' ? 0.05 : 0);
+        if (this.gift === 'worms') inv.worms = Math.max(0, inv.worms - 1); if (this.gift === 'fish') { const k = Object.keys(inv.fish).find((q) => inv.fish[q] > 0); if (k) inv.fish[k]--; }
+        drop(); const gp = giftMesh(this.gift); gp.position.set(h.x + (M().x - h.x) * 0.45, h.y + 0.08, h.z + (M().z - h.z) * 0.45); gp.rotation.set(0, Math.random() * 6, 0); gp.scale.setScalar(1.2); features.group.parent.add(gp); this.gp = gp;
+        const d = C.give(this.gift, this.good); changed(); this.l = (HER[st] || HER.friend)[Math.floor(Math.random() * 3)];
+        say(`${C.name}: "${this.l}"`, 2);
+        setTimeout(() => { if (cur?.id !== 'visit') return; C.react(this.good ? 'heart' : 'shrug'); say(this.good ? `${C.name}: "for ME?? ♡" (+${d})` : `${C.name}: "oh. ${this.gift}. thanks i guess" (+${d})`, 2.2); if (this.good) mochi.flap(1); }, 1600); },
+      end() { face = null; } },
+    { d: 1, start() { const C = CR(); C.lookAt(null); walkTo(new THREE.Vector3(C.landing.x + Math.sin(C.yawOut) * 0.9, 0, C.landing.z + Math.cos(C.yawOut) * 0.9)); say(this.good ? 'she LIKED it. play it cool. PLAY IT COOL' : 'that went... fine. it went fine', 2.5); } },
+    { d: 0.7, start() { mochi.hop(0.5); }, end() { rideY = boatY; const s = seatAt(), p = M(); p.x = s.x; p.z = s.z; } },
+    sail(() => CR().beach, () => CR().moor),
+    { d: 0.8, start() { mochi.hop(0.5); }, end() { const C = CR(); rideY = null; const p = M(); p.x = C.boardPt.x; p.z = C.boardPt.z; C.boatState.yaw = C.yawOut; if (this.gp) { this.gp.parent?.remove(this.gp); this.gp = null; } } } ] };
+  A.date = { zone: 'dock', label: '💞 on a date on the dock', ok: () => !!features.crush && features.crush.stage === 'dating',
+    onCancel() { CR()?.hearts(false); CR()?.lookAt(null); },
+    steps: [
+    { d: 1, start() { const C = CR(); walkTo(C.mochiDateSpot.clone()); say(`${C.name === '???' ? 'she' : C.name} came over!! act normal`, 2.5); } },
+    { d: 14, start() { const C = CR(); face = C.yawOut; const a = C.dockSeat, b = M(); C.hearts(true, new THREE.Vector3((a.x + b.x) / 2, a.y, (a.z + b.z) / 2)); this.k = 0; },
+      tick(u, dt, t) { const C = CR(); const L = ['nice sunset', 'nice... you', `${C.name}: "you're a good rower"`, 'i would row across ANY river', `${C.name}: "*leans on him*"`]; if (u > this.k * 0.22 && this.k < L.length) { say(L[this.k], 2.6); this.k++; if (this.k % 2) mochi.flap(0.5); C.lookAt(this.k % 2 ? M() : null); } pose.sway = 0.1 * Math.sin(t * 1.5); } },
+    { d: 1.5, start() { say('best day', 1.5); }, end() { CR().hearts(false); CR().lookAt(null); pose.sway = 0; face = null; } } ] };
   // 💿 disc hunt: the game disc is lost somewhere on the island (glinting). Walk over, peck it out, carry it home, slot it in.
   const walkTo = (v) => { posTarget = v; const p = M(); cur.steps[cur.k].d = Math.hypot(v.x - p.x, v.z - p.z) / 1.8 + 0.6; };
   A.disc = { zone: 'gaming', label: '💿 hunting for the game disc', ok: () => !!features.gaming && !features.gaming.found, steps: [
@@ -171,7 +209,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
       end() { const gb = WS().giftBoard; if (gb) { gb.group.add(gb.board); gb.board.position.copy(gb.home.pos); gb.board.rotation.copy(gb.home.rot); } liftTarget = 0; pose.sway = 0; face = null; } },
     { d: 1.2, start() { if (!this.no) say('parked. thank you corey 🛹', 2); } } ] };
 
-  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
+  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish', 'visit', 'date'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
   // which activity makes sense at a zone right now
   function choose(zid, prefer) {
     if (prefer && A[prefer] && A[prefer].zone === zid && (!A[prefer].ok || A[prefer].ok())) return prefer;
@@ -196,7 +234,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     return Math.random() < 0.6 ? 'garden' : null;
   }
   // STATE.activity / location keywords -> first activity
-  const KEYS = [[/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
+  const KEYS = [[/\bdat(e|ing)\b|girlfriend/, 'date'], [/visit|crush|\bher\b|girl kiwi|row(ing)? (the )?boat|\bsail/, 'visit'], [/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
     [/brows|laptop|internet|online|web|google|reading the news/, 'browse'], [/sleep|nap|bed|snooz/, 'sleep'], [/skateboard|cruis/, 'cruise'], [/skate|kickflip/, 'skate'], [/hot ?tub|soak|capybara/, 'soak'], [/burrow|petrel/, 'burrow'], [/telescope|whale/, 'telescope'], [/swing/, 'swing'], [/treehouse|tree house|climb/, 'treehouse'], [/yodel|weather station/, 'yodel'], [/paint|draw/, 'paint'],
     [/music|song|jam|drum|guitar|uke/, 'jam'], [/honey|bee/, 'honey'], [/shell/, 'shells'], [/skip(ping)? (rocks|stones)/, 'skip'], [/vending|cap-o-matic|trinket/, 'vend'], [/mail/, 'mail'], [/dust/, 'dust'], [/trade|squirrel/, 'trade'], [/eat|snack|lunch|dinner/, 'eat']];
   function fromText(s) { const t = String(s || '').toLowerCase(); for (const [re, a] of KEYS) if (re.test(t)) return a; return null; }
@@ -226,6 +264,6 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     for (const c of [...P.skewer.children]) if (c.userData.food) P.skewer.remove(c); P.skewer.visible = false; liftTarget = 0; face = null; pose.peck = pose.sway = pose.sleep = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); }
   function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); return true; }
   function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toLocaleDateString('en-CA') }); return FISH[k].name; }
-  return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, KEYS, liftTo(v) { liftTarget = v; },
+  return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get rideY() { return rideY; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, KEYS, liftTo(v) { liftTarget = v; },
     ctl: { go(v) { posTarget = v; }, face(f) { face = f; }, lift(v) { liftTarget = v; }, snapLift(v) { liftTarget = lift = v; }, hold, drop, fx, M, pose }, run(id) { const def = A[id]; if (!def) return false; cancel(); queued = id; return begin(def.zone); } };
 }
