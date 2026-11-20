@@ -70,13 +70,18 @@ const FRAG_COLOR = (mode, hq) => `
   // shoreline (island + both river banks): grey cobble/gravel band above the water, then a dark wet band right at the edge
   { float hy = vPWP.y - ${WATER_Y.toFixed(2)}; float wob = 0.07 * sin(vPWP.x * 0.9 + vPWP.z * 0.6) + 0.05 * sin(vPWP.z * 2.3 - vPWP.x * 1.1);
     float notPond = smoothstep(${(POND.r + 0.8).toFixed(2)}, ${(POND.r + 2.5).toFixed(2)}, length(vPWP.xz - vec2(${POND.x.toFixed(3)}, ${POND.z.toFixed(3)})));
-    float farB = smoothstep(48.0, 64.0, length(vPWP.xz)); float sB = smoothstep(mix(0.85, 1.75, farB), 0.3, hy + wob * 1.5) * smoothstep(-1.0, -0.35, hy) * smoothstep(0.35, 0.7, pwn.y) * notPond;
+    float farB = smoothstep(48.0, 64.0, length(vPWP.xz));
+    float wv = smoothstep(0.8, 1.2, dot(texture2D(u_bankC, vPWP.zx * 0.006 + 0.37).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333))); /* far bank: band width wanders 0.5..2.1 m */
+    float sB = smoothstep(mix(0.85, mix(0.5, 2.1, wv), farB), 0.3, hy + wob * 1.5) * smoothstep(-1.0, -0.35, hy) * smoothstep(0.35, 0.7, pwn.y) * notPond;
     if (sB > 0.001) { vec3 g1 = texture2D(u_bankC, vPWP.xz * 0.6).rgb; vec3 g2 = texture2D(u_bankC, vPWP.zx * 0.23 + 0.5).rgb;
       float lum = dot((g1 * 0.65 + g2 * 0.35) / max(u_bankAvg, vec3(0.02)), vec3(0.333));
       // linear-space greys (the old 0.42-0.55 rendered near-white): blue-grey river stone / warm sandy gravel, varied per patch
       float pv = dot(texture2D(u_bankC, vPWP.xz * 0.021 + 0.13).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
+      float pv2 = dot(texture2D(u_bankC, vPWP.zx * 0.047 + 0.61).rgb / max(u_bankAvg, vec3(0.02)), vec3(0.333));
       vec3 cob = mix(vec3(0.15, 0.15, 0.14), vec3(0.24, 0.20, 0.15), smoothstep(0.85, 1.15, pv)) * clamp(lum, 0.5, 1.6);
-      float keep = farB * smoothstep(1.02, 1.22, pv) * 0.75; // far bank: grassy / sandy patches survive in the gravel band
+      cob = mix(cob, vec3(0.11, 0.115, 0.12) * clamp(lum, 0.6, 1.4), smoothstep(1.05, 1.25, pv2) * 0.7); /* darker blue-grey stone patches */
+      cob = mix(cob, vec3(0.34, 0.29, 0.20) * clamp(lum, 0.8, 1.2), farB * smoothstep(0.88, 0.72, pv2) * 0.8); /* sand bars on the far bank */
+      float keep = farB * smoothstep(0.98, 1.15, pv) * 0.85; /* far bank: grassy patches survive in the gravel band */
       diffuseColor.rgb = mix(diffuseColor.rgb, cob, sB * 0.85 * uBankReady * (1.0 - keep)); }
     pbrWet = smoothstep(min(mix(0.72, 0.8, farB) + pDist * 0.006, 1.3), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
     diffuseColor.rgb *= mix(1.0, 0.5, pbrWet * pbrWet * (3.0 - 2.0 * pbrWet)); }` : ''}`;
