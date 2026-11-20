@@ -212,7 +212,7 @@ async function init() {
     wet: weather.rain ? (weather.heavy ? 1 : 0.7) : 0, wind: weather.wind ? (weather.heavy ? 1 : 0.5) : 0,
     perk: /happy|excit|hype|proud|confident|majestic|joy|giddy/.test(moodS) ? 1 : /sad|tired|sleepy|grump|lonely/.test(moodS) ? -0.6 : 0,
   };
-  Object.assign(mochi.mods, { cold: feel.cold, wet: feel.wet, wind: feel.wind, perk: Math.max(0, feel.perk) });
+  Object.assign(mochi.mods, { cold: feel.cold, wet: feel.wet, wind: feel.wind, perk: Math.max(0, feel.perk), tired: /tired|sleepy|drowsy|exhaust/.test(moodS) ? 1 : 0 });
   brain.speed *= (1 - 0.15 * feel.cold) * (feel.wet > 0.8 ? 1.15 : 1) * (feel.perk < 0 ? 0.8 : 1);
   const hopRate = Math.max(0.03, 0.12 * (1 - 0.6 * feel.cold) * (1 - 0.4 * feel.wet) * (1 + 0.8 * feel.perk));
   const shelter = feel.wet > 0.5 || weather.heavy ? ['hut', 'shop'] : feel.cold > 0.6 ? ['campfire', 'hut'] : null;

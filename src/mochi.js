@@ -176,14 +176,55 @@ export function createMochi(outfit = '', { style = 'new' } = {}) {
     if (extras.cape) extras.cape.position.set(...S.cape);
     return use;
   }
+  // ── new-style rig: the scan is one fused mesh, so wings + legs are moved in the vertex shader (per-vertex weights painted by position,
+  // feathered so seams stretch instead of tearing), and eyelids are little dome shells that swing down over the painted eyes ──
+  const rig = { u: { uWing: { value: new THREE.Vector2() }, uLegS: { value: new THREE.Vector2() }, uLegL: { value: new THREE.Vector2() } }, lids: [], blinkT: 2.5, blink: 0, dbl: false };
+  const RIG_GLSL = `attribute vec4 aRig; uniform vec2 uWing; uniform vec2 uLegS; uniform vec2 uLegL;
+    vec3 rZ(vec3 p, vec3 c, float a) { p -= c; float s = sin(a), k = cos(a); return vec3(p.x * k - p.y * s, p.x * s + p.y * k, p.z) + c; }
+    vec3 rX(vec3 p, vec3 c, float a) { p -= c; float s = sin(a), k = cos(a); return vec3(p.x, p.y * k - p.z * s, p.y * s + p.z * k) + c; }
+    vec3 rigP(vec3 p) { vec3 q = p;
+      q = mix(q, rZ(q, vec3(0.24, 0.05, -0.14), uWing.x), aRig.x); q = mix(q, rZ(q, vec3(-0.24, 0.05, -0.14), -uWing.y), aRig.y);
+      q = mix(q, rX(q, vec3(0.075, -0.31, -0.03), uLegS.x) + vec3(0.0, uLegL.x, 0.0), aRig.z); q = mix(q, rX(q, vec3(-0.075, -0.31, -0.03), uLegS.y) + vec3(0.0, uLegL.y, 0.0), aRig.w); return q; }
+    vec3 rigN(vec3 n) { vec3 q = n; q = mix(q, rZ(q, vec3(0.0), uWing.x), aRig.x); q = mix(q, rZ(q, vec3(0.0), -uWing.y), aRig.y);
+      q = mix(q, rX(q, vec3(0.0), uLegS.x), aRig.z); q = mix(q, rX(q, vec3(0.0), uLegS.y), aRig.w); return normalize(q); }
+`;
+  const patchRig = (mat, normals = true) => { mat.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, rig.u);
+      sh.vertexShader = RIG_GLSL + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n transformed = rigP(transformed);');
+      if (normals) sh.vertexShader = sh.vertexShader.replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\n objectNormal = rigN(objectNormal);'); };
+    mat.customProgramCacheKey = () => 'mochiRig' + (normals ? 1 : 0); return mat; };
+  const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  function buildRig(sc) {
+    sc.updateMatrixWorld(true); const inv = new THREE.Matrix4().copy(sc.matrixWorld).invert(); const meshes = []; sc.traverse((m) => { if (m.isMesh) meshes.push(m); });
+    for (const m of meshes) { // bake the dequantize node transform so weights/pivots live in the scan's own units (measured off the source GLB)
+      const g = m.geometry, pa = g.attributes.position, M = new THREE.Matrix4().multiplyMatrices(inv, m.matrixWorld); const f = new Float32Array(pa.count * 3);
+      for (let i = 0; i < pa.count; i++) { f[i * 3] = pa.getX(i); f[i * 3 + 1] = pa.getY(i); f[i * 3 + 2] = pa.getZ(i); }
+      g.setAttribute('position', new THREE.BufferAttribute(f, 3)); g.applyMatrix4(M); g.deleteAttribute('normal'); g.computeVertexNormals();
+      const w = new Float32Array(pa.count * 4), P = g.attributes.position;
+      for (let i = 0; i < P.count; i++) { const x = P.getX(i), y = P.getY(i), z = P.getZ(i), ax = Math.abs(x);
+        const wing = ss(0.232, 0.258, ax) * ss(-0.155, -0.115, y) * (1 - ss(0.03, 0.075, y)) * ss(-0.215, -0.185, z) * (1 - ss(-0.1, -0.065, z));
+        const leg = (1 - ss(-0.34, -0.292, y)) * (1 - ss(0.07, 0.14, z)); const side = ss(-0.03, 0.03, x);
+        w[i * 4] = wing * (x > 0 ? 1 : 0); w[i * 4 + 1] = wing * (x < 0 ? 1 : 0); w[i * 4 + 2] = leg * side; w[i * 4 + 3] = leg * (1 - side); }
+      g.setAttribute('aRig', new THREE.BufferAttribute(w, 4));
+      const old = m.material; if (old.map) { old.map.colorSpace = THREE.SRGBColorSpace; old.map.anisotropy = 4; }
+      m.material = patchRig(new THREE.MeshStandardMaterial({ map: old.map, color: new THREE.Color(1.25, 1.2, 1.14), roughness: 0.85, metalness: 0 })); /* the scan bakes in dark shading; lift it toward the preview tan */
+      m.customDepthMaterial = patchRig(new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }), false);
+      if (dbgRig) m.material.onBeforeCompile = ((ob) => (sh) => { ob(sh); sh.vertexShader = sh.vertexShader.replace('#include <color_vertex>', '#include <color_vertex>\n vDbg = aRig;').replace('void main() {', 'varying vec4 vDbg;\nvoid main() {'); sh.fragmentShader = 'varying vec4 vDbg;\n' + sh.fragmentShader.replace('#include <dithering_fragment>', '#include <dithering_fragment>\n gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.0, 0.1, 0.6), vDbg.x + vDbg.y); gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.1, 0.9, 1.0), vDbg.z + vDbg.w);'); })(m.material.onBeforeCompile);
+      m.matrix.identity(); m.position.set(0, 0, 0); m.quaternion.identity(); m.scale.set(1, 1, 1); m.updateMatrix(); if (m.parent !== sc) sc.add(m);
+      m.castShadow = true; m.receiveShadow = false; m.frustumCulled = false; }
+    // eyelids: painted eyes found in the texture atlas -> scan coords (±0.066, 0.263, -0.253), outward normal (±0.54, 0.09, -0.84), iris r≈0.02
+    const lidM = new THREE.MeshStandardMaterial({ color: new THREE.Color().setRGB(0.448 * 1.25, 0.375 * 1.2, 0.269 * 1.14, THREE.SRGBColorSpace), roughness: 0.9 });
+    const lidG = new THREE.SphereGeometry(0.03, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
+    for (const sx of [1, -1]) { const n = new THREE.Vector3(0.54 * sx, 0.09, -0.84).normalize(); const c = new THREE.Vector3(0.066 * sx, 0.263, -0.253).addScaledVector(n, -0.017);
+      const holder = new THREE.Group(); holder.position.copy(c); holder.lookAt(c.clone().add(n)); /* holder +z = outward */ sc.add(holder);
+      const lid = new THREE.Mesh(lidG, dbgRig ? new THREE.MeshBasicMaterial({ color: 0xff0000 }) : lidM); lid.rotation.x = -Math.PI / 2; holder.add(lid); rig.lids.push(lid); }
+  }
+  const dbgRig = /[?&]rigdbg=1/.test(globalThis.location?.search || ''); let forceLid = 0;
   let want = style;
   { const url = (import.meta.env?.BASE_URL || '/') + 'models/mochi.glb'; const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder);
     L.load(url, (g) => { try {
       const sc = g.scene; const S = 1.33; sc.scale.setScalar(S); sc.rotation.y = Math.PI; /* the scan faces -z; Mochi faces +z */ sc.updateMatrixWorld(true);
       const bb = new THREE.Box3().setFromObject(sc); sc.position.y -= bb.min.y; // feet on the ground
-      sc.traverse((m) => { if (!m.isMesh) return; if (!m.geometry.attributes.normal) m.geometry.computeVertexNormals();
-        const old = m.material; m.material = new THREE.MeshStandardMaterial({ map: old.map, color: new THREE.Color(1.25, 1.2, 1.14), roughness: 0.85, metalness: 0 }); /* the scan bakes in dark shading; lift it toward the preview tan */ if (old.map) { old.map.colorSpace = THREE.SRGBColorSpace; old.map.anisotropy = 4; }
-        m.castShadow = true; m.receiveShadow = false; });
+      buildRig(sc);
       model.add(sc); modelOk = true; applyStyle(want); console.log('[mochi] model ok');
     } catch (e) { console.warn('[mochi] model failed, classic', e.message); applyStyle('classic'); } }, undefined, (e) => { console.warn('[mochi] model load failed, classic', e?.message || e); applyStyle('classic'); }); }
 
@@ -238,15 +279,31 @@ export function createMochi(outfit = '', { style = 'new' } = {}) {
     ey = Math.min(ey, 1 - 0.9 * pose.sleep); eyes.forEach((e) => (e.scale.y = ey));
     // outfit physics-ish
     if (extras.cape) extras.cape.rotation.x = 0.02 + 0.3 * w + 0.3 * Math.sin(Math.min(1, Math.max(0, anim.hop) / anim.hopDur) * Math.PI) + 0.06 * Math.sin(t * 3.1) + 0.04 * Math.sin(t * 7.3) * w;
-    if (cur === 'new') { // no rig: waddle yaw + foot-shuffle squash, wing flap -> fluff shiver, sleep -> head tucked + settled
-      const fl = anim.flap > 0 ? Math.abs(Math.sin(t * 28)) * 0.05 : 0;
+    if (cur === 'new') { // body: waddle yaw + squash; wings/legs/lids: the vertex-shader rig (buildRig)
+      const fl = anim.flap > 0 ? Math.abs(Math.sin(t * 28)) * 0.025 : 0;
       model.rotation.y = Math.sin(anim.walkPhase) * 0.1 * w + 0.05 * Math.sin(t * 0.7) * idle * (1 - pose.sleep);
-      model.scale.set(1 + fl + 0.03 * w * Math.abs(Math.cos(anim.walkPhase)), 1 - 0.04 * w * Math.abs(Math.sin(anim.walkPhase)) - 0.06 * pose.sleep, 1 + fl * 0.5);
-      model.rotation.x = 0.1 * pose.sleep; model.position.y = -0.04 * pose.sleep; }
+      model.scale.set(1 + fl + 0.03 * w * Math.abs(Math.cos(anim.walkPhase)), 1 - 0.03 * w * Math.abs(Math.sin(anim.walkPhase)) - 0.06 * pose.sleep, 1 + fl * 0.5);
+      model.rotation.x = 0.1 * pose.sleep; model.position.y = -0.04 * pose.sleep;
+      // wings: excited/hop/startle flaps beat fast; walking = a little wiggle; asleep/cold = tucked
+      const hopU = anim.hop >= 0 ? Math.min(1, anim.hop / anim.hopDur) : -1;
+      let wa = 0.04 + 0.03 * Math.sin(t * 2.6) + 0.18 * w * Math.abs(Math.sin(anim.walkPhase)) + 0.06 * mods.perk * idle * Math.max(0, Math.sin(t * 6));
+      if (anim.flap > 0) wa = 0.25 + 0.6 * Math.abs(Math.sin(t * 26)) * Math.min(1, anim.flap * 3);
+      wa *= 1 - 0.9 * pose.sleep; wa -= 0.06 * pose.sleep + 0.05 * mods.cold * idle;
+      rig.u.uWing.value.set(wa, wa * (anim.flap > 0 ? 0.92 + 0.08 * Math.sin(t * 13) : 1));
+      // legs: alternate lift-swing-plant synced to walkPhase; push off + tuck on a hop; settle/tuck when asleep (scan units: 0.03 ≈ 4 cm)
+      const ph = anim.walkPhase; let sL = Math.sin(ph) * 0.55 * w, sR = -Math.sin(ph) * 0.55 * w, lL = Math.max(0, Math.cos(ph)) * 0.035 * w, lR = Math.max(0, -Math.cos(ph)) * 0.035 * w;
+      if (hopU >= 0) { const push = hopU < 0.2 ? -0.35 * Math.sin(hopU / 0.2 * Math.PI / 2) : 0.45 * Math.sin(Math.min(1, (hopU - 0.2) / 0.68) * Math.PI); sL = sR = push; lL = lR = hopU > 0.2 && hopU < 0.88 ? 0.03 * Math.sin((hopU - 0.2) / 0.68 * Math.PI) : 0; }
+      sL += 0.5 * pose.sleep; sR += 0.5 * pose.sleep; lL += 0.035 * pose.sleep; lR += 0.035 * pose.sleep;
+      rig.u.uLegS.value.set(sL, sR); rig.u.uLegL.value.set(lL, lR);
+      // eyelids: blink every 2-6 s (sometimes twice), half-droop when tired, shut when asleep
+      rig.blinkT -= dt; if (rig.blinkT < 0) { rig.blink = 0.16; rig.blinkT = rig.dbl ? 2 + Math.random() * 4 : (Math.random() < 0.2 ? 0.28 : 2 + Math.random() * 4); rig.dbl = !rig.dbl && rig.blinkT < 0.3; }
+      let lc = 0; if (rig.blink > 0) { rig.blink -= dt; lc = 1 - Math.abs((rig.blink / 0.16) * 2 - 1); }
+      lc = Math.max(lc, pose.sleep, 0.45 * (mods.tired || 0), forceLid); rig.lids.forEach((l) => (l.rotation.x = -Math.PI / 2 + Math.min(1, lc) * Math.PI)); }
     if (extras.sock) extras.sock.rotation.z = 0.35 + Math.sin(anim.walkPhase * 0.5) * 0.25 * w + 0.05 * Math.sin(t * 2);
   }
   Object.assign(api, { root, pivot, hop, flap, update, anim, hit, mods, hold, pose, slots, model, extras,
-    setStyle(st) { want = st; return applyStyle(st); }, get style() { return cur; }, get modelOk() { return modelOk; } });
+    setStyle(st) { want = st; return applyStyle(st); }, rig });
+  Object.defineProperties(api, { style: { get: () => cur }, modelOk: { get: () => modelOk }, lid: { get: () => forceLid, set: (v) => { forceLid = +v || 0; } } }); /* live accessors (Object.assign would freeze them) */
   applyStyle('classic'); // until the GLB arrives (and for good if it never does)
   return api;
 }
