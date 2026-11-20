@@ -159,3 +159,18 @@ body.photo #ui, body.photo #bubbles { display: none !important; }
 #photobar { position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; gap: 8px; z-index: 50; }
 #photobar[hidden] { display: none; }
 #photobar button { border: 0; padding: 10px 14px; border-radius: 99px; background: rgba(255,248,236,.92); color: #4a2a12; font: 700 14px var(--font, sans-serif); box-shadow: 0 4px 16px rgba(60,30,10,.2); cursor: pointer; }
+/* touch walk controls (phones/tablets): stick bottom-left, hop + E bottom-right, ✕ walk top-right */
+.touch-ui { display: none; }
+.touch-ui.show { display: block; }
+.touch-ui > * { position: fixed; z-index: 7; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.tstick { left: calc(22px + env(safe-area-inset-left)); bottom: calc(26px + env(safe-area-inset-bottom)); width: 132px; height: 132px; border-radius: 50%; background: rgba(255,255,255,.14); border: 2px solid rgba(255,255,255,.4); box-shadow: 0 2px 12px rgba(0,0,0,.25); backdrop-filter: blur(2px); }
+.tstick.active { background: rgba(255,255,255,.22); }
+.tknob { position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; margin: -29px 0 0 -29px; border-radius: 50%; background: rgba(255,255,255,.55); border: 2px solid rgba(255,255,255,.8); box-shadow: 0 2px 8px rgba(0,0,0,.3); pointer-events: none; }
+.tbtn { width: 64px; height: 64px; border-radius: 50%; border: 2px solid rgba(255,255,255,.6); background: rgba(40,25,12,.38); color: #fff; font: 700 24px Nunito, system-ui, sans-serif; box-shadow: 0 2px 10px rgba(0,0,0,.3); }
+.tbtn:active { background: rgba(255,255,255,.35); }
+.tjump { right: calc(24px + env(safe-area-inset-right)); bottom: calc(40px + env(safe-area-inset-bottom)); }
+.tuse { right: calc(100px + env(safe-area-inset-right)); bottom: calc(26px + env(safe-area-inset-bottom)); width: 54px; height: 54px; font-size: 20px; }
+.texit { right: calc(14px + env(safe-area-inset-right)); top: calc(70px + env(safe-area-inset-top)); padding: 8px 14px; border-radius: 99px; border: 0; background: rgba(40,25,12,.6); color: #fff; font: 700 14px Nunito, system-ui, sans-serif; }
+body.walking { overscroll-behavior: none; }
+@media (orientation: landscape) and (max-height: 500px) { .tstick { width: 112px; height: 112px; bottom: 18px; } .tjump { bottom: 24px; } .tuse { bottom: 14px; } .texit { top: 12px; } }
+body.touchwalk .legend, body.touchwalk .tools, body.touchwalk .nowplaying, body.touchwalk .hint { display: none !important; }

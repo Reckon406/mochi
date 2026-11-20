@@ -17,11 +17,30 @@ export function walkH(x, z) {
 }
 
 const BLOCKS = [...OBSTACLES.filter((o) => !o.mochiOnly), ...WALLS];
-export function createWalk({ camera, dom, isOpen = () => false, onChange = () => {}, sens = () => 1, showHint = () => true, onStep = () => {} }) {
+export function createWalk({ camera, dom, isOpen = () => false, onChange = () => {}, sens = () => 1, showHint = () => true, onStep = () => {}, onInteract = () => {} }) {
   const pos = new THREE.Vector3(), held = new Set(); const hint = document.createElement('div'); hint.className = 'walk-hint';
   hint.textContent = 'WASD move · shift sprint · space hop · click look · Esc unlock'; document.getElementById('app').appendChild(hint);
   let on = false, yaw = 0, pitch = 0, vy = 0, air = 0, bob = 0, hintT = 0, drag = null;
   const locked = () => document.pointerLockElement === dom;
+  // ── touch: virtual stick bottom-left (move), drag anywhere else (look), hop + E buttons bottom-right, ✕ to leave walk mode ──
+  const touchDev = matchMedia('(pointer: coarse)').matches || navigator.maxTouchPoints > 0 || /[?&]touch=1/.test(location.search);
+  const tui = document.createElement('div'); tui.className = 'touch-ui';
+  tui.innerHTML = '<div class="tstick"><div class="tknob"></div></div><button class="tbtn tjump" aria-label="hop">⤒</button><button class="tbtn tuse" aria-label="interact">E</button><button class="texit" aria-label="leave walk mode">✕ walk</button>';
+  document.getElementById('app').appendChild(tui);
+  const stickEl = tui.querySelector('.tstick'), knob = tui.querySelector('.tknob'); const stick = { id: null, x: 0, y: 0, cx: 0, cy: 0 }; const STICK_R = 52;
+  const stickMove = (e) => { let dx = e.clientX - stick.cx, dy = e.clientY - stick.cy; const d = Math.hypot(dx, dy); if (d > STICK_R) { dx *= STICK_R / d; dy *= STICK_R / d; } stick.x = dx / STICK_R; stick.y = dy / STICK_R; knob.style.transform = `translate(${dx}px, ${dy}px)`; };
+  const stickEnd = (e) => { if (e.pointerId !== stick.id) return; stick.id = null; stick.x = stick.y = 0; knob.style.transform = ''; stickEl.classList.remove('active'); };
+  stickEl.addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); if (stick.id != null) return; stick.id = e.pointerId; try { stickEl.setPointerCapture(e.pointerId); } catch {} const r = stickEl.getBoundingClientRect(); stick.cx = r.left + r.width / 2; stick.cy = r.top + r.height / 2; stickEl.classList.add('active'); stickMove(e); });
+  stickEl.addEventListener('pointermove', (e) => { if (e.pointerId === stick.id) { e.preventDefault(); stickMove(e); } });
+  stickEl.addEventListener('pointerup', stickEnd); stickEl.addEventListener('pointercancel', stickEnd); stickEl.addEventListener('lostpointercapture', stickEnd);
+  const tap = (sel, fn) => tui.querySelector(sel).addEventListener('pointerdown', (e) => { e.preventDefault(); e.stopPropagation(); fn(); });
+  tap('.tjump', () => { if (air <= 0) vy = 4.2; }); tap('.tuse', () => onInteract()); tap('.texit', () => set(false));
+  tui.addEventListener('contextmenu', (e) => e.preventDefault());
+  // look: one touch pointer on the canvas at a time; the stick lives on its own element so both work together
+  const look1 = { id: null, x: 0, y: 0 }; let lastPtr = 'mouse';
+  dom.addEventListener('pointerdown', (e) => { lastPtr = e.pointerType; if (!on || e.pointerType === 'mouse') return; if (look1.id == null) { look1.id = e.pointerId; look1.x = e.clientX; look1.y = e.clientY; } });
+  dom.addEventListener('pointermove', (e) => { if (!on || e.pointerId !== look1.id) return; look((e.clientX - look1.x) * 1.6, (e.clientY - look1.y) * 1.6); look1.x = e.clientX; look1.y = e.clientY; });
+  const lookEnd = (e) => { if (e.pointerId === look1.id) look1.id = null; }; addEventListener('pointerup', lookEnd); addEventListener('pointercancel', lookEnd);
 
   function pushOut(x, z) {
     for (const o of BLOCKS) { const dx = x - o.x, dz = z - o.z, d = Math.hypot(dx, dz), m = o.r + BODY_R;
@@ -42,6 +61,8 @@ export function createWalk({ camera, dom, isOpen = () => false, onChange = () =>
   }
   function set(v) {
     if (v === on) return; on = v; held.clear(); drag = null;
+    tui.classList.toggle('show', on && touchDev); document.body.classList.toggle('touchwalk', on && touchDev); stick.id = null; stick.x = stick.y = 0; knob.style.transform = ''; look1.id = null;
+    hint.textContent = touchDev ? 'left stick move · drag look · ⤒ hop · E do the nearest thing' : 'WASD move · shift sprint · space hop · click look · Esc unlock';
     if (on) { spawn(); hintT = 6; hint.classList.toggle('show', showHint()); } else { hint.classList.remove('show'); if (locked()) document.exitPointerLock(); }
     document.body.classList.toggle('walking', on); onChange(on);
   }
@@ -55,8 +76,8 @@ export function createWalk({ camera, dom, isOpen = () => false, onChange = () =>
   });
   addEventListener('keyup', (e) => { if (KEYS[e.code]) held.delete(KEYS[e.code]); if (e.key === 'Shift') held.delete('run'); });
   addEventListener('blur', () => held.clear());
-  dom.addEventListener('click', () => { if (on && !isOpen() && !locked() && dom.requestPointerLock) { try { const p = dom.requestPointerLock(); p?.catch?.(() => {}); } catch {} } });
-  dom.addEventListener('pointerdown', (e) => { if (on && !locked()) drag = [e.clientX, e.clientY]; });
+  dom.addEventListener('click', () => { if (on && lastPtr === 'mouse' && !isOpen() && !locked() && dom.requestPointerLock) { try { const p = dom.requestPointerLock(); p?.catch?.(() => {}); } catch {} } });
+  dom.addEventListener('pointerdown', (e) => { if (on && !locked() && e.pointerType === 'mouse') drag = [e.clientX, e.clientY]; });
   addEventListener('pointerup', () => (drag = null));
   addEventListener('mousemove', (e) => {
     if (!on) return;
@@ -72,14 +93,16 @@ export function createWalk({ camera, dom, isOpen = () => false, onChange = () =>
     fwd.set(-Math.sin(yaw), 0, -Math.cos(yaw)); right.set(-fwd.z, 0, fwd.x);
     mv.set(0, 0, 0);
     if (held.has('f')) mv.add(fwd); if (held.has('b')) mv.sub(fwd); if (held.has('r')) mv.add(right); if (held.has('l')) mv.sub(right);
+    let amt = 1, run = held.has('run');
+    if (stick.id != null && Math.hypot(stick.x, stick.y) > 0.12) { const m = Math.min(1, Math.hypot(stick.x, stick.y)); mv.addScaledVector(fwd, -stick.y).addScaledVector(right, stick.x); amt = m; if (m > 0.97) run = true; }
     const moving = mv.lengthSq() > 0;
     if (moving) {
-      mv.normalize().multiplyScalar(SPEED * (held.has('run') ? SPRINT : 1) * dt);
+      mv.normalize().multiplyScalar(SPEED * amt * (run ? SPRINT : 1) * dt);
       const ok = (x, z) => { const h = walkH(x, z); if (h == null) return false; const h0 = walkH(pos.x, pos.z) ?? h; return air > 0.3 || (h - h0) / Math.hypot(x - pos.x, z - pos.z) < 2.2; }; // no scaling sheer cliff faces
       let x = pos.x + mv.x, z = pos.z; if (ok(x, z)) pos.x = x; // per axis = slide along shorelines
       x = pos.x; z = pos.z + mv.z; if (ok(x, z)) pos.z = z;
       [x, z] = pushOut(pos.x, pos.z); if (walkH(x, z) != null) { pos.x = x; pos.z = z; }
-      const pb = bob; bob += dt * (held.has('run') ? 14 : 9); if (Math.floor(pb / Math.PI) !== Math.floor(bob / Math.PI) && air === 0) onStep();
+      const pb = bob; bob += dt * (run ? 14 : 9); if (Math.floor(pb / Math.PI) !== Math.floor(bob / Math.PI) && air === 0) onStep();
     }
     const g = walkH(pos.x, pos.z) ?? pos.y;
     vy -= 12 * dt; air = Math.max(0, air + vy * dt); if (air === 0) vy = Math.max(vy, 0);
@@ -88,5 +111,5 @@ export function createWalk({ camera, dom, isOpen = () => false, onChange = () =>
     camera.position.set(pos.x, pos.y + EYE + air + b, pos.z);
     camera.rotation.set(pitch, yaw, 0, 'YXZ');
   }
-  return { get on() { return on; }, set, toggle: () => set(!on), update, get pos() { return pos; } };
+  return { get on() { return on; }, set, toggle: () => set(!on), update, get pos() { return pos; }, touch: touchDev, get stick() { return { ...stick }; }, get yaw() { return yaw; } };
 }

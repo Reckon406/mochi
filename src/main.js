@@ -276,7 +276,7 @@ async function init() {
     onWalk: () => walk.toggle(),
     onSettings: () => setPanel.toggle(),
     onSongClick: () => music.next(),
-    canWalk: !matchMedia('(pointer: coarse)').matches,
+    canWalk: true,
     favoredId: favored.id,
   });
   // ── music + settings ──
@@ -298,7 +298,7 @@ async function init() {
   });
   // ── walk mode (WASD + mouse look); orbit/follow come back when it's off ──
   const walk = createWalk({ camera, dom: renderer.domElement, isOpen: () => !document.getElementById('lightbox')?.hidden,
-    sens: () => settings.get().lookSens, showHint: () => settings.get().walkHint, onStep: () => music.sfx('step'),
+    sens: () => settings.get().lookSens, showHint: () => settings.get().walkHint, onStep: () => music.sfx('step'), onInteract: () => interactNear(),
     onChange: (on) => {
       ui.setWalk(on); controls.enabled = !on; controls.autoRotate = false; lastInteract = performance.now();
       if (on) { follow = false; ui.setFollow(false); }
@@ -414,7 +414,7 @@ async function init() {
     if (w === rzW && h === rzH) return;
     rzW = w; rzH = h;
     camera.aspect = w / h; camera.updateProjectionMatrix();
-    renderer.setSize(w, h, false);
+    renderer.setSize(w, h, false); renderer.domElement.style.width = w + 'px'; renderer.domElement.style.height = h + 'px'; /* rotate portrait <-> landscape: the canvas box has to follow too */
     composer.setSize(w, h);
     bloom.resolution.set(w / 2, h / 2);
   }
@@ -543,7 +543,7 @@ async function init() {
     }
     raf = requestAnimationFrame(frame);
   }
-  if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk' && !matchMedia('(pointer: coarse)').matches)) walk.set(true);
+  if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk')) walk.set(true);
   raf = requestAnimationFrame(frame);
   window.__mochi = { flowers, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
