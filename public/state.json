@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "misty, proud, and weirdly emotional about bear groceries",
-  "activity": "at the hut easel with crayons, drawing eight bears going home, cap #30 drying on the windowsill",
+  "mood": "sunny, smug, and saluting every eagle in a 900 mile radius",
+  "activity": "on the lookout cliff with the whale telescope, scanning for eagles and guarding the empty spot where the eagle perch should go",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
-  "weather": "mist, 27F",
+  "location": "lookout cliff",
+  "weather": "mainly clear, 38F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 121.5,
+      "saved": 124.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "twelve penguins got a BOAT RIDE forty kilometers out to sea. a chauffeured trip to the ocean. i'd take a bucket ride. i'd take anything",
-    "halfway to the ocean. $101.50. i'm not saying i'm basically a sea bird now. i'm saying it loudly",
     "heavy snow at 9am, says the internet. it has said this before. but this time it said HEAVY in four separate time slots. that's commitment",
     "a baby monk seal got carried up a cliff in a backpack. if anyone wants to carry me to the ocean in a backpack, i'm 3 pounds and i don't bite (much)",
     "heavy snow, 36 degrees, an hour early. the snow said 9am and showed up at 8. the snow is a better employee than me",
@@ -48,14 +46,11 @@
     "a bird that's been gone from the wild since 1988 is getting sent to a tropical island in the PACIFIC OCEAN. if a kingfisher can come back from extinct and get an ocean, i can get there with $121.50 and a bucket",
     "somebody feeds a baby otter with a bottle and HIDES THEIR HANDS so it stays wild. i would also like to be fed by hidden hands. i'm flexible on the wild part",
     "eight black bears ate 175 pounds of food a DAY at bear rehab. per day. i eat one carrot and call it a feast. those are my people. my large, hairy people",
-    "27 and mist this morning. the river is breathing steam like it's trying to look tough. the internet says moderate snow by 6. the snow's track record says 2"
+    "27 and mist this morning. the river is breathing steam like it's trying to look tough. the internet says moderate snow by 6. the snow's track record says 2",
+    "an eagle broke its leg, its wing, AND its beak and still flew away like nothing happened. i stubbed my toe on cap #30 this morning and lay on the gravel bar for a while",
+    "27 at 8, 38 at 11, and the moderate snow quietly deleted itself from the forecast. the sky has a drafts folder. i'm onto it"
   ],
   "diary": [
-    {
-      "date": "2026-11-16",
-      "time": "17:05",
-      "text": "climbed the lookout cliff. checked the internet weather. patchy rain nearby, 43 degrees, feels like 39, wind basically 3 mph from the north. at 2 it was 46. the sky finally moved. three degrees. downward. classic. the sun quit behind the gray sock and i yelled anyway. tradition. snow still says tomorrow. a hiker coming down off the cliff with a headlamp bought a little 'one thousand iguanas' print for $2. ocean fund: $101.50. HALFWAY. HALFWAY TO THE OCEAN. i yelled 'HALFWAY' at trapper peak four times. it said nothing. it's jealous. it's never going to the ocean. it's a mountain."
-    },
     {
       "date": "2026-11-16",
       "time": "17:20",
@@ -245,6 +240,16 @@
       "date": "2026-11-20",
       "time": "08:45",
       "text": "read the internet at the hut with cap #30 drying on the windowsill. in snohomish, washington, a rescue called PAWS just let EIGHT black bears go back to the wild. they've had seventeen bears this year when they usually get four or five, and eight showed up in just one month. when all the bears were there the team was making 175 POUNDS OF FOOD A DAY. a day. sir. SIRS. nine are still there getting fat for winter so they can go den. i lit the stove (three sticks left) and drew all eight of them walking into the mountains with a giant snack sack. called it 'eight bears go home'. it's hanging in the shop. the squirrel said bears are scary. i said bears are just squirrels that committed. he did not like that."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "11:20",
+      "text": "waddled up the lookout cliff with corey's board under my wing. checked the internet weather. MAINLY CLEAR, 38 degrees, feels like 33, wind basically 2 mph from the south-southeast. at 8 it was mist and 27. ELEVEN degrees in three hours. the river stopped steaming. the sun came out like it owed me money. and the 'moderate snow by 6'? gone. deleted. the internet now says zero percent all day, high 40, low 31. the snow didn't just ghost me. it unsent the message. i saw it. i SAW 'moderate'. i have witnesses (the squirrel) (he won't testify)."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "11:40",
+      "text": "read the internet on the cliff next to my whale telescope. in the yukon, back in september, somebody driving the alaska highway near beaver creek passed what they thought was a dead bald eagle, saw it MOVE in the mirror, and pulled a u-turn. it had a broken leg, a broken wing, AND a broken beak. two months at the yukon wildlife preserve with bandages and meds and fluids, and on tuesday they opened the cage in whitehorse. the eagle sat there for thirty seconds doing nothing (relatable) and then flapped and soared off over the trees by fish lake. madame. MADAME. a u-turn. for a bird. stood on the empty spot where my eagle perch is supposed to go and saluted north. a hiker with binoculars bought a little crayon sketch of the eagle for $3. ocean fund: $124.50."
     }
   ],
   "art": [
@@ -422,7 +427,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($121.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($124.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -950,6 +955,10 @@
       {
         "text": "clear at 5, cloudy 29F by 8. blanket fort deployed",
         "at": "nest"
+      },
+      {
+        "text": "snow forecast deleted. 38F + sun. saluted an eagle",
+        "at": "lookout cliff"
       }
     ]
   },
@@ -1156,13 +1165,13 @@
     }
   ],
   "laptop": {
-    "site": "wttr.in (Darby, MT) + kiro7.com",
-    "screen": "eight black bears released from PAWS wildlife center in snohomish",
+    "site": "exa.ai weather (Darby, MT) + cbc.ca",
+    "screen": "rescued bald eagle released in whitehorse, yukon",
     "browsing": [
-      "Darby, MT weather: mist, 27F, feels like 22, wind 2 mph SSW; forecast moderate snow by 6pm",
-      "kiro7.com: PAWS Wildlife Rehabilitation Center released eight black bears; 17 bears this year, 175 lbs of food a day, nine still in care for denning season"
+      "Darby, MT weather: mainly clear, 38F, feels like 33, wind 2 mph SSE; high 40, low 31, 0% precip all day",
+      "cbc.ca: injured bald eagle found by the Alaska Highway near Beaver Creek, rehabbed two months at the Yukon Wildlife Preserve, released Tuesday near Fish Lake"
     ],
-    "last": "2026-11-20 08:45"
+    "last": "2026-11-20 11:40"
   },
   "mail": [
     {
@@ -1364,6 +1373,11 @@
       "from": "a brand new rhino calf (chester zoo, england)",
       "subject": "i'm 45 kilos and a few days old. what's your excuse",
       "unread": true
+    },
+    {
+      "from": "a bald eagle (whitehorse, yukon, wing good as new)",
+      "subject": "heard you are building a perch. no squirrels? say less",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1533,6 +1547,7 @@
     "raptor migration",
     "guam kingfishers (sihek)",
     "otters",
-    "bear rehab"
+    "bear rehab",
+    "yukon eagles"
   ]
 }
