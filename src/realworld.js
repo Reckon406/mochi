@@ -152,9 +152,10 @@ export function upgradeWorld(scene, { tier = 1, season = 'summer', snowy = false
       const n = o.isInstancedMesh ? o.count : 1;
       for (let i = 0; i < n; i++) { if (o.isInstancedMesh) { o.getMatrixAt(i, im4); w4.multiplyMatrices(o.matrixWorld, im4); } else w4.copy(o.matrixWorld);
         _v.setFromMatrixPosition(w4); const key = pickOf(POOL[kind], _v.x, _v.z, i); const pr = P[key]; if (!pr) continue;
-        const m = w4.clone().multiply(fit(gb, pr.box, OPTS[kind])); if (!buckets.has(key)) buckets.set(key, []); buckets.get(key).push(m); info[KINDS[kind]]++; }
+        const m = w4.clone().multiply(fit(gb, pr.box, OPTS[kind])); const bk = kind === 'driftwood' ? 'dw|' + key : key; if (!buckets.has(bk)) buckets.set(bk, []); buckets.get(bk).push(m); info[KINDS[kind]]++; }
       hide.push(o); });
-    for (const [key, list] of buckets) instanced(P[key].parts, list, group, { matFor: tune });
+    const bleachC = new Map(); const bleach = (m) => { if (!bleachC.has(m)) { const t = tune(m).clone(); if (t.color) t.color.lerp(new THREE.Color(0.8, 0.76, 0.68), 0.5).multiplyScalar(1.9); t.roughness = 1; bleachC.set(m, t); } return bleachC.get(m); }; /* sun-bleached driftwood */
+    for (const [bk, list] of buckets) { const dw = bk.startsWith('dw|'); instanced(P[dw ? bk.slice(3) : bk].parts, list, group, { matFor: dw ? bleach : tune }); }
     return hide;
   });
 
