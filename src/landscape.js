@@ -14,12 +14,16 @@ export const TRAPPER = { x: Math.sin(BEAR) * 900, z: -Math.cos(BEAR) * 900 };
 export const TRAPPER_DIR = new THREE.Vector2(Math.sin(BEAR), -Math.cos(BEAR));
 
 // must match the GLSL copy in water.js
-import { riverX, riverW } from './layout.js';
+import { riverX, riverW, DOCK } from './layout.js';
 export { riverX, riverW };
 
 // with the AI Bitterroot backdrop on (Medium+), the big procedural ranges are pressed down so the photo range reads behind them
 let LOWM = 0; export function setLowMountains(on) { LOWM = on ? 1 : 0; }
 const MCAP = 42, MK = 0.16;
+// the girl kiwi's homestead on the far bank (crush.js builds it here); bank trees keep clear of it
+let _gh = null;
+export function girlHome() { if (_gh) return _gh; let x = 0, z = 0; for (let s = 4; s < 90; s += 0.25) { x = DOCK.x1 + DOCK.dx * s; z = DOCK.z1 + DOCK.dz * s; if (x < riverX(z) - riverW(z) && terrainH(x, z) > WATER_Y - 0.15) break; }
+  const land = { x, z }; const home = { x: x + DOCK.dx * 3.4 - DOCK.dz * 2.2, z: z + DOCK.dz * 3.4 + DOCK.dx * 2.2 }; _gh = { land, home, cx: home.x - DOCK.dx * 1.0, cz: home.z - DOCK.dz * 1.0, r: 7.0 }; return _gh; }
 export function terrainH(x, z) { const h0 = terrainH0(x, z); if (!LOWM) return h0; const rel = h0 - FLOOR_Y; return rel > MCAP ? FLOOR_Y + MCAP + (rel - MCAP) * MK : h0; }
 function terrainH0(x, z) {
   const dx = x - riverX(z), adx = Math.abs(dx);
@@ -133,7 +137,7 @@ export function buildLandscape(scene, { snowy = false, mobile = false, season = 
   const willowC = seasonColors('willow', season, snowy);
   const placeBank = (mesh, count, cols, minD, maxD, scale, zr, clearR, trunkTint = null) => { let k = 0, tr = 0;
     while (k < count && tr < count * 40) { tr++; const z = (r() - 0.5) * 2 * zr; const side = r() < 0.5 ? -1 : 1; const off = riverW(z) + minD + Math.pow(r(), 1.6) * (maxD - minD); const x = riverX(z) + side * off;
-      const h = terrainH(x, z); if (h < FLOOR_Y - 0.25 || h > FLOOR_Y + 14) continue; if (Math.hypot(x, z) < clearR) continue;
+      const h = terrainH(x, z); if (h < FLOOR_Y - 0.25 || h > FLOOR_Y + 14) continue; if (Math.hypot(x, z) < clearR) continue; { const G = girlHome(); if (Math.hypot(x - G.cx, z - G.cz) < G.r) continue; }
       const sc = scale * (0.75 + r() * 0.55); p.set(x, h - 0.2, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, r() * 6.28); s.set(sc, sc * (0.9 + r() * 0.35), sc); m4.compose(p, q, s);
       mesh.setMatrixAt(k, m4);
       const hex = cols[Math.floor(r() * cols.length)]; pc.set(hex); if (snowy) pc.lerp(PAL.snow, 0.45); if (r() < 0.1) pc.set(snowy ? 0xe8ecf4 : 0x9a8a70);

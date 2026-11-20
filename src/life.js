@@ -124,25 +124,38 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     tick(u) { const C = CR(), b = C.boatState, from = this.from, to = this.to; const e = u * u * (3 - 2 * u); const want = Math.atan2(to.x - from.x, to.z - from.z); let dh = want - b.yaw; dh = Math.atan2(Math.sin(dh), Math.cos(dh)); b.yaw += dh * Math.min(1, 0.06 + u);
       b.x = from.x + (to.x - from.x) * e; b.z = from.z + (to.z - from.z) * e; const p = M(), s = seatAt(); p.x = s.x; p.z = s.z; face = b.yaw; pose.sway = 0.12; },
     end() { const C = CR(); C.boatState.row = 0; C.wake(false); pose.sway = 0; } });
-  const HER = { stranger: ['oh. hi? who are you', 'um. hello, little round stranger', '...do i know you?'], friend: ['MOCHI! hi!!', 'hey you! rowed all the way over?', 'my favourite neighbour'], crush: ['*fluffs feathers* oh. it\'s you. hi', 'you came back!! i mean. cool. hi', 'i was just thinking about you. about. boats.'] };
-  const pickGift = () => { const o = ['flowers', 'flowers']; if (Math.random() < 0.35) o.push('art'); if (inv.worms > 0) o.push('worms'); if (sum(inv.fish) > 0) o.push('fish'); return o[Math.floor(Math.random() * o.length)]; };
+  const HER = { stranger: ['oh. hi? who are you', 'um. hello, little round stranger', '...do i know you?'], friend: ['MOCHI! hi!!', 'hey you! rowed all the way over?', 'my favourite neighbour'], crush: ['*fluffs feathers* oh. it\'s you. hi', 'you came back!! i mean. cool. hi', 'i was just thinking about you. about. boats.'], dating: ['there you are ♡', 'my favourite rower', 'hi you'] };
+  // what he can bring: kind + which of her possible interests it touches. He favours things he KNOWS she likes.
+  const FLOWERS = ['bitterroot', 'balsamroot'];
+  const giftOptions = () => { const o = [{ kind: 'flowers', about: [FLOWERS[Math.floor(Math.random() * 2)]] }, { kind: 'art', about: ['art'] }];
+    if (inv.worms > 0) o.push({ kind: 'worms', about: ['worms'] }); const fk = Object.keys(inv.fish).find((k) => inv.fish[k] > 0); if (fk) o.push({ kind: 'fish', about: ['fishing', /cutthroat/.test(fk) ? 'trout' : null], fk });
+    if (inv.honey > 0) o.push({ kind: 'honey', about: ['honey'] }); if (inv.shells > 0) o.push({ kind: 'shells', about: ['shells'] }); if (sum(inv.cooked) > 0) o.push({ kind: 'cooked', about: ['cooking'] });
+    if (sum(inv.crops) > 0) o.push({ kind: 'veggies', about: ['garden'] }); if (inv.caps > 0) o.push({ kind: 'caps', about: ['caps'] }); return o; };
+  const pickGift = () => { const C = CR(), o = giftOptions(); const want = C.nextGift && o.find((g) => g.kind === C.nextGift || g.about.includes(C.nextGift)); if (want) { if (FLOWERS.includes(C.nextGift)) want.about = [C.nextGift]; return want; }
+    const known = o.filter((g) => g.about.some((a) => C.discovered.includes(a) && C.likes.includes(a)) && !g.about.includes(C.dislike)); if (known.length && Math.random() < 0.7) { const g = known[Math.floor(Math.random() * known.length)]; if (g.kind === 'flowers') g.about = [FLOWERS.find((f) => C.likes.includes(f) && C.discovered.includes(f)) || g.about[0]]; return g; }
+    const safe = o.filter((g) => !(C.discovered.includes(C.dislike) && g.about.includes(C.dislike))); return safe[Math.floor(Math.random() * safe.length)] || o[0]; };
+  const spend = (g) => { if (g.kind === 'worms') inv.worms = Math.max(0, inv.worms - 1); else if (g.kind === 'fish' && g.fk) inv.fish[g.fk]--; else if (g.kind === 'honey') inv.honey--; else if (g.kind === 'shells') inv.shells--; else if (g.kind === 'caps') inv.caps--; else if (g.kind === 'cooked') { const k = Object.keys(inv.cooked).find((q) => inv.cooked[q] > 0); if (k) inv.cooked[k]--; } else if (g.kind === 'veggies') { const k = Object.keys(inv.crops).find((q) => inv.crops[q] > 0); if (k) inv.crops[k]--; } };
+  const giftWord = (g) => (g.kind === 'flowers' ? (g.about[0] === 'bitterroot' ? 'bitterroot flowers' : 'balsamroot flowers') : g.kind === 'veggies' ? 'veggies from the garden' : g.kind === 'cooked' ? 'some campfire stew' : g.kind === 'caps' ? 'a shiny bottle cap' : g.kind);
+  const nm = () => (CR().name === '???' ? 'the kiwi across the river' : CR().name);
+  const reactTo = (C, r, mine) => { if (r.v === 'like') { C.react(mine ? 'heart' : 'sparkle'); mochi.flap(1); } else if (r.v === 'ick') C.react('ick'); else C.react('shrug'); };
+  const talkStep = (d = 4.2) => ({ d, start() { const C = CR(); const id = C.pickTopic(), info = C.interest(id); say(`so... do you like ${info.label}? ${info.emoji}`, 2); this.topic = id;
+      setTimeout(() => { if (!cur || !['visit', 'date'].includes(cur.id)) return; const r = C.talk(id); reactTo(C, r, false); changed();
+        say(r.v === 'like' ? `${C.name}: "YES. how did you know?!" ${r.fresh ? `💡 she loves ${info.label}!` : ''} (+${r.d})` : r.v === 'ick' ? `${C.name}: "...ew. no." ${r.fresh ? '📝 noted: NOT that' : ''} (${r.d})` : `${C.name}: "it's ok i guess" (+${r.d})`, 2.4); }, 1700); } });
   A.visit = { zone: 'dock', label: '⛵ rowing over to visit her', ok: () => !!features.crush && features.crush.stage !== 'dating',
     onCancel() { const C = CR(); if (!C) return; Object.assign(C.boatState, { x: C.moor.x, z: C.moor.z, yaw: C.yawOut, row: 0 }); C.wake(false); C.lookAt(null); rideY = null; const p = M(); p.x = C.boardPt.x; p.z = C.boardPt.z; if (this.gp) this.gp.parent?.remove(this.gp); },
     steps: [
-    { d: 1, start() { const C = CR(); this.gift = pickGift(); hold(giftMesh(this.gift), [0, 0, 0], 1.2); walkTo(C.boardPt.clone()); say(this.gift === 'flowers' ? 'picked some flowers. for no reason. for a friend. normal' : `bringing ${C.name === '???' ? 'the kiwi across the river' : C.name} some ${this.gift}`, 3); } },
+    { d: 1, start() { const C = CR(); this.gift = pickGift(); hold(giftMesh(this.gift.kind), [0, 0, 0], 1.2); walkTo(C.boardPt.clone()); say(this.gift.kind === 'flowers' ? `picked some ${giftWord(this.gift)}. for no reason. for a friend. normal` : `bringing ${nm()} ${giftWord(this.gift)}`, 3); } },
     { d: 0.7, start() { const C = CR(); face = Math.atan2(C.moor.x - M().x, C.moor.z - M().z); mochi.hop(0.5); }, end() { rideY = boatY; const s = seatAt(), p = M(); p.x = s.x; p.z = s.z; } },
     sail(() => CR().moor, () => CR().beach),
-    { d: 0.7, start() { mochi.hop(0.5); }, end() { const C = CR(); rideY = C.rideY; const p = M(); p.x = C.landing.x + Math.sin(C.yawOut) * 0.9; p.z = C.landing.z + Math.cos(C.yawOut) * 0.9; } },
+    { d: 0.7, start() { mochi.hop(0.5); }, end() { const C = CR(); rideY = C.rideY; const p = M(); p.x = C.dockTip.x; p.z = C.dockTip.z; } },
     { d: 1, start() { const C = CR(); C.lookAt(M()); walkTo(C.herFront()); } },
-    { d: 4, start() { const C = CR(); const h = C.her.position; face = Math.atan2(h.x - M().x, h.z - M().z); const st = C.stage;
-        const pref = { flowers: 0.15, art: 0.25, worms: 0.05, fish: -0.15 }[this.gift] ?? 0; this.good = Math.random() < 0.55 + pref + (st === 'crush' ? 0.15 : st === 'friend' ? 0.05 : 0);
-        if (this.gift === 'worms') inv.worms = Math.max(0, inv.worms - 1); if (this.gift === 'fish') { const k = Object.keys(inv.fish).find((q) => inv.fish[q] > 0); if (k) inv.fish[k]--; }
-        drop(); const gp = giftMesh(this.gift); gp.position.set(h.x + (M().x - h.x) * 0.45, h.y + 0.08, h.z + (M().z - h.z) * 0.45); gp.rotation.set(0, Math.random() * 6, 0); gp.scale.setScalar(1.2); features.group.parent.add(gp); this.gp = gp;
-        const d = C.give(this.gift, this.good); changed(); this.l = (HER[st] || HER.friend)[Math.floor(Math.random() * 3)];
-        say(`${C.name}: "${this.l}"`, 2);
-        setTimeout(() => { if (cur?.id !== 'visit') return; C.react(this.good ? 'heart' : 'shrug'); say(this.good ? `${C.name}: "for ME?? ♡" (+${d})` : `${C.name}: "oh. ${this.gift}. thanks i guess" (+${d})`, 2.2); if (this.good) mochi.flap(1); }, 1600); },
-      end() { face = null; } },
-    { d: 1, start() { const C = CR(); C.lookAt(null); walkTo(new THREE.Vector3(C.landing.x + Math.sin(C.yawOut) * 0.9, 0, C.landing.z + Math.cos(C.yawOut) * 0.9)); say(this.good ? 'she LIKED it. play it cool. PLAY IT COOL' : 'that went... fine. it went fine', 2.5); } },
+    { d: 2.2, start() { const C = CR(); const h = C.her.position; face = Math.atan2(h.x - M().x, h.z - M().z); const hint = C.hint(); say(`${C.name}: "${hint || (HER[C.stage] || HER.friend)[Math.floor(Math.random() * 3)]}"`, 2.2); } },
+    { d: 4, start() { const C = CR(); const h = C.her.position; spend(this.gift);
+        drop(); const gp = giftMesh(this.gift.kind); gp.position.set(h.x + (M().x - h.x) * 0.45, h.y + 0.08, h.z + (M().z - h.z) * 0.45); gp.rotation.set(0, Math.random() * 6, 0); gp.scale.setScalar(1.2); features.group.parent.add(gp); this.gp = gp;
+        const r = C.gift(this.gift.kind, this.gift.about); this.r = r; changed(); say(`here. ${giftWord(this.gift)}. for you`, 1.6);
+        setTimeout(() => { if (cur?.id !== 'visit') return; reactTo(C, r, true); say(r.v === 'like' ? `${C.name}: "for ME?? ♡" ${r.fresh ? `💡 she loves ${r.info.label}!` : ''} (+${r.d})` : r.v === 'ick' ? `${C.name}: "oh. ${giftWord(this.gift)}. ...ew" ${r.fresh ? '📝 noted' : ''} (${r.d})` : `${C.name}: "oh. thanks i guess" (+${r.d})`, 2.4); }, 1600); } },
+    talkStep(),
+    { d: 1, start() { const C = CR(); C.lookAt(null); walkTo(C.dockTip.clone()); say(this.r?.v === 'like' ? 'she LIKED it. play it cool. PLAY IT COOL' : this.r?.v === 'ick' ? 'note to self: never again' : 'that went... fine. it went fine', 2.5); } },
     { d: 0.7, start() { mochi.hop(0.5); }, end() { rideY = boatY; const s = seatAt(), p = M(); p.x = s.x; p.z = s.z; } },
     sail(() => CR().beach, () => CR().moor),
     { d: 0.8, start() { mochi.hop(0.5); }, end() { const C = CR(); rideY = null; const p = M(); p.x = C.boardPt.x; p.z = C.boardPt.z; C.boatState.yaw = C.yawOut; if (this.gp) { this.gp.parent?.remove(this.gp); this.gp = null; } } } ] };
@@ -150,8 +163,9 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     onCancel() { CR()?.hearts(false); CR()?.lookAt(null); },
     steps: [
     { d: 1, start() { const C = CR(); walkTo(C.mochiDateSpot.clone()); say(`${C.name === '???' ? 'she' : C.name} came over!! act normal`, 2.5); } },
-    { d: 14, start() { const C = CR(); face = C.yawOut; const a = C.dockSeat, b = M(); C.hearts(true, new THREE.Vector3((a.x + b.x) / 2, a.y, (a.z + b.z) / 2)); this.k = 0; },
-      tick(u, dt, t) { const C = CR(); const L = ['nice sunset', 'nice... you', `${C.name}: "you're a good rower"`, 'i would row across ANY river', `${C.name}: "*leans on him*"`]; if (u > this.k * 0.22 && this.k < L.length) { say(L[this.k], 2.6); this.k++; if (this.k % 2) mochi.flap(0.5); C.lookAt(this.k % 2 ? M() : null); } pose.sway = 0.1 * Math.sin(t * 1.5); } },
+    { d: 9, start() { const C = CR(); face = C.yawOut; const a = C.dockSeat, b = M(); C.hearts(true, new THREE.Vector3((a.x + b.x) / 2, a.y, (a.z + b.z) / 2)); this.k = 0; },
+      tick(u, dt, t) { const C = CR(); const L = ['nice sunset', 'nice... you', `${C.name}: "you're a good rower"`, `${C.name}: "*leans on him*"`]; if (u > this.k * 0.25 && this.k < L.length) { say(L[this.k], 2.4); this.k++; if (this.k % 2) mochi.flap(0.5); C.lookAt(this.k % 2 ? M() : null); } pose.sway = 0.1 * Math.sin(t * 1.5); } },
+    talkStep(4.5),
     { d: 1.5, start() { say('best day', 1.5); }, end() { CR().hearts(false); CR().lookAt(null); pose.sway = 0; face = null; } } ] };
   // 💿 disc hunt: the game disc is lost somewhere on the island (glinting). Walk over, peck it out, carry it home, slot it in.
   const walkTo = (v) => { posTarget = v; const p = M(); cur.steps[cur.k].d = Math.hypot(v.x - p.x, v.z - p.z) / 1.8 + 0.6; };
