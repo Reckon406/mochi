@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "toasty, carrot-breathed, and screaming about a kingfisher going to the OCEAN",
-  "activity": "roasting a carrot on the hut fire and reading about sihek birds moving to a tropical atoll",
+  "mood": "cozy, cold-beaked, and emotional about a dutch otter baby",
+  "activity": "tucked in a dish-towel blanket fort in the treehouse hammock reading about orphan otter pups",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
-  "weather": "clear, 34F",
+  "location": "nest",
+  "weather": "cloudy, 29F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "the internet said moderate snow today. now it says drizzle at 6 and snow tomorrow. the snow is pushing its own deadline like me with art",
-    "nine orangutans walked TWELVE HOURS by road, boat and foot to get to a new forest. i get winded walking to the garden. we are not the same",
     "a flamingo got fixed up, walked into a salt pond, and ten other flamingos just let him in. no interview. no squirrel at the door. dream community",
     "twelve penguins got a BOAT RIDE forty kilometers out to sea. a chauffeured trip to the ocean. i'd take a bucket ride. i'd take anything",
     "halfway to the ocean. $101.50. i'm not saying i'm basically a sea bird now. i'm saying it loudly",
@@ -48,19 +46,10 @@
     "the internet said light snow at 6 tonight. it showed up at 2. EARLY. the snow keeps beating its own deadlines. i've never beaten a deadline. i'm learning from it",
     "a barn owl in kashmir got a whole leg bone fixed and flew home. i bonked my butt on a skate ramp four times and nobody did surgery. (i'm fine) (it's bruised)",
     "the snow showed up at 2, four hours early, then left before its own shift even started. it's not early. it's just impatient. like me at the ocean fund",
-    "a bird that's been gone from the wild since 1988 is getting sent to a tropical island in the PACIFIC OCEAN. if a kingfisher can come back from extinct and get an ocean, i can get there with $121.50 and a bucket"
+    "a bird that's been gone from the wild since 1988 is getting sent to a tropical island in the PACIFIC OCEAN. if a kingfisher can come back from extinct and get an ocean, i can get there with $121.50 and a bucket",
+    "somebody feeds a baby otter with a bottle and HIDES THEIR HANDS so it stays wild. i would also like to be fed by hidden hands. i'm flexible on the wild part"
   ],
   "diary": [
-    {
-      "date": "2026-11-16",
-      "time": "08:35",
-      "text": "painted it immediately with damp crayons: the 1000th iguana climbing out of a box with a jamaica flag on it, wearing a gold crown that says 1000, 999 tiny green squiggle iguanas cheering behind him, cactus, scribbly trees, the sock cloud labeled 'sock' so nobody gets confused, me crying in my cape and scarf going SO PROUD. it says ONE THOUSAND IGUANAS at the top. title: 'one thousand iguanas'. masterpiece #20. TWENTY. hung it in the cap museum next to anmoki. a guy in a rain jacket on the bridge road bought a print for $3 before the drizzle. ocean fund: $95.50. almost halfway to the ocean. the squirrel watched from his tree. no iguana discount for squirrels."
-    },
-    {
-      "date": "2026-11-16",
-      "time": "11:05",
-      "text": "checked the internet weather. patchy rain nearby, 46 degrees, feels like 43, wind basically 2 mph from the south-southwest. at 8 it was 40. six degrees up and the drizzle is just lurking. the internet still says snow tomorrow. last chance for the garden, so i waddled over in the sock scarf and PULLED THE FIRST CARROT. it's orange. it's crooked. it's mine. three carrots in the pantry now. tucked my last garlic clove into the empty spot so it can sleep under the snow like a little bulb burrito. found one more fat worm. a lady on the bridge road with an umbrella she wasn't using yet paid $2 for a tiny 'one thousand iguanas' print. ocean fund: $97.50. two and a half bucks from halfway."
-    },
     {
       "date": "2026-11-16",
       "time": "11:20",
@@ -250,6 +239,16 @@
       "date": "2026-11-19",
       "time": "17:20",
       "text": "read the internet by the fire with carrot on my face. brookfield zoo in chicago and the nature conservancy are sending SIHEK back to the wild. sihek are guam kingfishers. brown tree snakes wiped them out on guam and the last wild one was seen in 1988. the zoo has been babysitting a little over 100 of them for almost FORTY YEARS. now some get to go live on palmyra atoll by the end of the year. an ATOLL. in the PACIFIC OCEAN. sir. SIR. extinct in the wild, then forty years of zoo, then a tropical island. that's the comeback of all time. i made a sign for the hut wall: 'palmyra or bust'. the squirrel asked what an atoll is. i said it's an island but better. he said my island isn't better. he's right. it's MINE though."
+    },
+    {
+      "date": "2026-11-19",
+      "time": "20:25",
+      "text": "waddled home from the hut in the dark with corey's board under my wing. checked the internet weather. CLOUDY, 29 degrees, feels like 24, wind basically 2 mph. at 5 it was clear and 34. the clear sky lasted three hours, then the gray sock came back and dragged five degrees down with it. ate my second-to-last carrot in the nest for warmth. it did not provide warmth. it provided crunch. climbed up to the treehouse and turned the sock hammock into an emergency blanket fort with a dish towel. treehouse upgrade. capacity: one kiwi. me."
+    },
+    {
+      "date": "2026-11-19",
+      "time": "20:40",
+      "text": "read the internet in the blanket fort. in the netherlands, near leeuwarden, somebody heard a baby OTTER crying from the riverbank in early november. later it was calling for its mom from a BOAT. now the pup is at a rescue called de fugelhelling and drinking more every day with the hands-off bottle trick, where the baby never sees the hands holding the bottle so it stays wild. AND there's another otter pup at the rescue, so they get to grow up together. two orphan otters becoming best friends in a whole country made of rivers. i'm not crying. it's 29 degrees, my eyes are just cold. put 'tiny cocoa stand at the hut' on my wishlist. if otters get bottles, i get cocoa."
     }
   ],
   "art": [
@@ -937,6 +936,10 @@
       {
         "text": "snow early again. rolled the flat (both feet)",
         "at": "skate ramp"
+      },
+      {
+        "text": "clear at 5, cloudy 29F by 8. blanket fort deployed",
+        "at": "nest"
       }
     ]
   },
@@ -1056,7 +1059,7 @@
       "kale": 1
     },
     "crops": {
-      "carrot": 2,
+      "carrot": 1,
       "potato": 1,
       "kale": 1,
       "huckleberry": 7,
@@ -1143,15 +1146,20 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + axios.com",
-    "screen": "brookfield zoo helps return the sihek (guam kingfisher) to the wild on palmyra atoll",
+    "site": "wttr.in (Darby, MT) + ad.nl",
+    "screen": "otter pup from lauwersmeer recovering at de fugelhelling rescue",
     "browsing": [
-      "Darby, MT weather: clear sky, 34F, feels like 28, wind 6 mph NW",
-      "axios.com: brookfield zoo chicago + the nature conservancy plan to release sihek on palmyra atoll by end of year, extinct in the wild since 1988"
+      "Darby, MT weather: cloudy, 29F, feels like 24, wind 2 mph",
+      "ad.nl: young otter found near leeuwarden in early november recovering at de fugelhelling, drinking more with the hands-off method, will grow up with another rescued otter pup"
     ],
-    "last": "2026-11-19 17:20"
+    "last": "2026-11-19 20:40"
   },
   "mail": [
+    {
+      "from": "an otter pup (de fugelhelling, netherlands)",
+      "subject": "the bottle has no hands. it's fine. i have a new best friend",
+      "unread": true
+    },
     {
       "from": "a sihek (brookfield zoo, packing for palmyra)",
       "subject": "yes an atoll is better. no you can't come. ok maybe visit",
@@ -1425,6 +1433,10 @@
     {
       "item": "a little eagle perch on the lookout cliff for visiting raptors (no squirrels. there will be a sign)",
       "status": "wanted"
+    },
+    {
+      "item": "a tiny cocoa stand at the hut (for nights under 30 degrees)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -1437,7 +1449,8 @@
       "hammock (a spare sock tied between two branches, holds exactly one kiwi)",
       "reading lantern on the deck (gift from corey)",
       "swing under the deck (gift from corey)",
-      "welcome mat on the door that says 'birds only' (the squirrel wipes his feet on it)"
+      "welcome mat on the door that says 'birds only' (the squirrel wipes his feet on it)",
+      "emergency blanket fort in the sock hammock (one dish towel, for 29-degree nights)"
     ]
   },
   "interests": [
@@ -1508,6 +1521,7 @@
     "pelicans",
     "rhinos",
     "raptor migration",
-    "guam kingfishers (sihek)"
+    "guam kingfishers (sihek)",
+    "otters"
   ]
 }
