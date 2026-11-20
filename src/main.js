@@ -14,6 +14,7 @@ import { createMochi } from './mochi.js';
 import { createGaming } from './gaming.js';
 import { createCrush } from './crush.js';
 import { createPet } from './pet.js';
+import { createMemories } from './memory.js';
 import { createSquirrel, createElk } from './creatures.js';
 import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF, PROP_SPOTS } from './layout.js';
@@ -141,6 +142,7 @@ async function init() {
   const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow }); try { features.gaming = createGaming(scene, { state, glow, tier: Q.tier ?? 2 }); } catch (e) { console.warn('gaming failed', e); }
   try { features.crush = createCrush(scene, { state, tier: Q.tier ?? 2 }); } catch (e) { console.warn('crush failed', e); }
   try { features.pet = createPet(scene, { state, tier: Q.tier ?? 2 }); } catch (e) { console.warn('pet failed', e); }
+  try { features.memories = createMemories(scene, { state, tier: Q.tier ?? 2, crush: features.crush }); } catch (e) { console.warn('memories failed', e); }
   try { features.wishes = buildWishes(scene, { features, glow, snowy, mobile: isMobile }); } catch (e) { console.warn('wishlist builds failed', e?.stack || e); features.wishes = null; }
   { const zs = new THREE.Group(); zs.name = 'zone-signs'; scene.add(zs); zoneSigns(zs, ZONES, { groundY, OBSTACLES, BRIDGE }); }
 
@@ -395,6 +397,7 @@ async function init() {
     if (document.pointerLockElement === renderer.domElement) ndc.set(0, 0); else ndc.set((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
     if (ray.intersectObject(mochi.hit, false).length) { brain.busy = 0.9; if (extras) extras.pet(); else { mochi.hop(0.85); music.sfx('hop'); if (Math.random() < 0.8) randomThought(); } return; }
     if (adv?.tap(ray)) { brain.busy = 0.5; return; }
+    if (features.memories?.tap(ray) || features.paper?.tap(ray) || features.mailNotes?.tap(ray)) { if (document.pointerLockElement) document.exitPointerLock(); music.sfx('click'); brain.busy = 0.5; return; }
     // click a hung picture -> open it in the gallery lightbox
     const hit = ray.intersectObjects(island.clickables, false)[0];
     if (hit && hit.distance < 40 && hit.object.userData.artIndex != null) { if (document.pointerLockElement) document.exitPointerLock(); music.sfx('click'); ui.openArt(hit.object.userData.artIndex); }

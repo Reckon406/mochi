@@ -223,13 +223,14 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
       end() { const gb = WS().giftBoard; if (gb) { gb.group.add(gb.board); gb.board.position.copy(gb.home.pos); gb.board.rotation.copy(gb.home.rot); } liftTarget = 0; pose.sway = 0; face = null; } },
     { d: 1.2, start() { if (!this.no) say('parked. thank you corey 🛹', 2); } } ] };
 
-  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish', 'visit', 'date'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
+  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish', 'visit', 'date'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail', 'reminisce'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
   // which activity makes sense at a zone right now
+  A.reminisce = { zone: 'hut', label: '📸 looking at memories', ok: () => !!features.memories, steps: [{ d: 8, start() { const M = features.memories; posTarget = M.spot.clone(); face = M.faceYaw; const l = [...M.mem.long, ...M.mem.short]; const m = l.length ? l[Math.floor(Math.random() * l.length)] : null; say(m ? `remember when... ${m.text.slice(0, 70)}` : 'my memory shelf is empty. go make some memories!', 4.5); }, tick() { pose.peck = 0.12; }, end() { pose.peck = 0; face = null; } }] };
   function choose(zid, prefer) {
     if (prefer && A[prefer] && A[prefer].zone === zid && (!A[prefer].ok || A[prefer].ok())) return prefer;
     if (zid === 'garden') { if (plots.some((p) => p.crop && p.stage >= 4)) return 'harvest'; if (plots.some((p) => !p.crop || p.stage === 0) && sum(inv.seeds) > 0 && Math.random() < 0.5) return 'plant'; if (Math.random() < 0.35 && plots.some((p) => p.crop && p.stage > 0 && p.stage < 4)) return 'water'; return 'dig'; }
     if (zid === 'campfire') return sum(inv.fish) > 0 || (Math.random() < 0.4 && ['potato', 'carrot', 'kale'].some((c) => inv.crops[c] > 0)) ? 'cook' : 'warm';
-    if (zid === 'hut') return features.mailbox.unread.length ? 'mail' : 'sleep';
+    if (zid === 'hut') return features.mailbox.unread.length ? 'mail' : features.memories && Math.random() < 0.3 ? 'reminisce' : 'sleep';
     if (zid === 'picnic') return (sum(inv.cooked) > 0 || inv.honey > 0) && Math.random() < 0.5 ? 'eat' : 'browse';
     const l = (BY_ZONE[zid] || []).filter((id) => A[id] && (!A[id].ok || A[id].ok())); return l.length ? l[Math.floor(Math.random() * l.length)] : null;
   }
@@ -248,7 +249,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     return Math.random() < 0.6 ? 'garden' : null;
   }
   // STATE.activity / location keywords -> first activity
-  const KEYS = [[/\bdat(e|ing)\b|girlfriend/, 'date'], [/visit|crush|\bher\b|girl kiwi|row(ing)? (the )?boat|\bsail/, 'visit'], [/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
+  const KEYS = [[/\bdat(e|ing)\b|girlfriend/, 'date'], [/visit|crush|\bher\b|girl kiwi|row(ing)? (the )?boat|\bsail/, 'visit'], [/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/memor|remember|reminisc|polaroid/, 'reminisce'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
     [/brows|laptop|internet|online|web|google|reading the news/, 'browse'], [/sleep|nap|bed|snooz/, 'sleep'], [/skateboard|cruis/, 'cruise'], [/skate|kickflip/, 'skate'], [/hot ?tub|soak|capybara/, 'soak'], [/burrow|petrel/, 'burrow'], [/telescope|whale/, 'telescope'], [/swing/, 'swing'], [/treehouse|tree house|climb/, 'treehouse'], [/yodel|weather station/, 'yodel'], [/paint|draw/, 'paint'],
     [/music|song|jam|drum|guitar|uke/, 'jam'], [/honey|bee/, 'honey'], [/shell/, 'shells'], [/skip(ping)? (rocks|stones)/, 'skip'], [/vending|cap-o-matic|trinket/, 'vend'], [/mail/, 'mail'], [/dust/, 'dust'], [/trade|squirrel/, 'trade'], [/eat|snack|lunch|dinner/, 'eat']];
   function fromText(s) { const t = String(s || '').toLowerCase(); for (const [re, a] of KEYS) if (re.test(t)) return a; return null; }
