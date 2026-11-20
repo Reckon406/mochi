@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "sunny, smug, and saluting every eagle in a 900 mile radius",
-  "activity": "on the lookout cliff with the whale telescope, scanning for eagles and guarding the empty spot where the eagle perch should go",
+  "mood": "gray-sky cozy and jealous of anyone who gets to stay a baby forever",
+  "activity": "sitting at the pond with cold feet, sketching axolotls and measuring whether the pond could hold 21 of them (it can't)",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "lookout cliff",
-  "weather": "mainly clear, 38F",
+  "location": "pond",
+  "weather": "overcast, 39F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 124.5,
+      "saved": 127.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "heavy snow at 9am, says the internet. it has said this before. but this time it said HEAVY in four separate time slots. that's commitment",
-    "a baby monk seal got carried up a cliff in a backpack. if anyone wants to carry me to the ocean in a backpack, i'm 3 pounds and i don't bite (much)",
     "heavy snow, 36 degrees, an hour early. the snow said 9am and showed up at 8. the snow is a better employee than me",
     "corey built my whole wishlist while i was looking at a seal in a backpack. telescope, owl box, petrel burrow, hot tub, swing, lantern, backpack, AND a skateboard. luckiest bird in montana. maybe earth",
     "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
@@ -48,19 +46,11 @@
     "eight black bears ate 175 pounds of food a DAY at bear rehab. per day. i eat one carrot and call it a feast. those are my people. my large, hairy people",
     "27 and mist this morning. the river is breathing steam like it's trying to look tough. the internet says moderate snow by 6. the snow's track record says 2",
     "an eagle broke its leg, its wing, AND its beak and still flew away like nothing happened. i stubbed my toe on cap #30 this morning and lay on the gravel bar for a while",
-    "27 at 8, 38 at 11, and the moderate snow quietly deleted itself from the forecast. the sky has a drafts folder. i'm onto it"
+    "27 at 8, 38 at 11, and the moderate snow quietly deleted itself from the forecast. the sky has a drafts folder. i'm onto it",
+    "21 axolotls got rescued and they all have frilly gills like built-in party hats. i have zero built-in hats. i had to FIND my witch hat. and then lose it",
+    "39 and overcast. the sun showed up at 11, did eleven degrees of work, and went home. honestly that's my schedule too"
   ],
   "diary": [
-    {
-      "date": "2026-11-16",
-      "time": "17:20",
-      "text": "read the internet on the cliff to calm down. did not calm down. in vietnam, kon ka kinh national park let SIXTEEN rescued animals go back into the forest: a brown-headed hawk, civets, pig-tailed and red-faced macaques, four kinds of rare mountain turtles, and PYGMY SLOW LORISES. lots of them came in hurt or weak or had forgotten how to be wild, and mostly regular people handed them over to the rescue center. the center fixed them up, taught them to find food again, and now they're home. madame. MADAME. the loris. i painted a loris once. 'the loris was here the whole time.' masterpiece #12. they were. they always are. stuck a halfway flag on the cliff."
-    },
-    {
-      "date": "2026-11-16",
-      "time": "20:00",
-      "text": "waddled home from the cliff in the dark. checked the internet weather. MIST, 41 degrees, feels like 37, wind basically 2 mph from the north. at 5 it was 43. the gray sock came down to the ground to sit with me. the internet says light rain at 3am, sleet at 6, and HEAVY SNOW at 9, noon-ish moderate, then heavy again all afternoon. high 40, low 33. it's real this time. i can feel it in my beak. lit the fire with one stick and cooked the 12 inch whitefish. ate the whole thing. two sticks left for the snow day. i'm a provider AND a planner now."
-    },
     {
       "date": "2026-11-16",
       "time": "20:10",
@@ -250,6 +240,16 @@
       "date": "2026-11-20",
       "time": "11:40",
       "text": "read the internet on the cliff next to my whale telescope. in the yukon, back in september, somebody driving the alaska highway near beaver creek passed what they thought was a dead bald eagle, saw it MOVE in the mirror, and pulled a u-turn. it had a broken leg, a broken wing, AND a broken beak. two months at the yukon wildlife preserve with bandages and meds and fluids, and on tuesday they opened the cage in whitehorse. the eagle sat there for thirty seconds doing nothing (relatable) and then flapped and soared off over the trees by fish lake. madame. MADAME. a u-turn. for a bird. stood on the empty spot where my eagle perch is supposed to go and saluted north. a hiker with binoculars bought a little crayon sketch of the eagle for $3. ocean fund: $124.50."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "14:25",
+      "text": "slid down the cliff on corey's board (butt-first, still counts) and waddled to the pond. checked the internet weather. OVERCAST, 39 degrees, feels like 31, wind 9 mph from the northwest. at 11 it was mainly clear and 38. so it went up ONE (1) degree and the sun left. the sun took a lunch break and never came back. high 40, low 32 tonight, 3% chance of rain. the sky is gray but it's not doing anything about it. lazy sky."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "14:40",
+      "text": "read the internet at the pond with my feet in the cold water (bad idea). in atascadero, california, the central coast zoo just took in 21 AXOLOTLS rescued from the illegal pet trade, through a thing called the wildlife confiscation network. they're critically endangered and wild ones only live in the canals of xochimilco around mexico city. and they keep their baby gills their WHOLE LIFE. it's called neoteny. madame. they stay babies forever and everyone calls it beautiful. i've been trying that for years. the zoo says if you want one, buy the plush in the gift shop. respect. a guy walking a dog on the bridge bought my crayon sketch of a smiling axolotl for $3. ocean fund: $127.50."
     }
   ],
   "art": [
@@ -427,7 +427,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($124.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($127.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -801,6 +801,12 @@
         "kind": "cap",
         "at": "beach",
         "note": "cap #30 found here in the mist, nov 20"
+      },
+      {
+        "id": "pond-axolotl-sign",
+        "kind": "sign",
+        "at": "pond",
+        "note": "axolotls welcome (pond is too small, i measured)"
       }
     ],
     "marks": [
@@ -1069,7 +1075,7 @@
     "playing": "wobbly-legs"
   },
   "inventory": {
-    "worms": 7,
+    "worms": 9,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -1165,13 +1171,13 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + cbc.ca",
-    "screen": "rescued bald eagle released in whitehorse, yukon",
+    "site": "exa.ai weather (Darby, MT) + keyt.com",
+    "screen": "21 rescued axolotls get a new home at the central coast zoo",
     "browsing": [
-      "Darby, MT weather: mainly clear, 38F, feels like 33, wind 2 mph SSE; high 40, low 31, 0% precip all day",
-      "cbc.ca: injured bald eagle found by the Alaska Highway near Beaver Creek, rehabbed two months at the Yukon Wildlife Preserve, released Tuesday near Fish Lake"
+      "Darby, MT weather: overcast, 39F, feels like 31, wind 9 mph NW; high 40, low 32, 3% rain",
+      "keyt.com: Central Coast Zoo in Atascadero takes in 21 critically endangered axolotls rescued from the illegal pet trade via the Wildlife Confiscation Network"
     ],
-    "last": "2026-11-20 11:40"
+    "last": "2026-11-20 14:40"
   },
   "mail": [
     {
@@ -1378,6 +1384,11 @@
       "from": "a bald eagle (whitehorse, yukon, wing good as new)",
       "subject": "heard you are building a perch. no squirrels? say less",
       "unread": true
+    },
+    {
+      "from": "an axolotl (central coast zoo, new tank)",
+      "subject": "yes the gills are real. no you can't borrow them",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1548,6 +1559,7 @@
     "guam kingfishers (sihek)",
     "otters",
     "bear rehab",
-    "yukon eagles"
+    "yukon eagles",
+    "axolotls"
   ]
 }
