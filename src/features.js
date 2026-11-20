@@ -4,6 +4,7 @@ import { aiTex } from './aitex.js';
 import { topH, groundY, mv, CLIFF, ZONES, VEND, DOCK, WATER_Y, BIGTREE } from './layout.js';
 import { canvasTex, signTex, woodTex, shingleTex } from './textures.js';
 import { plank } from './signs.js';
+import { vendFront, TRINKETS } from './vending.js';
 import { parseWeather } from './weather.js';
 
 const M = {}; const mat = (c, o = {}) => M[c + JSON.stringify(o)] ||= new THREE.MeshStandardMaterial({ color: c, roughness: 0.8, ...o });
@@ -98,13 +99,12 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
   // ── Cap-O-Matic: spend bottle caps on trinkets ──
   { const v = new THREE.Group(); v.position.set(VEND.x, topH(VEND.x, VEND.z) - 0.03, VEND.z); v.rotation.y = VEND.yaw; group.add(v);
     add(v, new THREE.BoxGeometry(0.9, 1.7, 0.6), mat(0xd23c3c, { roughness: 0.45 }), [0, 0.85, 0]); add(v, new THREE.BoxGeometry(0.96, 0.12, 0.66), mat(0xf2c23a, { metalness: 0.4, roughness: 0.4 }), [0, 1.74, 0]);
-    add(v, new THREE.PlaneGeometry(0.6, 0.62), new THREE.MeshStandardMaterial({ color: 0xbfe6ff, transparent: true, opacity: 0.35, roughness: 0.1 }), [0, 1.12, 0.302], [0, 0, 0], null, false);
-    const caps = [0xff6b8a, 0x4fb3e8, 0xffd34d, 0x5ac26a, 0xc9b6ff, 0xffffff]; for (let i = 0; i < 14; i++) add(v, new THREE.SphereGeometry(0.07, 10, 8), mat(caps[i % caps.length], { roughness: 0.3 }), [-0.22 + (i % 4) * 0.15, 0.9 + Math.floor(i / 4) * 0.13, 0.15], [0, 0, 0], null, false);
-    add(v, new THREE.PlaneGeometry(0.78, 0.26), new THREE.MeshStandardMaterial({ map: signTex(['CAP-O-MATIC', '3 caps = 1 trinket'], { w: 512, h: 170, sizes: [70, 38], bg: '#fff3c9' }), emissive: 0x332200 }), [0, 1.57, 0.302], [0, 0, 0], null, false);
     add(v, new THREE.CylinderGeometry(0.09, 0.09, 0.05, 16), mat(0xc8c8d0, { metalness: 0.8, roughness: 0.3 }), [0.3, 0.62, 0.31], [Math.PI / 2, 0, 0]);
-    add(v, new THREE.BoxGeometry(0.3, 0.16, 0.1), mat(0x2a2a2a), [-0.12, 0.35, 0.3]);
     const knob = add(v, new THREE.CylinderGeometry(0.06, 0.06, 0.08, 6), mat(0xf2c23a, { metalness: 0.5 }), [0.3, 0.62, 0.36], [Math.PI / 2, 0, 0]);
-    const glowM = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffe08a, emissiveIntensity: 0.5 }); glow.push({ m: glowM, day: 0.4, night: 3 }); add(v, new THREE.BoxGeometry(0.7, 0.04, 0.04), glowM, [0, 1.47, 0.31], [0, 0, 0], null, false);
+    { const KC = [['cap', '#e8463c'], ['ball', '#4fb3e8'], ['cap', '#ffd34d'], ['bag', '#5ac26a'], ['ball', '#c9b6ff'], ['can', '#e8463c'], ['cap', '#4fb3e8'], ['bag', '#ff8a3c'], ['ball', '#ffd34d'], ['can', '#3c7ae8']];
+      const items = TRINKETS.concat(['mystery cap', 'trail snack', 'fizzy pop', 'lucky cap', 'beef jerky', 'grape soda']).slice(0, 12).map((t, i) => ({ label: t.replace(/ \(.*\)/, ''), price: '3 caps', kind: KC[i % KC.length][0], color: KC[i % KC.length][1] }));
+      const capsNow = Number.isFinite(+state?.caps) ? +state.caps : null;
+      const F = vendFront({ title: 'CAP-O-MATIC', sub: '3 caps = 1 trinket', items, cols: 4, rows: 3, display: capsNow == null ? 'A1 ?' : `${capsNow} CAPS` }); v.add(F.group); glow.push({ m: F.glowM, day: 0.6, night: 2.2 }); glow.push({ m: F.backM, day: 0.25, night: 0.9 }); }
     const cap = add(v, new THREE.SphereGeometry(0.08, 10, 8), mat(0xff6b8a, { roughness: 0.3 }), [-0.12, 0.38, 0.4], [0, 0, 0], null, false); cap.visible = false;
     out.vend = { group: v, knob, cap };
   }

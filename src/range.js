@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { RANGE, topH, WATER_Y } from './layout.js';
 import { plank } from './signs.js';
+import { vendFront } from './vending.js';
 
 const LS = 'mochi.range';
 export const GUNS = {
@@ -65,10 +66,12 @@ export function createRange(scene, { life, mochi, say, music, state, getWild }) 
   for (let i = 0; i < 5; i++) put(B(0.1, 0.04, 0.02, -0.2 + (i % 3) * 0.2, 0.95 + Math.floor(i / 3) * 0.22, 0.2, 0x3a3d44), VX, VZ);
   const stat = new THREE.Mesh(merge(sg), vcM()); stat.castShadow = true; stat.receiveShadow = true; group.add(stat);
   // vending: rotate the face toward the lane entrance (+z faces the bench side) - built facing +z already
-  const glass = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.62), new THREE.MeshStandardMaterial({ color: 0xbfe6ff, transparent: true, opacity: 0.35, roughness: 0.1 })); glass.position.set(VX, gy(VX, VZ) + 1.12, VZ + 0.302); group.add(glass);
+  const gunItems = ORDER.map((id, i) => ({ label: GUNS[id].name, price: GUNS[id].price + ' caps', kind: 'gun', color: ['#f2c23a', '#c9b6ff', '#5ac26a', '#ff8a3c', '#4fb3e8'][i % 5], sold: D.guns.includes(id) })).concat([{ label: 'ear muffs', price: 'free', kind: 'bag', color: '#4f6b3a' }]);
+  const VF = vendFront({ title: 'GUN-O-MATIC', sub: 'caps for boomsticks', items: gunItems, cols: 3, rows: 2, header: '#4f6b3a', display: (Number.isFinite(+state?.caps) ? +state.caps + ' CAPS' : 'A1 ?') });
+  VF.group.position.set(VX, gy(VX, VZ), VZ); group.add(VF.group); const vglowM = VF.glowM;
   const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.08, 6).rotateX(Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xf2c23a, metalness: 0.5, roughness: 0.4 })); knob.position.set(VX + 0.3, gy(VX, VZ) + 0.62, VZ + 0.33); group.add(knob);
-  const vglowM = new THREE.MeshStandardMaterial({ color: 0xfff1c4, emissive: 0xffe08a, emissiveIntensity: 0.6 }); const vglow = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.04, 0.04), vglowM); vglow.position.set(VX, gy(VX, VZ) + 1.47, VZ + 0.31); group.add(vglow);
-  const vsign = plank(['GUN-O-MATIC', 'caps for boomsticks'], { width: 0.82, tone: 'pine', seed: 91 }); vsign.position.set(VX, gy(VX, VZ) + 1.6, VZ + 0.33); group.add(vsign);
+
+
   const rsign = plank(['RANGE'], { width: 0.9, icon: '🎯', tone: 'oak', seed: 92 }); rsign.position.set(x1 + 0.05, gy(x1, z1) + 1.15, z1 + 0.05); rsign.rotation.y = Math.PI / 2; group.add(rsign);
   const rules = plank(['ear muffs on', 'only shoot steel'], { width: 0.8, tone: 'pine', hand: true, seed: 93 }); rules.position.set(RX, gy(RX, RZ) + 1.25, RZ - 0.05); rules.rotation.y = Math.PI; group.add(rules);
 

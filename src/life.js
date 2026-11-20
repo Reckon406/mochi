@@ -1,5 +1,6 @@
 // Mochi's day-to-day: inventory + an activity at every place, chained into little quests
 // (dig worms in the garden -> fish at the dock -> cook at the campfire -> eat). Reads STATE, simulates the rest live in the page.
+import { TRINKETS } from './vending.js';
 import * as THREE from 'three';
 import { ZONES, groundY, topH, DOCK, WATER_Y, mv, SHOP, WISH } from './layout.js';
 import { FISH, rollFish, fishMesh, speciesKey } from './fish.js';
@@ -7,7 +8,6 @@ import { CROPS } from './features.js';
 
 const N = (v) => (Number.isFinite(+v) ? Math.max(0, Math.floor(+v)) : 0);
 const zone = (id) => ZONES.find((z) => z.id === id);
-const TRINKETS = ['tiny rubber duck', 'glow-in-the-dark star', 'googly eye (single)', 'mini compass', 'cursed marble', 'sticker of a moose', 'whistle', 'tiny sunglasses', 'bouncy ball', 'plastic gold coin'];
 const YODEL = ['YODEL-AY-HEE-HOOOO', 'HELLO TRAPPER PEAK', 'ECHOOOO', 'i am the king of this rock'];
 
 export function normInventory(s = {}) {
