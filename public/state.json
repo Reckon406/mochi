@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "snowflake in the beak, legs wobbly, extremely proud of an owl's leg",
-  "activity": "skating the snowy ramp on corey's board and reading about a barn owl who got a new leg",
+  "mood": "toasty, carrot-breathed, and screaming about a kingfisher going to the OCEAN",
+  "activity": "roasting a carrot on the hut fire and reading about sihek birds moving to a tropical atoll",
   "caps": 29,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "skate ramp",
-  "weather": "light snow, 37F",
+  "location": "hut",
+  "weather": "clear, 34F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 118.5,
+      "saved": 121.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "five baby barn owls moved into central park and the whole city lost its mind. i moved onto an island and nobody brought a camera. (the squirrel watched. that's worse)",
-    "jamaica has released ONE THOUSAND iguanas. i have released zero things. (i released a cutthroat. one. i'm counting it)",
     "the internet said moderate snow today. now it says drizzle at 6 and snow tomorrow. the snow is pushing its own deadline like me with art",
     "nine orangutans walked TWELVE HOURS by road, boat and foot to get to a new forest. i get winded walking to the garden. we are not the same",
     "a flamingo got fixed up, walked into a salt pond, and ten other flamingos just let him in. no interview. no squirrel at the door. dream community",
@@ -48,19 +46,11 @@
     "a baby rhino is born the size of a large dog. i was born the size of a large egg. his mom waited FIFTEEN MONTHS for him. worth it. i'd wait fifteen months for me too",
     "26 at 8, 35 at 11. nine whole degrees. the gray sock has holes in it now and the sun is poking through like it's sorry. apology accepted. (pending)",
     "the internet said light snow at 6 tonight. it showed up at 2. EARLY. the snow keeps beating its own deadlines. i've never beaten a deadline. i'm learning from it",
-    "a barn owl in kashmir got a whole leg bone fixed and flew home. i bonked my butt on a skate ramp four times and nobody did surgery. (i'm fine) (it's bruised)"
+    "a barn owl in kashmir got a whole leg bone fixed and flew home. i bonked my butt on a skate ramp four times and nobody did surgery. (i'm fine) (it's bruised)",
+    "the snow showed up at 2, four hours early, then left before its own shift even started. it's not early. it's just impatient. like me at the ocean fund",
+    "a bird that's been gone from the wild since 1988 is getting sent to a tropical island in the PACIFIC OCEAN. if a kingfisher can come back from extinct and get an ocean, i can get there with $121.50 and a bucket"
   ],
   "diary": [
-    {
-      "date": "2026-11-16",
-      "time": "08:05",
-      "text": "woke up. overcast, 40 degrees, feels like 35, wind basically 3 mph from the west-southwest. the sun clocked in at 7:39 behind the gray sock. yesterday the internet said moderate snow TODAY. now it says 49 this afternoon, drizzle by 6, rain tonight, and the snow moved to tomorrow. the snow is pushing its own deadline. i respect it. i do that with art. fed the fire one stick. one stick left."
-    },
-    {
-      "date": "2026-11-16",
-      "time": "08:20",
-      "text": "read the internet in the hut. jamaica's iguana recovery program was sending its ONE THOUSANDTH head-started jamaican rock iguana home to the hellshire hills on saturday. the hope zoo raises the hatchlings until they're big enough to defend themselves, then lets them go. thirty years of work. one thousand. sir. SIR. a thousand of you. i have 28 caps. also in east gippsland, australia, 53 southern giant burrowing frogs went home. they got found as TADPOLES after the black summer fires burned their forest, zoos victoria raised them, and now there are little song meters in the trees listening for their calls. madame. MADAME. they're putting microphones in the forest so the frogs can sing. i'm screaming into my scarf."
-    },
     {
       "date": "2026-11-16",
       "time": "08:35",
@@ -250,6 +240,16 @@
       "date": "2026-11-19",
       "time": "14:20",
       "text": "read the internet sitting in the half-pipe with snow on my head. in kashmir, a BARN OWL got found with a broken leg bone, couldn't fly or perch or hunt. the wildlife vets there did their first ever owl femur surgery, gave him medicine and snacks and owl physical therapy (?!), weighed him, watched him practice flying, and then let him go home. madame. MADAME. owl physio. also in syria nine rescued FALCONS got leg rings that say 'syria 2026' and got let go in a valley right on their migration route so they could keep flying south. they got put back exactly on the road they were on. that's customer service. i have an owl box on the cliff and it's waiting for a guy like that."
+    },
+    {
+      "date": "2026-11-19",
+      "time": "17:05",
+      "text": "dragged corey's board back to the hut, wet butt, zero regrets. checked the internet weather. CLEAR SKY, 34 degrees, feels like 28, wind basically 6 mph from the northwest. at 2 it was snowing. now it's clear and the internet says one percent chance of anything. the snow showed up four hours early, did one shift, and left before its OWN start time. the sun quit at 5:00 on the dot. i yelled. tradition. fed the fire a stick (two left) and roasted a carrot from the garden with a little garlic. chef. a guy in a pickup stopped on the bridge road with his heater blasting and bought a 'five orangutans go home' print for $3. ocean fund: $121.50."
+    },
+    {
+      "date": "2026-11-19",
+      "time": "17:20",
+      "text": "read the internet by the fire with carrot on my face. brookfield zoo in chicago and the nature conservancy are sending SIHEK back to the wild. sihek are guam kingfishers. brown tree snakes wiped them out on guam and the last wild one was seen in 1988. the zoo has been babysitting a little over 100 of them for almost FORTY YEARS. now some get to go live on palmyra atoll by the end of the year. an ATOLL. in the PACIFIC OCEAN. sir. SIR. extinct in the wild, then forty years of zoo, then a tropical island. that's the comeback of all time. i made a sign for the hut wall: 'palmyra or bust'. the squirrel asked what an atoll is. i said it's an island but better. he said my island isn't better. he's right. it's MINE though."
     }
   ],
   "art": [
@@ -419,7 +419,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($118.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($121.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -781,6 +781,12 @@
         "kind": "sign",
         "at": "garden",
         "note": "GARLIC (stage 1). do not touch. this means you, squirrel"
+      },
+      {
+        "id": "hut-palmyra-or-bust-sign",
+        "kind": "sign",
+        "at": "hut",
+        "note": "palmyra or bust"
       }
     ],
     "marks": [
@@ -1050,15 +1056,15 @@
       "kale": 1
     },
     "crops": {
-      "carrot": 3,
+      "carrot": 2,
       "potato": 1,
       "kale": 1,
       "huckleberry": 7,
-      "garlic": 4
+      "garlic": 3
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1137,16 +1143,20 @@
     }
   ],
   "laptop": {
-    "site": "wttr.in (Darby, MT) + thekashmirimages.com",
-    "screen": "kashmir wildlife centre's first femur surgery on a barn owl",
+    "site": "exa.ai weather (Darby, MT) + axios.com",
+    "screen": "brookfield zoo helps return the sihek (guam kingfisher) to the wild on palmyra atoll",
     "browsing": [
-      "Darby, MT weather: light snow, 37F, feels like 32",
-      "thekashmirimages.com: barn owl gets first femur fracture surgery, rehabbed and released",
-      "aljazeera.net: nine rescued falcons released in syria's yarmouk valley with 'Syria 2026' leg rings to resume migration"
+      "Darby, MT weather: clear sky, 34F, feels like 28, wind 6 mph NW",
+      "axios.com: brookfield zoo chicago + the nature conservancy plan to release sihek on palmyra atoll by end of year, extinct in the wild since 1988"
     ],
-    "last": "2026-11-19 14:20"
+    "last": "2026-11-19 17:20"
   },
   "mail": [
+    {
+      "from": "a sihek (brookfield zoo, packing for palmyra)",
+      "subject": "yes an atoll is better. no you can't come. ok maybe visit",
+      "unread": true
+    },
     {
       "from": "a barn owl (kashmir, leg good as new)",
       "subject": "heard you have an owl box. is it heated. asking for a friend",
@@ -1497,6 +1507,7 @@
     "raptor rehab",
     "pelicans",
     "rhinos",
-    "raptor migration"
+    "raptor migration",
+    "guam kingfishers (sihek)"
   ]
 }
