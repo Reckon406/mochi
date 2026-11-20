@@ -219,7 +219,7 @@ export function createMochi(outfit = '', { style = 'new' } = {}) {
       const lid = new THREE.Mesh(lidG, dbgRig ? new THREE.MeshBasicMaterial({ color: 0xff0000 }) : lidM); lid.rotation.x = -Math.PI / 2; holder.add(lid); rig.lids.push(lid); }
   }
   const dbgRig = /[?&]rigdbg=1/.test(globalThis.location?.search || ''); let forceLid = 0;
-  let want = style;
+  let want = style; let heldPad = null;
   { const url = (import.meta.env?.BASE_URL || '/') + 'models/mochi.glb'; const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder);
     L.load(url, (g) => { try {
       const sc = g.scene; const S = 1.33; sc.scale.setScalar(S); sc.rotation.y = Math.PI; /* the scan faces -z; Mochi faces +z */ sc.updateMatrixWorld(true);
@@ -302,7 +302,8 @@ export function createMochi(outfit = '', { style = 'new' } = {}) {
     if (extras.sock) extras.sock.rotation.z = 0.35 + Math.sin(anim.walkPhase * 0.5) * 0.25 * w + 0.05 * Math.sin(t * 2);
   }
   Object.assign(api, { root, pivot, hop, flap, update, anim, hit, mods, hold, pose, slots, model, extras,
-    setStyle(st) { want = st; return applyStyle(st); }, rig });
+    setStyle(st) { want = st; return applyStyle(st); }, rig, rage(d = 1) { shake = Math.max(shake, d); },
+    holdPad(p) { if (heldPad) heldPad.parent?.remove(heldPad); heldPad = p; if (!p) return; const N = cur === 'new'; p.position.set(N ? 0.02 : 0, N ? 0.5 : 0.48, N ? 0.42 : 0.62); p.rotation.set(-0.9, 0, 0); p.scale.setScalar(N ? 1.1 : 1.2); p.visible = true; slots.side.add(p); } });
   Object.defineProperties(api, { style: { get: () => cur }, modelOk: { get: () => modelOk }, lid: { get: () => forceLid, set: (v) => { forceLid = +v || 0; } } }); /* live accessors (Object.assign would freeze them) */
   applyStyle('classic'); // until the GLB arrives (and for good if it never does)
   return api;

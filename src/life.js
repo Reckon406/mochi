@@ -114,6 +114,24 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   A.vend = { zone: 'vending', label: '🎰 Cap-O-Matic', steps: [
     { d: 2, start() { const V = features.vend; if (inv.caps < 3) { this.no = true; say(`${inv.caps} caps. need 3. the machine mocks me`, 2.5); return; } inv.caps -= 3; say('3 caps in. come on come on', 2); changed(); this.V = V; }, tick(u, dt) { if (this.V?.knob) this.V.knob.rotation.z += dt * 6; } },
     { d: 2.5, start() { if (this.no) return; const tr = TRINKETS[Math.floor(Math.random() * TRINKETS.length)]; inv.trinkets.push(tr); if (this.V?.cap) this.V.cap.visible = true; mochi.flap(1); mochi.hop(0.7); say(`GOT: ${tr}!!`, 2.5); changed(); }, end() { if (this.V?.cap) this.V.cap.visible = false; } } ] };
+  // 🎮 gaming nook: sit on the beanbag, pad in his wings, button-mash, flap at the good bits, rage-shiver when he gets PLUCKED
+  // 💿 disc hunt: the game disc is lost somewhere on the island (glinting). Walk over, peck it out, carry it home, slot it in.
+  const walkTo = (v) => { posTarget = v; const p = M(); cur.steps[cur.k].d = Math.hypot(v.x - p.x, v.z - p.z) / 1.8 + 0.6; };
+  A.disc = { zone: 'gaming', label: '💿 hunting for the game disc', ok: () => !!features.gaming && !features.gaming.found, steps: [
+    { d: 1, start() { const G = features.gaming; const p = M(); const d = G.discPos.clone().sub(p).setY(0); const n = d.length() || 1; walkTo(G.discPos.clone().addScaledVector(d, -0.38 / n)); say(`no disc in the tray. something shiny near the ${G.discSpot === 'custom' ? 'bushes' : G.discSpot}...`, 3); } },
+    { d: 2.2, start() { const G = features.gaming; const p = M(); face = Math.atan2(G.discPos.x - p.x, G.discPos.z - p.z); }, tick(u, dt, t) { pose.peck = 0.6 + 0.4 * Math.sin(t * 9); }, end() { pose.peck = 0; } },
+    { d: 2.2, start() { const G = features.gaming; G.glint.visible = false; hold(G.disc, [0.4, 0, 0], 1.3); mochi.flap(1); say(`${G.title.toUpperCase()}?! it was by the ${G.discSpot === 'custom' ? 'bushes' : G.discSpot} the whole time`, 3); } },
+    { d: 1, start() { face = null; const G = features.gaming; walkTo(G.seat.clone()); } },
+    { d: 2.4, start() { const G = features.gaming; face = G.faceYaw; say('disc in. loading. loading. IT LOADED', 2.4); }, end() { const G = features.gaming; drop(); G.setFound(true); G.setMode('attract'); mochi.flap(0.8); face = null; } } ] };
+  A.gaming = { zone: 'gaming', label: '🎮 playing video games', ok: () => !!features.gaming && features.gaming.found, steps: [
+    { d: 2.2, start() { const G = features.gaming; posTarget = G.seat.clone(); face = G.faceYaw; say(G.found ? `booting up ${G.title}. nobody perch on me` : 'the TV says insert disc. WHAT disc', 2.5); } },
+    { d: 15, start() { const G = features.gaming; liftTarget = 0.14; if (!G.found) { this.nod = true; return; } G.setMode('drive'); G.spare.visible = false; mochi.holdPad?.(G.pad); },
+      tick(u, dt, t) { const G = features.gaming; if (this.nod) { pose.peck = 0.1; return; } pose.sway = this.rage > 0 ? 0 : 0.22; pose.peck = 0.06 * Math.abs(Math.sin(t * 22));
+        if (this.rage > 0) { this.rage -= dt; if (this.rage <= 0) say('ok. ok. i am calm. respawning', 2); }
+        else if (!this.died && u > 0.5 + Math.random() * 0.2) { this.died = true; G.die(); this.rage = 1.4; mochi.rage?.(1.2); say(['PLUCKED?? a PELICAN came out of NOWHERE', 'that was NOT my fault the car is slippery', 'i had 5 stars and a dream'][Math.floor(Math.random() * 3)], 2.6); }
+        else if (Math.random() < dt * 0.18) { mochi.flap(0.6); if (Math.random() < 0.4) { G.crash(); say(['WHEEE', 'two stars lets GO', 'drift king of vice beak', 'cash money (caps money)'][Math.floor(Math.random() * 4)], 1.8); } } },
+      end() { pose.sway = 0; pose.peck = 0; } },
+    { d: 2.2, start() { const G = features.gaming; say(G.found ? 'one more mission. then bed. (this is a lie)' : 'i will FIND that disc', 2.2); }, end() { const G = features.gaming; if (G.found) G.setMode('attract'); G.spare.visible = true; mochi.holdPad?.(null); liftTarget = 0; face = null; } } ] };
   A.pumpkins = { zone: 'pumpkins', label: '🎃 pumpkin check', steps: [{ d: 4, start() { say('checking on the pumpkins. they are being weird again', 2.5); pose.peck = 0.5; }, end() { pose.peck = 0; } }] };
 
   // ── wishlist builds (v3) ──
@@ -153,7 +171,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
       end() { const gb = WS().giftBoard; if (gb) { gb.group.add(gb.board); gb.board.position.copy(gb.home.pos); gb.board.rotation.copy(gb.home.rot); } liftTarget = 0; pose.sway = 0; face = null; } },
     { d: 1.2, start() { if (!this.no) say('parked. thank you corey 🛹', 2); } } ] };
 
-  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
+  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat'], vending: ['vend'], pumpkins: ['pumpkins'] };
   // which activity makes sense at a zone right now
   function choose(zid, prefer) {
     if (prefer && A[prefer] && A[prefer].zone === zid && (!A[prefer].ok || A[prefer].ok())) return prefer;
@@ -178,7 +196,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     return Math.random() < 0.6 ? 'garden' : null;
   }
   // STATE.activity / location keywords -> first activity
-  const KEYS = [[/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
+  const KEYS = [[/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
     [/brows|laptop|internet|online|web|google|reading the news/, 'browse'], [/sleep|nap|bed|snooz/, 'sleep'], [/skateboard|cruis/, 'cruise'], [/skate|kickflip/, 'skate'], [/hot ?tub|soak|capybara/, 'soak'], [/burrow|petrel/, 'burrow'], [/telescope|whale/, 'telescope'], [/swing/, 'swing'], [/treehouse|tree house|climb/, 'treehouse'], [/yodel|weather station/, 'yodel'], [/paint|draw/, 'paint'],
     [/music|song|jam|drum|guitar|uke/, 'jam'], [/honey|bee/, 'honey'], [/shell/, 'shells'], [/skip(ping)? (rocks|stones)/, 'skip'], [/vending|cap-o-matic|trinket/, 'vend'], [/mail/, 'mail'], [/dust/, 'dust'], [/trade|squirrel/, 'trade'], [/eat|snack|lunch|dinner/, 'eat']];
   function fromText(s) { const t = String(s || '').toLowerCase(); for (const [re, a] of KEYS) if (re.test(t)) return a; return null; }
