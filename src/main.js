@@ -16,6 +16,7 @@ import { createCrush } from './crush.js';
 import { createPet } from './pet.js';
 import { createMemories } from './memory.js';
 import { createPaper } from './paper.js';
+import { createMailNotes } from './mailnotes.js';
 import { createSquirrel, createElk } from './creatures.js';
 import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF, PROP_SPOTS } from './layout.js';
@@ -319,6 +320,10 @@ async function init() {
     return [inv.worms && `🪱${inv.worms}`, f && `🐟${f}`, c && `🍢${c}`, cr && `🥕${cr}`, inv.caps && `🧢${inv.caps}`, inv.trinkets.length && `🎁${inv.trinkets.length}`].filter(Boolean).join(' '); };
   let lifeDirty = 1;
   life = createLife({ state, mochi, features, say: (s, d) => say(s, d), music, sky, feel, onChange: (inv, log, label) => { if (label !== undefined) ui.setDoing(label, bagText(inv)); else ui.setDoing(life?.label || '', bagText(inv)); lifeDirty = 1; } });
+  try { features.mailNotes = createMailNotes(scene, { state, mailbox: features.mailbox, say: (s, d) => say(s, d) });
+    const mb = document.getElementById('mailBtn'); if (mb) { if (features.mailNotes.unseen) mb.classList.add('new'); mb.addEventListener('click', () => { features.mailNotes.open(); mb.classList.remove('new'); }); }
+    if (features.mailNotes.unseen) { if (features.mailbox?.flag) features.mailbox.flag.rotation.z = 0; setTimeout(() => features.mailNotes.greet(), 7000); }
+  } catch (e) { console.warn('mail notes failed', e); }
   ui.setDoing('', bagText(life.inv));
   const critters = createCritters(scene, { owlBox: features.wishes?.owlBox, lights: island.lights || [], life, say: (s, d) => say(s, d), music, season });
   if (Array.isArray(state.encounters)) life.encounters.push(...state.encounters.filter((e) => e && e.animal).slice(-30));

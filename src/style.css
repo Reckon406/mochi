@@ -174,3 +174,7 @@ body.photo #ui, body.photo #bubbles { display: none !important; }
 body.walking { overscroll-behavior: none; }
 @media (orientation: landscape) and (max-height: 500px) { .tstick { width: 112px; height: 112px; bottom: 18px; } .tjump { bottom: 24px; } .tuse { bottom: 14px; } .texit { top: 12px; } }
 body.touchwalk .legend, body.touchwalk .tools, body.touchwalk .nowplaying, body.touchwalk .hint { display: none !important; }
+#mailBtn.new { animation: mailpulse 1.4s ease-in-out infinite; }
+#mailBtn.new::after { content: ''; position: absolute; top: 2px; right: 2px; width: 9px; height: 9px; border-radius: 50%; background: #e8463c; }
+#mailBtn { position: relative; }
+@keyframes mailpulse { 50% { transform: scale(1.12); } }

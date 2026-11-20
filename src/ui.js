@@ -64,6 +64,7 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
   </nav>
   <div class="tools">
     <button id="setBtn" title="settings: graphics, sound, camera">⚙️</button>
+    <button id="mailBtn" title="mochi's mailbox: write him a note, read his letters">📬</button>
     <button id="followBtn" title="camera follows mochi">🎥 follow</button>
     ${canWalk ? '<button id="walkBtn" title="walk around the island (WASD + mouse, or the touch stick)">🚶 walk</button>' : ''}
     <span class="hint">drag to look around · tap mochi to make him hop · tap a place to send him${canWalk ? (matchMedia('(pointer: coarse)').matches ? ' · 🚶 walk = stick + drag' : ' · 🚶 walk = WASD') : ''}</span>
