@@ -48,6 +48,9 @@ These were downscaled to 256 px (Medium) and 512 px (High/Ultra), with the sun d
 
 All of these are from Poly Haven: https://polyhaven.com/textures
 
+## Mochi model
+- `public/models/mochi.glb`: AI-generated 3D model of Mochi (image-to-3D with Microsoft TRELLIS, from Corey's Mochi reference), optimized with glTF-Transform (meshopt + WebP). The original procedural Mochi stays in `src/mochi.js` as the Classic style and the fallback.
+
 ## Licences
 - Poly Haven assets: CC0. See https://polyhaven.com/license
 - Quaternius Stylized Nature MegaKit: CC0. See `License_Standard.txt` in the pack.

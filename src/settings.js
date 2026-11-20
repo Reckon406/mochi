@@ -6,6 +6,7 @@ export const DEFAULTS = {
   quality: 'auto', // auto | low | medium | high | ultra : pixel ratio, MSAA, shadow map size, AO
   shadows: true, bloom: true, particles: 1, detail: isCoarse ? 0.6 : 1, // particles/detail apply on reload
   master: 0.7, music: 0.6, sfx: 0.7, river: 0.3, mute: false, musicOn: true,
+  mochiStyle: 'new', // new (scanned 3D model) | classic (the original procedural Mochi)
   autoRotate: true, walkHint: true, startCam: 'orbit', lookSens: 1, wildlife: 'normal',
 };
 export const QUALITY = { low: { pr: 1, msaa: 0, shadow: 512, tier: 0 }, medium: { pr: 1.25, msaa: 0, shadow: 2048, tier: 1 }, high: { pr: 2, msaa: 4, shadow: 3072, tier: 2 }, ultra: { pr: 2, msaa: 4, shadow: 4096, tier: 3, ao: true } };
@@ -33,6 +34,7 @@ export function buildSettingsPanel(root, settings, { music }) {
   el.innerHTML = `<header><b>⚙️ Settings</b><button class="sclose" aria-label="close">✕</button></header>
     <h4>Graphics</h4>${sel('quality', 'Quality', [['auto', 'Auto (' + autoQuality() + ')'], ['low', 'Low (fast)'], ['medium', 'Medium'], ['high', 'High (pretty)'], ['ultra', 'Ultra (AO, heavy)']])}${chk('shadows', 'Shadows')}${chk('bloom', 'Glow / bloom')}${sel('wildlife', 'Wildlife', [['off', 'Off'], ['few', 'A few'], ['normal', 'Normal'], ['lots', 'Lots']])}
     ${rng('particles', 'Rain / snow amount', 0, 1.5, 0.1)}${rng('detail', 'Grass & flowers', 0.2, 1.5, 0.1)}<p class="snote" data-note hidden>grass + weather amount change after a <a href="#" data-reload>reload</a></p>
+    <h4>Mochi</h4>${sel('mochiStyle', 'Mochi style', [['new', 'New'], ['classic', 'Classic']])}
     <h4>Sound</h4>${rng('master', 'Master', 0, 1, 0.05)}${rng('music', 'Music', 0, 1, 0.05)}${rng('sfx', 'Effects', 0, 1, 0.05)}${rng('river', 'River', 0, 1, 0.05)}${chk('mute', 'Mute everything')}${chk('musicOn', "Play Mochi's songs")}
     <div class="songs">${songs.length ? songs.map((x, i) => `<button data-song="${i}">🎵 ${x.title.replace(/[<>&]/g, '')}<em>${String(x.mood || '').replace(/[<>&]/g, '')}</em></button>`).join('') : '<p class="muted">no songs yet. he is warming up his beak.</p>'}</div>
     <h4>Camera</h4>${chk('autoRotate', 'Auto-rotate when idle')}${chk('walkHint', 'Show walk-mode hint')}${sel('startCam', 'Start in', [['orbit', 'Orbit'], ['follow', 'Follow Mochi'], ['walk', 'Walk (desktop)']])}${rng('lookSens', 'Mouse look speed', 0.3, 2.5, 0.1)}

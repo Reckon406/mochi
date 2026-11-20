@@ -139,7 +139,7 @@ async function init() {
   try { features.wishes = buildWishes(scene, { features, glow, snowy, mobile: isMobile }); } catch (e) { console.warn('wishlist builds failed', e?.stack || e); features.wishes = null; }
   { const zs = new THREE.Group(); zs.name = 'zone-signs'; scene.add(zs); zoneSigns(zs, ZONES, { groundY, OBSTACLES, BRIDGE }); }
 
-  const mochi = createMochi(state.outfit || '');
+  const mochi = createMochi(state.outfit || '', { style: params.get('mochi') || S0.mochiStyle });
   scene.add(mochi.root);
   const squirrelZone = ZONES.find((z) => z.id === 'squirrel');
   const squirrel = createSquirrel(squirrelZone.pos); scene.add(squirrel.root);
@@ -286,6 +286,7 @@ async function init() {
     if ('quality' in patch && ao) ao.enabled = !!QUALITY[st.quality]?.ao;
     if ('quality' in patch) { const q = QUALITY[st.quality]; const cap = Math.min(q.pr, isMobile ? 1.5 : q.pr); renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, cap)); renderer.setSize(innerWidth, innerHeight); composer.setPixelRatio?.(Math.min(window.devicePixelRatio || 1, cap)); composer.setSize(innerWidth, innerHeight);
       const sz = (q.tier ?? 2) <= 0 ? Math.min(512, q.shadow) : isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
+    if ('mochiStyle' in patch) mochi.setStyle(st.mochiStyle);
     if ('shadows' in patch) sun.castShadow = st.shadows;
     if ('bloom' in patch) { bloom.enabled = st.bloom; bloom.userData.sanitize.enabled = st.bloom; }
     if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();

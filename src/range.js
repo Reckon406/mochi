@@ -80,7 +80,7 @@ export function createRange(scene, { life, mochi, say, music, state, getWild }) 
   const rack = {}; ORDER.forEach((id, i) => { const m = new THREE.Mesh(GG[id], gunM); m.position.set(RX + 0.5 - i * 0.25, gy(RX, RZ) + 0.62, RZ - 0.11); m.rotation.set(-Math.PI / 2 + 0.06, 0, 0); m.scale.setScalar(1.15); m.visible = false; m.castShadow = true; group.add(m); rack[id] = m; });
   const refreshRack = () => { for (const id of ORDER) rack[id].visible = D.guns.includes(id); };
   refreshRack();
-  const held = new THREE.Mesh(GG.rifle22, gunM); held.castShadow = true; held.visible = false; held.position.set(0.48, 0.42, 0.42); mochi.pivot.add(held);
+  const held = new THREE.Mesh(GG.rifle22, gunM); held.castShadow = true; held.visible = false; held.position.set(0.48, 0.42, 0.42); (mochi.slots?.side || mochi.pivot).add(held);
   const flash = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.22, 6).rotateX(Math.PI / 2).translate(0, 0, 0.11), new THREE.MeshBasicMaterial({ color: 0xffd36a, transparent: true, opacity: 0.95, depthWrite: false, blending: THREE.AdditiveBlending })); flash.visible = false; held.add(flash);
   let flashT = 0;
   const tipZ = { revolver: 0.3, rifle22: 0.6, lever: 0.62, shotgun: 0.62, scoped: 0.68 };
@@ -89,7 +89,7 @@ export function createRange(scene, { life, mochi, say, music, state, getWild }) 
   // ear muffs on the pivot (band over the top + two orange cups)
   const muffs = new THREE.Mesh(merge([tint(new THREE.TorusGeometry(0.56, 0.025, 5, 16, Math.PI).translate(0, 0.6, -0.08), 0x333338),
     tint(new THREE.CylinderGeometry(0.14, 0.14, 0.09, 12).rotateZ(Math.PI / 2).translate(0.56, 0.6, -0.08), 0xe0662a), tint(new THREE.CylinderGeometry(0.14, 0.14, 0.09, 12).rotateZ(Math.PI / 2).translate(-0.56, 0.6, -0.08), 0xe0662a)]), vcM({ roughness: 0.5 }));
-  muffs.visible = false; mochi.pivot.add(muffs);
+  muffs.visible = false; (mochi.slots?.head || mochi.pivot).add(muffs);
   function bang() { flash.visible = true; flashT = 0.07; flash.rotation.z = Math.random() * 3; music?.sfx?.('bang'); }
 
   // ── targets: 3 steel plates (hinge back), 5 cans on the log, clays from the thrower ──

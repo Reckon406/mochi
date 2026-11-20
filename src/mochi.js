@@ -2,6 +2,8 @@
 import * as THREE from 'three';
 import { furTextures, softDot, stripes, canvasTex } from './textures.js';
 import { rng } from './noise.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 const BODY_R = 0.55;
 const BODY_C = new THREE.Vector3(0, 0.6, 0);
@@ -12,8 +14,9 @@ function surf(dir, push = 0) {
   return new THREE.Vector3(d.x * BODY_S.x, d.y * BODY_S.y, d.z * BODY_S.z).multiplyScalar(BODY_R + push).add(BODY_C);
 }
 
-export function createMochi(outfit = '') {
+export function createMochi(outfit = '', { style = 'new' } = {}) {
   const o = outfit.toLowerCase();
+  const classic = []; // every part of the original procedural Mochi (kept: the 'Classic' style + the fallback if the GLB fails)
   const root = new THREE.Group(); root.name = 'mochi';
   const pivot = new THREE.Group(); root.add(pivot); // squash/stretch + waddle (origin at feet)
   const fur = furTextures();
@@ -22,7 +25,7 @@ export function createMochi(outfit = '') {
 
   const body = new THREE.Mesh(new THREE.SphereGeometry(BODY_R, 64, 48), furMat);
   body.position.copy(BODY_C); body.scale.copy(BODY_S); body.castShadow = true; body.receiveShadow = false; // self-shadowing from wings/beak looked blocky at this shadow resolution body.name = 'mochi-body';
-  pivot.add(body);
+  pivot.add(body); classic.push(body);
 
   // fluffy silhouette: soft tufts over the back + top (not on the face)
   const r = rng(5); const tuftGeo = new THREE.SphereGeometry(1, 16, 12);
@@ -40,7 +43,7 @@ export function createMochi(outfit = '') {
   // cheeky head tuft (ahoge)
   const tuftCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.02, 0.12, 0.02), new THREE.Vector3(0.09, 0.2, -0.02), new THREE.Vector3(0.14, 0.17, -0.06)]);
   const ahoge = new THREE.Mesh(new THREE.TubeGeometry(tuftCurve, 16, 0.028, 8), new THREE.MeshStandardMaterial({ color: 0x7a5235, roughness: 0.9 }));
-  ahoge.position.copy(surf(new THREE.Vector3(0, 1, 0.35), -0.03)); pivot.add(ahoge);
+  ahoge.position.copy(surf(new THREE.Vector3(0, 1, 0.35), -0.03)); pivot.add(ahoge); classic.push(ahoge);
 
   // eyes — big, glossy, with two sparkles
   const eyeMat = new THREE.MeshPhysicalMaterial({ color: 0x1b0f0a, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.05 });
@@ -53,7 +56,7 @@ export function createMochi(outfit = '') {
     const eye = new THREE.Mesh(new THREE.SphereGeometry(0.135, 32, 24), eyeMat); eye.scale.set(0.92, 1.1, 0.72); g.add(eye);
     const s1 = new THREE.Mesh(new THREE.SphereGeometry(0.03, 12, 8), sparkMat); s1.position.set(0.03 * sx, 0.045, 0.085); g.add(s1);
     const s2 = new THREE.Mesh(new THREE.SphereGeometry(0.018, 10, 8), sparkMat); s2.position.set(-0.035 * sx, -0.04, 0.084); g.add(s2);
-    pivot.add(g); eyes.push(g);
+    pivot.add(g); eyes.push(g); classic.push(g);
   }
   // rosy blush
   const blushMat = new THREE.MeshBasicMaterial({ map: softDot('#ff7f96'), transparent: true, opacity: 0.75, depthWrite: false });
@@ -61,20 +64,20 @@ export function createMochi(outfit = '') {
     const dir = new THREE.Vector3(0.62 * sx, 0.08, 0.78); const p = surf(dir, 0.006);
     const b = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 0.12), blushMat); b.position.copy(p);
     b.lookAt(p.clone().add(new THREE.Vector3(dir.x, dir.y, dir.z * 1.0)));
-    pivot.add(b);
+    pivot.add(b); classic.push(b);
   }
   // long thin curved beak
   const BL = 0.82; const beakGeo = new THREE.CylinderGeometry(0.013, 0.058, BL, 18, 24, false); beakGeo.translate(0, BL / 2, 0); beakGeo.rotateX(Math.PI / 2);
   { const p = beakGeo.attributes.position; for (let i = 0; i < p.count; i++) { const z = p.getZ(i); const t = z / BL; p.setY(i, p.getY(i) - 0.22 * t * t); } beakGeo.computeVertexNormals(); }
   const beak = new THREE.Mesh(beakGeo, new THREE.MeshStandardMaterial({ color: 0xd9a77a, roughness: 0.45 }));
-  beak.position.copy(surf(new THREE.Vector3(0, 0.02, 1), -0.06)); beak.rotation.x = 0.2; beak.castShadow = true; pivot.add(beak);
+  beak.position.copy(surf(new THREE.Vector3(0, 0.02, 1), -0.06)); beak.rotation.x = 0.2; beak.castShadow = true; pivot.add(beak); classic.push(beak);
 
   // tiny wings
   const wings = [];
   for (const sx of [-1, 1]) {
     const w = new THREE.Group(); w.position.copy(surf(new THREE.Vector3(sx, 0.15, -0.1), -0.05));
     const m = new THREE.Mesh(new THREE.SphereGeometry(0.13, 20, 14), furMat); m.scale.set(0.35, 0.8, 1.0); m.position.set(0.03 * sx, -0.06, 0); m.rotation.x = 0.4;
-    m.castShadow = true; w.add(m); pivot.add(w); wings.push(w);
+    m.castShadow = true; w.add(m); pivot.add(w); wings.push(w); classic.push(w);
   }
 
   // legs + three-toed feet
@@ -87,7 +90,7 @@ export function createMochi(outfit = '') {
       const toe = new THREE.Mesh(new THREE.CapsuleGeometry(0.025, 0.12, 4, 8), legMat); toe.rotation.x = Math.PI / 2; toe.rotation.y = a;
       toe.position.set(Math.sin(a) * 0.07, -0.19, Math.cos(a) * 0.07 + 0.02); toe.castShadow = true; leg.add(toe);
     }
-    shin.castShadow = true; legs.push(leg);
+    shin.castShadow = true; legs.push(leg); classic.push(leg);
   }
 
   // ── outfit ──
@@ -98,10 +101,10 @@ export function createMochi(outfit = '') {
     // a snug collar that hugs the body: dips under the beak in front, rides up the back
     const pts = []; for (let i = 0; i < 48; i++) { const ph = (i / 48) * Math.PI * 2; pts.push(surf(new THREE.Vector3(Math.sin(ph), -0.1 - 0.24 * Math.cos(ph), Math.cos(ph)), 0.03)); }
     const scarf = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, true), 96, 0.062, 12, true), smat);
-    tex.repeat.set(4, 1); scarf.castShadow = true; pivot.add(scarf);
+    tex.repeat.set(4, 1); scarf.castShadow = true; pivot.add(scarf); classic.push(scarf);
     // dangling sock toe
     const tail = new THREE.Group(); tail.position.copy(surf(new THREE.Vector3(0.5, -0.36, 0.8), 0.07));
-    const knot = new THREE.Mesh(new THREE.SphereGeometry(0.085, 14, 10), smat); knot.position.copy(surf(new THREE.Vector3(0.45, -0.3, 0.84), 0.06)); knot.scale.set(1.1, 0.85, 0.8); pivot.add(knot); pivot.add(tail);
+    const knot = new THREE.Mesh(new THREE.SphereGeometry(0.085, 14, 10), smat); knot.position.copy(surf(new THREE.Vector3(0.45, -0.3, 0.84), 0.06)); knot.scale.set(1.1, 0.85, 0.8); pivot.add(knot); pivot.add(tail); classic.push(knot, tail); /* the new model wears its own scarf */
     const tmat = new THREE.MeshStandardMaterial({ map: stripes(['#e8463c', '#fff4e0'], 6, false, 32, 128), roughness: 0.95 });
     const sock = new THREE.Mesh(new THREE.CapsuleGeometry(0.06, 0.2, 6, 12), tmat); sock.position.y = -0.12; tail.add(sock);
     const toe = new THREE.Mesh(new THREE.SphereGeometry(0.075, 14, 10), new THREE.MeshStandardMaterial({ color: 0xf2b33d, roughness: 0.95 })); toe.position.set(0, -0.26, 0.03); tail.add(toe);
@@ -149,6 +152,40 @@ export function createMochi(outfit = '') {
 
   // invisible, generous hit target for clicks/taps
   const hit = new THREE.Mesh(new THREE.SphereGeometry(0.95, 8, 6), new THREE.MeshBasicMaterial({ visible: false })); hit.position.y = 0.6; hit.name = 'mochi-hit'; root.add(hit);
+
+  // ── styles: 'new' = the TRELLIS-scanned Mochi (public/models/mochi.glb, no rig: moved by the same pivot transforms), 'classic' = the procedural one above ──
+  // slots: props hang off these so they land on the right spot for either body (classic = identity frame)
+  const slots = { head: new THREE.Group(), side: new THREE.Group() }; pivot.add(slots.head, slots.side);
+  const SPOTS = {
+    classic: { hold: [0, 0.36, 1.22], pack: null, hat: null, cape: [0, 0.92, -0.42], head: [[0, 0, 0], 1], side: [0, 0, 0], headOffset: 1.45 },
+    // measured off the GLB (turned to face +z): 1.33x scale, feet on y=0, beak tip ~z 0.68, crown ~(0, 1.11, 0.17), back ~z -0.55
+    new: { hold: [0, 0.58, 0.72], pack: [0, 0.68, -0.48], hat: [0, 1.07, 0.16], cape: [0, 0.95, -0.38], head: [[0, 0.47, 0.17], 0.68], side: [-0.06, 0.03, 0], headOffset: 1.35 },
+  };
+  const base = { pack: extras.backpack ? extras.backpack.position.clone() : null, packQ: extras.backpack ? extras.backpack.quaternion.clone() : null, hat: extras.hat ? extras.hat.position.clone() : null };
+  const model = new THREE.Group(); model.name = 'mochi-model'; model.visible = false; pivot.add(model); let modelOk = false, cur = 'classic';
+  const api = { headOffset: 1.45 };
+  function applyStyle(st) {
+    const use = st === 'new' && modelOk ? 'new' : 'classic'; cur = use; const S = SPOTS[use];
+    classic.forEach((c) => (c.visible = use === 'classic')); model.visible = use === 'new';
+    hold.position.set(...S.hold); api.headOffset = S.headOffset;
+    slots.head.position.set(...S.head[0]); slots.head.scale.setScalar(S.head[1]); slots.side.position.set(...S.side);
+    if (extras.backpack && !extras.cape) { if (S.pack) { extras.backpack.position.set(...S.pack); extras.backpack.rotation.set(0, Math.PI, 0); } else { extras.backpack.position.copy(base.pack); extras.backpack.quaternion.copy(base.packQ); } }
+    if (extras.backpack && extras.cape && use === 'new') extras.backpack.position.set(0.36, 0.62, -0.18);
+    else if (extras.backpack && extras.cape) extras.backpack.position.copy(base.pack);
+    if (extras.hat) { if (S.hat) extras.hat.position.set(...S.hat); else extras.hat.position.copy(base.hat); }
+    if (extras.cape) extras.cape.position.set(...S.cape);
+    return use;
+  }
+  let want = style;
+  { const url = (import.meta.env?.BASE_URL || '/') + 'models/mochi.glb'; const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder);
+    L.load(url, (g) => { try {
+      const sc = g.scene; const S = 1.33; sc.scale.setScalar(S); sc.rotation.y = Math.PI; /* the scan faces -z; Mochi faces +z */ sc.updateMatrixWorld(true);
+      const bb = new THREE.Box3().setFromObject(sc); sc.position.y -= bb.min.y; // feet on the ground
+      sc.traverse((m) => { if (!m.isMesh) return; if (!m.geometry.attributes.normal) m.geometry.computeVertexNormals();
+        const old = m.material; m.material = new THREE.MeshStandardMaterial({ map: old.map, color: new THREE.Color(1.25, 1.2, 1.14), roughness: 0.85, metalness: 0 }); /* the scan bakes in dark shading; lift it toward the preview tan */ if (old.map) { old.map.colorSpace = THREE.SRGBColorSpace; old.map.anisotropy = 4; }
+        m.castShadow = true; m.receiveShadow = false; });
+      model.add(sc); modelOk = true; applyStyle(want); console.log('[mochi] model ok');
+    } catch (e) { console.warn('[mochi] model failed, classic', e.message); applyStyle('classic'); } }, undefined, (e) => { console.warn('[mochi] model load failed, classic', e?.message || e); applyStyle('classic'); }); }
 
   // ── animation state ──
   const anim = { t: 0, walk: 0, walkPhase: 0, hop: -1, hopDur: 0.62, hopH: 0.7, flap: 0, blinkT: 2, blink: 0, look: 0, lookT: 0 };
@@ -201,7 +238,15 @@ export function createMochi(outfit = '') {
     ey = Math.min(ey, 1 - 0.9 * pose.sleep); eyes.forEach((e) => (e.scale.y = ey));
     // outfit physics-ish
     if (extras.cape) extras.cape.rotation.x = 0.02 + 0.3 * w + 0.3 * Math.sin(Math.min(1, Math.max(0, anim.hop) / anim.hopDur) * Math.PI) + 0.06 * Math.sin(t * 3.1) + 0.04 * Math.sin(t * 7.3) * w;
+    if (cur === 'new') { // no rig: waddle yaw + foot-shuffle squash, wing flap -> fluff shiver, sleep -> head tucked + settled
+      const fl = anim.flap > 0 ? Math.abs(Math.sin(t * 28)) * 0.05 : 0;
+      model.rotation.y = Math.sin(anim.walkPhase) * 0.1 * w + 0.05 * Math.sin(t * 0.7) * idle * (1 - pose.sleep);
+      model.scale.set(1 + fl + 0.03 * w * Math.abs(Math.cos(anim.walkPhase)), 1 - 0.04 * w * Math.abs(Math.sin(anim.walkPhase)) - 0.06 * pose.sleep, 1 + fl * 0.5);
+      model.rotation.x = 0.1 * pose.sleep; model.position.y = -0.04 * pose.sleep; }
     if (extras.sock) extras.sock.rotation.z = 0.35 + Math.sin(anim.walkPhase * 0.5) * 0.25 * w + 0.05 * Math.sin(t * 2);
   }
-  return { root, pivot, hop, flap, update, anim, hit, mods, hold, pose, headOffset: 1.45 };
+  Object.assign(api, { root, pivot, hop, flap, update, anim, hit, mods, hold, pose, slots, model, extras,
+    setStyle(st) { want = st; return applyStyle(st); }, get style() { return cur; }, get modelOk() { return modelOk; } });
+  applyStyle('classic'); // until the GLB arrives (and for good if it never does)
+  return api;
 }
