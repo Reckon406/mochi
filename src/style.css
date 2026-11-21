@@ -191,3 +191,31 @@ body.touchwalk .placesBtn, body.touchwalk .placesPop, body.touchwalk .tools, bod
 @keyframes mailpulse { 50% { transform: scale(1.12); } }
 
 #flyBtn.on, #followBtn.on { filter: brightness(1.15); box-shadow: 0 0 0 2px #c42b2b55; }
+
+/* 💬 chat with mochi (brain worker) */
+#chatBtn.on { background: var(--ink); color: #fff8ec; }
+.chatSheet { position: absolute; right: 16px; bottom: 16px; width: 360px; height: min(520px, calc(100% - 200px)); z-index: 12; display: flex; flex-direction: column; overflow: hidden;
+  background: rgba(255, 249, 238, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 22px; box-shadow: 0 12px 40px rgba(60, 30, 10, .25); color: var(--ink); font-family: var(--font); pointer-events: auto; }
+.chatSheet[hidden] { display: none; }
+.chatSheet header { display: flex; align-items: center; gap: 10px; padding: 12px 12px 10px 14px; border-bottom: 1px solid var(--line); }
+.chatSheet .ava { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%; background: #f3e2c6; font-size: 20px; }
+.chatSheet .t { flex: 1; display: flex; flex-direction: column; line-height: 1.15; } .chatSheet .t b { font-size: 15px; } .chatSheet .t i { font-style: normal; font-size: 11.5px; color: var(--ink2); }
+.chatSheet .x { border: 0; background: transparent; color: var(--ink2); font-size: 18px; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; } .chatSheet .x:hover { background: var(--line); }
+.chatSheet .msgs { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; overscroll-behavior: contain; }
+.chatSheet .msg { max-width: 82%; padding: 8px 12px; border-radius: 16px; font-size: 14px; line-height: 1.35; white-space: pre-wrap; word-wrap: break-word; }
+.chatSheet .msg.mochi { align-self: flex-start; background: #fff; border-bottom-left-radius: 6px; box-shadow: 0 1px 3px rgba(60, 30, 10, .08); }
+.chatSheet .msg.me { align-self: flex-end; background: var(--ink); color: #fff8ec; border-bottom-right-radius: 6px; }
+.chatSheet .msg.sys { align-self: center; background: transparent; font-size: 12px; color: var(--ink2); padding: 2px 8px; text-align: center; }
+.chatSheet .msg.typing { color: var(--ink2); letter-spacing: 2px; animation: chatdots 1s ease-in-out infinite; } .chatSheet .msg.off { opacity: .8; font-style: italic; }
+@keyframes chatdots { 50% { opacity: .35; } }
+.chatSheet form { display: flex; gap: 8px; padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); }
+.chatSheet input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: 99px; padding: 10px 14px; font: 600 16px var(--font); color: var(--ink); background: #fff; outline: none; }
+.chatSheet input:focus { border-color: var(--ink2); }
+.chatSheet form button { border: 0; width: 42px; height: 42px; border-radius: 50%; background: var(--ink); color: #fff8ec; font-size: 16px; cursor: pointer; flex: none; } .chatSheet form button:disabled { opacity: .45; }
+
+@media (max-width: 640px) {
+  #chatBtn .lbl { display: none; } #chatBtn { padding-left: 11px; padding-right: 11px; }
+  .chatSheet { left: 0; right: 0; bottom: 0; width: auto; height: min(56%, 470px); border-radius: 20px 20px 0 0; }
+  body.chatting .tools, body.chatting .placesBtn, body.chatting .placesPop, body.chatting .nowplaying, body.chatting .hint, body.chatting .doing { display: none !important; }
+}
+body.touchwalk .chatSheet { display: none !important; }

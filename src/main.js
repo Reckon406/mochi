@@ -54,6 +54,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 import { buildWorldState } from './worldstate.js';
 import { createMusic } from './music.js';
 import { createSettings, buildSettingsPanel, QUALITY } from './settings.js';
+import { brainEnabled, fetchBrainState, createBrainLink, buildChat } from './brainlink.js';
 
 const params = new URLSearchParams(location.search);
 const FALLBACK = {
@@ -62,6 +63,8 @@ const FALLBACK = {
 };
 
 async function loadState() {
+  // the brain worker owns the live layer (caps, inventory, mood...) and serves the full merged state; state.json is the fallback
+  if (brainEnabled(params)) { try { const s = await fetchBrainState(params); return { state: { ...FALLBACK, ...s }, error: null }; } catch (e) { console.warn('[brain] offline, using state.json', e.message || e); } }
   const src = params.get('state') || './state.json';
   try {
     const res = await fetch(src, { cache: 'no-store' });
@@ -323,7 +326,21 @@ async function init() {
   const bagText = (inv) => { const f = Object.values(inv.fish).reduce((a, b) => a + b, 0), c = Object.values(inv.cooked).reduce((a, b) => a + b, 0), cr = Object.values(inv.crops).reduce((a, b) => a + b, 0);
     return [inv.worms && `🪱${inv.worms}`, f && `🐟${f}`, c && `🍢${c}`, cr && `🥕${cr}`, inv.caps && `🧢${inv.caps}`, inv.trinkets.length && `🎁${inv.trinkets.length}`].filter(Boolean).join(' '); };
   let lifeDirty = 1;
-  life = createLife({ state, mochi, features, say: (s, d) => say(s, d), music, sky, feel, onChange: (inv, log, label) => { if (label !== undefined) ui.setDoing(label, bagText(inv)); else ui.setDoing(life?.label || '', bagText(inv)); lifeDirty = 1; } });
+  life = createLife({ state, mochi, features, say: (s, d) => say(s, d), music, sky, feel, onChange: (inv, log, label) => { if (label !== undefined) ui.setDoing(label, bagText(inv)); else ui.setDoing(life?.label || '', bagText(inv)); lifeDirty = 1; },
+    onEvent: (type, data) => brainLink?.event(type, data) });
+  // 🧠 brain link: poll the worker's live state, play the actions it picks (cron ticks / chat), host the 💬 chat sheet
+  const capsMax = (() => { const t = document.querySelector('#ui .bar.caps .bar-top i'); return t ? parseFloat(t.textContent.replace(/[^0-9.]/g, '')) || 0 : 0; })();
+  const brainLink = createBrainLink({ params, initial: state, getInv: () => life.inv, say: (s, d) => say(s, d),
+    onState: (s) => {
+      if (s) { if (s.mood) { const el = document.querySelector('#ui .row.mood .v'); if (el) el.textContent = s.mood; } if (s.activity) { const el = document.querySelector('#ui .row.act .v'); if (el) el.textContent = s.activity; }
+        if (s.world?.gaming?.found && features.gaming && !features.gaming.found) features.gaming.setFound?.(true); }
+      const b = document.querySelector('#ui .bar.caps'); if (b) { const v = life.inv.caps; const top = b.querySelector('.bar-top b'); if (top) top.innerHTML = `${v} <i>/ ${capsMax}</i>`; const f = b.querySelector('.fill'); if (f && capsMax) f.style.width = Math.min(100, v / capsMax * 100).toFixed(1) + '%'; }
+      ui.setDoing(life.label, bagText(life.inv)); lifeDirty = 1; },
+    onAction: ({ life: id, text, from }) => {
+      if (from === 'tick' && text) say(text.length > 90 ? text.slice(0, 88) + '…' : text, 5);
+      if (!id || !life.A[id] || walk.on || params.get('stay') === '1') return; const z = ZONES.find((q) => q.id === life.A[id].zone); if (!z) return;
+      planTo(z); life.queue(id); } });
+  let chat = null; if (params.get('ui') !== '0') try { chat = buildChat({ link: brainLink, say: (s, d) => say(s, d) }); } catch (e) { console.warn('chat failed', e); }
   try { features.mailNotes = createMailNotes(scene, { state, mailbox: features.mailbox, say: (s, d) => say(s, d) });
     const mb = document.getElementById('mailBtn'); if (mb) { if (features.mailNotes.unseen) mb.classList.add('new'); mb.addEventListener('click', () => { features.mailNotes.open(); mb.classList.remove('new'); }); }
     if (features.mailNotes.unseen) { if (features.mailbox?.flag) features.mailbox.flag.rotation.z = 0; setTimeout(() => features.mailNotes.greet(), 7000); }
@@ -567,7 +584,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk')) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { flowers, squirrel, wildmodels: { dress: dressWild, FIT: WILD_FIT, preload: preloadWild }, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { brainLink, chat, flowers, squirrel, wildmodels: { dress: dressWild, FIT: WILD_FIT, preload: preloadWild }, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

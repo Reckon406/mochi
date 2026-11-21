@@ -19,7 +19,10 @@ export function normInventory(s = {}) {
 }
 const sum = (o) => Object.values(o).reduce((a, b) => a + b, 0);
 
-export function createLife({ state, mochi, features, say, music, sky, feel, onChange = () => {} }) {
+export function createLife({ state, mochi, features, say, music, sky, feel, onChange = () => {}, onEvent = () => {} }) {
+  // visitor-triggered activities (tap a place / interact) report what happened to the brain worker so it sticks;
+  // autonomous wandering and brain-driven actions don't (the brain already counted those).
+  let userQ = null; const emit = (type, data) => { if (cur?.user) try { onEvent(type, data); } catch (e) { /* never break the sim */ } };
   const inv = normInventory(state); const fishLog = (Array.isArray(state.fishLog) ? state.fishLog : []).slice(-50).map((f) => ({ ...f }));
   const encounters = []; const P = features.props; const plots = features.plots;
   let rideY = null; let cur = null, lift = 0, liftTarget = 0, face = null, held = null, posTarget = null, last = '';
@@ -39,7 +42,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   const A = {};
   A.dig = { zone: 'garden', label: '🪱 digging for worms', steps: [
     { d: 2.6, start() { say('worm time. kiwis are literally built for this', 2.6); pose.peck = 1; }, tick(u) { if (Math.random() < 0.08) { const p = ahead(0.8); fx.puff(p.x, groundY(p.x, p.z) + 0.05, p.z, 0x6a4a2a); } } },
-    { d: 1.8, start() { pose.peck = 0; const n = 1 + Math.floor(Math.random() * 3); inv.worms += n; hold(P.worm.clone(), [0, Math.PI / 2, 0]); say(`+${n} worm${n > 1 ? 's' : ''} 🪱 (sorry guys)`, 2); changed(); } },
+    { d: 1.8, start() { pose.peck = 0; const n = 1 + Math.floor(Math.random() * 3); inv.worms += n; emit('worms', { n }); hold(P.worm.clone(), [0, Math.PI / 2, 0]); say(`+${n} worm${n > 1 ? 's' : ''} 🪱 (sorry guys)`, 2); changed(); } },
     { d: 0.2, start() { drop(); } } ] };
   A.plant = { zone: 'garden', label: '🌱 planting', steps: [
     { d: 3, start() { const p = plots.find((q) => !q.crop || q.stage === 0); const seed = Object.keys(inv.seeds).find((k) => inv.seeds[k] > 0) || 'garlic'; if (p) { posTarget = new THREE.Vector3(p.x, 0, p.z + 0.9); p.crop = seed; p.stage = 1; inv.seeds[seed] = Math.max(0, (inv.seeds[seed] || 1) - 1); this.p = p; say(`planting ${seed}. grow, little guy`, 3); } pose.peck = 1; },
@@ -61,7 +64,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 1.1, start() { pose.sway = 0; P.bobber.visible = false; if (!fz.catch) { say('nothing. the fish are in a meeting', 2); return; } const f = fz.catch; fz.mesh = fishMesh(f.species); fz.mesh.scale.setScalar(0.25 + f.inches * 0.022); features.group.add(fz.mesh); mochi.flap(1); },
       tick(u) { if (!fz.mesh) return; const a = fz.bob, b = M(); fz.mesh.position.set(a.x + (b.x - a.x) * u, WATER_Y + Math.sin(u * Math.PI) * 1.6 + u * 0.9, a.z + (b.z - a.z) * u); fz.mesh.rotation.set(Math.sin(u * 20) * 0.6, u * 6, 0); } },
     { d: 2.6, start() { P.line.visible = false; if (!fz.mesh) { drop(); return; } features.group.remove(fz.mesh); const f = fz.catch, F = FISH[f.species]; hold(fz.mesh, [0, Math.PI / 2, 0.2], 0.2 + f.inches * 0.016);
-        fishLog.push({ species: F.name, inches: f.inches, kept: F.keep, at: 'dock', date: new Date().toLocaleDateString('en-CA') });
+        fishLog.push({ species: F.name, inches: f.inches, kept: F.keep, at: 'dock', date: new Date().toLocaleDateString('en-CA') }); emit('fish', { species: f.species, inches: f.inches, bait: !!fz.bait });
         say(`${F.name}! ${f.inches} in. ${F.keep ? 'into the bucket 🪣' : F.why}`, 3.2); changed(); } },
     { d: 1.2, start() { if (!fz.catch) return; const F = FISH[fz.catch.species]; if (F.keep) { inv.fish[fz.catch.species] = (inv.fish[fz.catch.species] || 0) + 1; } else { mochi.flap(0.8); fx.rings(fz.bob.x, fz.bob.z); } drop(); changed(); },
       end() { drop(); face = null; } } ] };
@@ -114,7 +117,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   A.browse = { zone: 'picnic', label: '💻 browsing the web', steps: [{ d: 9, start() { const L = features.laptop; posTarget = L.pos.clone().add(new THREE.Vector3(Math.sin(L.yaw) * 0.85, 0, Math.cos(L.yaw) * 0.85)); face = L.yaw + Math.PI; const [site, txt] = L.lines(); L.lid.rotation.x = -0.25; say(`reading ${site}: ${txt.slice(0, 60)}`, 4); }, tick(u, dt) { pose.peck = 0.15; }, end() { pose.peck = 0; face = null; } }] };
   A.vend = { zone: 'vending', label: '🎰 Cap-O-Matic', steps: [
     { d: 2, start() { const V = features.vend; if (inv.caps < 3) { this.no = true; say(`${inv.caps} caps. need 3. the machine mocks me`, 2.5); return; } inv.caps -= 3; say('3 caps in. come on come on', 2); changed(); this.V = V; }, tick(u, dt) { if (this.V?.knob) this.V.knob.rotation.z += dt * 6; } },
-    { d: 2.5, start() { if (this.no) return; const tr = TRINKETS[Math.floor(Math.random() * TRINKETS.length)]; inv.trinkets.push(tr); if (this.V?.cap) this.V.cap.visible = true; mochi.flap(1); mochi.hop(0.7); say(`GOT: ${tr}!!`, 2.5); changed(); }, end() { if (this.V?.cap) this.V.cap.visible = false; } } ] };
+    { d: 2.5, start() { if (this.no) return; const tr = TRINKETS[Math.floor(Math.random() * TRINKETS.length)]; inv.trinkets.push(tr); emit('vend', { item: tr }); if (this.V?.cap) this.V.cap.visible = true; mochi.flap(1); mochi.hop(0.7); say(`GOT: ${tr}!!`, 2.5); changed(); }, end() { if (this.V?.cap) this.V.cap.visible = false; } } ] };
   // 🎮 gaming nook: sit on the beanbag, pad in his wings, button-mash, flap at the good bits, rage-shiver when he gets PLUCKED
   // 💕 visiting the girl kiwi: row over from the dock (wake behind), hand over a gift, row home. At 'dating' she comes to him instead.
   const CR = () => features.crush;
@@ -152,7 +155,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 2.2, start() { const C = CR(); const h = C.her.position; face = Math.atan2(h.x - M().x, h.z - M().z); const hint = C.hint(); say(`${C.name}: "${hint || (HER[C.stage] || HER.friend)[Math.floor(Math.random() * 3)]}"`, 2.2); } },
     { d: 4, start() { const C = CR(); const h = C.her.position; spend(this.gift);
         drop(); const gp = giftMesh(this.gift.kind); gp.position.set(h.x + (M().x - h.x) * 0.45, h.y + 0.08, h.z + (M().z - h.z) * 0.45); gp.rotation.set(0, Math.random() * 6, 0); gp.scale.setScalar(1.2); features.group.parent.add(gp); this.gp = gp;
-        const r = C.gift(this.gift.kind, this.gift.about); this.r = r; changed(); say(`here. ${giftWord(this.gift)}. for you`, 1.6);
+        const r = C.gift(this.gift.kind, this.gift.about); this.r = r; emit('gift', { kind: this.gift.kind, d: r?.d ?? 3 }); changed(); say(`here. ${giftWord(this.gift)}. for you`, 1.6);
         setTimeout(() => { if (cur?.id !== 'visit') return; reactTo(C, r, true); say(r.v === 'like' ? `${C.name}: "for ME?? ♡" ${r.fresh ? `💡 she loves ${r.info.label}!` : ''} (+${r.d})` : r.v === 'ick' ? `${C.name}: "oh. ${giftWord(this.gift)}. ...ew" ${r.fresh ? '📝 noted' : ''} (${r.d})` : `${C.name}: "oh. thanks i guess" (+${r.d})`, 2.4); }, 1600); } },
     talkStep(),
     { d: 1, start() { const C = CR(); C.lookAt(null); walkTo(C.dockTip.clone()); say(this.r?.v === 'like' ? 'she LIKED it. play it cool. PLAY IT COOL' : this.r?.v === 'ick' ? 'note to self: never again' : 'that went... fine. it went fine', 2.5); } },
@@ -174,7 +177,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     { d: 2.2, start() { const G = features.gaming; const p = M(); face = Math.atan2(G.discPos.x - p.x, G.discPos.z - p.z); }, tick(u, dt, t) { pose.peck = 0.6 + 0.4 * Math.sin(t * 9); }, end() { pose.peck = 0; } },
     { d: 2.2, start() { const G = features.gaming; G.glint.visible = false; hold(G.disc, [0.4, 0, 0], 1.3); mochi.flap(1); say(`${G.title.toUpperCase()}?! it was by the ${G.discSpot === 'custom' ? 'bushes' : G.discSpot} the whole time`, 3); } },
     { d: 1, start() { face = null; const G = features.gaming; walkTo(G.seat.clone()); } },
-    { d: 2.4, start() { const G = features.gaming; face = G.faceYaw; say('disc in. loading. loading. IT LOADED', 2.4); }, end() { const G = features.gaming; drop(); G.setFound(true); G.setMode('attract'); mochi.flap(0.8); face = null; } } ] };
+    { d: 2.4, start() { const G = features.gaming; face = G.faceYaw; say('disc in. loading. loading. IT LOADED', 2.4); }, end() { const G = features.gaming; drop(); G.setFound(true); emit('disc', {}); G.setMode('attract'); mochi.flap(0.8); face = null; } } ] };
   A.gaming = { zone: 'gaming', label: '🎮 playing video games', ok: () => !!features.gaming && features.gaming.found, steps: [
     { d: 2.2, start() { const G = features.gaming; posTarget = G.seat.clone(); face = G.faceYaw; say(G.found ? `booting up ${G.title}. nobody perch on me` : 'the TV says insert disc. WHAT disc', 2.5); } },
     { d: 15, start() { const G = features.gaming; liftTarget = 0.14; if (!G.found) { this.nod = true; return; } G.setMode('drive'); G.spare.visible = false; mochi.holdPad?.(G.pad); },
@@ -281,8 +284,8 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
 
   let queued = initial;
   function begin(zid) {
-    const id = choose(zid, queued); if (id === queued) queued = null; if (!id) return false; const def = A[id];
-    cur = { id, def, k: -1, el: 0, steps: def.steps.map((s) => ({ ...s })), bag: {} }; face = null; posTarget = null; last = def.label; next(); onChange(inv, fishLog, def.label); return true;
+    const id = choose(zid, queued); if (id === queued) queued = null; if (!id) return false; const def = A[id]; const user = !!userQ && id === userQ; userQ = null;
+    cur = { id, def, k: -1, el: 0, steps: def.steps.map((s) => ({ ...s })), bag: {}, user }; face = null; posTarget = null; last = def.label; next(); onChange(inv, fishLog, def.label); return true;
   }
   function next() { const c = cur; if (c.k >= 0) c.steps[c.k].end?.call(c.bag); c.k++; c.el = 0; if (c.k >= c.steps.length) { c.def.end?.(); drop(); pose.peck = pose.sway = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); return; } c.steps[c.k].start?.call(c.bag); }
   function update(dt, t) {
@@ -301,8 +304,9 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
   }
   function cancel() { if (!cur) return; const s = cur.steps[cur.k]; try { s?.end?.call(cur.bag); } catch (e) { /* ignore */ } try { cur.def.onCancel?.(cur.bag); } catch (e) { /* ignore */ } drop(); P.line.visible = false; P.bobber.visible = false; mochi.root.remove(P.board);
     for (const c of [...P.skewer.children]) if (c.userData.food) P.skewer.remove(c); P.skewer.visible = false; liftTarget = 0; face = null; pose.peck = pose.sway = pose.sleep = 0; cur = null; posTarget = null; onChange(inv, fishLog, ''); }
-  function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); return true; }
+  function interact(zid) { const l = BY_ZONE[zid]; if (!l) return false; queued = choose(zid); userQ = queued; return true; }
   function steal(by = 'raccoon') { const k = Object.keys(inv.fish).find((s) => inv.fish[s] > 0); if (!k) return null; inv.fish[k]--; changed(); encounters.push({ animal: by, at: 'dock', outcome: 'stole a fish', date: new Date().toLocaleDateString('en-CA') }); return FISH[k].name; }
   return { inv, fishLog, encounters, plots, begin, cancel, update, suggest, interact, steal, fromText, get current() { return cur; }, get label() { return cur ? cur.def.label : ''; }, get lift() { return lift; }, get rideY() { return rideY; }, get face() { return face; }, get initialZone() { return initial ? A[initial].zone : null; }, A, BY_ZONE, KEYS, liftTo(v) { liftTarget = v; },
+    queue(id) { if (!A[id]) return false; queued = id; userQ = null; return true; },
     ctl: { go(v) { posTarget = v; }, face(f) { face = f; }, lift(v) { liftTarget = v; }, snapLift(v) { liftTarget = lift = v; }, hold, drop, fx, M, pose }, run(id) { const def = A[id]; if (!def) return false; cancel(); queued = id; return begin(def.zone); } };
 }
