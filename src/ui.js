@@ -59,15 +59,19 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
       <div class="pane" id="pane-friends"></div>
     </div>
   </section>
-  <nav class="legend" id="legend">
-    ${ZONES.map((z) => `<button class="zone ${z.id === favoredId ? 'fav' : ''}" data-zone="${z.id}" title="send mochi to the ${esc(z.name.toLowerCase())}"><span>${z.emoji}</span>${esc(z.name)}</button>`).join('')}
-  </nav>
-  <div class="tools">
-    <button id="setBtn" title="settings: graphics, sound, camera">⚙️</button>
-    <button id="mailBtn" title="mochi's mailbox: write him a note, read his letters">📬</button>
-    <button id="followBtn" title="camera follows mochi">🎥 follow</button>
-    <button id="flyBtn" title="camera follows the plane while Mochi is flying">✈️ fly-cam</button>
+  <button class="placesBtn" id="placesBtn" type="button" aria-haspopup="true" aria-expanded="false" title="send mochi somewhere">📍 places</button>
+  <div class="placesPop" id="placesPop" hidden role="dialog" aria-label="places">
+    <div class="placesGrid">${ZONES.map((z) => `<button class="zone ${z.id === favoredId ? 'fav' : ''}" data-zone="${z.id}" title="send mochi to the ${esc(z.name.toLowerCase())}"><span>${z.emoji}</span>${esc(z.name)}</button>`).join('')}</div>
+  </div>
+  <div class="tools" id="tools">
     ${canWalk ? '<button id="walkBtn" title="walk around the island (WASD + mouse, or the touch stick)">🚶 walk</button>' : ''}
+    <button id="followBtn" title="camera follows mochi">🎥 follow</button>
+    <button id="moreBtn" type="button" title="more" aria-haspopup="true" aria-expanded="false">⋯</button>
+    <div class="morePop" id="morePop" hidden>
+      <button id="setBtn" title="settings: graphics, sound, camera">⚙️ settings</button>
+      <button id="mailBtn" title="mochi's mailbox: write him a note, read his letters">📬 mail</button>
+      <button id="flyBtn" title="camera follows the plane while Mochi is flying">✈️ fly-cam</button>
+    </div>
     <span class="hint">drag to look around · tap mochi to make him hop · tap a place to send him${canWalk ? (matchMedia('(pointer: coarse)').matches ? ' · 🚶 walk = stick + drag' : ' · 🚶 walk = WASD') : ''}</span>
   </div>
   <button class="nowplaying" id="nowPlaying" hidden title="skip to the next song"></button>
@@ -88,7 +92,19 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
     tabs.forEach((x) => x.classList.remove('on')); root.querySelectorAll('.pane').forEach((p) => p.classList.remove('open'));
     if (open) { b.classList.add('on'); root.querySelector('#pane-' + b.dataset.tab).classList.add('open'); }
   }));
-  root.querySelectorAll('.zone').forEach((b) => (b.onclick = () => onZone(b.dataset.zone)));
+  const placesBtn = root.querySelector('#placesBtn'), placesPop = root.querySelector('#placesPop');
+  const moreBtn = root.querySelector('#moreBtn'), morePop = root.querySelector('#morePop');
+  const closePops = (keep) => {
+    if (keep !== 'places') { placesPop.hidden = true; placesBtn.setAttribute('aria-expanded', 'false'); }
+    if (keep !== 'more') { morePop.hidden = true; moreBtn.setAttribute('aria-expanded', 'false'); }
+  };
+  placesBtn.onclick = (e) => { e.stopPropagation(); const open = placesPop.hidden; closePops(); if (open) { placesPop.hidden = false; placesBtn.setAttribute('aria-expanded', 'true'); } };
+  moreBtn.onclick = (e) => { e.stopPropagation(); const open = morePop.hidden; closePops(); if (open) { morePop.hidden = false; moreBtn.setAttribute('aria-expanded', 'true'); } };
+  placesPop.addEventListener('click', (e) => e.stopPropagation());
+  morePop.addEventListener('click', (e) => e.stopPropagation());
+  addEventListener('pointerdown', (e) => { if (!e.target.closest?.('#placesPop, #placesBtn, #morePop, #moreBtn, .settings')) closePops(); });
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') closePops(); });
+  root.querySelectorAll('.zone').forEach((b) => (b.onclick = () => { onZone(b.dataset.zone); closePops(); }));
   // gallery images: fall back to the painted version, then to the emoji
   root.querySelectorAll('.gallery img').forEach((img) => { img.onerror = () => { const t = artThumbs[+img.dataset.fb]; if (t.real && img.src !== t.fallback && t.fallback) { t.real = false; t.src = t.fallback; img.src = t.fallback; img.closest('.thumb').classList.remove('real'); img.parentElement.querySelector('.badge')?.remove(); } else img.remove(); }; });
   const lb = root.querySelector('#lightbox'), lbImg = lb.querySelector('img'); let lbK = 0;
@@ -105,7 +121,7 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
   const flyb = root.querySelector('#flyBtn');
   if (flyb) flyb.onclick = () => { fol = true; fb.classList.add('on'); flyb.classList.add('on'); onFollow(true); };
   const wb = root.querySelector('#walkBtn'); if (wb) wb.onclick = (e) => { e.currentTarget.blur(); onWalk?.(); };
-  root.querySelector('#setBtn').onclick = (e) => { e.currentTarget.blur(); onSettings?.(); };
+  root.querySelector('#setBtn').onclick = (e) => { e.currentTarget.blur(); closePops(); onSettings?.(); };
   const np = root.querySelector('#nowPlaying'); np.onclick = () => onSongClick?.();
   const tst = root.querySelector('.toast'); if (tst) setTimeout(() => tst.classList.add('gone'), 7000);
 

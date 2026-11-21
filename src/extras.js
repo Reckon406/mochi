@@ -52,7 +52,7 @@ export function createExtras({ scene, camera, renderer, renderNow, mochi, music,
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && photo) setPhoto(false); });
   // buttons in the top-right tool stack
   const tools = document.querySelector('#ui .tools');
-  if (tools) { const mk = (id, txt, title, fn) => { const b = document.createElement('button'); b.id = id; b.textContent = txt; b.title = title; b.onclick = (e) => { e.currentTarget.blur(); fn(); }; tools.insertBefore(b, tools.querySelector('.hint')); return b; };
+  if (tools) { const slot = document.getElementById('morePop') || tools; const mk = (id, txt, title, fn) => { const b = document.createElement('button'); b.id = id; b.textContent = txt; b.title = title; b.onclick = (e) => { e.currentTarget.blur(); fn(); }; if (slot.id === 'morePop') slot.appendChild(b); else tools.insertBefore(b, tools.querySelector('.hint')); return b; };
     mk('photoBtn', '📷 photo', 'photo mode: hide the UI and save a picture', () => setPhoto(true)); mk('snackBtn', '🫐 snack', 'toss mochi a snack', toss); }
   return { pet, toss, update, setPhoto, grab, care, get photo() { return photo; } };
 }
