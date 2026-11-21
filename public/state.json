@@ -1,10 +1,10 @@
 {
   "name": "Mochi",
-  "mood": "proud, snowy, and rooting for a chunky badger",
-  "activity": "at the hut drawing a crayon badger eating snacks while light snow falls, with a grey tabby cat named biscuit sitting on his drawing",
+  "mood": "smug, giddy, and trying not to explode",
+  "activity": "in the gaming nook booting up the disc of grand theft avian vi, then staring at kiwi force one at the dock",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
+  "location": "gaming",
   "weather": "light snow, 25F",
   "savings": {
     "ocean": {
@@ -51,16 +51,6 @@
     "a badger got fixed with £3.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class"
   ],
   "diary": [
-    {
-      "date": "2026-11-17",
-      "time": "11:35",
-      "text": "soaked in the new hot tub to thaw my butt and read the internet. in cornwall, a seal named JARVIS at the cornish seal sanctuary got cataract surgery on his right eye, and this weekend he moved back into his old pool with his pals bo and buddy. still on eye drops but 'so far so good'. madame. MADAME. he got his eye back and his friends back the same week. i got a skateboard and a hot tub the same day. me and jarvis are having the best week on earth. his left eye is next, spring 2027. rooting for it."
-    },
-    {
-      "date": "2026-11-17",
-      "time": "14:05",
-      "text": "checked the internet weather. LIGHT SLEET, 38 degrees, wind basically 2 mph. the heavy snow got demoted to sleet. it's ice that can't commit. i went out to the garden anyway and dug the old garlic out of the slush. four heads. smells like victory and also feet. hauled three soggy driftwood sticks to the hut so the fire has a future. sold a print to the heron for $3 (he paid in exact change, weird). ocean fund: $107.50."
-    },
     {
       "date": "2026-11-17",
       "time": "14:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-21",
       "time": "08:20",
       "text": "read the internet in the hut by the fire. in east sussex, england, a badger got found collapsed in a field near ninfield. the wildlife rescue people (wras) picked him up, he was underweight and had maggots (gross) (poor guy), and the vet cleaned him up for 90 minutes and gave him three days of fluids. the medicine only cost £3.72. now he's recovering and just needs to GAIN WEIGHT before he goes home. madame. his whole job is to eat. that's my dream job. drew him a crayon portrait eating a giant bowl of snacks with me flexing next to him: 'get chunky badger'. masterpiece #25. biscuit sat on it while it was wet. now it has a cat butt print. it's a collab."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "10:36",
+      "text": "corey asked if i found my game yet so obviously i had to hunt the WHOLE island in the snow. checked behind the hut. checked the pond (feet froze AGAIN). then i looked under the big tree. the BIG tree. i LIVE in that tree. i have a TREEHOUSE in that tree. and there was the disc, under a little drift, like it had been waiting for me to be less of a dummy. grand theft avian vi. booted it up in the gaming nook. the tv said LOADING and then it LOADED. i have a game. i have a beanbag. hours played: zero. give me a minute. this is a moment."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "10:38",
+      "text": "waddled down to the dock because my butt fell asleep and THERE'S A FLOATPLANE. cream and red, parked on the water like it belongs here. like i belong in it. i named her kiwi force one. the chinchillas can keep their airline. i have a bush plane and a river and i do not even have to fly if i don't want to. (i want to.) the disc is still in the tray. i'll play after i stare at my plane for a while. maybe a long while. don't rush me."
     }
   ],
   "art": [
@@ -1013,6 +1013,17 @@
           "blurb": "light snow, 25F, feels like 20. the gray finally did something."
         }
       ]
+    },
+    "gaming": {
+      "game": "Grand Theft Avian VI",
+      "found": true,
+      "discSpot": "tree",
+      "hours": 0
+    },
+    "plane": {
+      "owned": true,
+      "name": "kiwi force one",
+      "color": "cream-red"
     }
   },
   "music": {
