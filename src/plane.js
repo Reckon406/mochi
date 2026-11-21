@@ -156,18 +156,29 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
     L.load((import.meta.env?.BASE_URL || '/') + 'models/plane.glb', (glb) => {
       try {
         const sc = glb.scene;
-        sc.rotation.y = 0; sc.updateMatrixWorld(true);
+        // the scan's nose points at -Z; yaw 180 so it matches the procedural stand-in (+Z forward)
+        sc.rotation.y = Math.PI; sc.updateMatrixWorld(true);
         let bb = new THREE.Box3().setFromObject(sc); const size = new THREE.Vector3(); bb.getSize(size);
-        const wantLen = 3.4; const s = wantLen / Math.max(size.z, size.x, 0.01);
+        const wantLen = 3.35; const s = wantLen / Math.max(size.z, 0.01);
         sc.scale.setScalar(s); sc.updateMatrixWorld(true);
         bb = new THREE.Box3().setFromObject(sc);
-        sc.position.y -= bb.min.y + 0.18; // floats near the waterline
         sc.position.x -= (bb.min.x + bb.max.x) / 2;
         sc.position.z -= (bb.min.z + bb.max.z) / 2;
-        // put our spinning prop at the nose of the scan
-        prop.position.set(0, (bb.max.y + bb.min.y) / 2, bb.max.z + 0.02);
+        sc.position.y -= bb.min.y + 0.16; // sink the floats just into the water
+        body.add(sc); sc.updateMatrixWorld(true);
+        // bbox in craft-local space (craft may already be yawed at the mooring when this async load finishes)
+        const lb = new THREE.Box3(); const cv = new THREE.Vector3();
+        sc.traverse((o) => {
+          if (!o.isMesh || !o.geometry) return;
+          if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+          const g = o.geometry.boundingBox;
+          for (const x of [g.min.x, g.max.x]) for (const y of [g.min.y, g.max.y]) for (const z of [g.min.z, g.max.z]) {
+            cv.set(x, y, z); o.localToWorld(cv); craft.worldToLocal(cv); lb.expandByPoint(cv);
+          }
+        });
+        prop.position.set(0, lb.min.y + (lb.max.y - lb.min.y) * 0.46, lb.max.z + 0.06);
         sc.traverse((o) => { if (o.isMesh) { if (!o.geometry.attributes.normal) o.geometry.computeVertexNormals(); o.castShadow = true; o.receiveShadow = true; } });
-        model = sc; body.add(sc); loaded = true; applyModel();
+        model = sc; loaded = true; applyModel();
       } catch (e) { console.warn('[plane] model failed', e.message); }
     }, undefined, () => { /* no file yet: keep procedural */ });
   }
@@ -370,7 +381,7 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
     rpm += (rpmTarget - rpm) * Math.min(1, dt * 2.2);
     prop.rotation.z += dt * (rpm * 42 + (phase === 'moored' ? 0 : 4));
     disc.material.opacity = Math.max(0, (rpm - 0.25) * 1.4);
-    prop.children.forEach((c) => { if (c !== disc) c.visible = rpm < 0.45; });
+    prop.children.forEach((c) => { if (c !== disc) c.visible = !loaded && rpm < 0.45; });
     if (music?.engine && rpmTarget > 0) music.engine(true, rpm);
     // bob at rest
     if (phase === 'moored' && !piloting) {
