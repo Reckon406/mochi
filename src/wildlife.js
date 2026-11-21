@@ -6,6 +6,8 @@ import * as THREE from 'three';
 import { riverX, riverW, WATER_Y, groundY, islandRadius, ZONES, DOCK, mv } from './layout.js';
 import { terrainH } from './landscape.js';
 import { addRim } from './gfx.js';
+import { fishMesh } from './fish.js';
+import { dress, tick as tickModel, setStyle as setWildStyle, undress, FIT } from './wildmodels.js';
 
 const MATS = {}; const mat = (c, o = {}) => { const k = c + JSON.stringify(o); return MATS[k] || (MATS[k] = addRim(new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, flatShading: true, ...o }))); };
 function add(p, g, m, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, m); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; p.add(x); return x; }
@@ -108,6 +110,8 @@ export const SPECIES = {
   wolf: { name: 'gray wolf', hab: 'bank', when: ['dawn', 'dusk', 'night'], w: 1.2, make: () => quad({ len: 1.05, h: 0.95, body: 0x86827c, belly: 0xd6d2ca, legC: 0x9c968c, ears: 'pointy', tail: 'bushy', tailC: 0x3a3632 }) },
   beaver: { name: 'beaver', hab: 'water', when: ['dusk', 'night', 'dawn'], w: 4, swim: true, make: () => quad({ len: 0.6, h: 0.42, body: 0x5a3a22, ears: 'round', tail: 'flat', neck: 0.1, lf: 0.3, gf: 0.32, lt: 0.08 }) },
   otter: { name: 'river otter', hab: 'water', when: ['day', 'dusk', 'dawn'], w: 4, swim: true, porpoise: true, make: () => quad({ len: 0.8, h: 0.35, body: 0x4a3222, belly: 0x8a6a4a, ears: 'round', tail: 'long', neck: 0.2, lf: 0.3, gf: 0.3, lt: 0.08 }) },
+  whitefish: { name: 'mountain whitefish', hab: 'water', when: ['day', 'dawn', 'dusk'], w: 3, swim: true, fish: true, make: () => { const g = fishMesh('whitefish'); g.scale.setScalar(0.42); return g; } },
+  sucker: { name: 'largescale sucker', hab: 'water', when: ['day', 'dawn', 'dusk'], w: 2, swim: true, fish: true, make: () => { const g = fishMesh('sucker'); g.scale.setScalar(0.46); return g; } },
   // birds
   eagle: { name: 'bald eagle', hab: 'sky', when: ['day', 'dawn', 'dusk'], w: 4, bird: true, make: () => bird({ s: 1.6, body: 0x3a2618, head: 0xf8f6f0, beak: 0xf0c020, tail: 0.5 }) },
   osprey: { name: 'osprey', hab: 'sky', when: ['day'], months: M(3, 8), w: 4, bird: true, dive: true, make: () => bird({ s: 1.4, body: 0x4a3a2a, belly: 0xf6f2ea, head: 0xf2eee6, wing: 0x4a3a2a, beak: 0x222222, tail: 0.4 }) },
@@ -131,6 +135,9 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
   const tod = () => { const n = sky.state.night, gl = sky.state.golden; return n > 0.6 ? 'night' : gl > 0.25 || (n > 0.2 && n <= 0.6) ? (isDawnish() ? 'dawn' : 'dusk') : 'day'; };
   const isDawnish = () => { const h = new Date().getHours(); return h < 12; };
   const density = () => DENSITY[settings.get().wildlife] ?? 6;
+  const qs = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('wildstyle') : null;
+  setWildStyle(qs || settings.get().wildlifeStyle || 'new');
+  settings.on?.((st, patch) => { if (patch && 'wildlifeStyle' in patch) setWildStyle(st.wildlifeStyle); });
 
   // places
   const sideX = (z, side, off) => riverX(z) + side * (riverW(z) + off);
@@ -147,6 +154,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     const side = opts.side ?? (Math.random() < 0.7 ? -1 : 1); const z0 = opts.z ?? rnd(-45, 45);
     for (let i = 0; i < n; i++) {
       const m = sp.make({ antlers: month >= 8 || month <= 0 ? Math.random() < 0.5 : false, winter: winter || month >= 10 || month <= 2, i });
+      if (FIT[key] && !m.userData.wild) dress(m, key);
       m.scale.setScalar(sp.scale || 1); group.add(m);
       const a = { key, sp, m, side, t: 0, phase: 'in', life: rnd(40, 80), i, speed: (sp.slow || 1) * rnd(0.9, 1.4), wp: [], idle: 0, pred: PRED[key], vis: 0, ...opts };
       const hab = sp.hab;
@@ -161,11 +169,13 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
   }
   function despawn(a) {
     const u = a.m.userData || {};
+    undress(a.m);
     try { u.eyeM?.dispose?.(); } catch {}
     try { u.glow?.material?.dispose?.(); } catch {}
-    // unique per-animal geos (horns torus etc.) — shared S.* left alone
+    // unique per-animal geos (horns torus etc.) — shared S.* and TRELLIS template geos left alone
     a.m.traverse((o) => {
       if (!o.isMesh) return;
+      if (o.userData.keepGeo) { try { o.material?.dispose?.(); o.customDepthMaterial?.dispose?.(); } catch {} return; }
       const g = o.geometry; if (g && g !== S.sph && g !== S.cyl && g !== S.cone) { try { g.dispose(); } catch {} }
     });
     group.remove(a.m);
@@ -318,13 +328,23 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     }
   }
 
+  function poseModel(a, dt, t) {
+    const p = a.m.position;
+    const moved = a._lp ? p.distanceTo(a._lp) : 0;
+    a._lp = p.clone();
+    const speed = moved / Math.max(dt, 1e-3);
+    const fly = a.sp.hab === 'sky' || a.phase === 'fly-in' || a.phase === 'fly-out';
+    const swim = !!a.swim || a.sp.hab === 'water' || !!a.sp.swim;
+    tickModel(a.m, dt, t, { speed, swim, fly, glide: fly && a.sp.hab === 'sky' && !a.dv, drink: a.phase === 'drink' });
+  }
+
   function update(t, dt, night) {
     // fx
     for (const r of wakeM) if (r.userData.t != null) { r.userData.t += dt; const u = r.userData.t; r.scale.setScalar(0.5 + u * 2.2); r.material.opacity = Math.max(0, 0.7 * (1 - u / 1.4)); }
     for (const s of spray) if (s.visible) { const d = s.userData; d.t += dt; if (d.t < 0) continue; s.position.copy(d.o).addScaledVector(d.dir, d.t * 3.2).add(new THREE.Vector3(0, d.t * 0.3, 0)); s.scale.setScalar(0.5 + d.t * 3); s.material.opacity = Math.max(0, 0.55 * (1 - d.t / 1.6)); if (d.t > 1.6) s.visible = false; }
     if (density() === 0 && !ev) { for (const a of [...live]) despawn(a); return; }
     spawnT -= dt; if (spawnT < 0) { spawnT = rnd(3, 9); ambientSpawn(); }
-    for (const a of [...live]) updateAgent(a, dt, t, night);
+    for (const a of [...live]) { updateAgent(a, dt, t, night); poseModel(a, dt, t); }
     // occasional predator / thief events, scaled by density + time of day
     if (!ev) { eventT -= dt * (density() / 6); if (eventT < 0) { eventT = rnd(150, 300);
       const td = tod(); const ok = Object.keys(PRED).filter((k) => (!SPECIES[k].months || SPECIES[k].months(month)) && SPECIES[k].when.includes(td));
@@ -332,6 +352,6 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
       if (fishy && Math.random() < 0.45) startEvent(Math.random() < 0.5 ? 'coyote' : 'fox', 'dock'); else if (ok.length) { let k = pick(ok); if (k === 'grizzly' && Math.random() < 0.7) k = 'blackbear'; startEvent(k); } } }
     else updateEvent(dt, t);
   }
-  const api = { group, update, startEvent, spawn, get lock() { return lock; }, get courage() { return courage; }, get event() { return ev; }, live, warnShot: null };
+  const api = { group, update, startEvent, spawn, setStyle: setWildStyle, get lock() { return lock; }, get courage() { return courage; }, get event() { return ev; }, live, warnShot: null };
   return api;
 }

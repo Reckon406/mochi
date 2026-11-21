@@ -3,6 +3,7 @@
 // Non-native but common: rainbow + brown trout. Brook trout: present in tributaries, rare in the main river.
 import * as THREE from 'three';
 import { canvasTex } from './textures.js';
+import { dress } from './wildmodels.js';
 
 export const FISH = {
   whitefish: { name: 'mountain whitefish', native: true, w: 30, inch: [9, 16], keep: true, body: '#b8c2c8', back: '#6f7f88', belly: '#eef2f2', slim: 0.8 },
@@ -52,5 +53,5 @@ export function fishMesh(k, cooked = false) {
   const dorsal = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.16, 3), fin); dorsal.position.set(0, 0.17, 0.02); dorsal.scale.z = 2; g.add(dorsal);
   const eye = new THREE.Mesh(new THREE.SphereGeometry(0.028, 6, 4), new THREE.MeshBasicMaterial({ color: cooked ? 0xf0f0f0 : 0x111111 })); for (const s of [-1, 1]) { const e = eye.clone(); e.position.set(s * 0.08, 0.04, 0.36); g.add(e); }
   if (f.worms || k === 'bull') for (const s of [-1, 1]) { const pf = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.12), new THREE.MeshStandardMaterial({ color: k === 'bull' ? 0xd8d0b8 : 0xe8602a, side: THREE.DoubleSide })); pf.position.set(s * 0.1, -0.13, 0.18); pf.rotation.set(0.6, s * 0.4, 0); g.add(pf); }
-  g.userData.species = k; return g;
+  g.userData.species = k; if (!cooked && (k === 'whitefish' || k === 'sucker')) dress(g, k); return g;
 }

@@ -2,6 +2,7 @@
 // moths around the lights, and a raccoon that sneaks to the dock bucket for Mochi's fish.
 import * as THREE from 'three';
 import { mv, topH, DOCK, WATER_Y, groundY, islandRadius, BIGTREE } from './layout.js';
+import { dress, tick as tickModel, undress } from './wildmodels.js';
 
 const m = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, ...o });
 function add(p, g, mat, pos = [0, 0, 0], rot = [0, 0, 0], sc = null) { const x = new THREE.Mesh(g, mat); x.position.set(...pos); x.rotation.set(...rot); if (sc) x.scale.set(...sc); x.castShadow = true; p.add(x); return x; }
@@ -17,6 +18,7 @@ export function createCritters(scene, { lights = [], life, say, music, season, o
   for (const s of [-1, 1]) { add(head, new THREE.ConeGeometry(0.04, 0.13, 4), fe, [s * 0.09, 0.15, 0], [0, 0, -s * 0.3]); add(head, new THREE.CircleGeometry(0.06, 14), pale, [s * 0.06, 0.01, 0.135]); }
   const eyeM = new THREE.MeshStandardMaterial({ color: 0xffb020, emissive: 0xffa000, emissiveIntensity: 0 }); const eyes = [-1, 1].map((s) => add(head, new THREE.SphereGeometry(0.028, 8, 6), eyeM, [s * 0.06, 0.015, 0.15]));
   add(head, new THREE.ConeGeometry(0.02, 0.05, 4), m(0x3a3a3a), [0, -0.04, 0.15], [Math.PI / 2 + 0.4, 0, 0]);
+  dress(owl, 'owl');
   let hootT = 8;
 
   // ── bats over the river at dusk / night ──
@@ -34,6 +36,7 @@ export function createCritters(scene, { lights = [], life, say, music, season, o
   add(rh, new THREE.BoxGeometry(0.2, 0.05, 0.02), dark, [0, 0.02, 0.105]); add(rh, new THREE.SphereGeometry(0.02, 6, 4), dark, [0, -0.02, 0.18]); for (const s of [-1, 1]) add(rh, new THREE.ConeGeometry(0.04, 0.07, 4), gray, [s * 0.08, 0.1, 0]);
   const tail = new THREE.Group(); tail.position.set(0, 0.25, -0.24); rb.add(tail); for (let i = 0; i < 5; i++) add(tail, new THREE.CylinderGeometry(0.05, 0.05, 0.07, 8), i % 2 ? dark : gray, [0, 0, -i * 0.07], [Math.PI / 2, 0, 0]);
   const legs = [[-0.1, 0.12], [0.1, 0.12], [-0.1, -0.12], [0.1, -0.12]].map(([x, z]) => add(rb, new THREE.CylinderGeometry(0.03, 0.03, 0.14, 5), dark, [x, 0.07, z]));
+  dress(rac, 'raccoon');
   const bucket = new THREE.Vector3(DOCK.x0 + DOCK.dx * 1.0 + DOCK.dz * 0.5, DOCK.y, DOCK.z0 + DOCK.dz * 1.0 - DOCK.dx * 0.5);
   const th = DOCK.th + 0.45, R = islandRadius(th) + 0.5; const start = new THREE.Vector3(Math.cos(th) * R, 0, Math.sin(th) * R);
   let rT = 40 + Math.random() * 40, rk = -1, ru = 0, stole = null;
@@ -44,7 +47,11 @@ export function createCritters(scene, { lights = [], life, say, music, season, o
     // owl box: at night the owl flies over to the cliff and sits on its box; back to the big tree by day
     if (owlBox) { const want = awake ? 1 : 0; if (owlF.want !== want) { owlF.want = want; owlF.from = owl.position.clone(); owlF.to = want ? owlBox.perch.clone() : owlHome.clone(); owlF.u = 0; owlF.yaw = want ? owlBox.yaw : owlHomeYaw; }
       if (owlF.u < 1) { owlF.u = Math.min(1, owlF.u + dt / 7); const k = owlF.u * owlF.u * (3 - 2 * owlF.u); owl.position.lerpVectors(owlF.from, owlF.to, k); owl.position.y += Math.sin(Math.PI * owlF.u) * 4; owl.rotation.y = owlF.u < 0.9 ? Math.atan2(owlF.to.x - owlF.from.x, owlF.to.z - owlF.from.z) : owlF.yaw; } }
-    eyeM.emissiveIntensity = awake ? 1.4 : 0; eyes.forEach((e) => (e.scale.y = awake ? 1 : 0.15)); head.rotation.y = awake ? Math.sin(t * 0.4) * 1.2 + (Math.sin(t * 0.13) > 0.95 ? 1.5 : 0) : 0;
+    eyeM.emissiveIntensity = awake ? 1.4 : 0; eyes.forEach((e) => (e.scale.y = awake ? 1 : 0.15));
+    const owlFly = owlF.u < 1; const owlLook = awake ? Math.sin(t * 0.4) * 1.2 + (Math.sin(t * 0.13) > 0.95 ? 1.5 : 0) : 0;
+    const owlLoaded = owl.userData.wild?.loaded && owl.userData.wild.model?.visible;
+    if (owlLoaded) { head.rotation.y = 0; tickModel(owl, dt, t, { fly: owlFly, speed: owlFly ? 2 : 0, headYaw: owlFly ? 0 : owlLook }); }
+    else head.rotation.y = owlLook;
     if (awake) { hootT -= dt; if (hootT < 0) { hootT = 18 + Math.random() * 25; music.sfx('hoot'); } }
     // bats: out from dusk through the night, loop over the river around the island
     const batOn = Math.max(dusk, night) > 0.35 && season !== 'winter'; // they hibernate in winter
@@ -57,7 +64,7 @@ export function createCritters(scene, { lights = [], life, say, music, season, o
     if (rk >= 0) {
       const sp = rk === 2 ? 0.4 : 0.12; ru += dt * sp; const from = rk === 0 ? start : bucket, to = rk === 0 ? bucket : start; const k = Math.min(1, ru);
       if (rk === 1) { if (ru > 0.3 && !stole) { stole = life.steal('raccoon') || 'nothing'; say(stole === 'nothing' ? 'a raccoon checked my bucket. it was empty. ha.' : `HEY. a raccoon just stole my ${stole}`, 3.5); } if (ru > 1) { rk = 2; ru = 0; } }
-      else { const x = from.x + (to.x - from.x) * k, z = from.z + (to.z - from.z) * k; rac.position.set(x, Math.max(groundY(x, z), WATER_Y - 0.15), z); rac.rotation.y = Math.atan2(to.x - from.x, to.z - from.z); legs.forEach((l, i) => (l.rotation.x = Math.sin(t * 14 + i * 1.6) * 0.6)); tail.rotation.y = Math.sin(t * 5) * 0.3;
+      else { const x = from.x + (to.x - from.x) * k, z = from.z + (to.z - from.z) * k; rac.position.set(x, Math.max(groundY(x, z), WATER_Y - 0.15), z); rac.rotation.y = Math.atan2(to.x - from.x, to.z - from.z); legs.forEach((l, i) => (l.rotation.x = Math.sin(t * 14 + i * 1.6) * 0.6)); tail.rotation.y = Math.sin(t * 5) * 0.3; tickModel(rac, dt, t, { speed: rk === 2 ? 2.2 : 0.9 });
         if (k >= 1) { if (rk === 0) { rk = 1; ru = 0; } else { rk = -1; rac.visible = false; rT = 90 + Math.random() * 120; } } }
     }
   }

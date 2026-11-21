@@ -40,6 +40,7 @@ import { buildWildflowers } from './wildflowers.js';
 import { createLife } from './life.js';
 import { createCritters } from './critters.js';
 import { createWildlife } from './wildlife.js';
+import { dress as dressWild, FIT as WILD_FIT, preload as preloadWild } from './wildmodels.js';
 import { installHeightFog, MistFog } from './gfx.js';
 import { loadSignFonts, zoneSigns, updateSigns, setSignScale, setSignBoard } from './signs.js';
 import { initAITex, loadSignBoard, buildBackdrop, AI_INFO } from './aitex.js';
@@ -300,6 +301,7 @@ async function init() {
       const sz = (q.tier ?? 2) <= 0 ? Math.min(512, q.shadow) : isMobile ? Math.min(1024, q.shadow) : q.shadow; if (sun.shadow.mapSize.x !== sz) { sun.shadow.mapSize.set(sz, sz); sun.shadow.map?.dispose(); sun.shadow.map = null; } }
     if ('mochiStyle' in patch) mochi.setStyle(st.mochiStyle);
     if ('squirrelStyle' in patch) squirrel.setStyle?.(st.squirrelStyle);
+    if ('wildlifeStyle' in patch) wild.setStyle?.(st.wildlifeStyle);
     if ('shadows' in patch) sun.castShadow = st.shadows;
     if ('bloom' in patch) { bloom.enabled = st.bloom; bloom.userData.sanitize.enabled = st.bloom; }
     if ('master' in patch || 'music' in patch || 'sfx' in patch || 'river' in patch || 'mute' in patch) music.applyLevels();
@@ -565,7 +567,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk')) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { flowers, squirrel, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { flowers, squirrel, wildmodels: { dress: dressWild, FIT: WILD_FIT, preload: preloadWild }, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {
