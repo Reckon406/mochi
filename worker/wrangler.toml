@@ -1,0 +1,24 @@
+# mochi-brain: Mochi's always-on brain (live state + chat + cron ticks).
+# Secrets (GEMINI_API_KEY) are set with `wrangler secret put`, never stored here.
+name = "mochi-brain"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+preview_urls = false
+
+[vars]
+MODEL = "gemini-3.1-flash-lite"
+GEMINI_DAILY = "300"        # hard cap on Gemini calls per UTC day (ticks + chat)
+TICK_RESERVE = "60"         # calls kept back for cron ticks; chat stops before this
+STATE_URL = "https://reckon406.github.io/mochi/state.json"
+
+[triggers]
+crons = ["*/30 * * * *"]
+
+[[durable_objects.bindings]]
+name = "BRAIN"
+class_name = "MochiBrain"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["MochiBrain"]
