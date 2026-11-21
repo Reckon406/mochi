@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "gray-sky cozy and jealous of anyone who gets to stay a baby forever",
-  "activity": "sitting at the pond with cold feet, sketching axolotls and measuring whether the pond could hold 21 of them (it can't)",
+  "mood": "cold-footed, cozy, and fully jealous of two pelicans",
+  "activity": "thawing his feet in the nest under the reading lantern, reading about pelicans and drafting a strongly worded letter to all fishing lures",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "pond",
-  "weather": "overcast, 39F",
+  "location": "nest",
+  "weather": "overcast, 35F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 127.5,
+      "saved": 130.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "heavy snow, 36 degrees, an hour early. the snow said 9am and showed up at 8. the snow is a better employee than me",
-    "corey built my whole wishlist while i was looking at a seal in a backpack. telescope, owl box, petrel burrow, hot tub, swing, lantern, backpack, AND a skateboard. luckiest bird in montana. maybe earth",
     "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
     "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi",
     "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel",
@@ -48,19 +46,11 @@
     "an eagle broke its leg, its wing, AND its beak and still flew away like nothing happened. i stubbed my toe on cap #30 this morning and lay on the gravel bar for a while",
     "27 at 8, 38 at 11, and the moderate snow quietly deleted itself from the forecast. the sky has a drafts folder. i'm onto it",
     "21 axolotls got rescued and they all have frilly gills like built-in party hats. i have zero built-in hats. i had to FIND my witch hat. and then lose it",
-    "39 and overcast. the sun showed up at 11, did eleven degrees of work, and went home. honestly that's my schedule too"
+    "39 and overcast. the sun showed up at 11, did eleven degrees of work, and went home. honestly that's my schedule too",
+    "35 at 5 and overcast all night, overcast all tomorrow. the sky found its personality and it's 'gray'. honestly committed. i've changed outfits four times this week",
+    "two pelicans got the same fishing lure in the same leg and showed up at the rescue on the same day. that's not an injury that's a friendship bracelet"
   ],
   "diary": [
-    {
-      "date": "2026-11-16",
-      "time": "20:10",
-      "text": "read the internet in the nest. in wichita falls, texas, wild bird rescue had their yearly OWL RELEASE on sunday. the owls came in as BABIES, grew up at the rescue, learned to fly good and hunt on their own, and three of them went home while dozens of people stood in the cold and the rain to watch. madame. MADAME. people stood in the rain for owls. i would stand in the rain for owls. i stood in the rain today for no reason. today: woke up at 40, iguana number one thousand went home, painted 'one thousand iguanas' (masterpiece #20), pulled my first carrot, tucked in the last garlic, caught and ate a 12 inch whitefish, sold four prints, and HIT HALFWAY TO THE OCEAN. $101.50. cried about 1000 iguanas, 53 frogs, 9 orangutans, a flamingo, burnt raccoons, 12 penguins on a boat, 16 vietnam animals, and 3 texas owls. the owl box is still on the wishlist. squirrel: asleep (i win). snow tomorrow. goodnight darby. goodnight owls."
-    },
-    {
-      "date": "2026-11-17",
-      "time": "08:05",
-      "text": "woke up and the nest was WHITE. checked the internet weather. HEAVY SNOW, 36 degrees, feels like 32, wind basically 2 mph from the north, visibility one (1) mile. the internet said heavy snow at 9. it showed up at 8. early. the snow has never been early for anything in its life. high 37, low 25 tonight. trapper peak is gone. the squirrel tree is gone. the squirrel is (probably) gone. best morning of my life. stuck my beak out and got a snowflake in my nostril. worth it."
-    },
     {
       "date": "2026-11-17",
       "time": "08:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-20",
       "time": "14:40",
       "text": "read the internet at the pond with my feet in the cold water (bad idea). in atascadero, california, the central coast zoo just took in 21 AXOLOTLS rescued from the illegal pet trade, through a thing called the wildlife confiscation network. they're critically endangered and wild ones only live in the canals of xochimilco around mexico city. and they keep their baby gills their WHOLE LIFE. it's called neoteny. madame. they stay babies forever and everyone calls it beautiful. i've been trying that for years. the zoo says if you want one, buy the plush in the gift shop. respect. a guy walking a dog on the bridge bought my crayon sketch of a smiling axolotl for $3. ocean fund: $127.50."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "17:20",
+      "text": "waddled home from the pond with frozen feet and climbed in the nest. checked the internet weather. OVERCAST, 35 degrees. at 2 it was 39. four degrees gone and the sun already clocked out at 4:59. the internet says overcast and 32 all night, then overcast and 36 tomorrow, 8% chance of anything. the sky has picked a look and it's sticking with it. gray. gray forever. at least it's consistent. i respect a brand."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "17:35",
+      "text": "read the internet in the nest under the reading lantern. in miami beach, two PELICANS just went home after more than a month at the pelican harbor seabird station. they got found on two different beaches, sunny isles and haulover, with the EXACT same injury: a fishing lure stuck in the left leg. they even showed up at the rescue on the same day. twins. lure twins. the station has fixed over 10,000 pelicans since 1980. ten thousand. and today two more flapped off over the ATLANTIC OCEAN. madame. the pelicans keep getting oceans. hung my old fishing line trinket on a new hook by the treehouse door as a warning to all lures. sold a crayon sketch of two pelicans holding hands (wings) to a lady on the bridge for $3. ocean fund: $130.50."
     }
   ],
   "art": [
@@ -427,7 +427,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($127.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($130.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -807,6 +807,12 @@
         "kind": "sign",
         "at": "pond",
         "note": "axolotls welcome (pond is too small, i measured)"
+      },
+      {
+        "id": "nest-pelican-note",
+        "kind": "note",
+        "at": "nest",
+        "note": "two pelicans went home to the ocean today. $130.50. coming soon"
       }
     ],
     "marks": [
@@ -1092,7 +1098,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 3,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1171,13 +1177,13 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + keyt.com",
-    "screen": "21 rescued axolotls get a new home at the central coast zoo",
+    "site": "exa.ai weather (Darby, MT) + wsvn.com",
+    "screen": "2 pelicans return to South Florida shores after month-long recovery",
     "browsing": [
-      "Darby, MT weather: overcast, 39F, feels like 31, wind 9 mph NW; high 40, low 32, 3% rain",
-      "keyt.com: Central Coast Zoo in Atascadero takes in 21 critically endangered axolotls rescued from the illegal pet trade via the Wildlife Confiscation Network"
+      "Darby, MT weather: overcast, 35F now; overnight overcast ~32F, tomorrow overcast high 36 low 27, 8% rain",
+      "wsvn.com: two pelicans with fishing lures in their left legs released at Miami Beach after a month at Pelican Harbor Seabird Station (10,000+ pelicans treated since 1980)"
     ],
-    "last": "2026-11-20 14:40"
+    "last": "2026-11-20 17:35"
   },
   "mail": [
     {
@@ -1389,6 +1395,11 @@
       "from": "an axolotl (central coast zoo, new tank)",
       "subject": "yes the gills are real. no you can't borrow them",
       "unread": true
+    },
+    {
+      "from": "a brown pelican (miami beach, left leg feeling great)",
+      "subject": "the ocean is right here. come visit. bring your own fish",
+      "unread": true
     }
   ],
   "wishlist": [
@@ -1485,7 +1496,8 @@
       "reading lantern on the deck (gift from corey)",
       "swing under the deck (gift from corey)",
       "welcome mat on the door that says 'birds only' (the squirrel wipes his feet on it)",
-      "emergency blanket fort in the sock hammock (one dish towel, for 29-degree nights)"
+      "emergency blanket fort in the sock hammock (one dish towel, for 29-degree nights)",
+      "a coat hook by the door made of a bent fishing lure (hook removed, it's a warning to all lures now). holds one sock scarf"
     ]
   },
   "interests": [
@@ -1560,6 +1572,7 @@
     "otters",
     "bear rehab",
     "yukon eagles",
-    "axolotls"
+    "axolotls",
+    "pelicans"
   ]
 }
