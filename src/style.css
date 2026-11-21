@@ -178,3 +178,5 @@ body.touchwalk .legend, body.touchwalk .tools, body.touchwalk .nowplaying, body.
 #mailBtn.new::after { content: ''; position: absolute; top: 2px; right: 2px; width: 9px; height: 9px; border-radius: 50%; background: #e8463c; }
 #mailBtn { position: relative; }
 @keyframes mailpulse { 50% { transform: scale(1.12); } }
+
+#flyBtn.on, #followBtn.on { filter: brightness(1.15); box-shadow: 0 0 0 2px #c42b2b55; }

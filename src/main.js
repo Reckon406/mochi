@@ -17,6 +17,7 @@ import { createPet } from './pet.js';
 import { createMemories } from './memory.js';
 import { createPaper } from './paper.js';
 import { createMailNotes } from './mailnotes.js';
+import { createPlane } from './plane.js';
 import { createSquirrel, createElk } from './creatures.js';
 import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF, PROP_SPOTS } from './layout.js';
@@ -209,7 +210,7 @@ async function init() {
   controls.addEventListener('end', () => { lastInteract = performance.now(); });
 
   // keep the pan target near the island
-  const clampTarget = () => { const t = controls.target; t.x = THREE.MathUtils.clamp(t.x, -46, 48); t.z = THREE.MathUtils.clamp(t.z, -44, 46); t.y = THREE.MathUtils.clamp(t.y, -3, 6); };
+  const clampTarget = () => { const t = controls.target; const fly = !!(features.plane && features.plane.piloting); const r = fly ? 900 : 48; t.x = THREE.MathUtils.clamp(t.x, -r, r); t.z = THREE.MathUtils.clamp(t.z, -r, r); t.y = THREE.MathUtils.clamp(t.y, -3, fly ? 220 : 6); };
 
   // ── Mochi brain ──
   const favored = matchZone(state.location) || ZONES[0];
@@ -288,6 +289,7 @@ async function init() {
   });
   // ── music + settings ──
   const music = createMusic(state, settings);
+  try { features.plane = createPlane(scene, { state, tier: Q.tier ?? 2, music, mochi }); } catch (e) { console.warn('plane failed', e); }
   audioCtl.suspend = () => music.suspend(); audioCtl.resume = () => music.resume();
   music.onChange((song) => { ui.setSong(song); island.music.setPlaying(!!song); });
   const setPanel = buildSettingsPanel(document.getElementById('ui'), settings, { music });
@@ -517,9 +519,10 @@ async function init() {
     if (!life.current) life.update(dt, t);
     { const ry = life.rideY, mp = mochi.root.position; mp.y = (ry ? ry(mp.x, mp.z) : groundY(mp.x, mp.z)) + life.lift; }
     mochi.root.rotation.y = brain.heading;
+    if (features.plane?.applyPilot(mochi.root, brain)) { /* seated in the cockpit: pose already applied */ }
     mochi.update(dt, moving); extras?.update(dt); nightSky?.update(t, dt, sky.state.night || 0, camera);
     squirrel.update(dt); elk.update(dt, t); blobs?.update();
-    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.gaming?.update(t, dt, night); features.crush?.update(t, dt, night, mochi.root.position); features.pet?.update(t, dt, night, mochi.root.position, moving); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
+    island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.gaming?.update(t, dt, night); features.crush?.update(t, dt, night, mochi.root.position); features.pet?.update(t, dt, night, mochi.root.position, moving); features.plane?.update(t, dt); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
     promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
@@ -536,7 +539,11 @@ async function init() {
     // camera
     if (walk.on) walk.update(dt);
     else {
-      if (follow) { const p = mochi.root.position; controls.target.lerp(new THREE.Vector3(p.x, p.y + 0.7, p.z), Math.min(1, dt * 3)); }
+      if (follow && features.plane?.piloting) {
+        const c = features.plane.followCam();
+        controls.target.lerp(new THREE.Vector3(c[3], c[4], c[5]), Math.min(1, dt * 2.2));
+        camera.position.lerp(new THREE.Vector3(c[0], c[1], c[2]), Math.min(1, dt * 2.0));
+      } else if (follow) { const p = mochi.root.position; controls.target.lerp(new THREE.Vector3(p.x, p.y + 0.7, p.z), Math.min(1, dt * 3)); }
       if (!follow && performance.now() - lastInteract > 9000 && params.get('rotate') !== '0' && settings.get().autoRotate) controls.autoRotate = true;
       clampTarget(); controls.update(dt);
     }

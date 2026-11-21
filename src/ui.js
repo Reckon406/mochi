@@ -66,6 +66,7 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
     <button id="setBtn" title="settings: graphics, sound, camera">⚙️</button>
     <button id="mailBtn" title="mochi's mailbox: write him a note, read his letters">📬</button>
     <button id="followBtn" title="camera follows mochi">🎥 follow</button>
+    <button id="flyBtn" title="camera follows the plane while Mochi is flying">✈️ fly-cam</button>
     ${canWalk ? '<button id="walkBtn" title="walk around the island (WASD + mouse, or the touch stick)">🚶 walk</button>' : ''}
     <span class="hint">drag to look around · tap mochi to make him hop · tap a place to send him${canWalk ? (matchMedia('(pointer: coarse)').matches ? ' · 🚶 walk = stick + drag' : ' · 🚶 walk = WASD') : ''}</span>
   </div>
@@ -101,6 +102,8 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
   lb.addEventListener('touchend', (e) => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50) showLb(lbK + (dx < 0 ? 1 : -1)); sx = null; });
   const fb = root.querySelector('#followBtn'); let fol = false;
   fb.onclick = () => { fol = !fol; fb.classList.toggle('on', fol); onFollow(fol); };
+  const flyb = root.querySelector('#flyBtn');
+  if (flyb) flyb.onclick = () => { fol = true; fb.classList.add('on'); flyb.classList.add('on'); onFollow(true); };
   const wb = root.querySelector('#walkBtn'); if (wb) wb.onclick = (e) => { e.currentTarget.blur(); onWalk?.(); };
   root.querySelector('#setBtn').onclick = (e) => { e.currentTarget.blur(); onSettings?.(); };
   const np = root.querySelector('#nowPlaying'); np.onclick = () => onSongClick?.();

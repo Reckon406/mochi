@@ -154,10 +154,39 @@ export function createMusic(state, settings) {
     else if (kind === 'clay') noiseHit(t, 0.12, 0.12, 6000, sfxBus);
     else if (kind === 'thunk') { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.09); g.gain.setValueAtTime(0.22, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.14); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + 0.16); track(o); o.onended = () => { drop(o, g); liveNodes = Math.max(0, liveNodes - 1); }; noiseHit(t, 0.04, 0.06, 1800, sfxBus); }
   }
-  // browsers only allow audio after a user gesture
+  // looping bush-plane engine (prop rumble + band-passed noise)
+  let eng = null;
+  function engine(on, rpm = 0.6) {
+    if (!ensure() || settings.get().sfx <= 0) { if (!on && eng) { try { eng.src.stop(); eng.osc.stop(); } catch {} eng = null; } return; }
+    const t = ctx.currentTime;
+    if (!on) {
+      if (!eng) return;
+      try { eng.gain.gain.cancelScheduledValues(t); eng.gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.35); } catch {}
+      const nodes = eng; eng = null;
+      setTimeout(() => { try { nodes.src.stop(); nodes.osc.stop(); } catch {} }, 400);
+      return;
+    }
+    if (!eng) {
+      const buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate); const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+      const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 90; bp.Q.value = 0.65;
+      const osc = ctx.createOscillator(); osc.type = 'sawtooth'; osc.frequency.value = 70;
+      const og = ctx.createGain(); og.gain.value = 0.035;
+      const g = ctx.createGain(); g.gain.value = 0.0001;
+      src.connect(bp); bp.connect(g); osc.connect(og); og.connect(g); g.connect(sfxBus);
+      src.start(); osc.start();
+      eng = { src, osc, bp, gain: g };
+    }
+    const vol = 0.07 + 0.1 * Math.max(0, Math.min(1, rpm));
+    eng.gain.gain.cancelScheduledValues(t); eng.gain.gain.linearRampToValueAtTime(vol, t + 0.2);
+    eng.osc.frequency.setTargetAtTime(55 + rpm * 80, t, 0.15);
+    eng.bp.frequency.setTargetAtTime(80 + rpm * 180, t, 0.15);
+  }
+    // browsers only allow audio after a user gesture
   const kick0 = () => { if (started) return; started = true; if (!ensure()) return; ctx.resume(); if (settings.get().musicOn && songs.length) playSong(cur); };
   ['pointerdown', 'keydown', 'touchstart'].forEach((e) => addEventListener(e, kick0, { once: true, passive: true }));
-  function suspend() { clearTimeout(timer); timer = null; try { ctx?.suspend?.(); } catch {} if (audioEl) try { audioEl.pause(); } catch {} }
+  function suspend() { clearTimeout(timer); timer = null; engine(false); try { ctx?.suspend?.(); } catch {} if (audioEl) try { audioEl.pause(); } catch {} }
   function resume() {
     if (!ctx) return;
     try { ctx.resume(); } catch {}
@@ -169,7 +198,7 @@ export function createMusic(state, settings) {
     songs, get started() { return started; }, get current() { return songs[cur] || null; }, get playing() { return !!(timer || audioEl); },
     get liveNodes() { return liveNodes; },
     next() { started = true; playSong(cur + 1); }, play(i = cur) { started = true; ctx?.resume(); playSong(i); }, stop() { stopSong(); onChange(null); },
-    suspend, resume,
+    suspend, resume, engine,
     onChange(fn) { onChange = fn; }, applyLevels, sfx,
     setEnabled(on) { if (on && started && !this.playing) playSong(cur); if (!on) { stopSong(); onChange(null); } },
   };

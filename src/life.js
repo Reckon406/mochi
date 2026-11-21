@@ -223,15 +223,38 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
       end() { const gb = WS().giftBoard; if (gb) { gb.group.add(gb.board); gb.board.position.copy(gb.home.pos); gb.board.rotation.copy(gb.home.rot); } liftTarget = 0; pose.sway = 0; face = null; } },
     { d: 1.2, start() { if (!this.no) say('parked. thank you corey 🛹', 2); } } ] };
 
-  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish', 'visit', 'date'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail', 'reminisce'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat', 'read'], vending: ['vend'], pumpkins: ['pumpkins'] };
+  const BY_ZONE = { garden: ['dig', 'plant', 'water', 'harvest'], dock: ['fish', 'visit', 'date', 'fly'], campfire: ['cook', 'warm'], hut: ['sleep', 'mail', 'reminisce'], pond: ['skip'], tree: ['treehouse', 'swing'], ramp: ['skate', 'cruise'], hottub: ['soak'], burrow: ['burrow'], museum: ['dust'], squirrel: ['trade'], cliff: ['yodel', 'telescope'], beach: ['shells'], meadow: ['honey'], shop: ['curate'], market: ['paint'], gaming: ['gaming', 'disc'], music: ['jam'], picnic: ['browse', 'eat', 'read'], vending: ['vend'], pumpkins: ['pumpkins'] };
   // which activity makes sense at a zone right now
   A.reminisce = { zone: 'hut', label: '📸 looking at memories', ok: () => !!features.memories, steps: [{ d: 8, start() { const M = features.memories; posTarget = M.spot.clone(); face = M.faceYaw; const l = [...M.mem.long, ...M.mem.short]; const m = l.length ? l[Math.floor(Math.random() * l.length)] : null; say(m ? `remember when... ${m.text.slice(0, 70)}` : 'my memory shelf is empty. go make some memories!', 4.5); }, tick() { pose.peck = 0.12; }, end() { pose.peck = 0; face = null; } }] };
   A.read = { zone: 'picnic', label: '📰 reading the paper', ok: () => !!features.paper, steps: [{ d: 10, start() { const P = features.paper; posTarget = P.spot.clone(); face = Math.atan2(-P.spot.x, -P.spot.z); hold(P.held(), [0, 0, 0], 1); say(`📰 ${P.data.headline.slice(0, 70)}`, 4.5); }, tick(u) { pose.peck = 0.1 + Math.sin(u * 9) * 0.03; if (held) held.rotation.z = Math.sin(u * 5) * 0.05; }, end() { pose.peck = 0; face = null; drop(); } }] };
+
+  A.fly = { zone: 'dock', label: '✈️ flying the bush plane', ok: () => !!(features.plane && features.plane.owned),
+    onCancel() { const P = features.plane; if (P) P.reset(); rideY = null; face = null; liftTarget = 0; },
+    steps: [
+      { d: 2, start() { const P = features.plane; walkTo(P.boardPt.clone()); say(`ok ${P.name || 'little plane'}, let's go flying`, 2.2); } },
+      { d: 0.8, start() { const P = features.plane; mochi.hop(0.6); face = Math.atan2(P.moor.x - M().x, P.moor.z - M().z); },
+        end() { const P = features.plane; P.wearGoggles(true); P.setPiloting(true); P.startEngine(); rideY = () => P.rideY(); const s = P.seatWorld(); M().x = s.x; M().z = s.z; } },
+      { d: 2.4, start() { const P = features.plane; music?.engine?.(true, 0.35); say('contact! ...wait do kiwis say that', 2.3); P.drive('taxi', 0); },
+        tick(u) { features.plane.drive('taxi', 0); pose.sway = 0.15; } },
+      { d: 7, start() { say('taxiing. water is a runway if you believe', 2.8); }, tick(u) { features.plane.drive('taxi', u); } },
+      { d: 6, start() { say('and we are OFF. try not to look down', 2.8); }, tick(u) { features.plane.drive('takeoff', u); } },
+      { d: 9, start() { say('following the river. Bitterroot looks tiny from up here', 3); }, tick(u) { features.plane.drive('cruise', u); } },
+      { d: 8, start() { say('swinging east — hello Sapphires', 2.6); }, tick(u) { features.plane.drive('sapphires', u); } },
+      { d: 5, start() { say('over the island! i can see my hut!!', 2.4); }, tick(u) { features.plane.drive('valley', u); } },
+      { d: 7, start() { say('ok one barrel roll. and a loop. for science', 2.8); }, tick(u) { features.plane.drive('stunt', u); } },
+      { d: 8, start() { say('west now. Trapper Peak, i see you', 2.6); }, tick(u) { features.plane.drive('bitterroots', u); } },
+      { d: 6, start() { say('turning final. flaps... i do not have flaps. it is fine', 2.6); }, tick(u) { features.plane.drive('approach', u); } },
+      { d: 5, start() { say('hold on — kissing the water', 2.2); }, tick(u) { features.plane.drive('land', u); } },
+      { d: 5, start() { say('nice landing. i am a professional', 2.2); }, tick(u) { const P = features.plane; P.drive('return', u); } },
+      { d: 1.2, start() { const P = features.plane; P.drive('return', 1); mochi.hop(0.5); },
+        end() { const P = features.plane; P.wearGoggles(false); P.stopEngine(); P.reset(); rideY = null; face = null; const b = P.boardPt; M().x = b.x; M().z = b.z; say('tied up. goggles tan: pending', 2.4); } },
+    ] };
   function choose(zid, prefer) {
     if (prefer && A[prefer] && A[prefer].zone === zid && (!A[prefer].ok || A[prefer].ok())) return prefer;
     if (zid === 'garden') { if (plots.some((p) => p.crop && p.stage >= 4)) return 'harvest'; if (plots.some((p) => !p.crop || p.stage === 0) && sum(inv.seeds) > 0 && Math.random() < 0.5) return 'plant'; if (Math.random() < 0.35 && plots.some((p) => p.crop && p.stage > 0 && p.stage < 4)) return 'water'; return 'dig'; }
     if (zid === 'campfire') return sum(inv.fish) > 0 || (Math.random() < 0.4 && ['potato', 'carrot', 'kale'].some((c) => inv.crops[c] > 0)) ? 'cook' : 'warm';
     if (zid === 'hut') return features.mailbox.unread.length ? 'mail' : features.memories && Math.random() < 0.3 ? 'reminisce' : 'sleep';
+    if (zid === 'dock' && features.plane?.owned && Math.random() < 0.28) return 'fly';
     if (zid === 'picnic') return (sum(inv.cooked) > 0 || inv.honey > 0) && Math.random() < 0.5 ? 'eat' : features.paper && Math.random() < 0.35 ? 'read' : 'browse';
     const l = (BY_ZONE[zid] || []).filter((id) => A[id] && (!A[id].ok || A[id].ok())); return l.length ? l[Math.floor(Math.random() * l.length)] : null;
   }
@@ -250,7 +273,7 @@ export function createLife({ state, mochi, features, say, music, sky, feel, onCh
     return Math.random() < 0.6 ? 'garden' : null;
   }
   // STATE.activity / location keywords -> first activity
-  const KEYS = [[/\bdat(e|ing)\b|girlfriend/, 'date'], [/visit|crush|\bher\b|girl kiwi|row(ing)? (the )?boat|\bsail/, 'visit'], [/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/newspaper|gazette|the paper|reading the news/, 'read'], [/memor|remember|reminisc|polaroid/, 'reminisce'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
+  const KEYS = [[/\bdat(e|ing)\b|girlfriend/, 'date'], [/visit|crush|\bher\b|girl kiwi|row(ing)? (the )?boat|\bsail/, 'visit'], [/\bdisc\b|find(ing)? (the )?game/, 'disc'], [/\bfly\b|flying|take\s?off|floatplane|\bplane\b|pilot|aviation/, 'fly'], [/newspaper|gazette|the paper|reading the news/, 'read'], [/memor|remember|reminisc|polaroid/, 'reminisce'], [/video ?game|\bgam(e|es|ing)\b|ps5|playstation|\bgta\b|grand theft|controller/, 'gaming'], [/fish|angl|cast|rod\b/, 'fish'], [/cook|roast|grill|campfire|s'more/, 'cook'], [/plant|sow|seed/, 'plant'], [/water(ing)? (the )?(garden|plants)/, 'water'], [/harvest|pick(ing)? (carrot|potato|berr)/, 'harvest'], [/dig|worm/, 'dig'],
     [/brows|laptop|internet|online|web|google|reading the news/, 'browse'], [/sleep|nap|bed|snooz/, 'sleep'], [/skateboard|cruis/, 'cruise'], [/skate|kickflip/, 'skate'], [/hot ?tub|soak|capybara/, 'soak'], [/burrow|petrel/, 'burrow'], [/telescope|whale/, 'telescope'], [/swing/, 'swing'], [/treehouse|tree house|climb/, 'treehouse'], [/yodel|weather station/, 'yodel'], [/paint|draw/, 'paint'],
     [/music|song|jam|drum|guitar|uke/, 'jam'], [/honey|bee/, 'honey'], [/shell/, 'shells'], [/skip(ping)? (rocks|stones)/, 'skip'], [/vending|cap-o-matic|trinket/, 'vend'], [/mail/, 'mail'], [/dust/, 'dust'], [/trade|squirrel/, 'trade'], [/eat|snack|lunch|dinner/, 'eat']];
   function fromText(s) { const t = String(s || '').toLowerCase(); for (const [re, a] of KEYS) if (re.test(t)) return a; return null; }
