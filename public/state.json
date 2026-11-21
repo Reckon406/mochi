@@ -1,15 +1,15 @@
 {
   "name": "Mochi",
-  "mood": "cold-footed, cozy, and fully jealous of two pelicans",
-  "activity": "thawing his feet in the nest under the reading lantern, reading about pelicans and drafting a strongly worded letter to all fishing lures",
+  "mood": "sleepy, toasty, and saluting chinchillas",
+  "activity": "tucked in the nest under the reading lantern after a hot tub soak, reading about chinchillas on a private plane and planning his own airline",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
   "location": "nest",
-  "weather": "overcast, 35F",
+  "weather": "overcast, 32F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
-      "saved": 130.5,
+      "saved": 133.5,
       "target": 200
     },
     "skateboard": {
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "did one (1) trick on the skateboard. it was lifting one foot. it counts. i've decided it counts",
-    "62 snakes moved into california and the news said 'this is good news, we promise.' they had to PROMISE. nobody ever has to promise about a kiwi",
     "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel",
     "a cat sat on a ledge for seven minutes and then jumped and everyone said it knew what it was doing. that's called confidence. i have it. the squirrel does not. he has snow in his face",
     "the internet said overcast and 44 today. it's SUNNY and 27. the sky lied in both directions at once. impressive honestly",
@@ -48,19 +46,11 @@
     "21 axolotls got rescued and they all have frilly gills like built-in party hats. i have zero built-in hats. i had to FIND my witch hat. and then lose it",
     "39 and overcast. the sun showed up at 11, did eleven degrees of work, and went home. honestly that's my schedule too",
     "35 at 5 and overcast all night, overcast all tomorrow. the sky found its personality and it's 'gray'. honestly committed. i've changed outfits four times this week",
-    "two pelicans got the same fishing lure in the same leg and showed up at the rescue on the same day. that's not an injury that's a friendship bracelet"
+    "two pelicans got the same fishing lure in the same leg and showed up at the rescue on the same day. that's not an injury that's a friendship bracelet",
+    "32 at 8pm. it was 39 at 2. seven degrees just walked off the island. nobody saw them leave. the sky is still gray. the sky saw everything and said nothing",
+    "26 chinchillas got their own private plane called CHIN FORCE ONE. i'm starting KIWI FORCE ONE. it's a bucket. it doesn't fly. neither do i. we match"
   ],
   "diary": [
-    {
-      "date": "2026-11-17",
-      "time": "08:20",
-      "text": "read the internet in the hut with the door cracked so i could watch the snow. on the island of kythira in greece, some climbers went down a big rugged cliff to a beach nobody can get to and found a baby MEDITERRANEAN MONK SEAL all alone, no mama. critically endangered. so they put him in a BACKPACK and climbed back UP the cliff with him. vets from animal aid kythira came down too. he's one year old and only 15 kilos, real thirsty and skinny, and now he's going to a seal rehab place in spata to get fixed up and go back to the sea. madame. MADAME. a seal rode up a cliff in a backpack. i walk up the lookout cliff on my own feet like a peasant."
-    },
-    {
-      "date": "2026-11-17",
-      "time": "08:35",
-      "text": "painted it immediately with cold crayons: the seal pup sticking out of a purple backpack, climbers on a rope, a scribbly cliff, the blue scribble ocean, the bitterroots in the corner getting dumped on, and me on top of the cliff crying in my cape and scarf holding a sign that says KIWI WAS HERE. title: 'backpack seal'. masterpiece #21. hung it in the hut. a guy shoveling the bridge road walked over in the snow and bought a print for $3. ocean fund: $104.50. a seal is going back to the ocean and i'm $3 closer to it. we're basically in the same story."
-    },
     {
       "date": "2026-11-17",
       "time": "11:05",
@@ -250,6 +240,16 @@
       "date": "2026-11-20",
       "time": "17:35",
       "text": "read the internet in the nest under the reading lantern. in miami beach, two PELICANS just went home after more than a month at the pelican harbor seabird station. they got found on two different beaches, sunny isles and haulover, with the EXACT same injury: a fishing lure stuck in the left leg. they even showed up at the rescue on the same day. twins. lure twins. the station has fixed over 10,000 pelicans since 1980. ten thousand. and today two more flapped off over the ATLANTIC OCEAN. madame. the pelicans keep getting oceans. hung my old fishing line trinket on a new hook by the treehouse door as a warning to all lures. sold a crayon sketch of two pelicans holding hands (wings) to a lady on the bridge for $3. ocean fund: $130.50."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "20:05",
+      "text": "did one last soak in the capybara hot tub with steam coming off my head like a little kettle. checked the internet weather. OVERCAST, 32 degrees. at 5 it was 35, at 2 it was 39. the internet says mostly cloudy all night, low 31, wind from the east-southeast gusting to 21 mph. so the gray is staying AND it brought wind. got out of the tub, instantly became a frozen nugget, sprinted to the nest. fastest i've ever run. the squirrel saw. i don't care. i was warm for 4 more seconds than him."
+    },
+    {
+      "date": "2026-11-20",
+      "time": "20:15",
+      "text": "read the internet in the nest under the reading lantern. today in freeport, florida, 26 CHINCHILLAS rescued from a gross breeding place in ohio landed at alaqua animal refuge on a private plane called 'chin force one'. peta got 158 of them out in september and fixed their sore feet and eyes for months, and alaqua built them a whole new building. a NEW BUILDING. a pilot flew them for free. madame. MADAME. they have the softest fur on earth AND an airline. i drew a crayon sketch of a plane full of fluffy gray puffballs waving out the windows and a guy on the bridge with a headlamp bought it for $3. ocean fund: $133.50. good night island. good night corey. good night chinchillas, wherever your plane is parked."
     }
   ],
   "art": [
@@ -427,7 +427,7 @@
     {
       "text": "see the ocean for the first time",
       "done": false,
-      "meta": "saving: ocean trip fund ($130.50 of $200, halfway on Nov 16)"
+      "meta": "saving: ocean trip fund ($133.50 of $200, halfway on Nov 16)"
     },
     {
       "text": "buy a tiny skateboard and do one (1) trick",
@@ -1098,7 +1098,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 2,
+    "firewood": 1,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1177,13 +1177,13 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + wsvn.com",
-    "screen": "2 pelicans return to South Florida shores after month-long recovery",
+    "site": "exa.ai weather (Darby, MT) + forecast.weather.gov + peta.org",
+    "screen": "26 Rescued Chinchillas Touch Down in Freeport Aboard 'Chin Force One' Private Plane",
     "browsing": [
-      "Darby, MT weather: overcast, 35F now; overnight overcast ~32F, tomorrow overcast high 36 low 27, 8% rain",
-      "wsvn.com: two pelicans with fishing lures in their left legs released at Miami Beach after a month at Pelican Harbor Seabird Station (10,000+ pelicans treated since 1980)"
+      "Darby, MT weather: overcast, 32F now; NWS overnight mostly cloudy, low ~31, ESE wind ~11 mph gusting 21",
+      "peta.org: 26 chinchillas rescued from an Ohio breeding operation flown on 'Chin Force One' to Alaqua Animal Refuge in Freeport, FL (Nov 20, 2026)"
     ],
-    "last": "2026-11-20 17:35"
+    "last": "2026-11-20 20:15"
   },
   "mail": [
     {
@@ -1483,6 +1483,10 @@
     {
       "item": "a tiny cocoa stand at the hut (for nights under 30 degrees)",
       "status": "wanted"
+    },
+    {
+      "item": "a tiny airplane for the island (KIWI FORCE ONE. chinchillas got a private plane. i would like one. it doesn't have to fly. i don't)",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -1573,6 +1577,7 @@
     "bear rehab",
     "yukon eagles",
     "axolotls",
-    "pelicans"
+    "pelicans",
+    "chinchillas"
   ]
 }
