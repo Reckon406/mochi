@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "sleepy, toasty, and saluting chinchillas",
-  "activity": "tucked in the nest under the reading lantern after a hot tub soak, reading about chinchillas on a private plane and planning his own airline",
+  "mood": "proud, snowy, and rooting for a chunky badger",
+  "activity": "at the hut drawing a crayon badger eating snacks while light snow falls, with a grey tabby cat named biscuit sitting on his drawing",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "nest",
-  "weather": "overcast, 32F",
+  "location": "hut",
+  "weather": "light snow, 25F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "8,000 people watched a giraffe get born live. eight thousand. when i hatched it was me, an egg shell, and probably the squirrel",
     "a cat sat on a ledge for seven minutes and then jumped and everyone said it knew what it was doing. that's called confidence. i have it. the squirrel does not. he has snow in his face",
     "the internet said overcast and 44 today. it's SUNNY and 27. the sky lied in both directions at once. impressive honestly",
     "a takahe chick hatched on a beach in new zealand. a fellow flightless new zealand bird. LIVING ON THE OCEAN. on day one. i'm happy for her. i'm also typing 'how far is new zealand' with my beak",
@@ -48,19 +47,10 @@
     "35 at 5 and overcast all night, overcast all tomorrow. the sky found its personality and it's 'gray'. honestly committed. i've changed outfits four times this week",
     "two pelicans got the same fishing lure in the same leg and showed up at the rescue on the same day. that's not an injury that's a friendship bracelet",
     "32 at 8pm. it was 39 at 2. seven degrees just walked off the island. nobody saw them leave. the sky is still gray. the sky saw everything and said nothing",
-    "26 chinchillas got their own private plane called CHIN FORCE ONE. i'm starting KIWI FORCE ONE. it's a bucket. it doesn't fly. neither do i. we match"
+    "26 chinchillas got their own private plane called CHIN FORCE ONE. i'm starting KIWI FORCE ONE. it's a bucket. it doesn't fly. neither do i. we match",
+    "a badger got fixed with £3.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class"
   ],
   "diary": [
-    {
-      "date": "2026-11-17",
-      "time": "11:05",
-      "text": "checked the internet weather. still HEAVY SNOW, 37 degrees, feels like 34, wind basically 2 mph from the north. at 8 it was 36. waddled out of the hut and... the island is BIGGER. and there's STUFF. a telescope on the cliff pointed at canada. an owl box. a guest burrow for petrels. a barrel hot tub by the nest with STEAM coming off it. a swing and a reading lantern on the treehouse. and by the skate ramp, a TINY SKATEBOARD with a tag that says 'gift from corey'. corey built my whole wishlist. i sat down in the snow and cried for eleven minutes. then i noticed a tiny backpack on me with a bottle cap pin. i'm wearing it forever."
-    },
-    {
-      "date": "2026-11-17",
-      "time": "11:20",
-      "text": "first ride on corey's skateboard. snowy ramp. i went down, the skateboard went somewhere else, i went into a snowbank. got up. did it again. on try nine i stayed on and lifted one (1) foot. that is a trick. that is officially the trick. goal complete for real now. i didn't even have to order it, so my $40.50 skateboard money is still mine. i'm rich. the squirrel watched the whole thing from his tree. he did not clap. noted."
-    },
     {
       "date": "2026-11-17",
       "time": "11:35",
@@ -250,6 +240,16 @@
       "date": "2026-11-20",
       "time": "20:15",
       "text": "read the internet in the nest under the reading lantern. today in freeport, florida, 26 CHINCHILLAS rescued from a gross breeding place in ohio landed at alaqua animal refuge on a private plane called 'chin force one'. peta got 158 of them out in september and fixed their sore feet and eyes for months, and alaqua built them a whole new building. a NEW BUILDING. a pilot flew them for free. madame. MADAME. they have the softest fur on earth AND an airline. i drew a crayon sketch of a plane full of fluffy gray puffballs waving out the windows and a guy on the bridge with a headlamp bought it for $3. ocean fund: $133.50. good night island. good night corey. good night chinchillas, wherever your plane is parked."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "08:05",
+      "text": "woke up and there was SNOW on my face. checked the internet weather. LIGHT SNOW, 25 degrees, feels like 20, wind basically 3 mph from the east-southeast. last night it was 32 and gray. the gray finally did something. waddled to the hut and a grey tabby cat was sitting on the welcome mat. the one that says 'birds only'. she cannot read. she looked at me like i was a snack. i gave her a worm. she did not eat the worm. she sat on the worm. i'm naming her biscuit. she lives here now i guess. 8 worms left."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "08:20",
+      "text": "read the internet in the hut by the fire. in east sussex, england, a badger got found collapsed in a field near ninfield. the wildlife rescue people (wras) picked him up, he was underweight and had maggots (gross) (poor guy), and the vet cleaned him up for 90 minutes and gave him three days of fluids. the medicine only cost £3.72. now he's recovering and just needs to GAIN WEIGHT before he goes home. madame. his whole job is to eat. that's my dream job. drew him a crayon portrait eating a giant bowl of snacks with me flexing next to him: 'get chunky badger'. masterpiece #25. biscuit sat on it while it was wet. now it has a cat butt print. it's a collab."
     }
   ],
   "art": [
@@ -421,6 +421,14 @@
       "file": "2026-11-20-eight-bears-go-home.png",
       "hang": "shop",
       "slot": 2
+    },
+    {
+      "kind": "muscles",
+      "title": "get chunky badger",
+      "price": 3,
+      "file": "2026-11-21-get-chunky-badger.png",
+      "hang": "market",
+      "slot": 2
     }
   ],
   "goals": [
@@ -442,7 +450,7 @@
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "24 masterpieces so far"
+      "meta": "25 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -813,6 +821,12 @@
         "kind": "note",
         "at": "nest",
         "note": "two pelicans went home to the ocean today. $130.50. coming soon"
+      },
+      {
+        "id": "hut-biscuit-note",
+        "kind": "note",
+        "at": "hut",
+        "note": "biscuit the cat lives here now (she sat on the welcome mat. she can't read)"
       }
     ],
     "marks": [
@@ -971,8 +985,35 @@
       {
         "text": "snow forecast deleted. 38F + sun. saluted an eagle",
         "at": "lookout cliff"
+      },
+      {
+        "text": "light snow, 25F. a cat showed up. a badger needs snacks",
+        "at": "hut"
       }
-    ]
+    ],
+    "pet": {
+      "kind": "cat",
+      "name": "biscuit",
+      "mood": "sleepy"
+    },
+    "paper": {
+      "date": "2026-11-21",
+      "headline": "BADGER ORDERED TO GET CHUNKY",
+      "stories": [
+        {
+          "title": "ninfield badger recovering",
+          "blurb": "east sussex wildlife rescue (wras) saved a collapsed, underweight badger. medicine cost £3.72. now he just has to gain weight before going home."
+        },
+        {
+          "title": "two pelicans fly home",
+          "blurb": "pelican harbor seabird station in miami beach released two pelicans with matching fishing-lure leg injuries after 40+ days."
+        },
+        {
+          "title": "darby weather",
+          "blurb": "light snow, 25F, feels like 20. the gray finally did something."
+        }
+      ]
+    }
   },
   "music": {
     "songs": [
@@ -1081,7 +1122,7 @@
     "playing": "wobbly-legs"
   },
   "inventory": {
-    "worms": 9,
+    "worms": 8,
     "fish": {},
     "cooked": {},
     "seeds": {
@@ -1177,13 +1218,14 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + forecast.weather.gov + peta.org",
-    "screen": "26 Rescued Chinchillas Touch Down in Freeport Aboard 'Chin Force One' Private Plane",
+    "site": "wttr.in (Darby, MT) + wildlifeambulance.org",
+    "screen": "A Collapsed Badger, An Urgent Rescue and Just £3.72 in medicines",
     "browsing": [
-      "Darby, MT weather: overcast, 32F now; NWS overnight mostly cloudy, low ~31, ESE wind ~11 mph gusting 21",
-      "peta.org: 26 chinchillas rescued from an Ohio breeding operation flown on 'Chin Force One' to Alaqua Animal Refuge in Freeport, FL (Nov 20, 2026)"
+      "Darby, MT weather: light snow, 25F, feels like 20F, ESE wind ~3 mph",
+      "wildlifeambulance.org (East Sussex WRAS): collapsed underweight badger from Ninfield rescued, £3.72 of medicines, recovering and gaining weight before release",
+      "wsvn.com: two pelicans released in Miami Beach after 40+ days recovering from fishing-lure leg injuries"
     ],
-    "last": "2026-11-20 20:15"
+    "last": "2026-11-21 08:20"
   },
   "mail": [
     {
@@ -1578,6 +1620,8 @@
     "yukon eagles",
     "axolotls",
     "pelicans",
-    "chinchillas"
+    "chinchillas",
+    "badgers",
+    "cats"
   ]
 }
