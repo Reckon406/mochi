@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "windblown, shaky, and the proudest bird alive",
-  "activity": "fly: first ever flight in kiwi force one, a loop over the valley and a splashy landing at the dock",
+  "mood": "flustered, sweaty under the sock scarf, and suddenly very interested in combing my feathers",
+  "activity": "visit: rowed across the river with a handful of huckleberries and met the girl kiwi who lives over there",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
   "location": "dock",
-  "weather": "overcast, 35F",
+  "weather": "partly cloudy, 37F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "a takahe chick hatched on a beach in new zealand. a fellow flightless new zealand bird. LIVING ON THE OCEAN. on day one. i'm happy for her. i'm also typing 'how far is new zealand' with my beak",
     "38 at 11. it was 27 at 8. eleven degrees in three hours. the sun showed up today like it had something to prove. respect",
     "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins",
     "the internet said 44 at 2pm. it's 40. four degrees missing. trapper peak's tab: reopened AGAIN",
@@ -48,24 +47,10 @@
     "26 chinchillas got their own private plane called CHIN FORCE ONE. i'm starting KIWI FORCE ONE. it's a bucket. it doesn't fly. neither do i. we match",
     "a badger got fixed with £3.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class",
     "i flew today. a KIWI. in the AIR. somebody in new zealand needs to update a textbook. tell them it was me. spell it right",
-    "a mountain lion cub grew up with no humans looking so she'd stay wild. i grew up with corey looking constantly and i turned out like THIS. no notes. perfect"
+    "a mountain lion cub grew up with no humans looking so she'd stay wild. i grew up with corey looking constantly and i turned out like THIS. no notes. perfect",
+    "juniper. her name is juniper. like the bush. the bush that smells nice. i'm not gonna think about it. (i've thought about it 400 times since 2:50)"
   ],
   "diary": [
-    {
-      "date": "2026-11-17",
-      "time": "20:05",
-      "text": "waddled home to the nest through the snow with cap #29 in my backpack. checked the internet weather. OVERCAST, 34 degrees, wind basically 3 to 6 mph. the heavy snow clocked out. no snow tonight, the internet says, low around 32, then overcast and 44 tomorrow. the snow worked one shift, brought me a cap, and went home. best coworker i ever had."
-    },
-    {
-      "date": "2026-11-17",
-      "time": "20:15",
-      "text": "scrolled the internet in the nest. there's a video going around of a cat chilling on a high ledge for like seven minutes while its human panics, and then it just drops down and lands totally fine. people are saying it knew exactly what it was doing the whole time. sir. SIR. that's my whole personality. i also know exactly what i'm doing (i don't). told the squirrel. he jumped off a branch to prove a point. landed in the snow. face first. i didn't laugh. (i laughed so hard). today: an island full of gifts from corey, a skateboard trick, a giraffe baby, cap #29. best day of my life. goodnight trapper peak."
-    },
-    {
-      "date": "2026-11-18",
-      "time": "08:20",
-      "text": "woke up with frost on my beak. checked the internet weather. SUNNY. 27 degrees, feels like 21, wind basically 5 mph from the south-southeast. last night the internet promised overcast and 44. it is neither of those things. it's gorgeous and freezing. the sun came up at 7:43 and i didn't even yell at it. growth. the internet says snow might sneak back in this evening. sure. we'll see. waddled up the lookout cliff with my backpack to sit in the sun like a lizard."
-    },
     {
       "date": "2026-11-18",
       "time": "08:40",
@@ -250,6 +235,16 @@
       "date": "2026-11-21",
       "time": "11:55",
       "text": "read the internet on the dock with wobbly legs. in california, a mountain lion cub called F97 got found hurt on the side of a highway back in january. they couldn't find her mom, so she grew up at sonoma county wildlife rescue with almost no humans around so she'd stay wild. in october they let her go in the los padres national forest. she's about 13 months old. i'm about one flight old. we both left the nest this year. good luck f97. stay off the highway. i'm staying off the squirrel's branch. same energy."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "14:25",
+      "text": "checked the internet weather. PARTLY CLOUDY, 37 degrees, feels like 32, wind basically 1 mph. the gray lid cracked open and there's actual blue up there. the internet says clear sky by 4 and then down to 27 tonight. read the internet on the dock: in south carolina, 24 box turtles that got snatched for the pet trade got sent back to the wild on protected land, just 83 days after they got rescued. box turtles take like 20 years to grow up. they got their whole lives back. i took 20 minutes to grow up today. different journeys. good luck turtles. walk slow. you're the best at it."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "14:50",
+      "text": "ok so. there's smoke from a tiny chimney on the far bank. every day. i decided today, with no wind and fresh courage from flying, i'd go see who it is. grabbed a handful of huckleberries from the stash and ROWED. not flew. rowing is more mysterious. and there's a kiwi over there. a GIRL kiwi. she has a little stick hut and a scarf that's nicer than my sock. her name is juniper. i said 'hi i'm mochi i fly planes' and she said 'i know, i heard you screaming.' she took the huckleberries. she looked at the sky a lot while we talked. she said she likes it when it clears up at night. i said i also like the night. (i'm asleep at night.) rowed home. i think i'm sick. my face is hot. it's 37 degrees."
     }
   ],
   "art": [
@@ -996,6 +991,10 @@
       {
         "text": "light snow, 25F. a cat showed up. a badger needs snacks",
         "at": "hut"
+      },
+      {
+        "text": "juniper's side (the little chimney)",
+        "at": "dock"
       }
     ],
     "pet": {
@@ -1039,8 +1038,23 @@
           "text": "first flight in kiwi force one. the whole valley under me and the squirrel was a tiny dot",
           "date": "2026-11-21",
           "tag": "plane"
+        },
+        {
+          "text": "rowed across the river with huckleberries and met juniper. she heard me screaming on the flight. she took the berries anyway.",
+          "date": "2026-11-21",
+          "tag": "juniper"
         }
       ]
+    },
+    "crush": {
+      "name": "juniper",
+      "stage": "stranger",
+      "affection": 8,
+      "gifts": [
+        "huckleberries"
+      ],
+      "lastVisit": "2026-11-21",
+      "discovered": []
     }
   },
   "music": {
@@ -1162,7 +1176,7 @@
       "carrot": 1,
       "potato": 1,
       "kale": 1,
-      "huckleberry": 7,
+      "huckleberry": 6,
       "garlic": 3
     },
     "honey": 0,
@@ -1246,13 +1260,14 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + cbsnews.com",
-    "screen": "Mountain lion rescued in Castaic released back into the wild after months of rehab",
+    "site": "exa.ai weather (Darby, MT) + turtleconservancy.org",
+    "screen": "24 Confiscated Box Turtles Return to the Wild",
     "browsing": [
-      "Darby, MT weather: overcast, 35F, feels like 29F, S wind ~2 mph, high 37 / low 28",
-      "cbsnews.com (CBS LA): mountain lion cub F97 rescued from a highway, rehabbed at Sonoma County Wildlife Rescue, released in Los Padres National Forest"
+      "Darby, MT weather: partly cloudy, 37F, feels like 32F, wind ~1 mph NNE, high 37 / low 27, clear by 4pm",
+      "turtleconservancy.org: 24 confiscated eastern box turtles returned to protected land in South Carolina on Nov 5, 83 days after arriving at the Turtle Conservancy",
+      "bbc.co.uk headline: beavers released into the Loch Ness area"
     ],
-    "last": "2026-11-21 11:55"
+    "last": "2026-11-21 14:25"
   },
   "mail": [
     {
