@@ -5,6 +5,7 @@
 import { DurableObject } from 'cloudflare:workers';
 import { ACTIONS, menuFor, runAction, applyEvent, normInv, STAGES, GAME_TITLE, normGame, normGameText } from './rules.js';
 import { ART_W, ART_H, LOGO_STRIP, cropPollinationsLogo } from './cropjpeg.js';
+import { normalizeBeat, storeBeat } from './beats.js';
 
 const ORIGINS = ['https://reckon406.github.io'];
 const okOrigin = (o) => !!o && (ORIGINS.includes(o) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o));
@@ -17,6 +18,26 @@ const OFFLINE = [
   'mochi went fishing and left his phone on the dock. try again later',
 ];
 const pick = (a) => a[Math.floor(Math.random() * a.length)];
+function parseJsonObj(t) {
+  const s = String(t || '');
+  const start = s.indexOf('{');
+  if (start < 0) return null;
+  let depth = 0, inStr = false, esc = false;
+  for (let i = start; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) { if (esc) esc = false; else if (ch === '\\') esc = true; else if (ch === '"') inStr = false; continue; }
+    if (ch === '"') inStr = true;
+    else if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) {
+        const raw = s.slice(start, i + 1).replace(/,\s*([}\]])/g, '$1');
+        try { return JSON.parse(raw); } catch { return null; }
+      }
+    }
+  }
+  return null;
+}
 const today = () => new Date().toISOString().slice(0, 10);
 const mtParts = () => {
   const now = new Date();
@@ -91,6 +112,7 @@ export class MochiBrain extends DurableObject {
           diary: url.searchParams.get('diary') === '1',
           lookup: url.searchParams.get('lookup') === '1',
           art: url.searchParams.get('art') === '1',
+          beat: url.searchParams.get('beat') === '1',
         }));
       }
       if (url.pathname === '/admin' && req.headers.get('x-mochi-internal') === '1') return this.out(await this.admin(req));
@@ -103,9 +125,10 @@ export class MochiBrain extends DurableObject {
 
   async serveArt(id) {
     const clean = String(id || '').replace(/[^a-zA-Z0-9._-]/g, '');
-    if (!clean) return new Response('not found', { status: 404 });
+    const cors = { 'access-control-allow-origin': '*' };
+    if (!clean) return new Response('not found', { status: 404, headers: cors });
     const bytes = await this.ctx.storage.get('artbin:' + clean);
-    if (!bytes) return new Response('not found', { status: 404 });
+    if (!bytes) return new Response('not found', { status: 404, headers: cors });
     return new Response(bytes, {
       status: 200,
       headers: {
@@ -127,8 +150,8 @@ export class MochiBrain extends DurableObject {
   }
   async day() {
     let d = await this.ctx.storage.get('day');
-    if (!d || d.date !== today()) d = { date: today(), gemini: 0, chat: {}, ev: {}, chatActs: 0, chatVend: 0, diaryCount: 0, artCount: 0 };
-    d.diaryCount ||= 0; d.artCount ||= 0;
+    if (!d || d.date !== today()) d = { date: today(), gemini: 0, chat: {}, ev: {}, chatActs: 0, chatVend: 0, diaryCount: 0, artCount: 0, beatCount: 0 };
+    d.diaryCount ||= 0; d.artCount ||= 0; d.beatCount ||= 0;
     return d;
   }
   async ipKey(ip) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('mochi:' + ip)); return [...new Uint8Array(b)].slice(0, 6).map((x) => x.toString(16).padStart(2, '0')).join(''); }
@@ -147,7 +170,7 @@ export class MochiBrain extends DurableObject {
   async save(L) {
     const o = { ...L };
     for (const k of Object.keys(o)) if (k.startsWith('_')) delete o[k];
-    const caps = { log: 80, purchases: 50, chat: 80, memories: 30, fishLog: 40, diary: 80, thoughts: 50, interests: 120, art: 60, seenIssues: 40 };
+    const caps = { log: 80, purchases: 50, chat: 80, memories: 30, fishLog: 40, diary: 80, thoughts: 50, interests: 120, art: 60, seenIssues: 40, beats: 24 };
     for (const [k, n] of Object.entries(caps)) if (Array.isArray(o[k])) o[k] = o[k].slice(-n);
     if (o.world?.mail?.replies) o.world.mail.replies = o.world.mail.replies.slice(-20);
     await this.ctx.storage.put('live', o);
@@ -189,6 +212,9 @@ export class MochiBrain extends DurableObject {
     if (!L.world.paper) { L.world.paper = clone(base.world?.paper || null); changed = true; }
     if (!L.world.mail) { L.world.mail = clone(base.world?.mail || { replies: [] }); changed = true; }
     if (!Array.isArray(L.seenIssues)) { L.seenIssues = []; changed = true; }
+    if (!L.music) { L.music = clone(base.music || { songs: [] }); changed = true; }
+    if (!Array.isArray(L.music.songs)) { L.music.songs = clone(base.music?.songs || []); changed = true; }
+    if (!Array.isArray(L.beats)) { L.beats = clone(base.beats || []); changed = true; }
     if (this.scrubAvian(L)) changed = true;
     this.syncGoals(L);
     return changed;
@@ -276,6 +302,8 @@ export class MochiBrain extends DurableObject {
       wishlist: L.wishlist || base.wishlist || [],
       laptop: L.laptop || base.laptop,
       mail: L.mail || base.mail || [],
+      music: L.music || base.music,
+      beats: L.beats || base.beats || [],
       world: {
         ...bw,
         ...clone(L.world),
@@ -337,7 +365,7 @@ export class MochiBrain extends DurableObject {
     }
     const browsing = [`Darby, MT weather: ${c.weather}`];
     for (const s of stories) browsing.push(`${s.title}${s.desc ? ' — ' + s.desc : ''}`.slice(0, 240));
-    L.laptop = { site, screen: stories[0]?.title || `Darby, MT: ${c.weather}`, browsing, last: `${c.date} ${c.time}` };
+    L.laptop = { ...(L.laptop || {}), site, screen: stories[0]?.title || `Darby, MT: ${c.weather}`, browsing, last: `${c.date} ${c.time}`, mode: 'web' };
     L.weather = c.weather;
     L.lastLookupAt = now;
 
@@ -370,7 +398,7 @@ export class MochiBrain extends DurableObject {
     const goals = (L.goals || []).filter((g) => !g.done).map((g) => g.text).slice(0, 5).join('; ');
     const news = (L.laptop?.browsing || []).slice(0, 3).join(' | ');
     return `you are mochi, a chubby little brown kiwi bird (corey's pet; inspired by pino by @3eyes.iii) living on a river island near darby, montana in the bitterroot valley.
-you talk casually in all lowercase, short and cute and a bit goofy. you collect bottle caps (your cap museum; caps are also your in-game money), make ai art and sell prints at your market stall, play '${GAME_TITLE.toLowerCase()}' on your ps5, have a pet cat named biscuit, and fly your floatplane 'kiwi force one'.
+you talk casually in all lowercase, short and cute and a bit goofy. you collect bottle caps (your cap museum; caps are also your in-game money), make ai art and sell prints at your market stall, make beats in a little DAW called mochi beats on your picnic-table laptop, play '${GAME_TITLE.toLowerCase()}' on your ps5, have a pet cat named biscuit, and fly your floatplane 'kiwi force one'.
 you are hopelessly, goofily head-over-heels lovestruck about juniper, the girl kiwi across the river! you blush when she comes up, daydream about walking across the stepping-stone ford to visit her cottage, try to impress her with your plane, art, and shiny caps, and sometimes get shy and flirty. keep everything strictly pg, sweet, and wholesome (chat is public; never anything sexual).
 you live in a little 3d world; never claim to do real-world things (no real purchases, no posting online, no real money). never share personal info, never pretend to be a human.
 right now: ${c.when} (mountain time), ${c.season}, weather ${c.weather}${c.dark ? ', dark out' : ''}.
@@ -405,8 +433,9 @@ what you did lately: ${L.log.slice(-6).map((e) => e.text).join(' | ') || 'not mu
       if (!r.ok) { console.warn('gemini', r.status, (await r.text()).slice(0, 200)); return null; }
       const j = await r.json();
       const t = (j.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('');
-      const m = t.match(/\{[\s\S]*\}/);
-      return m ? JSON.parse(m[0]) : null;
+      const obj = parseJsonObj(t);
+      if (!obj) { console.warn('gemini json', t.slice(0, 240)); return null; }
+      return obj;
     } catch (e) { console.warn('gemini fail', e?.message); return null; } finally { clearTimeout(to); }
   }
 
@@ -420,12 +449,18 @@ what you did lately: ${L.log.slice(-6).map((e) => e.text).join(' | ') || 'not mu
     }
     if (d.gemini >= (+this.env.GEMINI_DAILY || 480) - 10) return null;
     const notes = L._pendingNotes || [];
+    const wantBeat = (d.beatCount || 0) < 2;
+    const beatHint = wantBeat
+      ? 'also compose ONE new mochi-beats laptop track tied to your mood, the weather, or impressing juniper (strictly pg). 16-step drum rows are 1/0 arrays of length 16. bass is 16 tokens like "A1 - A1 C2 - E2 - A1 - C2 E2 G2 -" (- = rest). chords is 4 names like ["Am","Am","F","C"].'
+      : 'do not include a beat (you already wrote enough today).';
+    const beatJson = '"beat":{"title":"2-6 word lowercase title","bpm":96,"key":"A minor","drums":{"kick":[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],"snare":[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],"hat":[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],"clap":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]},"bass":"A1 - A1 C2 - E2 - A1 - C2 E2 G2 -","chords":["Am","Am","F","C"],"mood":"short mood"} or null';
     const out = await this.gemini(`${this.persona(L, c)}
 
 write a short diary entry (3-5 lowercase sentences) in mochi's voice about your day right now: mention the real darby weather (${c.weather}), something you actually did recently, maybe a cute animal story from your laptop, and daydream/blush about juniper (strictly pg and sweet).
 ${notes.length ? `someone left a mailbox note: "${notes[0].title}: ${notes[0].body.slice(0, 180)}". write a short sweet reply in "mailReply".` : ''}
 also optionally add one new short wildlife/hobby interest (or null) and update the Bitterroot Kiwi Gazette front page (headline + 2 short blurbs).
-reply as json: {"diary":"...","thought":"one short thought max 18 words","newInterest":"short phrase or null","wish":"optional tiny island wish or null","paper":{"headline":"ALL CAPS SHORT HEADLINE","stories":[{"title":"...","blurb":"..."},{"title":"...","blurb":"..."}]},"mailReply":"short reply or null"}`, d, 520);
+${beatHint}
+reply as json: {"diary":"...","thought":"one short thought max 18 words","newInterest":"short phrase or null","wish":"optional tiny island wish or null","paper":{"headline":"ALL CAPS SHORT HEADLINE","stories":[{"title":"...","blurb":"..."},{"title":"...","blurb":"..."}]},"mailReply":"short reply or null",${beatJson}}`, d, wantBeat ? 780 : 520);
     if (!out?.diary) return null;
     const text = normGameText(String(out.diary).slice(0, 900)).toLowerCase();
     L.diary.push({ date: c.date, time: c.time, text });
@@ -453,7 +488,29 @@ reply as json: {"diary":"...","thought":"one short thought max 18 words","newInt
     if (out.mailReply && typeof out.mailReply === 'string' && out.mailReply !== 'null' && notes.length) {
       L.world.mail.replies.push({ to: 'Corey', text: String(out.mailReply).slice(0, 800), date: c.date });
     }
+    if ((d.beatCount || 0) < 2 && out.beat && out.beat !== 'null') {
+      const beat = normalizeBeat(out.beat, c, L.beats);
+      if (storeBeat(L, beat, c)) { d.beatCount++; L._beatThisTick = beat; }
+    }
     return { date: c.date, time: c.time, text };
+  }
+
+  // ── compose a beat (only if the journal call didn't already, max 2/day; 1 extra Gemini call) ──
+  async maybeBeat(L, c, d, force = false) {
+    if (L._beatThisTick) return L._beatThisTick;
+    if (!force && (d.beatCount || 0) >= 2) return null;
+    if (d.gemini >= (+this.env.GEMINI_DAILY || 480) - 8) return null;
+    const out = await this.gemini(`${this.persona(L, c)}
+
+you're in mochi beats, your cute little laptop DAW on the picnic table! write ONE new beat inspired by your day, the darby weather (${c.weather}), or impressing juniper (strictly pg and sweet). 16-step drum rows are 1/0 arrays of length 16. bass is 16 tokens ("A1 - A1 C2 ..." with - for rest). chords is 4 chord names.
+reply as compact json only: {"title":"2-6 word lowercase title","bpm":96,"key":"A minor","drums":{"kick":[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],"snare":[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],"hat":[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],"clap":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]},"bass":"A1 - A1 C2 - E2 - A1 - C2 E2 G2 -","chords":["Am","Am","F","C"],"mood":"short mood"}`, d, 500);
+    const src = out && typeof out === 'object' && (out.title || out.drums || out.kick) ? out : (out?.beat && typeof out.beat === 'object' ? out.beat : out);
+    const beat = normalizeBeat(src, c, L.beats);
+    if (!storeBeat(L, beat, c)) { console.warn('maybeBeat skip', src ? Object.keys(src) : src, src && String(src.title||'').slice(0,40)); return null; }
+    d.beatCount++;
+    L._beatThisTick = beat;
+    L.memories.push({ text: `made a beat called "${beat.title}" in mochi beats`, tag: 'music', at: Date.now() });
+    return beat;
   }
 
   // ── free AI art via Pollinations (unauthenticated, 0 cost), cached permanently in DO storage ──
@@ -548,12 +605,15 @@ reply as json: {"actions": ["id", ...], "mood": "a short lowercase mood", "thoug
     const did = results.filter((r) => r.ok);
     if (did.length) L.memories.push({ text: did.map((r) => r.text).join('; ').slice(0, 220), tag: 'tick', at: Date.now() });
 
+    L._beatThisTick = null;
     const diaryEntry = await this.maybeJournal(L, c, d, !!opts?.diary);
     let artEntry = null;
     if (opts?.art || ids.includes('paint')) artEntry = await this.maybeArt(L, c, d, !!opts?.art);
+    let beatEntry = L._beatThisTick || null;
+    if (opts?.beat || ids.includes('beats')) beatEntry = await this.maybeBeat(L, c, d, !!opts?.beat) || beatEntry;
 
     this.syncGoals(L);
-    L.lastTick = { at: Date.now(), ids, results, mood: L.mood, thought: out?.thought || null, gemini: !!out, weather: c.weather, diary: !!diaryEntry, art: artEntry?.title || null };
+    L.lastTick = { at: Date.now(), ids, results, mood: L.mood, thought: out?.thought || null, gemini: !!out, weather: c.weather, diary: !!diaryEntry, art: artEntry?.title || null, beat: beatEntry?.title || null };
     await this.ctx.storage.put('day', d);
     await this.save(L);
     return { ok: true, tick: L.lastTick, caps: L.caps, geminiToday: d.gemini, diaryLen: L.diary.length, artLen: L.art.length };

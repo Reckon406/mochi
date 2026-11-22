@@ -89,6 +89,7 @@ export const ACTIONS = {
   sleep: { life: 'sleep', desc: 'nap in the hut (good at night)', run() { return { text: 'napped in the hut. zzz. dreamed of the ocean' }; } },
   shells: { life: 'shells', desc: 'beachcomb for shells', run(L) { if (Math.random() < 0.6) { L.inventory.shells++; return { text: 'found a shell on the beach. pocketed' }; } return { text: 'beachcombed. found mostly sand' }; } },
   browse: { life: 'browse', desc: 'browse the laptop at the picnic table', run(L) { const h = L._laptopHeadline; return { text: h ? `browsed the laptop: ${h.slice(0, 90)}` : 'browsed the laptop at the picnic table' }; } },
+  beats: { life: 'beats', desc: 'make a beat on the laptop in mochi beats (little DAW / step sequencer)', run(L) { const t = L._lastBeatTitle; return { text: t ? `made a new beat on the laptop in mochi beats: "${t}"` : 'opened mochi beats on the laptop and tapped out a groove' }; } },
   jam: { life: 'jam', desc: 'jam on the music stage', run() { return { text: 'jammed on the music stage. the squirrel did not clap' }; } },
   telescope: { life: 'telescope', desc: 'look through the treehouse telescope (best at night)', run() { return { text: 'looked through the telescope. the stars kept the promise' }; } },
   skip: { life: 'skip', desc: 'skip rocks at the pond', run() { const n = ri(1, 6); return { text: `skipped a rock ${n} times. ${n > 4 ? 'LEGEND' : 'the pond is not ready for me'}` }; } },

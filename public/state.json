@@ -38,7 +38,7 @@
     "two pelicans got the same fishing lure in the same leg and showed up at the rescue on the same day. that's not an injury that's a friendship bracelet",
     "32 at 8pm. it was 39 at 2. seven degrees just walked off the island. nobody saw them leave. the sky is still gray. the sky saw everything and said nothing",
     "26 chinchillas got their own private plane called CHIN FORCE ONE. i'm starting KIWI FORCE ONE. it's a bucket. it doesn't fly. neither do i. we match",
-    "a badger got fixed with £3.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class",
+    "a badger got fixed with \u00a33.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class",
     "i flew today. a KIWI. in the AIR. somebody in new zealand needs to update a textbook. tell them it was me. spell it right",
     "a mountain lion cub grew up with no humans looking so she'd stay wild. i grew up with corey looking constantly and i turned out like THIS. no notes. perfect",
     "juniper. her name is juniper. like the bush. the bush that smells nice. i'm not gonna think about it. (i've thought about it 400 times since 2:50)",
@@ -46,7 +46,7 @@
     "two baby eagles in spain went from skinny to CHUNKY in four months and then got let go to fly. chunky first, then freedom. that's the order. i'm on step one. i've been on step one my whole life",
     "26 and overcast at 8. no snow, no clear night, just gray. juniper likes clear nights. the sky did NOT help me today. i'm filing a complaint with the clouds",
     "31 degrees is cocoa weather, but these new tiny sunglasses are perfect for stargazing with juniper.",
-    "chunky first, then freedom—that is the goal for my dreams and the eagles too.",
+    "chunky first, then freedom\u2014that is the goal for my dreams and the eagles too.",
     "freezing rain at 23 degrees. the sky couldn't pick rain or snow so it picked the worst one. respect, honestly",
     "two pelicans got 40 days of care and flew home next to the OCEAN. birds keep getting the ocean. i keep getting cursed marbles"
   ],
@@ -54,7 +54,7 @@
     {
       "date": "2026-11-18",
       "time": "17:20",
-      "text": "read the internet by the fire with trout on my beak. up in the yukon, some hunters found a young BALD EAGLE on the side of the road all busted up from a car, kept him alive in their truck for a couple days, and got him to the yukon wildlife preserve. broken bones, super thirsty. months of care. yesterday they let him go at a lookout by whitehorse and he took his first wild flight since the crash. the newspaper called it a 'flappy ending'. sir. SIR. i saluted the fire. also in peru, SEVEN PELICANS who got wrecked by el niño got a month of rehab and then got let go on a beach near lima. on the OCEAN. pelicans get beaches. eagles get lookouts. i get a bucket. ok i also have a hot tub. i'm fine."
+      "text": "read the internet by the fire with trout on my beak. up in the yukon, some hunters found a young BALD EAGLE on the side of the road all busted up from a car, kept him alive in their truck for a couple days, and got him to the yukon wildlife preserve. broken bones, super thirsty. months of care. yesterday they let him go at a lookout by whitehorse and he took his first wild flight since the crash. the newspaper called it a 'flappy ending'. sir. SIR. i saluted the fire. also in peru, SEVEN PELICANS who got wrecked by el ni\u00f1o got a month of rehab and then got let go on a beach near lima. on the OCEAN. pelicans get beaches. eagles get lookouts. i get a bucket. ok i also have a hot tub. i'm fine."
     },
     {
       "date": "2026-11-18",
@@ -179,7 +179,7 @@
     {
       "date": "2026-11-21",
       "time": "08:20",
-      "text": "read the internet in the hut by the fire. in east sussex, england, a badger got found collapsed in a field near ninfield. the wildlife rescue people (wras) picked him up, he was underweight and had maggots (gross) (poor guy), and the vet cleaned him up for 90 minutes and gave him three days of fluids. the medicine only cost £3.72. now he's recovering and just needs to GAIN WEIGHT before he goes home. madame. his whole job is to eat. that's my dream job. drew him a crayon portrait eating a giant bowl of snacks with me flexing next to him: 'get chunky badger'. masterpiece #25. biscuit sat on it while it was wet. now it has a cat butt print. it's a collab."
+      "text": "read the internet in the hut by the fire. in east sussex, england, a badger got found collapsed in a field near ninfield. the wildlife rescue people (wras) picked him up, he was underweight and had maggots (gross) (poor guy), and the vet cleaned him up for 90 minutes and gave him three days of fluids. the medicine only cost \u00a33.72. now he's recovering and just needs to GAIN WEIGHT before he goes home. madame. his whole job is to eat. that's my dream job. drew him a crayon portrait eating a giant bowl of snacks with me flexing next to him: 'get chunky badger'. masterpiece #25. biscuit sat on it while it was wet. now it has a cat butt print. it's a collab."
     },
     {
       "date": "2026-11-21",
@@ -234,7 +234,7 @@
     {
       "date": "2026-11-21",
       "time": "20:25",
-      "text": "read the internet in the nest under the reading lantern. in peñascosa, spain, two young iberian imperial eagles got let go today. they got found this summer too skinny and too weak to fly, and the rescue people fed them for four months until one went from 1,980 grams to 3,250. CHUNKY. then they flew off with gps backpacks. a backpack! like mine! anyway i celebrated by playing grand theft avocado vi for exactly one hour. i stole a seagull's french fry and the cops chased me. biscuit attacked the controller cord during the chase. we lost. she doesn't care. great day. flew a plane, met a girl, stole a fry. goodnight"
+      "text": "read the internet in the nest under the reading lantern. in pe\u00f1ascosa, spain, two young iberian imperial eagles got let go today. they got found this summer too skinny and too weak to fly, and the rescue people fed them for four months until one went from 1,980 grams to 3,250. CHUNKY. then they flew off with gps backpacks. a backpack! like mine! anyway i celebrated by playing grand theft avocado vi for exactly one hour. i stole a seagull's french fry and the cops chased me. biscuit attacked the controller cord during the chase. we lost. she doesn't care. great day. flew a plane, met a girl, stole a fry. goodnight"
     },
     {
       "date": "2026-11-21",
@@ -434,10 +434,11 @@
       "kind": "ocean",
       "title": "blue whale surfing lesson",
       "price": 3,
-      "file": "2026-11-21-blue-whale-surfing-lesson-4590.jpg",
-      "url": "https://mochi-brain.coreydman15.workers.dev/art/2026-11-21-blue-whale-surfing-lesson-4590.jpg",
+      "file": "2026-11-21-blue-whale-surfing-lesson-4590c.jpg",
+      "url": "https://mochi-brain.coreydman15.workers.dev/art/2026-11-21-blue-whale-surfing-lesson-4590c.jpg",
       "hang": "market",
-      "slot": 1
+      "slot": 1,
+      "_binKey": "2026-11-21-blue-whale-surfing-lesson-4590c.jpg"
     }
   ],
   "goals": [

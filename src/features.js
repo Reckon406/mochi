@@ -6,6 +6,7 @@ import { canvasTex, signTex, woodTex, shingleTex } from './textures.js';
 import { plank } from './signs.js';
 import { vendFront, TRINKETS } from './vending.js';
 import { parseWeather } from './weather.js';
+import { drawDaw, isBeat } from './beatkit.js';
 
 const M = {}; const mat = (c, o = {}) => M[c + JSON.stringify(o)] ||= new THREE.MeshStandardMaterial({ color: c, roughness: 0.8, ...o });
 function add(p, g, m, pos = [0, 0, 0], rot = [0, 0, 0], sc = null, shadow = true) { const x = new THREE.Mesh(g, m); x.position.set(...pos); x.rotation.set(...rot); if (sc) (typeof sc === 'number' ? x.scale.setScalar(sc) : x.scale.set(...sc)); x.castShadow = shadow; x.receiveShadow = true; p.add(x); return x; }
@@ -70,15 +71,35 @@ export function buildFeatures(scene, { state, season, snowy, glow }) {
     const screen = add(lid, new THREE.PlaneGeometry(0.42, 0.26), sm, [0, 0.15, 0.001], [0, 0, 0], null, false); screen.rotation.y = 0;
     add(lid, new THREE.CircleGeometry(0.02, 12), mat(0xffffff, { emissive: 0xffffff, emissiveIntensity: 0.6 }), [0, 0.15, -0.021], [0, Math.PI, 0], null, false); // logo on the back
     const lt = new THREE.PointLight(0x9ad0ff, 0, 2.2, 1.6); lt.position.set(0, 0.25, 0.25); lp.add(lt);
-    const L2 = state.laptop || {}; const list = Array.isArray(L2.browsing) ? L2.browsing : [];
-    const lines = () => { const last = list[list.length - 1]; const site = String(L2.site || (last && last.site) || 'mochinet'); const txt = String(L2.screen || (last && (last.title || last.text)) || L2.last || 'loading the entire internet...'); return [site, txt]; };
+    const L2 = state.laptop || {}; const list = Array.isArray(L2.browsing) ? L2.browsing.slice() : [];
+    const lines = () => { const Lnow = state.laptop || L2; const listNow = Array.isArray(Lnow.browsing) ? Lnow.browsing : list; const last = listNow[listNow.length - 1]; const site = String(Lnow.site || (last && last.site) || 'mochinet'); const txt = String(Lnow.screen || (last && (last.title || last.text)) || Lnow.last || 'loading the entire internet...'); return [site, txt]; };
     function setScreen(lns) { const [site, txt] = lns; screenTex?.dispose(); screenTex = canvasTex(512, 320, (g, w, h) => {
       g.fillStyle = '#eef4ff'; g.fillRect(0, 0, w, h); g.fillStyle = '#3b6fd8'; g.fillRect(0, 0, w, 54); g.fillStyle = '#fff'; g.font = 'bold 28px sans-serif'; g.fillText('🌐 ' + site.slice(0, 26), 16, 37);
       g.fillStyle = '#1f2a3a'; g.font = 'bold 30px sans-serif'; const words = txt.split(/\s+/); let line = '', y = 100; for (const wd of words) { if ((line + ' ' + wd).length > 24) { g.fillText(line, 18, y); y += 40; line = wd; if (y > 290) break; } else line = (line + ' ' + wd).trim(); } if (y <= 290) g.fillText(line, 18, y);
     }); sm.emissiveMap = screenTex; sm.map = screenTex; sm.needsUpdate = true; }
-    setScreen(lines());
-    out.laptop = { pos: p, yaw, lid, light: lt, setScreen, lines, list };
-    anim.push((t, dt, night) => { lt.intensity = 0.4 + night * 1.6; sm.emissiveIntensity = 0.7 + 0.08 * Math.sin(t * 3); });
+    let dawBeat = (L2.mode === 'daw' && isBeat(L2.beat)) ? L2.beat : null, dawStep = -1;
+    function setDaw(beat) { dawBeat = beat && isBeat(beat) ? beat : dawBeat; dawStep = -1; paintDaw(0); }
+    function paintDaw(step) {
+      dawStep = step & 15;
+      screenTex?.dispose();
+      screenTex = canvasTex(512, 320, (g, w, h) => drawDaw(g, w, h, dawBeat || { title: 'new beat', bpm: 96, key: 'C', drums: { kick: [1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0], snare: [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0], hat: [1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], clap: [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0] } }, dawStep));
+      sm.emissiveMap = screenTex; sm.map = screenTex; sm.needsUpdate = true;
+    }
+    function syncLaptop(L3) {
+      const src = L3 || state.laptop || {};
+      if (src.browsing) { list.length = 0; list.push(...(Array.isArray(src.browsing) ? src.browsing : [])); }
+      if (src.mode === 'daw' && isBeat(src.beat)) setDaw(src.beat);
+      else if (src.mode !== 'daw') setScreen(lines());
+    }
+    if (dawBeat) paintDaw(0); else setScreen(lines());
+    out.laptop = { pos: p, yaw, lid, light: lt, setScreen, setDaw, sync: syncLaptop, lines, list, get daw() { return dawBeat; } };
+    anim.push((t, dt, night) => {
+      lt.intensity = 0.4 + night * 1.6; sm.emissiveIntensity = 0.7 + 0.08 * Math.sin(t * 3);
+      if (!dawBeat) return;
+      const bpm = Math.max(60, Math.min(160, +dawBeat.bpm || 96));
+      const st = Math.floor((t * bpm / 60) * 4) & 15;
+      if (st !== dawStep) paintDaw(st);
+    });
   }
 
   // ── weather station on the lookout cliff (reads STATE.weather) ──

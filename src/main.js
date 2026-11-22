@@ -297,6 +297,7 @@ async function init() {
   audioCtl.suspend = () => music.suspend(); audioCtl.resume = () => music.resume();
   music.onChange((song) => { ui.setSong(song); island.music.setPlaying(!!song); });
   const setPanel = buildSettingsPanel(document.getElementById('ui'), settings, { music });
+  music.onLibrary?.(() => setPanel.refreshSongs?.());
   settings.on((st, patch) => {
     if ('quality' in patch && QUALITY[st.quality]?.ao && !ao && !isMobile) { ao = new GTAOPass(scene, camera, innerWidth, innerHeight); ao.blendIntensity = 0.85; ao.updateGtaoMaterial({ radius: 0.6, distanceExponent: 1.5, thickness: 1.2, scale: 1.0, samples: 12 }); composer.insertPass(ao, 1); }
     if ('quality' in patch && ao) ao.enabled = !!QUALITY[st.quality]?.ao;
@@ -334,7 +335,9 @@ async function init() {
     onState: (s) => {
       if (s) { if (s.mood) { const el = document.querySelector('#ui .row.mood .v'); if (el) el.textContent = s.mood; } if (s.activity) { const el = document.querySelector('#ui .row.act .v'); if (el) el.textContent = s.activity; }
         if (s.world?.gaming?.found && features.gaming && !features.gaming.found) features.gaming.setFound?.(true);
-        if (s.laptop) state.laptop = s.laptop; if (Array.isArray(s.mail)) state.mail = s.mail;
+        if (s.laptop) { state.laptop = s.laptop; features.laptop?.sync?.(s.laptop); }
+        if (s.music || s.beats) { if (s.music) state.music = s.music; if (s.beats) state.beats = s.beats; music.sync(state); }
+        if (Array.isArray(s.mail)) state.mail = s.mail;
         if (Array.isArray(s.wishlist)) state.wishlist = s.wishlist; if (Array.isArray(s.interests)) state.interests = s.interests;
         if (Array.isArray(s.thoughts) && s.thoughts.length) thoughts.splice(0, thoughts.length, ...s.thoughts.filter(Boolean));
         ui.syncState(s); }

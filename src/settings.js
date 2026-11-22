@@ -48,9 +48,16 @@ export function buildSettingsPanel(root, settings, { music }) {
   el.addEventListener('input', (e) => { const i = e.target; const k = i.dataset.k; if (!k) return; const v = i.type === 'checkbox' ? i.checked : i.type === 'range' ? parseFloat(i.value) : i.value; settings.set({ [k]: v });
     const vv = el.querySelector(`[data-v="${k}"]`); if (vv) vv.textContent = fmt(k, v); if (k === 'particles' || k === 'detail') el.querySelector('[data-note]').hidden = false; });
   el.querySelector('[data-reload]').onclick = (e) => { e.preventDefault(); location.reload(); };
-  el.querySelectorAll('[data-song]').forEach((b) => (b.onclick = () => { settings.set({ musicOn: true }); refresh(); music.play(+b.dataset.song); }));
+  const bindSongs = () => el.querySelectorAll('[data-song]').forEach((b) => (b.onclick = () => { settings.set({ musicOn: true }); refresh(); music.play(+b.dataset.song); }));
+  bindSongs();
+  function refreshSongs() {
+    const box = el.querySelector('.songs'); if (!box) return;
+    const list = music.songs;
+    box.innerHTML = list.length ? list.map((x, i) => `<button data-song="${i}">🎵 ${x.title.replace(/[<>&]/g, '')}<em>${String(x.mood || '').replace(/[<>&]/g, '')}</em></button>`).join('') : '<p class="muted">no songs yet. he is warming up his beak.</p>';
+    bindSongs();
+  }
   el.querySelector('.sclose').onclick = () => (el.hidden = true);
   el.querySelector('.sreset').onclick = () => { settings.reset(); refresh(); el.querySelector('[data-note]').hidden = false; };
   el.addEventListener('keydown', (e) => e.stopPropagation()); // don't walk while fiddling with sliders
-  return { el, toggle() { el.hidden = !el.hidden; if (!el.hidden) refresh(); }, get open() { return !el.hidden; } };
+  return { el, toggle() { el.hidden = !el.hidden; if (!el.hidden) refresh(); }, refreshSongs, get open() { return !el.hidden; } };
 }

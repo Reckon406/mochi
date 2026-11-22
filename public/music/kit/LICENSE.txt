@@ -1,0 +1,18 @@
+Mochi Beats sample kit — all files here are CC0 1.0 (public domain).
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Drums and bass (kick, snare, hat, clap, bass-c) are trimmed/converted from
+Sonic Pi's bundled samples (https://github.com/sonic-pi-net/sonic-pi, v4.5.1,
+etc/samples/), which Sonic Pi states were obtained from freesound.org and
+placed in the public domain under CC0 1.0. See etc/samples/README.md.
+
+  kick.ogg   <- drum_bass_hard.flac  (freesound.org/people/menegass/sounds/100051/)
+  snare.ogg  <- drum_snare_hard.flac (freesound.org/people/menegass/sounds/100058/)
+  hat.ogg    <- drum_cymbal_closed.flac (freesound.org/people/menegass/sounds/100053/)
+  clap.ogg   <- perc_snap.flac       (listed under Sonic Pi's CC0 samples)
+  bass-c.ogg <- bass_thick_c.flac    (Sonic Pi CC0 sample set)
+
+Piano notes (piano-c2/c3/c4.ogg) are trimmed from the Versilian Community
+Sample Library "TX81Z - FM Piano" set (https://github.com/sgossner/VCSL),
+which is dedicated to the public domain under CC0 1.0. Hosted copies used:
+https://smpldsnds.github.io/sgossner-vcsl/

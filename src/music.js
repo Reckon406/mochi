@@ -1,6 +1,8 @@
+import { isBeat, kitUrl, steps16, bassNotes, chordBars } from './beatkit.js';
 // Mochi's soundtrack. STATE.music = { songs: [{ id, title, mood, bpm?, key?, notes?, file? }], playing?: id }
 // Songs without `file` are generated live with Web Audio from the song itself (title seeds the melody, mood picks scale/tempo/sound),
 // so every song he "writes" sounds different but stays the same each time. `file` = ./music/<file> (mp3/ogg) if he ever makes a real track.
+// kind:'beat' songs (Mochi Beats) play with bundled CC0 drum + instrument samples via smplr Sampler — not synth bleeps.
 //
 // IMPORTANT: reuse noise buffers and disconnect nodes on ended. Creating a fresh AudioBuffer + graph per drum hit used to
 // pile up for ~one song (~60s) and freeze the tab on real machines.
@@ -56,11 +58,24 @@ export function createMusic(state, settings) {
   let noise = null; // shared one-shot noise buffers (created once per AudioContext)
   let liveNodes = 0; // approx in-flight sources (for ?debug=1)
   let SF = null, inst = null; const leads = new Map(); // sampled instruments (null until loaded)
+  let kitP = null, kit = null, libFn = null; // CC0 Mochi Beats kit (drums + bass + keys)
   function loadSamples() {
     if (SF || !ctx) return; SF = import('smplr').then(({ Soundfont }) => {
       const mk = (instrument, volume) => { const x = Soundfont(ctx, { instrument, kit: 'FluidR3_GM', destination: musicBus, volume }); return x.ready.then(() => x); };
       return Promise.all([mk('acoustic_guitar_steel', 90), mk('acoustic_bass', 105)]).then(([guitar, bass]) => { inst = { guitar, bass, mk }; });
     }).catch((e) => { console.warn('samples failed, using synth', e); inst = null; });
+  }
+  function loadKit() {
+    if (kitP || !ctx) return kitP;
+    kitP = import('smplr').then(({ Sampler }) => {
+      const mk = (buffers, volume) => { const x = Sampler(ctx, { buffers, destination: musicBus, volume }); return x.ready.then(() => x); };
+      return Promise.all([
+        mk({ kick: kitUrl('kick.ogg'), snare: kitUrl('snare.ogg'), hat: kitUrl('hat.ogg'), clap: kitUrl('clap.ogg') }, 110),
+        mk({ 48: kitUrl('bass-c.ogg') }, 115),
+        mk({ 48: kitUrl('piano-c2.ogg'), 60: kitUrl('piano-c3.ogg'), 72: kitUrl('piano-c4.ogg') }, 90),
+      ]).then(([drums, bass, keys]) => { kit = { drums, bass, keys }; return kit; });
+    }).catch((e) => { console.warn('mochi beats kit failed', e); kit = null; return null; });
+    return kitP;
   }
   function lead(mood) { // per-mood melody instrument, loaded on demand, cached
     if (!inst) return null; const name = LEAD[mood] || 'acoustic_grand_piano';
@@ -78,7 +93,7 @@ export function createMusic(state, settings) {
     noise = { hit: mkNoise(ctx, 0.12), tick: mkNoise(ctx, 0.04), short: mkNoise(ctx, 0.05), long: mkNoise(ctx, 0.55), spray: mkNoise(ctx, 0.6) };
     applyLevels(); // river fades in over ~2.5s on first start instead of starting at full volume
     ambBus.gain.cancelScheduledValues(ctx.currentTime); ambBus.gain.setValueAtTime(0, ctx.currentTime); ambBus.gain.linearRampToValueAtTime(ambLevel(), ctx.currentTime + 2.5);
-    river(); loadSamples(); return ctx;
+    river(); loadSamples(); loadKit(); return ctx;
   }
   function ambLevel() { const s = settings.get(); return s.sfx * (s.river ?? 0.3) * 0.35; } // river default = 30% of the old level
   function applyLevels() { if (!ctx) return; const s = settings.get(); master.gain.value = s.mute ? 0 : s.master; musicBus.gain.value = s.music * 0.55; sfxBus.gain.value = s.sfx; const amb = ambLevel(); ambBus.gain.cancelScheduledValues(ctx.currentTime); ambBus.gain.setTargetAtTime(amb, ctx.currentTime, 0.08); if (audioEl) audioEl.volume = s.mute ? 0 : s.master * s.music; }
@@ -111,7 +126,8 @@ export function createMusic(state, settings) {
   function playSong(i) {
     stopSong(); if (!songs.length || !ensure()) return; cur = ((i % songs.length) + songs.length) % songs.length; const song = songs[cur];
     const f = typeof song.file === 'string' && /^[\w.-]+\.(mp3|ogg|wav|m4a)$/i.test(song.file) ? song.file : null;
-    if (f) { audioEl = new Audio('./music/' + encodeURIComponent(f)); audioEl.onended = () => playSong(cur + 1); audioEl.onerror = () => { audioEl = null; generate(song); }; applyLevels(); audioEl.play().catch(() => generate(song)); }
+    if (isBeat(song)) playBeat(song);
+    else if (f) { audioEl = new Audio('./music/' + encodeURIComponent(f)); audioEl.onended = () => playSong(cur + 1); audioEl.onerror = () => { audioEl = null; generate(song); }; applyLevels(); audioEl.play().catch(() => generate(song)); }
     else generate(song);
     onChange(song);
   }
@@ -138,7 +154,33 @@ export function createMusic(state, settings) {
     };
     sched();
   }
-  function stopSong() { clearTimeout(timer); timer = null; if (inst) { try { inst.guitar.stop(); inst.bass.stop(); leads.forEach((x) => x?.stop()); } catch {} } if (audioEl) { audioEl.pause(); audioEl = null; } }
+  function playBeat(song) {
+    const bpm = Math.max(60, Math.min(160, +song.bpm || 96));
+    const stepDur = 60 / bpm / 4; // 16 steps = 1 bar of 16th notes
+    const kick = steps16(song.drums?.kick), snare = steps16(song.drums?.snare), hat = steps16(song.drums?.hat), clap = steps16(song.drums?.clap);
+    const bass = bassNotes(song.bass), chords = chordBars(song.chords);
+    const loops = 8; let bar = 0;
+    const hit = (sampler, n, t, dur, vel) => { if (!sampler || n == null) return; try { note(sampler, n, t, dur, vel); } catch {} };
+    const sched = () => {
+      if (!kit) { timer = setTimeout(() => playSong(cur + 1), 400); return; }
+      if (bar >= loops) { timer = setTimeout(() => playSong(cur + 1), stepDur * 16 * 1000); return; }
+      const t0 = Math.max(ctx.currentTime + 0.05, sched.next || 0);
+      for (let i = 0; i < 16; i++) {
+        const t = t0 + i * stepDur;
+        if (kick[i]) hit(kit.drums, 'kick', t, 0.4, 110);
+        if (snare[i]) hit(kit.drums, 'snare', t, 0.35, 100);
+        if (hat[i]) hit(kit.drums, 'hat', t, 0.18, 70);
+        if (clap[i]) hit(kit.drums, 'clap', t, 0.3, 90);
+        if (bass[i] != null) hit(kit.bass, bass[i], t, stepDur * 1.8, 100);
+        if (i % 4 === 0) (chords[Math.floor(i / 4) % chords.length] || []).forEach((m, s) => hit(kit.keys, m, t + s * 0.018, stepDur * 3.5, 72));
+      }
+      sched.next = t0 + 16 * stepDur; bar++;
+      timer = setTimeout(sched, Math.max(10, (sched.next - ctx.currentTime - 0.2) * 1000));
+    };
+    const go = () => { if (!ensure()) return; loadKit()?.then((k) => { if (!k) { timer = setTimeout(() => playSong(cur + 1), 400); return; } sched(); }); };
+    go();
+  }
+  function stopSong() { clearTimeout(timer); timer = null; if (inst) { try { inst.guitar.stop(); inst.bass.stop(); leads.forEach((x) => x?.stop()); } catch {} } if (kit) { try { kit.drums?.stop(); kit.bass?.stop(); kit.keys?.stop(); } catch {} } if (audioEl) { audioEl.pause(); audioEl = null; } }
   // little synth chirps for SFX
   function sfx(kind) { if (!ensure() || settings.get().sfx <= 0) return; const t = ctx.currentTime + 0.01;
     if (kind === 'hop') { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; o.frequency.setValueAtTime(700, t); o.frequency.exponentialRampToValueAtTime(1500, t + 0.09); o.frequency.exponentialRampToValueAtTime(1100, t + 0.16); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2); o.connect(g); g.connect(sfxBus); o.start(t); o.stop(t + 0.25); track(o); o.onended = () => { drop(o, g); liveNodes = Math.max(0, liveNodes - 1); }; }
@@ -197,9 +239,19 @@ export function createMusic(state, settings) {
   return {
     songs, get started() { return started; }, get current() { return songs[cur] || null; }, get playing() { return !!(timer || audioEl); },
     get liveNodes() { return liveNodes; },
+    sync(st) {
+      const next = [], seen = new Set();
+      const add = (x) => { if (!x || !(x.title || x.file || isBeat(x))) return; const id = x.id || x.title; if (seen.has(id)) return; seen.add(id); next.push(x); };
+      for (const x of (st?.music?.songs || [])) add(x);
+      for (const x of (st?.beats || [])) add(x);
+      songs.splice(0, songs.length, ...next);
+      if (cur >= songs.length) cur = Math.max(0, songs.length - 1);
+      libFn?.(songs);
+    },
+    playId(id) { const i = songs.findIndex((x) => x.id === id || x.title === id); if (i >= 0) { started = true; ctx?.resume(); playSong(i); } },
     next() { started = true; playSong(cur + 1); }, play(i = cur) { started = true; ctx?.resume(); playSong(i); }, stop() { stopSong(); onChange(null); },
     suspend, resume, engine,
-    onChange(fn) { onChange = fn; }, applyLevels, sfx,
+    onChange(fn) { onChange = fn; }, onLibrary(fn) { libFn = fn; }, applyLevels, sfx,
     setEnabled(on) { if (on && started && !this.playing) playSong(cur); if (!on) { stopSong(); onChange(null); } },
   };
 }
