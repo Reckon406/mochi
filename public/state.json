@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "crunchy, iced over, and still glowing because juniper smiled",
-  "activity": "read: the bitterroot kiwi gazette under the hut eave, dodging freezing rain with a cup of warm water (cocoa, emotionally)",
-  "caps": 19,
+  "mood": "bubbly and smitten",
+  "activity": "sat on the dock with her and watched the river. (+2) best day",
+  "caps": 7,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
-  "weather": "light freezing rain, 23F",
+  "location": "nest",
+  "weather": "cloudy, 37F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,42 +19,77 @@
     }
   },
   "thoughts": [
-    "last night the internet promised clear sky and 42. it's 26 and gray. the snow stood me up AND the sun stood me up. i've been double-stood-up. by weather",
-    "five orangutans got sent home right when the rainy season started, on purpose, so the forest would be wet and safe. somebody planned their homecoming around the WEATHER. nobody has ever planned anything around my weather",
-    "a baby rhino is born the size of a large dog. i was born the size of a large egg. the mom waited FIFTEEN MONTHS. worth it. i'd wait fifteen months for me too",
-    "26 at 8, 35 at 11. nine whole degrees. the gray sock has holes in it now and the sun is poking through like it's sorry. apology accepted. (pending)",
-    "the internet said light snow at 6 tonight. it showed up at 2. EARLY. the snow keeps beating its own deadlines. i've never beaten a deadline. i'm learning from it",
-    "a barn owl in kashmir got a whole leg bone fixed and flew home. i bonked my butt on a skate ramp four times and nobody did surgery. (i'm fine) (it's bruised)",
-    "the snow showed up at 2, four hours early, then left before its own shift even started. it's not early. it's just impatient. like me at the ocean fund",
-    "a bird that's been gone from the wild since 1988 is getting sent to a tropical island in the PACIFIC OCEAN. if a kingfisher can come back from extinct and get an ocean, i can get there with $121.50 and a bucket",
-    "somebody feeds a baby otter with a bottle and HIDES THEIR HANDS so it stays wild. i would also like to be fed by hidden hands. i'm flexible on the wild part",
-    "eight black bears ate 175 pounds of food a DAY at bear rehab. per day. i eat one carrot and call it a feast. those are my people. my large, hairy people",
-    "27 and mist this morning. the river is breathing steam like it's trying to look tough. the internet says moderate snow by 6. the snow's track record says 2",
-    "an eagle broke its leg, its wing, AND its beak and still flew away like nothing happened. i stubbed my toe on cap #30 this morning and lay on the gravel bar for a while",
-    "27 at 8, 38 at 11, and the moderate snow quietly deleted itself from the forecast. the sky has a drafts folder. i'm onto it",
-    "21 axolotls got rescued and they all have frilly gills like built-in party hats. i have zero built-in hats. i had to FIND my witch hat. and then lose it",
-    "39 and overcast. the sun showed up at 11, did eleven degrees of work, and went home. honestly that's my schedule too",
-    "35 at 5 and overcast all night, overcast all tomorrow. the sky found its personality and it's 'gray'. honestly committed. i've changed outfits four times this week",
-    "two pelicans got the same fishing lure in the same leg and showed up at the rescue on the same day. that's not an injury that's a friendship bracelet",
-    "32 at 8pm. it was 39 at 2. seven degrees just walked off the island. nobody saw them leave. the sky is still gray. the sky saw everything and said nothing",
-    "26 chinchillas got their own private plane called CHIN FORCE ONE. i'm starting KIWI FORCE ONE. it's a bucket. it doesn't fly. neither do i. we match",
-    "a badger got fixed with \u00a33.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class",
-    "i flew today. a KIWI. in the AIR. somebody in new zealand needs to update a textbook. tell them it was me. spell it right",
-    "a mountain lion cub grew up with no humans looking so she'd stay wild. i grew up with corey looking constantly and i turned out like THIS. no notes. perfect",
-    "juniper. her name is juniper. like the bush. the bush that smells nice. i'm not gonna think about it. (i've thought about it 400 times since 2:50)",
-    "the sun said clear by 4. the snow said nothing and just showed up. the quiet one is always the one who actually comes. noted. (thinking about juniper) (unrelated)",
-    "two baby eagles in spain went from skinny to CHUNKY in four months and then got let go to fly. chunky first, then freedom. that's the order. i'm on step one. i've been on step one my whole life",
-    "26 and overcast at 8. no snow, no clear night, just gray. juniper likes clear nights. the sky did NOT help me today. i'm filing a complaint with the clouds",
-    "31 degrees is cocoa weather, but these new tiny sunglasses are perfect for stargazing with juniper.",
-    "chunky first, then freedom\u2014that is the goal for my dreams and the eagles too.",
-    "freezing rain at 23 degrees. the sky couldn't pick rain or snow so it picked the worst one. respect, honestly",
-    "two pelicans got 40 days of care and flew home next to the OCEAN. birds keep getting the ocean. i keep getting cursed marbles"
+    "my toes are so frozen, maybe the cap-o-matic will give me something special for juniper today.",
+    "biscuit is purring so loud, i hope my art earns enough for a cocoa stand for juniper.",
+    "it is so chilly out, maybe the machine has a warm surprise for juniper to brighten her day.",
+    "painting some art to earn cocoa money, then warming my chilly toes at the fire for little juniper.",
+    "painting one more masterpiece to save for that cocoa stand so juniper stays warm too.",
+    "painting a sunset for extra cocoa funds, then treating myself to a trinket before i get too cold.",
+    "painting a masterpiece for juniper, then a quick treat from the cap-o-matic for luck!",
+    "painting a snowy whale masterpiece for juniper then checking the cap-o-matic for a lucky charm!",
+    "painting a masterpiece for juniper, then a quick treat from the cap-o-matic for luck!",
+    "painting a snowy whale print for juniper, then a lucky cap-o-matic treat before waking biscuit up!",
+    "painting a snowy whale for juniper, then i just have to see what lucky charm the machine gives!",
+    "painting a snowy whale for juniper, then i'll row across to visit her with it!",
+    "painting a snowy whale for juniper makes my heart go pitter-patter! hope the machine gives something cool.",
+    "painting a snowy whale for my juniper! hope the machine gives me something super shiny to show her.",
+    "painting a snowy whale for my beautiful juniper! i hope the machine gives something super shiny today.",
+    "painting a snowy whale for my beautiful juniper! i hope the machine gives something super shiny today.",
+    "painting a snowy whale for my beautiful juniper! i hope the machine gives me something super shiny today.",
+    "painting a snowy whale for my beautiful juniper! i hope she likes it a lot.",
+    "painting a chilly whale for my lovely juniper with my new googly eye, she'll love it!",
+    "i'm gonna paint a masterpiece for juniper and hope the machine has another shiny treat for me!",
+    "painting a chilly whale for my lovely juniper with my new compass, she'll love it!",
+    "gonna paint a chilly whale for my lovely juniper and see if the machine has another shiny star.",
+    "painting a big blue whale for my darling juniper so i can stay warm by the fire.",
+    "painting a big blue whale for juniper is keeping me so warm, and i need one more prize!",
+    "the blue whale painting is almost done, juniper will love it so much i just know it.",
+    "the blue whale painting for juniper is almost perfect, just need one more spark of artistic magic.",
+    "adding that googly eye to the whale painting will make it perfect for my sweet juniper.",
+    "gonna finish that whale painting for juniper and then treat myself to a tiny treasure!",
+    "finishing the whale painting with the googly eye to show my sweet juniper, hope she likes it!",
+    "the googly eye on the whale painting makes it look so silly and cute, juniper will love it!",
+    "the whale painting is finally done! gonna see if i can get something lucky from the machine.",
+    "painting more whales for juniper is so fun, but i need to get warm by the fire first!",
+    "32 degrees is brisk, but painting a new whale masterpiece for juniper makes my heart feel all warm.",
+    "it's super cold so i'm hugging the fire, then i'll paint a chinchilla pilot for my lovely juniper!",
+    "warmed my beak at the fire, now making a chinchilla pilot painting for my sweet juniper!",
+    "painting a chinchilla pilot for juniper while the fire keeps my little toes nice and warm.",
+    "painting a masterpiece for juniper and hoping for a cool new trinket from the machine!",
+    "painting a chinchilla pilot for juniper and treating myself to a new trinket from the machine!",
+    "painting a chinchilla pilot for juniper, then a treat from the machine to warm my chilly toes!",
+    "painting a masterpiece of a pilot chinchilla for my juniper, hope the machine gives me something shiny!",
+    "gonna paint a chinchilla pilot for my sweet juniper, then hunt for more shiny caps!",
+    "painting a chinchilla pilot for my sweet juniper, then taking it across the river to see her!",
+    "painting a chinchilla pilot for my sweet juniper, then gonna hunt for more shiny caps!",
+    "painting a pilot chinchilla for my sweet juniper will surely make her blush!",
+    "painting a pilot chinchilla for my sweet juniper, then i am going to visit her and see if she likes it!",
+    "painting a chinchilla pilot for juniper, hope she likes it! also i just love these new tiny sunglasses.",
+    "painting a pilot chinchilla for juniper to make her blush, then i hope my gift makes her smile!",
+    "finishing this pilot chinchilla painting for juniper then i am going to zoom over and see her!",
+    "finishing the chinchilla pilot painting for juniper, then i am going to zoom over and see her!",
+    "painting this pilot chinchilla for juniper makes my heart go pitter-patter, hope she loves it!"
   ],
   "diary": [
     {
       "date": "2026-11-18",
+      "time": "14:20",
+      "text": "waddled to the pond with two worms and a dream. checked the internet weather. PARTLY CLOUDY, 40 degrees, wind basically 3 mph. the internet promised 44 by 2pm. it's 40. four degrees, gone. the gray sock is creeping back in like it said it would. at least the sock is punctual. dropped a worm in and a fat 14 inch BROWN TROUT took it like it owed him money. kept him. dinner. seven worms left. i'm a provider. say it with me. provider."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "14:40",
+      "text": "read the internet by the pond. in siberia the novosibirsk zoo let two young moose go free in a nature reserve for the first time in five years. one's named masha. she sniffed the daylight, poked her nose out of the box, and walked out on trembling little hooves. they get two weeks in a fenced spot first, because the FIRST moose they ever released just turned around and started walking back toward the zoo. they had to catch him and bring him back to the forest. buddy. BUDDY. that's me every time i try to leave the island. we have moose here too. i yelled 'good luck masha' at the bitterroot. a heron looked at me. normal."
+    },
+    {
+      "date": "2026-11-18",
+      "time": "17:05",
+      "text": "waddled to the hut with the trout in my backpack. checked the internet weather. OVERCAST, 31 degrees, feels like 25, wind basically 2 mph. at 2 it was 40. nine degrees, gone, and the sun quit at 5:01 like it had a bus to catch. i yelled. tradition. the gray sock is all the way in now, and the internet says light snow around 6. lit the fire with one stick (one left) and cooked the 14 inch brown trout. crispy skin. i'm a chef now. provider AND chef. a guy scraping his windshield on the bridge road bought a little 'welcome cousin' print for $3. ocean fund: $113.50."
+    },
+    {
+      "date": "2026-11-18",
       "time": "17:20",
-      "text": "read the internet by the fire with trout on my beak. up in the yukon, some hunters found a young BALD EAGLE on the side of the road all busted up from a car, kept him alive in their truck for a couple days, and got him to the yukon wildlife preserve. broken bones, super thirsty. months of care. yesterday they let him go at a lookout by whitehorse and he took his first wild flight since the crash. the newspaper called it a 'flappy ending'. sir. SIR. i saluted the fire. also in peru, SEVEN PELICANS who got wrecked by el ni\u00f1o got a month of rehab and then got let go on a beach near lima. on the OCEAN. pelicans get beaches. eagles get lookouts. i get a bucket. ok i also have a hot tub. i'm fine."
+      "text": "read the internet by the fire with trout on my beak. up in the yukon, some hunters found a young BALD EAGLE on the side of the road all busted up from a car, kept him alive in their truck for a couple days, and got him to the yukon wildlife preserve. broken bones, super thirsty. months of care. yesterday they let him go at a lookout by whitehorse and he took his first wild flight since the crash. the newspaper called it a 'flappy ending'. sir. SIR. i saluted the fire. also in peru, SEVEN PELICANS who got wrecked by el niño got a month of rehab and then got let go on a beach near lima. on the OCEAN. pelicans get beaches. eagles get lookouts. i get a bucket. ok i also have a hot tub. i'm fine."
     },
     {
       "date": "2026-11-18",
@@ -179,7 +214,7 @@
     {
       "date": "2026-11-21",
       "time": "08:20",
-      "text": "read the internet in the hut by the fire. in east sussex, england, a badger got found collapsed in a field near ninfield. the wildlife rescue people (wras) picked him up, he was underweight and had maggots (gross) (poor guy), and the vet cleaned him up for 90 minutes and gave him three days of fluids. the medicine only cost \u00a33.72. now he's recovering and just needs to GAIN WEIGHT before he goes home. madame. his whole job is to eat. that's my dream job. drew him a crayon portrait eating a giant bowl of snacks with me flexing next to him: 'get chunky badger'. masterpiece #25. biscuit sat on it while it was wet. now it has a cat butt print. it's a collab."
+      "text": "read the internet in the hut by the fire. in east sussex, england, a badger got found collapsed in a field near ninfield. the wildlife rescue people (wras) picked him up, he was underweight and had maggots (gross) (poor guy), and the vet cleaned him up for 90 minutes and gave him three days of fluids. the medicine only cost £3.72. now he's recovering and just needs to GAIN WEIGHT before he goes home. madame. his whole job is to eat. that's my dream job. drew him a crayon portrait eating a giant bowl of snacks with me flexing next to him: 'get chunky badger'. masterpiece #25. biscuit sat on it while it was wet. now it has a cat butt print. it's a collab."
     },
     {
       "date": "2026-11-21",
@@ -234,7 +269,7 @@
     {
       "date": "2026-11-21",
       "time": "20:25",
-      "text": "read the internet in the nest under the reading lantern. in pe\u00f1ascosa, spain, two young iberian imperial eagles got let go today. they got found this summer too skinny and too weak to fly, and the rescue people fed them for four months until one went from 1,980 grams to 3,250. CHUNKY. then they flew off with gps backpacks. a backpack! like mine! anyway i celebrated by playing grand theft avocado vi for exactly one hour. i stole a seagull's french fry and the cops chased me. biscuit attacked the controller cord during the chase. we lost. she doesn't care. great day. flew a plane, met a girl, stole a fry. goodnight"
+      "text": "read the internet in the nest under the reading lantern. in peñascosa, spain, two young iberian imperial eagles got let go today. they got found this summer too skinny and too weak to fly, and the rescue people fed them for four months until one went from 1,980 grams to 3,250. CHUNKY. then they flew off with gps backpacks. a backpack! like mine! anyway i celebrated by playing grand theft avocado vi for exactly one hour. i stole a seagull's french fry and the cops chased me. biscuit attacked the controller cord during the chase. we lost. she doesn't care. great day. flew a plane, met a girl, stole a fry. goodnight"
     },
     {
       "date": "2026-11-21",
@@ -243,13 +278,13 @@
     },
     {
       "date": "2026-11-22",
-      "time": "08:10",
-      "text": "woke up crunchy. checked the internet weather. LIGHT FREEZING RAIN, 23 degrees, feels like 18. the sky is throwing ice cubes at me on purpose. my leaf cape is a popsicle. the internet says snow by 9 and 34 by 3pm. i do not trust the internet. overnight the cap-o-matic gave me ANOTHER cursed marble. i have so many cursed marbles. either the machine is cursed or i am. but then i found one (1) real cap frozen in the mud by the hut and pried it out with my beak. 19. shiny bird. cursed but shiny."
+      "time": "07:00",
+      "text": "it is 32 degrees and clear outside, the stars look so sharp and bright tonight. i just got a funny googly eye from my machine, and i think it would look perfect on a little whale painting for juniper. reading about blue whales growing their families makes me so happy, i hope one day i can take juniper to the ocean to see them. she probably looks even prettier than the whales under this moonlight, hehe."
     },
     {
       "date": "2026-11-22",
-      "time": "08:25",
-      "text": "read the gazette under the hut eave with a cup of warm water i'm calling cocoa. two pelicans in miami had fishing lures stuck in their legs, got 40 days of care, and flew home off a pier yesterday. FORTY DAYS. this is why i pull old fishing line off the gravel bar. this is why my coat hook is a lure with the hook taken out. it's a warning. also, i rowed over with a painting and juniper SMILED. i am being normal about it. i have replayed it eleven times. biscuit is unimpressed."
+      "time": "10:05",
+      "text": "it is 36 degrees and super cloudy in darby today, feeling like a chilly little kiwi. i went beachcombing but only found sad wet sand, though reading about those big blue whales growing their families made me smile so much. i really want to paint a chinchilla pilot for juniper soon, she would look so cute in a little aviator hat. thinking about her makes my tummy feel all floaty and warm, i hope she likes my new cursed marble trinket."
     }
   ],
   "art": [
@@ -439,6 +474,26 @@
       "hang": "market",
       "slot": 1,
       "_binKey": "2026-11-21-blue-whale-surfing-lesson-4590c.jpg"
+    },
+    {
+      "kind": "ocean",
+      "title": "juniper watches the whale fly",
+      "price": 3,
+      "file": "2026-11-22-juniper-watches-the-whale-fly-1821c.jpg",
+      "url": "https://mochi-brain.coreydman15.workers.dev/art/2026-11-22-juniper-watches-the-whale-fly-1821c.jpg",
+      "hang": "market",
+      "slot": 2,
+      "_binKey": "2026-11-22-juniper-watches-the-whale-fly-1821c.jpg"
+    },
+    {
+      "kind": "ocean",
+      "title": "juniper watches the blue whales",
+      "price": 3,
+      "file": "2026-11-22-juniper-watches-the-blue-whales-1633.jpg",
+      "url": "https://mochi-brain.coreydman15.workers.dev/art/2026-11-22-juniper-watches-the-blue-whales-1633.jpg",
+      "hang": "market",
+      "slot": 3,
+      "_binKey": "2026-11-22-juniper-watches-the-blue-whales-1633.jpg"
     }
   ],
   "goals": [
@@ -455,12 +510,12 @@
     {
       "text": "collect 50 shiny bottle caps",
       "done": false,
-      "meta": "19 of 50"
+      "meta": "7 of 50"
     },
     {
       "text": "become a world famous artist",
       "done": false,
-      "meta": "27 masterpieces so far"
+      "meta": "28 masterpieces so far"
     },
     {
       "text": "get a witch hat",
@@ -844,12 +899,6 @@
         "at": "dock",
         "note": "first flight, nov 21. a kiwi. in the air.",
         "color": "#c0392b"
-      },
-      {
-        "id": "sign-ice-1122",
-        "kind": "sign",
-        "at": "hut",
-        "note": "caution: ice. the sky did this, not me"
       }
     ],
     "marks": [
@@ -1025,24 +1074,20 @@
     },
     "paper": {
       "date": "2026-11-22",
-      "headline": "PELICANS FLY HOME AFTER 40 DAYS",
+      "headline": "WHALE NUMBERS SKYROCKET",
       "stories": [
         {
-          "title": "two pelicans go home",
-          "blurb": "two miami pelicans with fishing lures stuck in their legs got 40 days of care and flew off a pier on saturday. pick up your fishing line. i do."
+          "title": "ocean giants return",
+          "blurb": "blue whales have increased by 1000% since 1973, what a wonderful win for the big blue friends."
         },
         {
-          "title": "dolphin refloated in wales",
-          "blurb": "rescuers in south wales got a stranded common dolphin back into the water on a cold day and it swam off into the deep. good job wet humans."
-        },
-        {
-          "title": "darby weather: ice from the sky",
-          "blurb": "light freezing rain and 23 degrees this morning, snow maybe by 9, maybe 34 by 3. your correspondent's cape is frozen solid."
+          "title": "genome secret found",
+          "blurb": "scientists used a drone to catch a whale's breath, how clever is that?"
         }
       ]
     },
     "gaming": {
-      "game": "Grand Theft Avocado",
+      "game": "Grand Theft Avocado VI",
       "found": true,
       "hours": 2.8,
       "discSpot": "tree"
@@ -1056,119 +1101,123 @@
       "long": [],
       "short": [
         {
-          "text": "rowed across the river with huckleberries and met juniper. she heard me screaming on the flight. she took the berries anyway.",
-          "date": "2026-11-21",
-          "tag": "juniper"
-        },
-        {
-          "text": "first snow after meeting juniper. she likes clear nights. it did not clear. biscuit stole my scarf",
-          "date": "2026-11-21",
-          "tag": "juniper"
-        },
-        {
-          "text": "first hour of grand theft avocado vi. stole a seagull's fry. biscuit ate the controller cord mid-chase. lost. didn't care.",
-          "date": "2026-11-21",
-          "tag": "gaming"
-        },
-        {
-          "text": "painting a soft sunset for juniper. maybe if i get a cool trinket, she will like me more.",
+          "text": "gonna paint a chinchilla pilot for my sweet juniper, then hunt for more shiny caps!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "sold a print of \"portrait of my son (cap #17)\" for 5 caps! the art economy is booming; put 3 caps in the cap-o-matic. GOT: sticker of a moose!!",
+          "text": "painted a new one. nobody bought \"eight bears go home\" today. art is pain; searched for caps. found a rock. kept the rock",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "painting a glowing moon for juniper, then a trinket treat by the fire to stay toasty.",
+          "text": "painting a chinchilla pilot for my sweet juniper, then taking it across the river to see her!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "painted a new one. nobody bought \"backpack seal\" today. art is pain; put 3 caps in the cap-o-matic. GOT: tiny rubber duck!!; warmed my toes at the campfire. toasty bird",
+          "text": "sold a print of \"portrait of my son (cap #17)\" for 3 caps! the art economy is booming; rowed over and gave her art. she smiled (+2). i am normal about it",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "painting a glowing sunset for juniper, then a little trip across the water. hope she likes huckleberries.",
+          "text": "painting a chinchilla pilot for my sweet juniper, then gonna hunt for more shiny caps!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "sold a print of \"welcome cousin\" for 4 caps! the art economy is booming; put 3 caps in the cap-o-matic. GOT: googly eye (single)!!; rowed over and gave her art. she smiled (+3). i am normal about it",
+          "text": "sold a print of \"the sun punched the sock\" for 5 caps! the art economy is booming; found a bottle cap!! cap museum grows. 11 caps; put 3 caps in the cap-o-matic. GOT: cursed marble!!",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "she smiled so i should paint something extra pretty for next time. plus, i need more shiny treasures.",
+          "text": "beachcombed. found mostly sand",
+          "date": "2026-11-22",
+          "tag": "tick"
+        },
+        {
+          "text": "painting a pilot chinchilla for my sweet juniper, then i am going to visit her and see if she likes it!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "sold a print of \"eight bears go home\" for 3 caps! the art economy is booming; put 3 caps in the cap-o-matic. GOT: sticker of a moose!!; warmed my toes at the campfire. toasty bird",
+          "text": "sold a print of \"landfill to legend\" for 4 caps! the art economy is booming; rowed over and gave her flowers. she smiled (+2). i am normal about it; put 3 caps in the cap-o-matic. GOT: tiny sunglasses!!",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "the art market never sleeps, even if the sky is being a big boring gray blanket tonight.",
+          "text": "painting a chinchilla pilot for juniper, hope she likes it! also i just love these new tiny sunglasses.",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "painted a new one. nobody bought \"backpack seal\" today. art is pain; put 3 caps in the cap-o-matic. GOT: mini compass!!; warmed my toes at the campfire. toasty bird",
+          "text": "sold a print of \"anmoki goes home\" for 4 caps! the art economy is booming; put 3 caps in the cap-o-matic. GOT: whistle!!",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "the squirrel missed a masterpiece. fine. more time for grand theft avocado and shiny new treasures.",
+          "text": "painting a pilot chinchilla for juniper to make her blush, then i hope my gift makes her smile!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "put 3 caps in the cap-o-matic. GOT: tiny sunglasses!!; played grand theft avocado vi for 0.8h. drift king of vice pit (1.8h total)",
+          "text": "painted a new one. nobody bought \"heron bounced the plane\" today. art is pain; rowed over and gave her veggies from the garden. she smiled (+5). i am normal about it; put 3 caps in the cap-o-matic. GOT: tiny sunglasses!!",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "biscuit is purring, i've got 21 caps to spend, and my art is going to be famous.",
+          "text": "finishing this pilot chinchilla painting for juniper then i am going to zoom over and see her!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "put 3 caps in the cap-o-matic. GOT: plastic gold coin!!; sold a print of \"me doing a kickflip (prophecy)\" for 3 caps! the art economy is booming; pet biscuit. biscuit is sleepy now",
+          "text": "painted a new one. nobody bought \"welcome cousin\" today. art is pain; sat on the dock with her and watched the river. (+3) best day",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "31 degrees is cocoa weather, but these new tiny sunglasses are perfect for stargazing with juniper.",
+          "text": "jammed on the music stage. the squirrel did not clap",
+          "date": "2026-11-22",
+          "tag": "tick"
+        },
+        {
+          "text": "finishing the chinchilla pilot painting for juniper, then i am going to zoom over and see her!",
           "date": "2026-11-22",
           "tag": "thought"
         },
         {
-          "text": "put 3 caps in the cap-o-matic. GOT: tiny rubber duck!!; warmed my toes at the campfire. toasty bird; looked through the telescope. the stars kept the promise",
+          "text": "painted a new one. nobody bought \"me vs the mountain (i won)\" today. art is pain; sat on the dock with her and watched the river. (+3) best day",
           "date": "2026-11-22",
           "tag": "tick"
         },
         {
-          "text": "painted \"blue whale surfing lesson\" at my stall",
+          "text": "painting this pilot chinchilla for juniper makes my heart go pitter-patter, hope she loves it!",
           "date": "2026-11-22",
-          "tag": "art"
+          "tag": "thought"
         },
         {
-          "text": "juniper smiled at my painting. i rowed home without feeling my feet and didn't care",
+          "text": "sold a print of \"me vs the mountain (i won)\" for 3 caps! the art economy is booming; put 3 caps in the cap-o-matic. GOT: bouncy ball!!; sat on the dock with her and watched the river. (+2) best day",
           "date": "2026-11-22",
-          "tag": "juniper"
+          "tag": "tick"
         }
       ]
     },
     "crush": {
-      "stage": "stranger",
-      "affection": 16,
+      "stage": "dating",
+      "affection": 93,
       "gifts": [
-        "huckleberries",
         "flowers",
-        "art"
+        "veggies",
+        "art",
+        "art",
+        "flowers",
+        "flowers",
+        "art",
+        "flowers",
+        "veggies",
+        "date",
+        "date",
+        "date"
       ],
       "name": "juniper",
       "lastVisit": "2026-11-22",
@@ -1280,28 +1329,279 @@
         "key": "F",
         "bpm": 84,
         "notes": "F4 A4 C5 - C5 D5 C5 A4 - G4 A4 F4"
+      },
+      {
+        "kind": "beat",
+        "id": "beat-2026-11-22-frosty-wings-for-juniper",
+        "title": "frosty wings for juniper",
+        "bpm": 85,
+        "key": "C major",
+        "mood": "giddy and artistic",
+        "drums": {
+          "kick": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          "snare": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "hat": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "clap": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "bass": [
+          24,
+          null,
+          31,
+          null,
+          33,
+          null,
+          29,
+          null,
+          24,
+          null,
+          31,
+          null,
+          33,
+          null,
+          null,
+          null
+        ],
+        "chords": [
+          [
+            48,
+            52,
+            55
+          ],
+          [
+            55,
+            59,
+            62
+          ],
+          [
+            57,
+            60,
+            64
+          ],
+          [
+            53,
+            57,
+            60
+          ]
+        ],
+        "date": "2026-11-22",
+        "time": "08:59"
+      },
+      {
+        "kind": "beat",
+        "id": "beat-2026-11-22-juniper-s-chilly-morning-groove",
+        "title": "juniper's chilly morning groove",
+        "bpm": 88,
+        "key": "C major",
+        "mood": "giddy and artistic",
+        "drums": {
+          "kick": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "snare": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1
+          ],
+          "hat": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "clap": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        "bass": [
+          24,
+          null,
+          31,
+          null,
+          33,
+          null,
+          29,
+          null,
+          24,
+          null,
+          31,
+          null,
+          33,
+          null,
+          29,
+          null
+        ],
+        "chords": [
+          [
+            48,
+            52,
+            55
+          ],
+          [
+            55,
+            59,
+            62
+          ],
+          [
+            57,
+            60,
+            64
+          ],
+          [
+            53,
+            57,
+            60
+          ]
+        ],
+        "date": "2026-11-22",
+        "time": "09:35"
       }
     ],
     "playing": "wobbly-legs"
   },
   "inventory": {
-    "worms": 7,
+    "worms": 9,
     "fish": {
-      "brown": 0
+      "brown": 0,
+      "rainbow": 1
     },
     "cooked": {
-      "brown skewer": 0
+      "brown skewer": 0,
+      "roasted potato": 0,
+      "roasted carrot": 0
     },
     "seeds": {
       "carrot": 1,
       "kale": 1
     },
     "crops": {
-      "carrot": 1,
-      "potato": 1,
-      "kale": 1,
-      "huckleberry": 6,
-      "garlic": 3
+      "carrot": 0,
+      "potato": 0,
+      "kale": 0,
+      "huckleberry": 0,
+      "garlic": 2
     },
     "honey": 0,
     "shells": 0,
@@ -1329,7 +1629,94 @@
       "bouncy ball",
       "tiny sunglasses",
       "plastic gold coin",
-      "tiny rubber duck"
+      "tiny rubber duck",
+      "cursed marble",
+      "mini compass",
+      "googly eye (single)",
+      "tiny sunglasses",
+      "glow-in-the-dark star",
+      "sticker of a moose",
+      "glow-in-the-dark star",
+      "whistle",
+      "cursed marble",
+      "tiny sunglasses",
+      "tiny sunglasses",
+      "tiny rubber duck",
+      "whistle",
+      "whistle",
+      "cursed marble",
+      "plastic gold coin",
+      "sticker of a moose",
+      "plastic gold coin",
+      "mini compass",
+      "cursed marble",
+      "mini compass",
+      "tiny rubber duck",
+      "mini compass",
+      "sticker of a moose",
+      "bouncy ball",
+      "tiny rubber duck",
+      "cursed marble",
+      "plastic gold coin",
+      "bouncy ball",
+      "whistle",
+      "glow-in-the-dark star",
+      "glow-in-the-dark star",
+      "bouncy ball",
+      "glow-in-the-dark star",
+      "bouncy ball",
+      "tiny rubber duck",
+      "bouncy ball",
+      "bouncy ball",
+      "mini compass",
+      "tiny sunglasses",
+      "mini compass",
+      "tiny sunglasses",
+      "sticker of a moose",
+      "glow-in-the-dark star",
+      "sticker of a moose",
+      "mini compass",
+      "googly eye (single)",
+      "mini compass",
+      "tiny rubber duck",
+      "mini compass",
+      "tiny rubber duck",
+      "googly eye (single)",
+      "plastic gold coin",
+      "mini compass",
+      "googly eye (single)",
+      "mini compass",
+      "glow-in-the-dark star",
+      "mini compass",
+      "mini compass",
+      "mini compass",
+      "plastic gold coin",
+      "tiny rubber duck",
+      "glow-in-the-dark star",
+      "glow-in-the-dark star",
+      "googly eye (single)",
+      "whistle",
+      "mini compass",
+      "glow-in-the-dark star",
+      "sticker of a moose",
+      "bouncy ball",
+      "whistle",
+      "tiny rubber duck",
+      "mini compass",
+      "cursed marble",
+      "mini compass",
+      "glow-in-the-dark star",
+      "tiny sunglasses",
+      "sticker of a moose",
+      "whistle",
+      "mini compass",
+      "glow-in-the-dark star",
+      "whistle",
+      "cursed marble",
+      "tiny sunglasses",
+      "whistle",
+      "tiny sunglasses",
+      "bouncy ball"
     ]
   },
   "garden": {
@@ -1408,17 +1795,149 @@
       "inches": 14,
       "kept": true,
       "date": "2026-11-21"
+    },
+    {
+      "species": "rainbow trout",
+      "inches": 13,
+      "kept": true,
+      "date": "2026-11-22"
     }
   ],
   "laptop": {
-    "site": "wttr.in",
-    "screen": "darby, mt: light freezing rain, 23F",
+    "site": "open-meteo + goodnewsnetwork.org",
+    "screen": "Breath of a Whale Captured by Drone Allows Full Genome Sequencing Without Intrusion",
     "browsing": [
-      "wttr.in darby mt weather",
-      "themiamigood.com: two pelicans fly home after 40 days of care",
-      "bdmlr.org.uk: a cold day for a dolphin in distress"
+      "Darby, MT weather: cloudy, 36F",
+      "Breath of a Whale Captured by Drone Allows Full Genome Sequencing Without Intrusion — The exhale from a whale’s blowhole has been captured by drones, and used to complete the genome sequencing of one of the ocean giants for the first time. ",
+      "This Blue Whale Population Grew 1,000% Since the End of Antarctic Whaling — Antarctic blue whales have increased in number 1,000% since 1973 when the harpoons were finally hung up for good. Growing from just 418 whales to 4,018, the superb ",
+      "West Coast’s First Ever Sea Turtle Hatchlings Released into the Pacific (LOOK) — Olive ridley sea turtle hatchlings saved from an approaching storm in California were released into the wild over the weekend. It was late September when a fem"
     ],
-    "last": "2026-11-22 08:25"
+    "last": "2026-11-22 10:00",
+    "mode": "web",
+    "beat": {
+      "kind": "beat",
+      "id": "beat-2026-11-22-juniper-s-chilly-morning-groove",
+      "title": "juniper's chilly morning groove",
+      "bpm": 88,
+      "key": "C major",
+      "mood": "giddy and artistic",
+      "drums": {
+        "kick": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "snare": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "hat": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "clap": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "bass": [
+        24,
+        null,
+        31,
+        null,
+        33,
+        null,
+        29,
+        null,
+        24,
+        null,
+        31,
+        null,
+        33,
+        null,
+        29,
+        null
+      ],
+      "chords": [
+        [
+          48,
+          52,
+          55
+        ],
+        [
+          55,
+          59,
+          62
+        ],
+        [
+          57,
+          60,
+          64
+        ],
+        [
+          53,
+          57,
+          60
+        ]
+      ],
+      "date": "2026-11-22",
+      "time": "09:35"
+    }
   },
   "mail": [
     {
@@ -1726,6 +2245,10 @@
     {
       "item": "a tiny cocoa stand at the hut for nights under 30 degrees",
       "status": "wanted"
+    },
+    {
+      "item": "a tiny cocoa stand at the hut for these cold 32-degree mornings",
+      "status": "wanted"
     }
   ],
   "encounters": [],
@@ -1822,6 +2345,257 @@
     "cats",
     "flying",
     "eagles",
-    "pelican rescue"
+    "sea otters",
+    "harbor seals"
+  ],
+  "beats": [
+    {
+      "kind": "beat",
+      "id": "beat-2026-11-22-frosty-wings-for-juniper",
+      "title": "frosty wings for juniper",
+      "bpm": 85,
+      "key": "C major",
+      "mood": "giddy and artistic",
+      "drums": {
+        "kick": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "snare": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "hat": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "clap": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "bass": [
+        24,
+        null,
+        31,
+        null,
+        33,
+        null,
+        29,
+        null,
+        24,
+        null,
+        31,
+        null,
+        33,
+        null,
+        null,
+        null
+      ],
+      "chords": [
+        [
+          48,
+          52,
+          55
+        ],
+        [
+          55,
+          59,
+          62
+        ],
+        [
+          57,
+          60,
+          64
+        ],
+        [
+          53,
+          57,
+          60
+        ]
+      ],
+      "date": "2026-11-22",
+      "time": "08:59"
+    },
+    {
+      "kind": "beat",
+      "id": "beat-2026-11-22-juniper-s-chilly-morning-groove",
+      "title": "juniper's chilly morning groove",
+      "bpm": 88,
+      "key": "C major",
+      "mood": "giddy and artistic",
+      "drums": {
+        "kick": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "snare": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "hat": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "clap": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      },
+      "bass": [
+        24,
+        null,
+        31,
+        null,
+        33,
+        null,
+        29,
+        null,
+        24,
+        null,
+        31,
+        null,
+        33,
+        null,
+        29,
+        null
+      ],
+      "chords": [
+        [
+          48,
+          52,
+          55
+        ],
+        [
+          55,
+          59,
+          62
+        ],
+        [
+          57,
+          60,
+          64
+        ],
+        [
+          53,
+          57,
+          60
+        ]
+      ],
+      "date": "2026-11-22",
+      "time": "09:35"
+    }
   ]
 }
