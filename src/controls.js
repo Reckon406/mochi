@@ -1,18 +1,21 @@
 // Walk mode: WASD + mouse look (pointer lock, or click-drag if lock is refused). Orbit stays in main.js.
 import * as THREE from 'three';
 import { islandSurfH, isletSurfH, rockH, bridgeParam, bridgeYt, OBSTACLES, WALLS, WATER_Y, onDock, DOCK } from './layout.js';
+import { crossingH, farWalkH } from './landscape.js';
 
 const EYE = 1.75, SPEED = 4.2, SPRINT = 2.0, BODY_R = 0.35, MAP_R = 72, PITCH_MAX = 1.45, SENS = 0.0022;
 const KEYS = { KeyW: 'f', ArrowUp: 'f', KeyS: 'b', ArrowDown: 'b', KeyA: 'l', ArrowLeft: 'l', KeyD: 'r', ArrowRight: 'r' };
 
 // standing height incl. bridge, islet, gravel bars and river boulders; null = water
 export function walkH(x, z) {
+  const cross = crossingH(x, z); if (cross != null) return cross;
+  const far = farWalkH(x, z); if (far != null) return far;
   if (Math.hypot(x, z) > MAP_R) return null;
   const bp = bridgeParam(x, z);
   if (bp.t > 0 && bp.t < 1 && Math.abs(bp.lat) < 1.0) return bridgeYt(bp.t);
   if (onDock(x, z)) return Math.max(DOCK.y, islandSurfH(x, z));
   const surf = Math.max(islandSurfH(x, z), isletSurfH(x, z), rockH(x, z));
-  if (surf < WATER_Y + 0.08) return null; // river: wade in up to the ankles, no further
+  if (surf < WATER_Y + 0.08) return null; // river: wade in up to the ankles, no further (the ford to her bank is handled above)
   return surf;
 }
 
@@ -97,7 +100,7 @@ export function createWalk({ camera, dom, isOpen = () => false, onChange = () =>
     if (stick.id != null && Math.hypot(stick.x, stick.y) > 0.12) { const m = Math.min(1, Math.hypot(stick.x, stick.y)); mv.addScaledVector(fwd, -stick.y).addScaledVector(right, stick.x); amt = m; if (m > 0.97) run = true; }
     const moving = mv.lengthSq() > 0;
     if (moving) {
-      mv.normalize().multiplyScalar(SPEED * amt * (run ? SPRINT : 1) * dt);
+      const wade = (walkH(pos.x, pos.z) ?? 9) < WATER_Y + 0.4; mv.normalize().multiplyScalar(SPEED * amt * (run ? SPRINT : 1) * (wade ? 0.55 : 1) * dt);
       const ok = (x, z) => { const h = walkH(x, z); if (h == null) return false; const h0 = walkH(pos.x, pos.z) ?? h; return air > 0.3 || (h - h0) / Math.hypot(x - pos.x, z - pos.z) < 2.2; }; // no scaling sheer cliff faces
       let x = pos.x + mv.x, z = pos.z; if (ok(x, z)) pos.x = x; // per axis = slide along shorelines
       x = pos.x; z = pos.z + mv.z; if (ok(x, z)) pos.z = z;

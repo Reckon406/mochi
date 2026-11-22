@@ -5,8 +5,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { DOCK, WATER_Y, topH, groundY } from './layout.js';
-import { terrainH, riverX, TRAPPER } from './landscape.js';
+import { DOCK, WATER_Y, groundY, ISLAND_R, islandSurfH, isletSurfH } from './layout.js';
+import { terrainH, riverX, riverW, TRAPPER } from './landscape.js';
 
 const FLOAT_Y = 0.22; // how high the fuselage sits above the floats / waterline
 const COLORS = {
@@ -225,9 +225,12 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
   const _seat = new THREE.Vector3();
   const _fwd = new THREE.Vector3();
 
-  function setPose(x, y, z, yaw, pitch = 0, roll = 0) {
+  const _T = new THREE.Vector3(), _up = new THREE.Vector3(), _right = new THREE.Vector3(), _m4 = new THREE.Matrix4(), _qt = new THREE.Quaternion(), _eu = new THREE.Euler();
+  function setPose(x, y, z, yaw, pitch = 0, roll = 0, quat = null) {
     st.x = x; st.y = y; st.z = z; st.yaw = yaw; st.pitch = pitch; st.roll = roll;
-    craft.position.set(x, y, z); craft.rotation.set(pitch, yaw, roll);
+    craft.position.set(x, y, z);
+    if (quat) craft.quaternion.copy(quat);
+    else { craft.rotation.order = 'YXZ'; craft.rotation.set(pitch, yaw, roll); }
   }
   function seatWorld() {
     _seat.copy(seatLocal); craft.localToWorld(_seat); return _seat;
@@ -243,70 +246,135 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
   // ── scenic path: taxi, takeoff, follow the river, Sapphires, a stunt, Bitterroots, land, taxi home ──
   function lerpYaw(a, b, t) { let d = b - a; d = Math.atan2(Math.sin(d), Math.cos(d)); return a + d * t; }
   function catmull(pts, u) {
-    const n = pts.length - 1; const x = Math.max(0, Math.min(0.9999, u)) * n; const i = Math.floor(x), t = x - i;
+    const n = pts.length - 1; const xx = Math.max(0, Math.min(0.9999, u)) * n; const i = Math.floor(xx), t = xx - i;
     const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[Math.min(n, i + 1)], p3 = pts[Math.min(n, i + 2)];
     const tt = t * t, ttt = tt * t;
     const f = (a, b, c, d) => 0.5 * ((2 * b) + (-a + c) * t + (2 * a - 5 * b + 4 * c - d) * tt + (-a + 3 * b - 3 * c + d) * ttt);
-    const xw = f(p0.x, p1.x, p2.x, p3.x), yw = f(p0.y, p1.y, p2.y, p3.y), zw = f(p0.z, p1.z, p2.z, p3.z);
-    let yaw = lerpYaw(p1.yaw, p2.yaw, t);
-    const pitch = (p1.pitch || 0) + ((p2.pitch || 0) - (p1.pitch || 0)) * t;
-    const roll = (p1.roll || 0) + ((p2.roll || 0) - (p1.roll || 0)) * t;
-    return { x: xw, y: yw, z: zw, yaw, pitch, roll };
+    const ux = p0.up || { x: 0, y: 1, z: 0 }, uy = p1.up || ux, uz = p2.up || uy, uw = p3.up || uz;
+    const upx = f(ux.x, uy.x, uz.x, uw.x), upy = f(ux.y, uy.y, uz.y, uw.y), upz = f(ux.z, uy.z, uz.z, uw.z);
+    return { x: f(p0.x, p1.x, p2.x, p3.x), y: f(p0.y, p1.y, p2.y, p3.y), z: f(p0.z, p1.z, p2.z, p3.z),
+      yaw: lerpYaw(p1.yaw, p2.yaw, t), pitch: (p1.pitch || 0) + ((p2.pitch || 0) - (p1.pitch || 0)) * t,
+      roll: (p1.roll || 0) + ((p2.roll || 0) - (p1.roll || 0)) * t, up: { x: upx, y: upy, z: upz }, phase: t < 0.5 ? p1.phase : p2.phase };
   }
+  function bankH(x, z) {
+    const isl = islandSurfH(x, z), ile = isletSurfH(x, z);
+    return Math.max(terrainH(x, z), Number.isFinite(isl) ? isl : -Infinity, Number.isFinite(ile) ? ile : -Infinity);
+  }
+  function onWater(x, z) { return bankH(x, z) <= WATER_Y + 0.2; }
+  // x on the west (or east) side of the river that is actually water, well clear of the island
+  function waterX(z, side = -1) {
+    const rx = riverX(z), rw = riverW(z);
+    for (const k of [0.78, 0.7, 0.62, 0.55, 0.48, 0.4, 0.85, 0.9]) {
+      const x = rx + side * rw * k;
+      if (onWater(x, z)) return x;
+    }
+    const x = rx + side * Math.max(ISLAND_R + 12, rw * 0.7);
+    return x;
+  }
+
   function mkPath() {
     const pts = [];
+    const wy = WATER_Y + FLOAT_Y;
+    const UP = { x: 0, y: 1, z: 0 };
+    const floor = (x, z) => Math.max(terrainH(x, z), WATER_Y);
+    const flyY = (x, z, agl = 30) => floor(x, z) + agl;
+    const side0 = Math.sign(moor.x - riverX(moor.z)) || -1;
+    const chan = (z) => riverX(z) + side0 * Math.min(16, riverW(z) * 0.4);
     const push = (x, y, z, extra = {}) => {
       const prev = pts[pts.length - 1];
       const yaw = extra.yaw != null ? extra.yaw : (prev ? Math.atan2(x - prev.x, z - prev.z) : moor.yaw);
-      pts.push({ x, y, z, yaw, pitch: extra.pitch || 0, roll: extra.roll || 0, phase: extra.phase || 'cruise' });
+      let yy = y;
+      if (!extra.onWater && !extra.holdY) yy = Math.max(y, flyY(x, z, extra.agl != null ? extra.agl : 30));
+      const g = bankH(x, z);
+      if (g > WATER_Y + 0.25) yy = Math.max(yy, g + (extra.onWater ? 2.5 : extra.holdY ? 10 : 2.5));
+      pts.push({ x, y: yy, z, yaw, pitch: extra.pitch || 0, roll: extra.roll || 0, phase: extra.phase || 'cruise', up: extra.up || UP, onWater: !!extra.onWater });
     };
-    const wy = WATER_Y + FLOAT_Y;
-    push(moor.x, wy, moor.z, { yaw: moor.yaw, phase: 'moored' });
-    // taxi south into open water, then straighten downriver
-    for (let i = 1; i <= 5; i++) {
-      const u = i / 5; const z = moor.z - u * 42; const x = moor.x + (riverX(z) - 18 - moor.x) * u * 0.45;
-      push(x, wy, z, { yaw: Math.PI + 0.05, phase: 'taxi' });
+
+    push(moor.x, wy, moor.z, { yaw: moor.yaw, phase: 'moored', onWater: true });
+    // Outbound taxi: leave the pier into open water south of the island, then north along the west channel.
+    // (A straight north run at the mooring's x would cut through the island.)
+    {
+      const side = Math.sign(moor.x - riverX(moor.z)) || -1;
+      const zS = moor.z + 18;
+      push((moor.x + waterX(moor.z + 10, side)) * 0.5, wy, moor.z + 10, { phase: 'taxi', onWater: true });
+      push(waterX(zS, side), wy, zS, { phase: 'taxi', onWater: true });
+      for (const z of [42, 24, 6, -14, -34, -58]) push(waterX(z, side), wy, z, { phase: 'taxi', onWater: true });
     }
-    // takeoff: accelerate, nose up, climb
-    for (let i = 1; i <= 6; i++) {
-      const u = i / 6; const z = moor.z - 42 - u * 70; const x = riverX(z) - 16;
-      const y = wy + u * u * 22; const pitch = u < 0.7 ? u * 0.35 : 0.35 * (1 - (u - 0.7) / 0.3);
-      push(x, y, z, { yaw: Math.PI, pitch, phase: 'takeoff' });
+    { const z0 = pts[pts.length - 1].z, side = Math.sign(moor.x - riverX(moor.z)) || -1;
+      for (let i = 1; i <= 8; i++) {
+        const u = i / 8, z = z0 - u * 90, x = waterX(z, side);
+        const climb = u * u * (3 - 2 * u);
+        const y = wy + (flyY(x, z, 32) - wy) * climb;
+        push(x, y, z, { phase: 'takeoff', onWater: u < 0.12, holdY: u >= 0.12, pitch: u < 0.55 ? u * 0.3 : 0.3 * (1 - (u - 0.55) / 0.45) });
+      }
     }
-    // follow the river south, climbing to cruise
-    for (const z of [-140, -190, -240, -290]) push(riverX(z) - 10, 32 + Math.sin(z / 40) * 3, z, { phase: 'cruise' });
-    // swing east toward the Sapphires
-    push(80, 38, -260, { phase: 'sapphires' });
-    push(220, 44, -180, { phase: 'sapphires' });
-    push(340, 48, -40, { phase: 'sapphires' });
-    push(360, 50, 80, { phase: 'sapphires' });
-    push(240, 46, 160, { phase: 'sapphires' });
-    // back over the valley / island
-    push(40, 42, 80, { phase: 'valley' });
-    push(0, 40, 0, { phase: 'valley' });
-    // a barrel roll over the island
-    { const x0 = 0, y0 = 40, z0 = 0; for (let i = 1; i <= 8; i++) {
-      const u = i / 8; push(x0 - 8 * u, y0 + Math.sin(u * Math.PI) * 3, z0 - 18 * u, { phase: 'stunt', roll: u * Math.PI * 2, pitch: 0.05 });
-    } }
-    // a loop-the-loop heading west
-    { const R = 16, x0 = -30, y0 = 44, z0 = -40; for (let i = 0; i <= 10; i++) {
-      const a = (i / 10) * Math.PI * 2; // 0 at bottom going up-and-over
-      const x = x0 - R * Math.sin(a), y = y0 + R * (1 - Math.cos(a));
-      push(x, y, z0, { phase: 'stunt', yaw: -Math.PI / 2, pitch: -a });
-    } }
-    // Bitterroots / Trapper Peak side
-    push(-180, 50, -80, { phase: 'bitterroots' });
-    push(-340, 56, 40, { phase: 'bitterroots' });
-    push(-420, 58, 180, { phase: 'bitterroots' });
-    push(-280, 50, 260, { phase: 'bitterroots' });
-    push(-80, 40, 200, { phase: 'approach' });
-    // approach from the north, descend along the river toward the mooring
-    for (const z of [140, 80, 40]) push(riverX(z) - 18, 18 + (z - 40) * 0.12, z, { phase: 'approach', pitch: -0.18 });
-    // land on the water south of the dock and taxi home
-    { const z = moor.z - 50; push(moor.x - 4, wy + 2, z, { phase: 'land', pitch: -0.08, yaw: 0.05 }); }
-    push(moor.x - 2, wy, moor.z - 28, { phase: 'land', pitch: 0, yaw: 0.1 });
-    push(moor.x - 1, wy, moor.z - 12, { phase: 'taxi', yaw: 0.2 });
-    push(moor.x, wy, moor.z, { yaw: moor.yaw, phase: 'moored' });
+    {
+      const side = Math.sign(moor.x - riverX(moor.z)) || -1;
+      for (const z of [-160, -220, -280, -340]) {
+        const x = waterX(z, side);
+        push(x, flyY(x, z, 32), z, { phase: 'cruise' });
+      }
+    }
+    for (const [x, z] of [[90, -270], [200, -190], [300, -60], [260, 70], [140, 130]]) push(x, flyY(x, z, 34), z, { phase: 'sapphires' });
+    // stay over the valley / river rather than clipping a low cut across the island
+    for (const [x, z] of [[50, 70], [waterX(16), 16], [waterX(-24), -24]]) push(x, flyY(x, z, 28), z, { phase: 'valley' });
+    { const z0 = -72, x0 = waterX(-72), y0 = flyY(x0, z0, 32);
+      for (let i = 1; i <= 10; i++) {
+        const u = i / 10, a = u * Math.PI * 2;
+        const x = x0 - 5 * u, z = z0 - 24 * u, y = y0 + Math.sin(u * Math.PI) * 5;
+        push(x, y, z, { phase: 'stunt', up: { x: Math.sin(a), y: Math.cos(a), z: 0 }, holdY: true, agl: 0 });
+      }
+      const R = 18, zL = z0 - 30, xL = waterX(zL), yB = flyY(xL, zL, 32), yC = yB + R;
+      for (let i = 0; i <= 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        const x = xL, y = yC - R * Math.cos(a), z = zL - R * Math.sin(a);
+        push(x, y, z, { phase: 'stunt', up: { x: 0, y: Math.cos(a), z: Math.sin(a) }, holdY: true });
+      }
+    }
+    for (const [x, z] of [[-120, -90], [-240, -30], [-340, 70], [-260, 170], [-120, 190]]) push(x, flyY(x, z, 36), z, { phase: 'bitterroots' });
+    // Bitterroots already ends south of the island; arrive from there and descend over water
+    // heading north toward the pier, so the final never cuts across the island or reverses.
+    {
+      const side = Math.sign(moor.x - riverX(moor.z)) || -1;
+      const mid = [
+        [-80, 155],
+        [waterX(120, side), 120],
+        [waterX(90, side), 90],
+        [waterX(70, side), 70],
+      ];
+      mid.forEach((p, i) => {
+        const u = i / (mid.length - 1);
+        const y = flyY(p[0], p[1], 32) * (1 - u * 0.45) + (wy + 12) * (u * 0.45);
+        push(p[0], Math.max(y, flyY(p[0], p[1], 16), wy + 8), p[1], { phase: 'approach' });
+      });
+      const zA = moor.z + 48, zB = moor.z + 18;
+      for (let i = 1; i <= 6; i++) {
+        const u = i / 6, z = zA + (zB - zA) * u;
+        const xw = waterX(z, side);
+        let x = xw + (moor.x - xw) * Math.min(1, u * 1.05);
+        if (!onWater(x, z)) x = xw;
+        const y = (wy + 10) * (1 - u) + (wy + 2.0) * u;
+        push(x, Math.max(y, wy + 1.8), z, { phase: 'approach', holdY: true, pitch: -0.1 * (1 - u) });
+      }
+    }
+    {
+      const side = Math.sign(moor.x - riverX(moor.z)) || -1;
+      for (let i = 1; i <= 5; i++) {
+        const u = i / 5, z = (moor.z + 18) + ((moor.z + 3) - (moor.z + 18)) * u;
+        const xw = waterX(z, side);
+        let x = moor.x + (xw - moor.x) * (1 - u) * 0.25;
+        if (!onWater(x, z)) x = onWater(moor.x, z) ? moor.x : xw;
+        const y = wy + (1 - u) * (1 - u) * 2.2;
+        push(x, y, z, { phase: 'land', onWater: true, holdY: true });
+      }
+    }
+    for (let i = 1; i <= 4; i++) {
+      const u = i / 4, z = (moor.z + 3) + (moor.z - (moor.z + 3)) * u;
+      let x = moor.x;
+      if (!onWater(x, z)) x = waterX(z);
+      push(x, wy, z, { phase: 'taxi', onWater: true });
+    }
+    push(moor.x, wy, moor.z, { yaw: moor.yaw, phase: 'moored', onWater: true });
     return pts;
   }
   const PATH = mkPath();
@@ -335,7 +403,27 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
   function drive(seg, u) {
     const s = SEG[seg] || SEG.cruise; const t = s.u0 + (s.u1 - s.u0) * Math.max(0, Math.min(1, u));
     const p = catmull(PATH, t);
-    setPose(p.x, p.y, p.z, p.yaw, p.pitch, p.roll);
+    const du = 0.35 / PATH.length;
+    const pa = catmull(PATH, Math.max(0, t - du)), pb = catmull(PATH, Math.min(1, t + du));
+    _T.set(pb.x - pa.x, pb.y - pa.y, pb.z - pa.z);
+    if (_T.lengthSq() < 1e-10) _T.set(Math.sin(p.yaw), 0, Math.cos(p.yaw));
+    _T.normalize();
+    _up.set(p.up?.x || 0, p.up?.y || 1, p.up?.z || 0);
+    if (_up.lengthSq() < 0.05) _up.set(0, 1, 0);
+    _up.normalize();
+    if (Math.abs(_up.dot(_T)) > 0.96) { _up.set(0, 1, 0); if (Math.abs(_up.dot(_T)) > 0.96) _up.set(1, 0, 0); }
+    if (p.phase !== 'stunt') {
+      const pc = catmull(PATH, Math.min(1, t + du * 2));
+      const y1 = Math.atan2(pb.x - pa.x, pb.z - pa.z), y2 = Math.atan2(pc.x - pb.x, pc.z - pb.z);
+      let dy = y2 - y1; dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+      _up.applyAxisAngle(_T, Math.max(-0.7, Math.min(0.7, -dy * 8)));
+    }
+    _right.crossVectors(_up, _T).normalize();
+    _up.crossVectors(_T, _right).normalize();
+    _m4.makeBasis(_right, _up, _T);
+    _qt.setFromRotationMatrix(_m4);
+    _eu.setFromQuaternion(_qt, 'YXZ');
+    setPose(p.x, p.y, p.z, _eu.y, _eu.x, _eu.z, _qt);
     phase = seg;
     const onWater = p.y < WATER_Y + FLOAT_Y + 1.6;
     wakeOn = onWater && (seg === 'taxi' || seg === 'takeoff' || seg === 'land' || seg === 'return');
@@ -387,7 +475,7 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
     if (phase === 'moored' && !piloting) {
       const bob = Math.sin(t * 1.25) * 0.03;
       craft.position.set(moor.x, WATER_Y + FLOAT_Y + bob, moor.z);
-      craft.rotation.set(Math.sin(t * 1.05) * 0.02, moor.yaw, Math.sin(t * 0.9) * 0.015);
+      craft.rotation.order = 'YXZ'; craft.rotation.set(Math.sin(t * 1.05) * 0.02, moor.yaw, Math.sin(t * 0.9) * 0.015);
       st.y = craft.position.y; st.yaw = moor.yaw; st.pitch = craft.rotation.x; st.roll = craft.rotation.z;
     }
     // shadow
@@ -426,7 +514,7 @@ export function createPlane(scene, { state, tier = 2, music, mochi } = {}) {
       if (!piloting) return false;
       const s = seatWorld(); root.position.set(s.x, s.y, s.z);
       if (brain) brain.heading = st.yaw;
-      root.rotation.set(st.pitch, st.yaw, st.roll);
+      root.rotation.order = 'YXZ'; root.rotation.set(st.pitch, st.yaw, st.roll);
       return true;
     },
   };

@@ -24,6 +24,26 @@ const MCAP = 42, MK = 0.16;
 let _gh = null;
 export function girlHome() { if (_gh) return _gh; let x = 0, z = 0; for (let s = 4; s < 90; s += 0.25) { x = DOCK.x1 + DOCK.dx * s; z = DOCK.z1 + DOCK.dz * s; if (x < riverX(z) - riverW(z) && terrainH(x, z) > WATER_Y - 0.15) break; }
   const land = { x, z }; const home = { x: x + DOCK.dx * 3.4 - DOCK.dz * 2.2, z: z + DOCK.dz * 3.4 + DOCK.dx * 2.2 }; _gh = { land, home, cx: home.x - DOCK.dx * 1.0, cz: home.z - DOCK.dz * 1.0, r: 7.0 }; return _gh; }
+// Walkable ford from the fishing-dock tip to her landing, plus a small walkable yard around her cottage.
+export function crossingParam(x, z) {
+  const G = girlHome(); const ax = DOCK.x1, az = DOCK.z1, bx = G.land.x, bz = G.land.z;
+  const lx = bx - ax, lz = bz - az, len = Math.hypot(lx, lz) || 1;
+  const t = ((x - ax) * lx + (z - az) * lz) / (len * len);
+  const lat = (-(x - ax) * lz + (z - az) * lx) / len;
+  return { t, lat, len, ax, az, bx, bz, lx, lz };
+}
+export function crossingH(x, z) {
+  const p = crossingParam(x, z);
+  if (p.t < -0.08 || p.t > 1.15 || Math.abs(p.lat) > 2.6) return null;
+  const tt = Math.max(0, Math.min(1, p.t));
+  const h = terrainH(p.ax + p.lx * tt, p.az + p.lz * tt);
+  return h > WATER_Y + 0.05 ? h : WATER_Y + 0.18;
+}
+export function farWalkH(x, z) {
+  const G = girlHome(); if (Math.hypot(x - G.cx, z - G.cz) > G.r + 14) return null;
+  const h = terrainH(x, z); return h > WATER_Y + 0.05 ? h : null;
+}
+
 export function terrainH(x, z) { const h0 = terrainH0(x, z); if (!LOWM) return h0; const rel = h0 - FLOOR_Y; return rel > MCAP ? FLOOR_Y + MCAP + (rel - MCAP) * MK : h0; }
 function terrainH0(x, z) {
   const dx = x - riverX(z), adx = Math.abs(dx);

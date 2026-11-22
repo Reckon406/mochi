@@ -8,7 +8,7 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import './style.css';
 import { ENV } from './water.js';
 import { createSky } from './sky.js';
-import { buildLandscape, TRAPPER_DIR, setLowMountains } from './landscape.js';
+import { buildLandscape, TRAPPER_DIR, setLowMountains, terrainH, girlHome, crossingH } from './landscape.js';
 import { buildIsland } from './island.js';
 import { createMochi } from './mochi.js';
 import { createGaming } from './gaming.js';
@@ -23,7 +23,7 @@ import { parseWeather, createWeather } from './weather.js';
 import { ZONES, matchZone, groundY, onIslet, BRIDGE, bridgeParam, OBSTACLES, CLIFF, PROP_SPOTS } from './layout.js';
 import { createBlobShadows } from './blobs.js';
 import { buildUI } from './ui.js';
-import { createWalk } from './controls.js';
+import { createWalk, walkH } from './controls.js';
 import { seasonOf } from './season.js';
 import { buildFeatures } from './features.js';
 import { buildWishes, applyWishBuilt } from './wishes.js';
@@ -584,7 +584,7 @@ async function init() {
   }
   if (params.get('walk') === '1' || (!params.has('cam') && !params.has('walk') && S0.startCam === 'walk')) walk.set(true);
   raf = requestAnimationFrame(frame);
-  window.__mochi = { brainLink, chat, flowers, squirrel, wildmodels: { dress: dressWild, FIT: WILD_FIT, preload: preloadWild }, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
+  window.__mochi = { walkH, terrainH, girlHome, crossingH, brainLink, chat, flowers, squirrel, wildmodels: { dress: dressWild, FIT: WILD_FIT, preload: preloadWild }, AI_INFO, get backdrop() { return backdrop; }, get pbrInfo() { return pbrInfo; }, get realInfo() { return realInfo; }, get envInfo() { return envInfo; }, tempSigns, range, adv, extras, nightSky, waterFx, wild, ui, life, features, critters, season, brain, mochi, planTo, ZONES, say, controls, camera, sky, walk, island, worldState, music, settings, feel, renderer, scene, composer };
 }
 
 init().catch((e) => {

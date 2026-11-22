@@ -91,6 +91,20 @@ export function createCrush(scene, { state, tier = 2 }) {
   const home = { x: land.x + dirx * 3.4 - dirz * 2.2, z: land.z + dirz * 3.4 + dirx * 2.2 }; home.y = terrainH(home.x, home.z);
   const homeYaw = Math.atan2(-dirx, -dirz); // she faces back across the river toward Mochi's island
   const place = new THREE.Group(); place.position.set(home.x, home.y, home.z); place.rotation.y = homeYaw; scene.add(place);
+  // 🪨 stepping-stone ford from the dock tip to her landing (walkable via crossingH)
+  { const ax = DOCK.x1, az = DOCK.z1, bx = land.x, bz = land.z, len = Math.hypot(bx - ax, bz - az) || 1;
+    const n = Math.max(6, Math.round(len / 2.6)); const stoneM = new THREE.MeshStandardMaterial({ color: 0x8f8a84, roughness: 1 });
+    const ford = new THREE.Group(); ford.name = 'ford'; scene.add(ford);
+    for (let i = 1; i < n; i++) {
+      const t = i / n, x = ax + (bx - ax) * t, z = az + (bz - az) * t;
+      const jitter = ((i * 13.7) % 1 - 0.5) * 0.7; const px = -(bz - az) / len * jitter, pz = (bx - ax) / len * jitter;
+      const h = terrainH(x + px, z + pz); const y = Math.max(WATER_Y + 0.08, h);
+      const r = 0.55 + ((i * 7.3) % 1) * 0.4;
+      const m = new THREE.Mesh(new THREE.DodecahedronGeometry(r, 0), stoneM);
+      m.position.set(x + px, y - r * 0.45, z + pz); m.rotation.set(i * 0.7, i * 1.1, i * 0.4);
+      m.scale.set(1.15, 0.45, 1.0); m.castShadow = m.receiveShadow = true; ford.add(m);
+    }
+  }
   const api = { name, gifts, lastVisit: cfg?.lastVisit || null, lastResult: null };
   Object.defineProperties(api, { stage: { get: stageNow }, affection: { get: () => affection } });
   // local frame: +z points across the river at Mochi's island, the waterline/landing is at about (-2.2, 3.4)
