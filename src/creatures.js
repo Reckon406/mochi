@@ -1,6 +1,7 @@
 // The rival squirrel and the occasional elk
 import * as THREE from 'three';
-import { topH } from './layout.js';
+import { topH, riverX, riverW } from './layout.js';
+import { dress, tick as tickModel } from './wildmodels.js';
 import { smoothstep } from './noise.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -91,7 +92,10 @@ export function createElk() {
   add(body, new THREE.ConeGeometry(0.06, 0.15, 6), rump, [0, 1.6, -0.95], [-2.2, 0, 0]);
   root.scale.setScalar(0.85); root.visible = false;
 
-  const routes = [[[-15, 11], [13, 11.5]], [[14, -8], [-12, -11]], [[-13, -7], [6, 13.5]], [[-14, 9], [12, -9]]].map((r) => r.map(([x, z]) => [x * 1.7, z * 1.7]));
+  // west far bank: water's edge (small off) to the treeline
+  const bankX = (z, off) => riverX(z) - (riverW(z) + off);
+  const routes = [[18, 2, 26], [-8, 2, 28], [8, 3, 24], [-20, 2, 30]].map(([z, edge, trees]) => [[bankX(z, edge), z], [bankX(z, trees), z]]);
+  dress(root, 'elk');
   let active = false, prog = 0, from = new THREE.Vector2(), to = new THREE.Vector2(), timer = 25 + Math.random() * 30, walkPh = 0, pause = 0, len = 1;
   function start(p0 = 0) { const r = routes[Math.floor(Math.random() * routes.length)]; const flip = Math.random() < 0.5; from.set(...(flip ? r[1] : r[0])); to.set(...(flip ? r[0] : r[1])); len = from.distanceTo(to); prog = p0; active = true; root.visible = true; pause = 0; }
   function update(dt, t) {
@@ -101,11 +105,14 @@ export function createElk() {
     const p = from.clone().lerp(to, Math.min(1, prog)); const y = topH(p.x, p.y);
     root.position.set(p.x, y, p.y);
     root.rotation.y = Math.atan2(to.x - from.x, to.y - from.y);
-    const fade = smoothstep(0, 0.08, prog) * (1 - smoothstep(0.92, 1, prog)); root.scale.setScalar(0.85 * (0.001 + fade));
+    const fade = smoothstep(0, 0.08, prog) * (1 - smoothstep(0.92, 1, prog));
+    const base = root.userData.wild?.loaded ? 1 : 0.85;
+    root.scale.setScalar(base * (0.001 + fade));
     if (moving) walkPh += dt * 5.5;
     legs.forEach((l, i) => (l.rotation.x = moving ? Math.sin(walkPh + (i === 0 || i === 3 ? 0 : Math.PI)) * 0.4 : 0));
     body.position.y = moving ? Math.abs(Math.sin(walkPh)) * 0.04 : 0;
     neck.rotation.x = moving ? 0.05 * Math.sin(walkPh * 2) : 0.55 + 0.05 * Math.sin(t * 3); // grazes when paused
+    tickModel(root, dt, t, { speed: moving ? speed : 0, drink: !moving });
     if (prog >= 1) { active = false; root.visible = false; timer = 70 + Math.random() * 80; }
   }
   return { root, update, start, get active() { return active; } };

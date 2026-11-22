@@ -97,6 +97,7 @@ export const SPECIES = {
   muledeer: { name: 'mule deer', hab: 'bank', when: ['dawn', 'dusk', 'day'], w: 9, make: (s) => quad({ len: 1.2, h: 1.3, body: 0x8f7a62, belly: 0xd8ccb4, ears: 'mule', tail: 'short', tailC: 0x222222, horns: s.antlers ? 'antler' : null }) },
   whitetail: { name: 'white-tailed deer', hab: 'bank', when: ['dawn', 'dusk', 'day'], w: 11, make: (s) => quad({ len: 1.15, h: 1.25, body: 0x9a6c46, belly: 0xefe6d8, ears: 'deer', tail: 'flag', tailC: 0xf8f4ee, horns: s.antlers ? 'antler' : null }) },
   moose: { name: 'moose', hab: 'bank', when: ['dawn', 'dusk', 'day'], w: 3, make: (s) => quad({ len: 1.8, h: 2.3, body: 0x3a2a1e, legC: 0x8a7a68, ears: 'deer', hump: true, horns: s.antlers ? 'palm' : 'bell', neck: 0.25 }) },
+  elk: { name: 'elk', hab: 'bank', when: ['dawn', 'dusk', 'day'], w: 5, far: true, make: (s) => quad({ len: 1.5, h: 1.6, body: 0x8a5a36, belly: 0xe8d2a8, legC: 0x4a2e1c, ears: 'deer', tail: 'short', tailC: 0xe8d2a8, neck: 0.2, horns: s.antlers ? 'antler' : null }) },
   bighorn: { name: 'bighorn sheep', hab: 'slope', when: ['day', 'dawn', 'dusk'], w: 3, scale: 3.2, make: () => quad({ len: 1.0, h: 1.0, body: 0x8a7660, belly: 0xeee6d6, tail: 'short', tailC: 0xeee6d6, horns: 'curl', ears: 'pointy' }) },
   goat: { name: 'mountain goat (Trapper Peak side)', hab: 'high', when: ['day', 'dawn', 'dusk'], w: 3, scale: 4, make: () => quad({ len: 0.95, h: 1.0, body: 0xf4f2ea, horns: 'goat', beard: true, ears: 'pointy', hump: true }) },
   coyote: { name: 'coyote', hab: 'bank', when: ['dawn', 'dusk', 'night', 'day'], w: 5, make: () => quad({ len: 0.85, h: 0.75, body: 0xa88c68, belly: 0xe2d6c0, legC: 0x9a6e48, ears: 'pointy', tail: 'bushy', tailC: 0x2a241e }) },
@@ -153,7 +154,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
   function spawn(key, opts = {}) {
     const sp = SPECIES[key]; const room = Math.max(0, MAX_LIVE - live.length); if (room <= 0 && !opts.event) return [];
     const n = sp.flock ? Math.min(room, Math.max(1, Math.round(sp.flock * rnd(0.5, 1.0)))) : 1; const made = [];
-    const side = opts.side ?? (Math.random() < 0.7 ? -1 : 1); const z0 = opts.z ?? rnd(-45, 45);
+    const side = opts.side ?? (sp.far ? -1 : (Math.random() < 0.7 ? -1 : 1)); const z0 = opts.z ?? rnd(-45, 45);
     for (let i = 0; i < n; i++) {
       const m = sp.make({ antlers: month >= 8 || month <= 0 ? Math.random() < 0.5 : false, winter: winter || month >= 10 || month <= 2, i });
       if (FIT[key] && !m.userData.wild) dress(m, key);

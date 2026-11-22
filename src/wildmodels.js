@@ -24,6 +24,7 @@ export const FIT = {
   osprey: { file: 'osprey', kind: 'bird', height: 0.5, yaw: Math.PI },
   heron: { file: 'great_blue_heron', kind: 'bird', height: 0.85, yaw: Math.PI },
   brook: { file: 'brook_trout', kind: 'fish', length: 0.95, yaw: Math.PI },
+  elk: { file: 'elk', kind: 'quad', height: 2.05, yaw: Math.PI },
 };
 
 const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
