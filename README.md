@@ -158,7 +158,7 @@ Most animals live on the **other** side of the river: the far banks, the valley 
 
 Bird and mammal list, and the sources it was checked against:
 - **Mammals:** mule deer, white-tailed deer, moose, bighorn sheep, mountain goat, black bear, grizzly bear (rare: no confirmed resident Bitterroot population, but dispersers can turn up anywhere in western Montana), mountain lion, gray wolf, coyote, red fox, beaver (with a lodge on the west bank), river otter, raccoon, striped skunk, porcupine, snowshoe hare.
-- **Birds:** bald eagle, osprey (summer), great blue heron, Canada geese, mallards, great horned owl, black-billed magpie, Steller's jay.
+- **Birds:** bald eagle, osprey (summer), great blue heron, Canada geese, mallards, wild turkey, great horned owl, black-billed magpie, Steller's jay.
 - **Sources:**
   - Bitterroot NF, About the Area: https://www.fs.usda.gov/r01/bitterroot/about-area
   - FWP, Bears in Montana / Bitterroot recovery zone: https://fwp.mt.gov/conservation/wildlife-management/grizzly-bears

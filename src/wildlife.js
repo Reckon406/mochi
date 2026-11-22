@@ -112,10 +112,12 @@ export const SPECIES = {
   otter: { name: 'river otter', hab: 'water', when: ['day', 'dusk', 'dawn'], w: 4, swim: true, porpoise: true, make: () => quad({ len: 0.8, h: 0.35, body: 0x4a3222, belly: 0x8a6a4a, ears: 'round', tail: 'long', neck: 0.2, lf: 0.3, gf: 0.3, lt: 0.08 }) },
   whitefish: { name: 'mountain whitefish', hab: 'water', when: ['day', 'dawn', 'dusk'], w: 3, swim: true, fish: true, make: () => { const g = fishMesh('whitefish'); g.scale.setScalar(0.42); return g; } },
   sucker: { name: 'largescale sucker', hab: 'water', when: ['day', 'dawn', 'dusk'], w: 2, swim: true, fish: true, make: () => { const g = fishMesh('sucker'); g.scale.setScalar(0.46); return g; } },
+  brook: { name: 'brook trout', hab: 'water', when: ['day', 'dawn', 'dusk'], w: 2, swim: true, fish: true, make: () => { const g = fishMesh('brook'); g.scale.setScalar(0.38); return g; } },
   // birds
   eagle: { name: 'bald eagle', hab: 'sky', when: ['day', 'dawn', 'dusk'], w: 4, bird: true, make: () => bird({ s: 1.6, body: 0x3a2618, head: 0xf8f6f0, beak: 0xf0c020, tail: 0.5 }) },
   osprey: { name: 'osprey', hab: 'sky', when: ['day'], months: M(3, 8), w: 4, bird: true, dive: true, make: () => bird({ s: 1.4, body: 0x4a3a2a, belly: 0xf6f2ea, head: 0xf2eee6, wing: 0x4a3a2a, beak: 0x222222, tail: 0.4 }) },
   heron: { name: 'great blue heron', hab: 'edge', when: ['day', 'dawn', 'dusk'], w: 4, bird: true, wade: true, make: () => bird({ s: 1.5, body: 0x7a8a9c, head: 0xe8ecef, beak: 0xe0b040, neck: 0.5, legs: 0.7, tail: 0.2 }) },
+  turkey: { name: 'wild turkey', hab: 'bank', when: ['day', 'dawn', 'dusk'], w: 3, bird: true, hop: true, make: () => bird({ s: 1.15, body: 0x3a2a1e, belly: 0x6a4a2a, head: 0x3a8a4a, beak: 0xe0a040, tail: 1.0, legs: 0.32 }) },
   geese: { name: 'Canada geese', hab: 'float', when: ['day', 'dawn', 'dusk'], w: 5, bird: true, flock: 4, make: () => bird({ s: 1.0, body: 0x8a7a66, head: 0x141414, belly: 0xd8d0c0, beak: 0x141414, neck: 0.3, tail: 0.2 }) },
   mallard: { name: 'mallards', hab: 'float', when: ['day', 'dawn', 'dusk'], w: 5, bird: true, flock: 3, make: (s) => bird({ s: 0.7, body: s.i % 2 ? 0x8a6a48 : 0x9a9a92, head: s.i % 2 ? 0x8a6a48 : 0x1a6a3a, belly: s.i % 2 ? null : 0x7a4a3a, beak: 0xe0c040, tail: 0.15 }) },
   magpie: { name: 'black-billed magpie', hab: 'island', when: ['day', 'dawn', 'dusk'], w: 4, bird: true, hop: true, make: () => bird({ s: 0.55, body: 0x111418, belly: 0xf6f6f6, wing: 0x1a2a4a, beak: 0x111111, tail: 1.3, legs: 0.18 }) },

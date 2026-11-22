@@ -14,6 +14,16 @@ export const FIT = {
   owl: { file: 'great_horned_owl', kind: 'bird', height: 0.48, yaw: Math.PI },
   whitefish: { file: 'mountain_whitefish', kind: 'fish', length: 1, yaw: Math.PI },
   sucker: { file: 'largescale_sucker', kind: 'fish', length: 1, yaw: Math.PI },
+  fox: { file: 'red_fox', kind: 'quad', height: 0.55, yaw: Math.PI },
+  porcupine: { file: 'porcupine', kind: 'quad', height: 0.5, yaw: Math.PI },
+  bighorn: { file: 'bighorn_sheep', kind: 'quad', height: 1.0, yaw: Math.PI },
+  goat: { file: 'mountain_goat', kind: 'quad', height: 1.0, yaw: Math.PI },
+  turkey: { file: 'wild_turkey', kind: 'bird', height: 0.65, yaw: Math.PI },
+  magpie: { file: 'magpie', kind: 'bird', height: 0.28, yaw: Math.PI },
+  jay: { file: 'stellers_jay', kind: 'bird', height: 0.26, yaw: Math.PI },
+  osprey: { file: 'osprey', kind: 'bird', height: 0.5, yaw: Math.PI },
+  heron: { file: 'great_blue_heron', kind: 'bird', height: 0.85, yaw: Math.PI },
+  brook: { file: 'brook_trout', kind: 'fish', length: 0.95, yaw: Math.PI },
 };
 
 const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
