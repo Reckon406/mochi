@@ -1,2 +1,13 @@
-{ "name": "mochi-brain", "private": true, "type": "module",
-  "scripts": { "deploy": "wrangler deploy", "dev": "wrangler dev", "tick": "curl -s -X POST -H 'origin: http://localhost:5173' http://localhost:8787/tick" } }
+{
+  "name": "mochi-brain",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "tick": "curl -s -X POST -H 'origin: http://localhost:5173' http://localhost:8787/tick"
+  },
+  "dependencies": {
+    "jpeg-js": "^0.4.4"
+  }
+}

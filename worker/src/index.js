@@ -4,6 +4,7 @@
 // Bitterroot Kiwi Gazette, crush/gaming/plane/pet, chat & visitor events. state.json is only a cold-start fallback.
 import { DurableObject } from 'cloudflare:workers';
 import { ACTIONS, menuFor, runAction, applyEvent, normInv, STAGES, GAME_TITLE, normGame, normGameText } from './rules.js';
+import { ART_W, ART_H, LOGO_STRIP, cropPollinationsLogo } from './cropjpeg.js';
 
 const ORIGINS = ['https://reckon406.github.io'];
 const okOrigin = (o) => !!o && (ORIGINS.includes(o) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o));
@@ -470,13 +471,15 @@ reply as json: {"title":"short title","kind":"ocean|muscles|cap|pumpkin|skateboa
     if (!idea?.prompt || !idea?.title) return null;
     const slug = String(idea.title).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 32) || 'painting';
     const id = `${c.date}-${slug}-${(now % 10000)}`;
-    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(String(idea.prompt).slice(0, 220))}?width=512&height=640&nologo=true&seed=${now % 999999}`;
+    // nologo/private are kept in case the classic API honors them again; as of 2026 they are ignored and a logo is always stamped, so we request a slightly taller canvas and crop the bottom strip.
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(String(idea.prompt).slice(0, 220))}?width=${ART_W}&height=${ART_H + LOGO_STRIP}&nologo=true&private=true&seed=${now % 999999}`;
     try {
       const ac = new AbortController(); const to = setTimeout(() => ac.abort(), 18000);
       const r = await fetch(url, { signal: ac.signal, headers: { 'user-agent': 'mochi-brain/1.0' } }).finally(() => clearTimeout(to));
       const ct = r.headers.get('content-type') || '';
       if (!r.ok || !ct.startsWith('image/')) return null;
-      const buf = await r.arrayBuffer();
+      let buf = new Uint8Array(await r.arrayBuffer());
+      try { buf = cropPollinationsLogo(buf, LOGO_STRIP); } catch (e) { console.warn('art crop fail', e?.message); }
       if (buf.byteLength < 4000 || buf.byteLength > 900000) return null;
       const fname = `${id}.jpg`;
       await this.ctx.storage.put('artbin:' + fname, buf);
@@ -556,10 +559,31 @@ reply as json: {"actions": ["id", ...], "mood": "a short lowercase mood", "thoug
     return { ok: true, tick: L.lastTick, caps: L.caps, geminiToday: d.gemini, diaryLen: L.diary.length, artLen: L.art.length };
   }
 
-  // admin: normalize game title / scrub old avian strings without running a tick
+  // admin: normalize game title / scrub old avian strings, or replace stored art bytes (cache-bust via newFile)
   async admin(req) {
     let body = {}; try { body = await req.json(); } catch {}
     const { L } = await this.sync();
+    const putArt = [];
+    if (Array.isArray(body?.putArt)) {
+      for (const item of body.putArt) {
+        const oldFile = String(item?.file || '').replace(/[^a-zA-Z0-9._-]/g, '');
+        const newFile = String(item?.newFile || oldFile).replace(/[^a-zA-Z0-9._-]/g, '');
+        if (!oldFile || !newFile || !newFile.endsWith('.jpg')) { putArt.push({ file: oldFile, ok: false, error: 'bad name' }); continue; }
+        let raw;
+        try { raw = Uint8Array.from(atob(String(item.b64 || '')), (c) => c.charCodeAt(0)); }
+        catch { putArt.push({ file: oldFile, ok: false, error: 'bad b64' }); continue; }
+        if (raw.byteLength < 4000 || raw.byteLength > 900000) { putArt.push({ file: oldFile, ok: false, error: 'bad size' }); continue; }
+        await this.ctx.storage.put('artbin:' + newFile, raw);
+        const a = (L.art || []).find((x) => x.file === oldFile || x._binKey === oldFile);
+        if (a) {
+          a.file = newFile;
+          a.url = `${WORKER_PUBLIC}/art/${newFile}`;
+          a._binKey = newFile;
+        }
+        if (oldFile !== newFile) await this.ctx.storage.delete('artbin:' + oldFile);
+        putArt.push({ file: newFile, ok: true, bytes: raw.byteLength });
+      }
+    }
     const was = L.world.gaming.game;
     const next = body && body.game ? normGame(body.game) : GAME_TITLE;
     L.world.gaming.game = next;
@@ -567,7 +591,7 @@ reply as json: {"actions": ["id", ...], "mood": "a short lowercase mood", "thoug
     this.syncGoals(L);
     await this.save(L);
     const g = L.world.gaming;
-    return { ok: true, game: g.game, found: g.found, hours: g.hours, was, diaryLen: L.diary?.length, artLen: L.art?.length };
+    return { ok: true, game: g.game, found: g.found, hours: g.hours, was, diaryLen: L.diary?.length, artLen: L.art?.length, putArt };
   }
 
   // ── chat ──
