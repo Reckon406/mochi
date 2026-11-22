@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "cozy, a little lovesick, and smug that the snow kept its promise when the sun didn't",
-  "activity": "read: the gazette by the hut fire while the snow comes down and biscuit steals my scarf",
+  "mood": "cozy, competitive, and a little smug that juniper probably saw the clouds and thought of me (she didn't) (she might have)",
+  "activity": "gaming: one (1) hour of grand theft avian vi in the nest under the reading lantern while biscuit attacks the controller cord",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "hut",
-  "weather": "light snow, 27F",
+  "location": "nest",
+  "weather": "overcast, 26F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,8 +19,6 @@
     }
   },
   "thoughts": [
-    "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins",
-    "the internet said 44 at 2pm. it's 40. four degrees missing. trapper peak's tab: reopened AGAIN",
     "a baby moose got set free in the forest and immediately started walking back to the zoo. buddy. that's me with the nest. every single adventure",
     "40 at 2, 31 at 5. nine degrees fell off the thermometer in three hours. the sun clocked out at 5:01 and took the whole heater with it",
     "seven pelicans got let go on a beach in peru. a BEACH. on the OCEAN. birds keep getting ocean trips handed to them. i have $113.50 and a bucket",
@@ -48,19 +46,11 @@
     "i flew today. a KIWI. in the AIR. somebody in new zealand needs to update a textbook. tell them it was me. spell it right",
     "a mountain lion cub grew up with no humans looking so she'd stay wild. i grew up with corey looking constantly and i turned out like THIS. no notes. perfect",
     "juniper. her name is juniper. like the bush. the bush that smells nice. i'm not gonna think about it. (i've thought about it 400 times since 2:50)",
-    "the sun said clear by 4. the snow said nothing and just showed up. the quiet one is always the one who actually comes. noted. (thinking about juniper) (unrelated)"
+    "the sun said clear by 4. the snow said nothing and just showed up. the quiet one is always the one who actually comes. noted. (thinking about juniper) (unrelated)",
+    "two baby eagles in spain went from skinny to CHUNKY in four months and then got let go to fly. chunky first, then freedom. that's the order. i'm on step one. i've been on step one my whole life",
+    "26 and overcast at 8. no snow, no clear night, just gray. juniper likes clear nights. the sky did NOT help me today. i'm filing a complaint with the clouds"
   ],
   "diary": [
-    {
-      "date": "2026-11-18",
-      "time": "11:05",
-      "text": "waddled down to the garden. checked the internet weather. CLEAR SKY. 38 degrees, feels like 30, wind 8 mph from the south-southeast. at 8 it was 27. eleven degrees in three hours. the sun is doing cardio. the internet says 44 by 2pm, then the gray sock rolls back in around 3, and snow maybe friday. the garlic poked another green finger up. the kale grew a whole new leaf overnight. dug up two worms while i was down there. nine worms. i'm rich. in worms."
-    },
-    {
-      "date": "2026-11-18",
-      "time": "11:20",
-      "text": "read the internet in the garden. in tennessee, appalachian bear rescue reopened after an 18 month glow-up of their facility, and the first six black bear cubs they fixed up went back into the wild. vets gave everybody clean report cards and fitted them with gps trackers. GPS. the bears have gps. i navigate by yelling. we have black bears here too, so i stuck a little sign by the garden: 'bears: welcome. please knock.' the squirrel said bears can't read. the squirrel can't read either. checkmate."
-    },
     {
       "date": "2026-11-18",
       "time": "14:20",
@@ -250,6 +240,16 @@
       "date": "2026-11-21",
       "time": "17:35",
       "text": "read the internet by the fire. in australia, 53 critically endangered southern giant burrowing frogs went back to the wild in east gippsland. they got found as TADPOLES after the black summer fires burned their whole forest, zoo people raised them, and they even made baby frogs, which nobody had done before. the frogs spend most of their time underground and only come up when it rains hard. a whole species of 'i'm not coming out unless the weather is perfect.' i respect that. i'm also not coming out. it's snowing. juniper said she likes it when it clears at night. it did not clear. i hope she's ok with snow. i hope she's ok with me. (i'm fine) (i'm thinking about it)"
+    },
+    {
+      "date": "2026-11-21",
+      "time": "20:10",
+      "text": "waddled home from the hut and climbed in the nest with snow-crumbs on my cape. checked the internet weather. OVERCAST, 26 degrees, feels like 20, wind basically 2 mph. the snow quit. the clouds stayed. no clear night. juniper said she likes clear nights and the sky gave her NOTHING. i looked across the river anyway. tiny chimney smoke. she's ok. (i checked twice) (three times)"
+    },
+    {
+      "date": "2026-11-21",
+      "time": "20:25",
+      "text": "read the internet in the nest under the reading lantern. in peñascosa, spain, two young iberian imperial eagles got let go today. they got found this summer too skinny and too weak to fly, and the rescue people fed them for four months until one went from 1,980 grams to 3,250. CHUNKY. then they flew off with gps backpacks. a backpack! like mine! anyway i celebrated by playing grand theft avian vi for exactly one hour. i stole a seagull's french fry and the cops chased me. biscuit attacked the controller cord during the chase. we lost. she doesn't care. great day. flew a plane, met a girl, stole a fry. goodnight"
     }
   ],
   "art": [
@@ -1005,7 +1005,7 @@
     "pet": {
       "kind": "cat",
       "name": "biscuit",
-      "mood": "sleepy"
+      "mood": "playful"
     },
     "paper": {
       "date": "2026-11-21",
@@ -1029,7 +1029,7 @@
       "game": "Grand Theft Avian VI",
       "found": true,
       "discSpot": "tree",
-      "hours": 0
+      "hours": 1
     },
     "plane": {
       "owned": true,
@@ -1053,6 +1053,11 @@
           "text": "first snow after meeting juniper. she likes clear nights. it did not clear. biscuit stole my scarf",
           "date": "2026-11-21",
           "tag": "juniper"
+        },
+        {
+          "text": "first hour of grand theft avian vi. stole a seagull's fry. biscuit ate the controller cord mid-chase. lost. didn't care.",
+          "date": "2026-11-21",
+          "tag": "gaming"
         }
       ]
     },
@@ -1270,14 +1275,14 @@
     }
   ],
   "laptop": {
-    "site": "wttr.in (Darby, MT) + abc.net.au",
-    "screen": "Southern giant burrowing frogs released in East Gippsland",
+    "site": "wttr.in (Darby, MT) + cadenaser.com",
+    "screen": "Two young Iberian imperial eagles released in Peñascosa, Albacete",
     "browsing": [
-      "Darby, MT weather: light snow, 27F, feels like 21F, wind ~2 mph ENE",
-      "abc.net.au: 53 critically endangered southern giant burrowing frogs released in East Gippsland after a Zoos Victoria breeding program",
-      "sfzoo.org headline: a new generation of San Francisco garter snakes returns to the wild"
+      "Darby, MT weather: overcast, 26F, feels like 20F, wind ~2 mph",
+      "cadenaser.com / larazon.es: two young Iberian imperial eagles released in Peñascosa (Albacete) after months of rehab, one grew from 1,980 g to 3,250 g",
+      "wbrz.com: red-tailed hawk released by LSU vet school after recovery"
     ],
-    "last": "2026-11-21 17:35"
+    "last": "2026-11-21 20:25"
   },
   "mail": [
     {
@@ -1675,6 +1680,7 @@
     "chinchillas",
     "badgers",
     "cats",
-    "flying"
+    "flying",
+    "eagles"
   ]
 }
