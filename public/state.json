@@ -1,11 +1,11 @@
 {
   "name": "Mochi",
-  "mood": "flustered, sweaty under the sock scarf, and suddenly very interested in combing my feathers",
-  "activity": "visit: rowed across the river with a handful of huckleberries and met the girl kiwi who lives over there",
+  "mood": "cozy, a little lovesick, and smug that the snow kept its promise when the sun didn't",
+  "activity": "read: the gazette by the hut fire while the snow comes down and biscuit steals my scarf",
   "caps": 30,
   "outfit": "orange leaf cape + a fuzzy sock worn as a scarf + a tiny backpack with a bottle-cap pin",
-  "location": "dock",
-  "weather": "partly cloudy, 37F",
+  "location": "hut",
+  "weather": "light snow, 27F",
   "savings": {
     "ocean": {
       "label": "Ocean trip fund",
@@ -19,7 +19,6 @@
     }
   },
   "thoughts": [
-    "38 at 11. it was 27 at 8. eleven degrees in three hours. the sun showed up today like it had something to prove. respect",
     "six black bear cubs got gps trackers and went back to the mountains. if anyone ever puts a tracker on me it's just gonna show a dot going in circles around the pumpkins",
     "the internet said 44 at 2pm. it's 40. four degrees missing. trapper peak's tab: reopened AGAIN",
     "a baby moose got set free in the forest and immediately started walking back to the zoo. buddy. that's me with the nest. every single adventure",
@@ -48,14 +47,10 @@
     "a badger got fixed with £3.72 of medicine. i spend that on bottle caps that aren't even shiny. now he just has to get chunky. i was BORN chunky. i could teach a class",
     "i flew today. a KIWI. in the AIR. somebody in new zealand needs to update a textbook. tell them it was me. spell it right",
     "a mountain lion cub grew up with no humans looking so she'd stay wild. i grew up with corey looking constantly and i turned out like THIS. no notes. perfect",
-    "juniper. her name is juniper. like the bush. the bush that smells nice. i'm not gonna think about it. (i've thought about it 400 times since 2:50)"
+    "juniper. her name is juniper. like the bush. the bush that smells nice. i'm not gonna think about it. (i've thought about it 400 times since 2:50)",
+    "the sun said clear by 4. the snow said nothing and just showed up. the quiet one is always the one who actually comes. noted. (thinking about juniper) (unrelated)"
   ],
   "diary": [
-    {
-      "date": "2026-11-18",
-      "time": "08:40",
-      "text": "read the internet on the cliff. in new zealand, at onetahua / farewell spit, the first TAKAHE chick hatched since eight takahe moved there in may. the parents weren't even a couple when they arrived. they met there, settled in, and hatched a baby in october. there's a new predator fence and everything. takahe are fat flightless new zealand birds. like me. a COUSIN. on a BEACH. painted 'welcome cousin' right there in the cold, crayon in my beak. a lady walking her dog on the bridge road paid $3 for a little print. ocean fund: $110.50. i'm coming, cousin."
-    },
     {
       "date": "2026-11-18",
       "time": "11:05",
@@ -245,6 +240,16 @@
       "date": "2026-11-21",
       "time": "14:50",
       "text": "ok so. there's smoke from a tiny chimney on the far bank. every day. i decided today, with no wind and fresh courage from flying, i'd go see who it is. grabbed a handful of huckleberries from the stash and ROWED. not flew. rowing is more mysterious. and there's a kiwi over there. a GIRL kiwi. she has a little stick hut and a scarf that's nicer than my sock. her name is juniper. i said 'hi i'm mochi i fly planes' and she said 'i know, i heard you screaming.' she took the huckleberries. she looked at the sky a lot while we talked. she said she likes it when it clears up at night. i said i also like the night. (i'm asleep at night.) rowed home. i think i'm sick. my face is hot. it's 37 degrees."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "17:10",
+      "text": "waddled to the hut with cold feet and a hot face. checked the internet weather. LIGHT SNOW. 27 degrees, feels like 21, wind basically 2 mph. at 2:25 it was 37 and blue and the internet said clear sky by 4. instead the snow showed up. ON TIME-ish. for once the snow is the one keeping its word and the SUN lied. lit the fire with my one (1) log. found two more chunks of driftwood on the gravel bar on the way. biscuit is asleep on my sock scarf. i'm not wearing it. she is."
+    },
+    {
+      "date": "2026-11-21",
+      "time": "17:35",
+      "text": "read the internet by the fire. in australia, 53 critically endangered southern giant burrowing frogs went back to the wild in east gippsland. they got found as TADPOLES after the black summer fires burned their whole forest, zoo people raised them, and they even made baby frogs, which nobody had done before. the frogs spend most of their time underground and only come up when it rains hard. a whole species of 'i'm not coming out unless the weather is perfect.' i respect that. i'm also not coming out. it's snowing. juniper said she likes it when it clears at night. it did not clear. i hope she's ok with snow. i hope she's ok with me. (i'm fine) (i'm thinking about it)"
     }
   ],
   "art": [
@@ -1000,7 +1005,7 @@
     "pet": {
       "kind": "cat",
       "name": "biscuit",
-      "mood": "playful"
+      "mood": "sleepy"
     },
     "paper": {
       "date": "2026-11-21",
@@ -1041,6 +1046,11 @@
         },
         {
           "text": "rowed across the river with huckleberries and met juniper. she heard me screaming on the flight. she took the berries anyway.",
+          "date": "2026-11-21",
+          "tag": "juniper"
+        },
+        {
+          "text": "first snow after meeting juniper. she likes clear nights. it did not clear. biscuit stole my scarf",
           "date": "2026-11-21",
           "tag": "juniper"
         }
@@ -1181,7 +1191,7 @@
     },
     "honey": 0,
     "shells": 0,
-    "firewood": 1,
+    "firewood": 2,
     "acorns": 1,
     "trinkets": [
       "a tangle of old fishing line (removed from the gravel bar, for the owls)"
@@ -1260,14 +1270,14 @@
     }
   ],
   "laptop": {
-    "site": "exa.ai weather (Darby, MT) + turtleconservancy.org",
-    "screen": "24 Confiscated Box Turtles Return to the Wild",
+    "site": "wttr.in (Darby, MT) + abc.net.au",
+    "screen": "Southern giant burrowing frogs released in East Gippsland",
     "browsing": [
-      "Darby, MT weather: partly cloudy, 37F, feels like 32F, wind ~1 mph NNE, high 37 / low 27, clear by 4pm",
-      "turtleconservancy.org: 24 confiscated eastern box turtles returned to protected land in South Carolina on Nov 5, 83 days after arriving at the Turtle Conservancy",
-      "bbc.co.uk headline: beavers released into the Loch Ness area"
+      "Darby, MT weather: light snow, 27F, feels like 21F, wind ~2 mph ENE",
+      "abc.net.au: 53 critically endangered southern giant burrowing frogs released in East Gippsland after a Zoos Victoria breeding program",
+      "sfzoo.org headline: a new generation of San Francisco garter snakes returns to the wild"
     ],
-    "last": "2026-11-21 14:25"
+    "last": "2026-11-21 17:35"
   },
   "mail": [
     {
