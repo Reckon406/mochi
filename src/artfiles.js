@@ -1,6 +1,9 @@
 // Mochi's real (AI-made) art lives in ./art/<file>. Entries without `file` keep the procedural look.
 import * as THREE from 'three';
+const BRAIN_ART = 'https://mochi-brain.coreydman15.workers.dev/art/';
 export function artUrl(a) {
+  const u = a && typeof a.url === 'string' ? a.url.trim() : '';
+  if (u && u.startsWith(BRAIN_ART) && !u.includes('..')) return u;
   const f = a && typeof a.file === 'string' ? a.file.trim() : '';
   if (!f || f.includes('/') || f.includes('\\') || f.includes('..')) return null; // plain filenames only
   return './art/' + encodeURIComponent(f);

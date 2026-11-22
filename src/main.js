@@ -333,7 +333,11 @@ async function init() {
   const brainLink = createBrainLink({ params, initial: state, getInv: () => life.inv, say: (s, d) => say(s, d),
     onState: (s) => {
       if (s) { if (s.mood) { const el = document.querySelector('#ui .row.mood .v'); if (el) el.textContent = s.mood; } if (s.activity) { const el = document.querySelector('#ui .row.act .v'); if (el) el.textContent = s.activity; }
-        if (s.world?.gaming?.found && features.gaming && !features.gaming.found) features.gaming.setFound?.(true); }
+        if (s.world?.gaming?.found && features.gaming && !features.gaming.found) features.gaming.setFound?.(true);
+        if (s.laptop) state.laptop = s.laptop; if (Array.isArray(s.mail)) state.mail = s.mail;
+        if (Array.isArray(s.wishlist)) state.wishlist = s.wishlist; if (Array.isArray(s.interests)) state.interests = s.interests;
+        if (Array.isArray(s.thoughts) && s.thoughts.length) thoughts.splice(0, thoughts.length, ...s.thoughts.filter(Boolean));
+        ui.syncState(s); }
       const b = document.querySelector('#ui .bar.caps'); if (b) { const v = life.inv.caps; const top = b.querySelector('.bar-top b'); if (top) top.innerHTML = `${v} <i>/ ${capsMax}</i>`; const f = b.querySelector('.fill'); if (f && capsMax) f.style.width = Math.min(100, v / capsMax * 100).toFixed(1) + '%'; }
       ui.setDoing(life.label, bagText(life.inv)); lifeDirty = 1; },
     onAction: ({ life: id, text, from }) => {

@@ -16,19 +16,23 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
   const sv = state.savings || {};
   const savingsBars = Object.entries(sv).map(([k, s]) => bar(`${k === 'ocean' ? '🌊' : k === 'skateboard' ? '🛹' : '💰'} ${esc(s.label || k)}`, s.saved, s.target, money, k)).join('');
   const capsGoal = (() => { const g = (state.goals || []).find((x) => /cap/i.test(x.text)); const m = g && g.text.match(/(\d+)/); return m ? parseInt(m[1]) : 50; })();
-  const diary = [...(state.diary || [])].reverse();
-  const byDate = {}; diary.forEach((d) => (byDate[d.date] ||= []).push(d));
   const fmtDate = (d) => { const dt = new Date(d + 'T12:00:00'); return isNaN(dt) ? d : dt.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); };
   const fmtTime = (t) => { const [h, m] = (t || '').split(':').map(Number); if (isNaN(h)) return t || ''; const ap = h >= 12 ? 'pm' : 'am'; return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${ap}`; };
-  const diaryHtml = Object.entries(byDate).map(([d, items]) => `<div class="day"><div class="date">${esc(fmtDate(d))}</div>${items.map((it) => `<div class="entry"><span class="time">${esc(fmtTime(it.time))}</span><p>${esc(it.text)}</p></div>`).join('')}</div>`).join('') || '<p class="muted">no diary yet. he is busy.</p>';
-  // gallery: newest first. real art -> ./art/<file>; otherwise a painted (procedural) thumbnail, emoji if even that fails
-  const arts = [...(state.art || [])].map((a, i) => ({ a, i })).reverse();
+  const renderDiary = (list) => {
+    const rev = [...(list || [])].reverse(); const byDate = {}; rev.forEach((d) => (byDate[d.date] ||= []).push(d));
+    return Object.entries(byDate).map(([d, items]) => `<div class="day"><div class="date">${esc(fmtDate(d))}</div>${items.map((it) => `<div class="entry"><span class="time">${esc(fmtTime(it.time))}</span><p>${esc(it.text)}</p></div>`).join('')}</div>`).join('') || '<p class="muted">no diary yet. he is busy.</p>';
+  };
+  const renderGoals = (list) => (list || []).map((g) => `<div class="goal ${g.done ? 'done' : ''}"><span class="chk">${g.done ? '✔' : ''}</span><div><div class="gt">${esc(g.text)}</div>${g.meta ? `<div class="gm">${esc(g.meta)}</div>` : ''}</div></div>`).join('');
   const painted = (a) => { try { return artTex(a.kind, a.title, a.price).image.toDataURL('image/png'); } catch { return ''; } };
-  const artThumbs = arts.map(({ a, i }) => ({ a, i, src: artUrl(a) || painted(a), real: !!artUrl(a), fallback: painted(a) }));
-  const artHtml = artThumbs.length ? `<div class="gallery">${artThumbs.map((t, k) => `<button class="thumb ${t.real ? 'real' : ''}" data-k="${k}" aria-label="${esc(t.a.title)}">
+  const buildThumbs = (list) => [...(list || [])].map((a, i) => ({ a, i })).reverse().map(({ a, i }) => ({ a, i, src: artUrl(a) || painted(a), real: !!artUrl(a), fallback: painted(a) }));
+  const renderArt = (thumbs) => thumbs.length ? `<div class="gallery">${thumbs.map((t, k) => `<button class="thumb ${t.real ? 'real' : ''}" data-k="${k}" aria-label="${esc(t.a.title)}">
       <span class="frame">${t.src ? `<img loading="lazy" alt="" src="${t.src}" data-fb="${k}">` : ''}<span class="ae">${ART_EMOJI[t.a.kind] || '🖼️'}</span>${t.real ? '<span class="badge">✨ original</span>' : ''}</span>
       <span class="tt">${esc(t.a.title)}</span><span class="ap">${money(t.a.price)}</span></button>`).join('')}</div>` : '<p class="muted">no masterpieces (yet)</p>';
-  const goalsHtml = (state.goals || []).map((g) => `<div class="goal ${g.done ? 'done' : ''}"><span class="chk">${g.done ? '✔' : ''}</span><div><div class="gt">${esc(g.text)}</div>${g.meta ? `<div class="gm">${esc(g.meta)}</div>` : ''}</div></div>`).join('');
+  const diaryHtml = renderDiary(state.diary);
+  let artThumbs = buildThumbs(state.art);
+  const artHtml = renderArt(artThumbs);
+  const goalsHtml = renderGoals(state.goals);
+  let lastDiaryLen = (state.diary || []).length, lastArtLen = (state.art || []).length;
 
   root.innerHTML = `
   <section class="card" id="card">
@@ -105,12 +109,14 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
   addEventListener('pointerdown', (e) => { if (!e.target.closest?.('#placesPop, #placesBtn, #morePop, #moreBtn, .settings')) closePops(); });
   addEventListener('keydown', (e) => { if (e.key === 'Escape') closePops(); });
   root.querySelectorAll('.zone').forEach((b) => (b.onclick = () => { onZone(b.dataset.zone); closePops(); }));
-  // gallery images: fall back to the painted version, then to the emoji
-  root.querySelectorAll('.gallery img').forEach((img) => { img.onerror = () => { const t = artThumbs[+img.dataset.fb]; if (t.real && img.src !== t.fallback && t.fallback) { t.real = false; t.src = t.fallback; img.src = t.fallback; img.closest('.thumb').classList.remove('real'); img.parentElement.querySelector('.badge')?.remove(); } else img.remove(); }; });
   const lb = root.querySelector('#lightbox'), lbImg = lb.querySelector('img'); let lbK = 0;
   const showLb = (k) => { lbK = (k + artThumbs.length) % artThumbs.length; const t = artThumbs[lbK]; lbImg.src = t.src || t.fallback; lbImg.onerror = () => { if (t.fallback && lbImg.src !== t.fallback) lbImg.src = t.fallback; };
     lb.querySelector('.lb-cap b').textContent = t.a.title || 'untitled'; lb.querySelector('.lb-cap span').textContent = `${money(t.a.price)}${t.real ? ' · original by mochi' : ''}`; lb.hidden = false; };
-  root.querySelectorAll('.thumb').forEach((b) => (b.onclick = () => showLb(+b.dataset.k)));
+  const bindGallery = () => {
+    root.querySelectorAll('.gallery img').forEach((img) => { img.onerror = () => { const t = artThumbs[+img.dataset.fb]; if (t?.real && img.src !== t.fallback && t.fallback) { t.real = false; t.src = t.fallback; img.src = t.fallback; img.closest('.thumb')?.classList.remove('real'); img.parentElement.querySelector('.badge')?.remove(); } else img.remove(); }; });
+    root.querySelectorAll('.thumb').forEach((b) => (b.onclick = () => showLb(+b.dataset.k)));
+  };
+  bindGallery();
   lb.onclick = (e) => { if (e.target === lb || e.target.classList.contains('lb-close')) lb.hidden = true; };
   lb.querySelector('.lb-prev').onclick = () => showLb(lbK - 1); lb.querySelector('.lb-next').onclick = () => showLb(lbK + 1);
   addEventListener('keydown', (e) => { if (lb.hidden) return; if (e.key === 'Escape') lb.hidden = true; if (e.key === 'ArrowLeft') showLb(lbK - 1); if (e.key === 'ArrowRight') showLb(lbK + 1); });
@@ -137,5 +143,24 @@ export function buildUI(state, weather, { onZone, onFollow, onWalk, onSettings, 
     get lightboxOpen() { return !lb.hidden; },
     setSong(song) { np.hidden = !song; if (song) np.innerHTML = `<span class="eq"><i></i><i></i><i></i></span> ${esc(song.title)} <em>by mochi · skip ⏭</em>`; },
     openTab(name) { root.querySelector(`.tabs button[data-tab="${name}"]`)?.click(); },
+    syncState(s) {
+      if (!s) return;
+      if (s.weather) { const el = root.querySelector('#card .loc span'); if (el) el.textContent = s.weather; }
+      if (Array.isArray(s.diary) && s.diary.length !== lastDiaryLen) {
+        lastDiaryLen = s.diary.length;
+        const p = root.querySelector('#pane-diary'); if (p) p.innerHTML = renderDiary(s.diary);
+        const bi = root.querySelector('.tabs button[data-tab="diary"] i'); if (bi) bi.textContent = String(lastDiaryLen);
+      }
+      if (Array.isArray(s.art) && s.art.length !== lastArtLen) {
+        lastArtLen = s.art.length;
+        artThumbs = buildThumbs(s.art);
+        const p = root.querySelector('#pane-art'); if (p) { p.innerHTML = renderArt(artThumbs); bindGallery(); }
+        const bi = root.querySelector('.tabs button[data-tab="art"] i'); if (bi) bi.textContent = String(lastArtLen);
+      }
+      if (Array.isArray(s.goals)) {
+        const p = root.querySelector('#pane-goals'); if (p) p.innerHTML = renderGoals(s.goals);
+        const bi = root.querySelector('.tabs button[data-tab="goals"] i'); if (bi) bi.textContent = `${s.goals.filter((g) => g.done).length}/${s.goals.length}`;
+      }
+    },
   };
 }

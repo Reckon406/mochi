@@ -1,0 +1,31 @@
+name: Snapshot Mochi state fallback
+on:
+  schedule:
+    - cron: '0 10 * * *' # daily 3am MT — keeps public/state.json fresh as an offline fallback only
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch live state from mochi-brain Worker
+        run: |
+          curl -fsSL https://mochi-brain.coreydman15.workers.dev/state -o /tmp/live.json
+          node -e '
+            const fs = require("fs");
+            const d = JSON.parse(fs.readFileSync("/tmp/live.json", "utf8"));
+            if (!d || typeof d.caps !== "number" || !Array.isArray(d.diary)) throw new Error("invalid state");
+            delete d.brain;
+            fs.writeFileSync("public/state.json", JSON.stringify(d, null, 2) + "\n");
+          '
+      - name: Commit fallback snapshot if changed
+        run: |
+          if ! git diff --quiet public/state.json; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/state.json
+            git commit -m "Snapshot fallback state.json from mochi-brain"
+            git push
+          fi

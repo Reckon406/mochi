@@ -7,6 +7,10 @@ export function normGame(name) {
   if (!t || /^grand theft\s+(avian|avocado)(\s+vi)?$/i.test(t)) return GAME_TITLE;
   return t.slice(0, 40);
 }
+export function normGameText(text) {
+  if (typeof text !== 'string') return text;
+  return text.replace(/grand theft\s+avian(\s+vi)?/gi, (m) => (m[0] === 'G' ? GAME_TITLE : 'grand theft avocado vi'));
+}
 export const TRINKETS = ['tiny rubber duck', 'glow-in-the-dark star', 'googly eye (single)', 'mini compass', 'cursed marble', 'sticker of a moose', 'whistle', 'tiny sunglasses', 'bouncy ball', 'plastic gold coin'];
 export const VEND_COST = 3;
 export const FISH = {
@@ -84,7 +88,7 @@ export const ACTIONS = {
   warm: { life: 'warm', desc: 'warm up at the campfire (uses firewood if any)', run(L) { if (L.inventory.firewood > 0) L.inventory.firewood--; return { text: 'warmed my toes at the campfire. toasty bird' }; } },
   sleep: { life: 'sleep', desc: 'nap in the hut (good at night)', run() { return { text: 'napped in the hut. zzz. dreamed of the ocean' }; } },
   shells: { life: 'shells', desc: 'beachcomb for shells', run(L) { if (Math.random() < 0.6) { L.inventory.shells++; return { text: 'found a shell on the beach. pocketed' }; } return { text: 'beachcombed. found mostly sand' }; } },
-  browse: { life: 'browse', desc: 'browse the laptop at the picnic table', run() { return { text: 'browsed the laptop. read about a very chunky badger' }; } },
+  browse: { life: 'browse', desc: 'browse the laptop at the picnic table', run(L) { const h = L._laptopHeadline; return { text: h ? `browsed the laptop: ${h.slice(0, 90)}` : 'browsed the laptop at the picnic table' }; } },
   jam: { life: 'jam', desc: 'jam on the music stage', run() { return { text: 'jammed on the music stage. the squirrel did not clap' }; } },
   telescope: { life: 'telescope', desc: 'look through the treehouse telescope (best at night)', run() { return { text: 'looked through the telescope. the stars kept the promise' }; } },
   skip: { life: 'skip', desc: 'skip rocks at the pond', run() { const n = ri(1, 6); return { text: `skipped a rock ${n} times. ${n > 4 ? 'LEGEND' : 'the pond is not ready for me'}` }; } },
