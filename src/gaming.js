@@ -1,6 +1,12 @@
 // 🎮 gaming nook by the hut: flat-screen TV on a low console, a generic white/black games console, a pad, a beanbag.
-// The TV runs a home-made parody game ("Grand Theft Avian VI": neon beach drive, palms, pink/teal sunset, HUD) on a CanvasTexture.
+// The TV runs a home-made parody game ("Grand Theft Avocado VI": neon beach drive, palms, pink/teal sunset, HUD) on a CanvasTexture.
 // STATE: world.gaming = { game, hours, found, discSpot } (all optional). No real game assets or logos anywhere.
+export const GAME_TITLE = 'Grand Theft Avocado VI';
+export function normGame(name) {
+  const t = String(name || '').trim();
+  if (!t || /^grand theft\s+(avian|avocado)(\s+vi)?$/i.test(t)) return GAME_TITLE;
+  return t.slice(0, 40);
+}
 import * as THREE from 'three';
 import { GAMING, topH, groundY } from './layout.js';
 
@@ -23,7 +29,7 @@ export function makePad() {
 
 export function createGaming(scene, { state, glow, tier = 2 }) {
   const cfg = state.world && typeof state.world.gaming === 'object' && state.world.gaming ? state.world.gaming : {};
-  const title = String(cfg.game || 'Grand Theft Avian VI').slice(0, 40);
+  const title = normGame(cfg.game);
   const group = new THREE.Group(); group.name = 'gaming'; scene.add(group);
   const y0 = topH(GAMING.x, GAMING.z); group.position.set(GAMING.x, y0, GAMING.z); group.rotation.y = GAMING.yaw;
   // low wooden media console + rug
@@ -64,12 +70,22 @@ export function createGaming(scene, { state, glow, tier = 2 }) {
   const spotKeys = Object.keys(DISC_SPOTS); const day = Math.floor(Date.now() / 864e5);
   const ds = cfg.discSpot; const discXZ = Array.isArray(ds) && ds.length >= 2 && isFinite(ds[0]) && isFinite(ds[1]) ? [+ds[0], +ds[1]] : DISC_SPOTS[ds] || DISC_SPOTS[spotKeys[day % spotKeys.length]];
   const discSpotName = Array.isArray(ds) ? 'custom' : DISC_SPOTS[ds] ? ds : spotKeys[day % spotKeys.length];
-  const coverCv = document.createElement('canvas'); coverCv.width = 96; coverCv.height = 128; { const q = coverCv.getContext('2d'); const gr = q.createLinearGradient(0, 0, 0, 128); gr.addColorStop(0, '#ff5fa2'); gr.addColorStop(0.6, '#ffb36b'); gr.addColorStop(1, '#2ad1c9'); q.fillStyle = gr; q.fillRect(0, 0, 96, 128);
-    q.fillStyle = '#1a1030'; q.fillRect(0, 0, 96, 22); q.fillStyle = '#fff'; q.font = 'bold 11px ' + F; q.textAlign = 'center'; q.fillText('GRAND THEFT', 48, 15); q.font = 'bold 34px ' + F; q.fillStyle = '#fff'; q.fillText('VI', 48, 70); q.font = 'bold 10px ' + F; q.fillText('AVIAN', 48, 86);
-    q.fillStyle = '#1a1030'; for (let i = 0; i < 6; i++) q.fillRect(8 + i * 14, 100 - (i % 3) * 6, 10, 30); }
-  const coverT = new THREE.CanvasTexture(coverCv); coverT.colorSpace = THREE.SRGBColorSpace;
-  const disc = new THREE.Group(); { const caseM = new THREE.MeshStandardMaterial({ color: 0x1b4fa8, roughness: 0.4 }); const box = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.016, 0.19), caseM); box.castShadow = true; disc.add(box);
-    const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.135, 0.175), new THREE.MeshStandardMaterial({ map: coverT, roughness: 0.5 })); cover.rotation.x = -Math.PI / 2; cover.position.y = 0.0085; disc.add(cover); }
+  const coverCv = document.createElement('canvas'); coverCv.width = 192; coverCv.height = 256;
+  { const q = coverCv.getContext('2d'); const gr = q.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#163a1c'); gr.addColorStop(0.45, '#2f7a32'); gr.addColorStop(0.78, '#c6e36a'); gr.addColorStop(1, '#e8c85a'); q.fillStyle = gr; q.fillRect(0, 0, 192, 256);
+    q.fillStyle = '#10240f'; q.fillRect(0, 0, 192, 46); q.fillStyle = '#e8ffb0'; q.font = 'bold 22px ' + F; q.textAlign = 'center'; q.textBaseline = 'middle'; q.fillText('GRAND THEFT', 96, 24);
+    // cartoon avocado with sunglasses (no real logos)
+    q.save(); q.translate(96, 118); q.fillStyle = '#2a6b28'; q.beginPath(); q.moveTo(0, -56); q.bezierCurveTo(36, -56, 50, -18, 50, 8); q.bezierCurveTo(50, 54, 32, 70, 0, 70); q.bezierCurveTo(-32, 70, -50, 54, -50, 8); q.bezierCurveTo(-50, -18, -36, -56, 0, -56); q.fill();
+    q.fillStyle = '#d4ec6a'; q.beginPath(); q.ellipse(0, 8, 32, 44, 0, 0, 7); q.fill(); q.fillStyle = '#8a5628'; q.beginPath(); q.arc(0, 12, 16, 0, 7); q.fill(); q.fillStyle = 'rgba(255,255,255,0.3)'; q.beginPath(); q.ellipse(-5, 6, 6, 4, -0.5, 0, 7); q.fill();
+    q.fillStyle = '#1a1a1a'; q.fillRect(-34, -18, 68, 6); q.beginPath(); q.ellipse(-16, -8, 16, 13, 0, 0, 7); q.ellipse(16, -8, 16, 13, 0, 0, 7); q.fill(); q.fillStyle = '#4a6a8a'; q.beginPath(); q.ellipse(-20, -11, 6, 4, 0, 0, 7); q.fill(); q.restore();
+    q.fillStyle = '#10240f'; q.font = '900 28px ' + F; q.fillText('AVOCADO', 96, 210); q.fillStyle = '#fff8dc'; q.font = '900 34px ' + F; q.fillText('VI', 96, 240); }
+  const coverT = new THREE.CanvasTexture(coverCv); coverT.colorSpace = THREE.SRGBColorSpace; const coverMat = new THREE.MeshStandardMaterial({ map: coverT, roughness: 0.5 });
+  const caseM = new THREE.MeshStandardMaterial({ color: 0x1a3d14, roughness: 0.4 });
+  const disc = new THREE.Group(); { const box = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.016, 0.19), caseM); box.castShadow = true; disc.add(box);
+    const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.135, 0.175), coverMat); cover.rotation.x = -Math.PI / 2; cover.position.y = 0.0085; disc.add(cover); }
+  // a copy of the case standing on the cabinet so the box art stays visible after the lost disc is found
+  const shelfCase = new THREE.Group(); { const box = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.19, 0.016), caseM); box.castShadow = true; shelfCase.add(box);
+    const cover = new THREE.Mesh(new THREE.PlaneGeometry(0.135, 0.175), coverMat); cover.position.z = 0.0085; shelfCase.add(cover); }
+  shelfCase.position.set(-0.22, 0.515, 0.12); shelfCase.rotation.y = 0.18; group.add(shelfCase);
   disc.position.set(discXZ[0], groundY(discXZ[0], discXZ[1]) + 0.02, discXZ[1]); disc.rotation.set(0.08, day * 1.7, -0.05); scene.add(disc);
   const glintCv = document.createElement('canvas'); glintCv.width = glintCv.height = 64; { const q = glintCv.getContext('2d'); const gr = q.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.15, 'rgba(255,250,220,0.8)'); gr.addColorStop(1, 'rgba(255,240,200,0)'); q.fillStyle = gr; q.fillRect(0, 0, 64, 64);
     q.fillStyle = 'rgba(255,255,255,0.95)'; q.fillRect(31, 2, 2, 60); q.fillRect(2, 31, 60, 2); }
@@ -99,10 +115,13 @@ export function createGaming(scene, { state, glow, tier = 2 }) {
     g.strokeStyle = '#ff4fa3'; g.lineWidth = 3; g.beginPath(); g.moveTo(mx, my); g.lineTo(mx + mm * 0.7, my - mm * 0.6); g.stroke(); g.restore(); g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(mx, my - 7); g.lineTo(mx - 5, my + 5); g.lineTo(mx + 5, my + 5); g.fill();
     g.textAlign = 'right'; g.textBaseline = 'top'; g.font = `bold ${Math.round(ch * 0.085)}px ${F}`; g.lineWidth = 4; g.strokeStyle = '#000'; const c$ = '$' + cash.toLocaleString('en-US'); g.strokeText(c$, cw - 12, 30); g.fillStyle = '#7dff8a'; g.fillText(c$, cw - 12, 30);
     for (let i = 0; i < 5; i++) { const sx = cw - 16 - i * 22, sy = 16, on = i < wanted; g.fillStyle = on ? (Math.floor(t * 4) % 2 && wanted >= 3 ? '#ffffff' : '#ffd34d') : 'rgba(255,255,255,0.25)'; g.beginPath(); for (let k = 0; k < 10; k++) { const a = -Math.PI / 2 + k * Math.PI / 5, r = k % 2 ? 4 : 9; g.lineTo(sx + Math.cos(a) * r, sy + Math.sin(a) * r); } g.fill(); }
-    g.textAlign = 'left'; g.font = `bold ${Math.round(ch * 0.05)}px ${F}`; g.fillStyle = 'rgba(255,255,255,0.75)'; g.fillText('VICE BEAK BLVD', 12, 12); }
+    g.textAlign = 'left'; g.font = `bold ${Math.round(ch * 0.05)}px ${F}`; g.fillStyle = 'rgba(255,255,255,0.75)'; g.fillText('VICE PIT BLVD', 12, 12); }
   function attract(t) { sky(t); city(t * 0.3); sea(t); road(t * 0.2); g.fillStyle = 'rgba(20,0,40,0.35)'; g.fillRect(0, 0, cw, ch);
-    g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `900 ${Math.round(ch * 0.15)}px ${F}`; g.lineWidth = 8; g.strokeStyle = '#1a0830'; const L1 = title.toUpperCase().replace(/ VI$/, ''); g.strokeText(L1, cw / 2, ch * 0.34); const tg = g.createLinearGradient(0, ch * 0.26, 0, ch * 0.42); tg.addColorStop(0, '#ffe36b'); tg.addColorStop(1, '#ff4fa3'); g.fillStyle = tg; g.fillText(L1, cw / 2, ch * 0.34);
-    if (/ VI$/.test(title)) { g.font = `900 ${Math.round(ch * 0.2)}px ${F}`; g.strokeText('VI', cw / 2, ch * 0.55); g.fillStyle = '#5ff3e8'; g.fillText('VI', cw / 2, ch * 0.55); }
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineWidth = 8; g.strokeStyle = '#1a0830';
+    const main = title.toUpperCase().replace(/ VI$/, ''), parts = main.split(/\s+/), line1 = parts.length >= 3 ? parts.slice(0, -1).join(' ') : main, line2 = parts.length >= 3 ? parts[parts.length - 1] : '';
+    const y1 = line2 ? ch * 0.26 : ch * 0.34; g.font = `900 ${Math.round(ch * (line2 ? 0.1 : 0.15))}px ${F}`; g.strokeText(line1, cw / 2, y1); const tg = g.createLinearGradient(0, y1 - ch * 0.08, 0, y1 + ch * 0.08); tg.addColorStop(0, '#e8ffb0'); tg.addColorStop(1, '#7dff6a'); g.fillStyle = tg; g.fillText(line1, cw / 2, y1);
+    if (line2) { g.font = `900 ${Math.round(ch * 0.16)}px ${F}`; g.strokeText(line2, cw / 2, ch * 0.42); const tg2 = g.createLinearGradient(0, ch * 0.34, 0, ch * 0.5); tg2.addColorStop(0, '#ffe36b'); tg2.addColorStop(1, '#7dff6a'); g.fillStyle = tg2; g.fillText(line2, cw / 2, ch * 0.42); }
+    if (/ VI$/.test(title)) { g.font = `900 ${Math.round(ch * 0.18)}px ${F}`; g.strokeText('VI', cw / 2, ch * 0.6); g.fillStyle = '#5ff3e8'; g.fillText('VI', cw / 2, ch * 0.6); }
     if (Math.floor(t * 2) % 2) { g.font = `bold ${Math.round(ch * 0.06)}px ${F}`; g.fillStyle = '#ffffff'; g.fillText('PRESS ✕ TO START', cw / 2, ch * 0.8); } }
   function drive(t) { sky(t); city(t); sea(t); road(t); car(t, 1); hud(t); }
   function wastedScr(t) { drive(t - deadT * 0); g.fillStyle = 'rgba(120,120,120,0.55)'; g.fillRect(0, 0, cw, ch); g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = `900 ${Math.round(ch * 0.2)}px ${F}`; g.lineWidth = 8; g.strokeStyle = '#000'; g.strokeText('PLUCKED', cw / 2, ch * 0.45); g.fillStyle = '#c8202a'; g.fillText('PLUCKED', cw / 2, ch * 0.45); }

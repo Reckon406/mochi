@@ -2,7 +2,7 @@
 // (caps, inventory, activity/mood, crush, gaming hours, plane, pet, memories, purchase/chat/action logs).
 // A cron tick lets Gemini pick 1-3 actions from a fixed, server-validated menu. GET /state, POST /chat, POST /event.
 import { DurableObject } from 'cloudflare:workers';
-import { ACTIONS, menuFor, runAction, applyEvent, normInv, STAGES } from './rules.js';
+import { ACTIONS, menuFor, runAction, applyEvent, normInv, STAGES, GAME_TITLE, normGame } from './rules.js';
 
 const ORIGINS = ['https://reckon406.github.io'];
 const okOrigin = (o) => !!o && (ORIGINS.includes(o) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(o));
@@ -28,13 +28,13 @@ export default {
     if (req.method === 'POST' && origin && !okOrigin(origin)) return json({ error: 'origin not allowed' }, 403, origin);
     const ip = req.headers.get('cf-connecting-ip') || 'local';
     const fwd = (p, extra = {}) => stub(env).fetch('https://brain' + p, { method: req.method, body: req.method === 'POST' ? req.body : undefined, headers: { 'content-type': 'application/json', 'x-ip': ip, 'x-origin': origin, ...extra } });
-    if (path === '/' && req.method === 'GET') return json({ name: 'mochi-brain', hi: 'chirp. try GET /state', endpoints: ['GET /state', 'POST /chat {message}', 'POST /event {type,...}'] }, 200, origin);
+    if (path === '/' && req.method === 'GET') return json({ name: 'mochi-brain', hi: 'chirp. try GET /state', endpoints: ['GET /state', 'POST /chat {message}', 'POST /event {type,...}'], game: 'Grand Theft Avocado VI' }, 200, origin);
     if (path === '/state' && req.method === 'GET') return withCors(await fwd('/state'), origin);
     if (path === '/chat' && req.method === 'POST') return withCors(await fwd('/chat'), origin);
     if (path === '/event' && req.method === 'POST') return withCors(await fwd('/event'), origin);
-    if (path === '/tick' && req.method === 'POST') { // manual tick: admin token only
+    if ((path === '/tick' || path === '/admin') && req.method === 'POST') { // manual tick / admin: token only
       const tok = req.headers.get('authorization') || ''; if (!env.ADMIN_TOKEN || tok !== 'Bearer ' + env.ADMIN_TOKEN) return json({ error: 'nope' }, 401, origin);
-      return withCors(await fwd('/tick' + url.search, { 'x-mochi-internal': '1' }), origin);
+      return withCors(await fwd(path + url.search, { 'x-mochi-internal': '1' }), origin);
     }
     return json({ error: 'not found' }, 404, origin);
   },
@@ -51,6 +51,7 @@ export class MochiBrain extends DurableObject {
     try {
       if (url.pathname === '/state') return this.out({ ...(await this.view()) });
       if (url.pathname === '/tick' && req.headers.get('x-mochi-internal') === '1') return this.out(await this.tick(url.searchParams.get('force')));
+      if (url.pathname === '/admin' && req.headers.get('x-mochi-internal') === '1') return this.out(await this.admin(req));
       if (url.pathname === '/chat') return await this.chat(req, ip);
       if (url.pathname === '/event') return await this.event(req, ip);
     } catch (e) { console.error('brain error', e?.stack || e); return this.out({ error: 'brain hiccup', reply: pick(OFFLINE) }, 500); }
@@ -68,7 +69,7 @@ export class MochiBrain extends DurableObject {
   async load() { const [live, base] = await Promise.all([this.ctx.storage.get('live'), this.ctx.storage.get('base')]); return { live, base: base || {} }; }
   async save(L) { const o = { ...L }; for (const k of Object.keys(o)) if (k.startsWith('_')) delete o[k]; for (const k of ['log', 'purchases', 'chat', 'memories', 'fishLog']) o[k] = (o[k] || []).slice(-({ log: 80, purchases: 50, chat: 80, memories: 30, fishLog: 40 }[k])); await this.ctx.storage.put('live', o); }
   liveOf(s) { const w = s.world || {}; return { caps: Math.max(0, Math.floor(+s.caps || 0)), inventory: normInv(s.inventory), activity: String(s.activity || ''), mood: String(s.mood || ''), location: String(s.location || ''),
-    world: { crush: { stage: 'stranger', affection: 0, gifts: [], ...(w.crush || {}) }, gaming: { game: 'Grand Theft Avian VI', found: false, hours: 0, ...(w.gaming || {}) }, plane: { owned: true, name: 'kiwi force one', ...(w.plane || {}) }, pet: { kind: 'cat', name: 'biscuit', mood: 'playful', ...(w.pet || {}) } },
+    world: (() => { const crush = { stage: 'stranger', affection: 0, gifts: [], ...(w.crush || {}) }; const gaming = { game: GAME_TITLE, found: false, hours: 0, ...(w.gaming || {}) }; gaming.game = normGame(gaming.game); const plane = { owned: true, name: 'kiwi force one', ...(w.plane || {}) }; const pet = { kind: 'cat', name: 'biscuit', mood: 'playful', ...(w.pet || {}) }; return { crush, gaming, plane, pet }; })(),
     mem: ((w.memories && w.memories.short) || []).map((m) => String(m.text || m)) }; }
 
   async sync() {
@@ -87,11 +88,13 @@ export class MochiBrain extends DurableObject {
       for (const t of S.mem) if (!(seen.mem || []).includes(t)) L.memories.push({ text: t, tag: 'bot', at: Date.now() });
     }
     if (fresh || !seen) await this.ctx.storage.put('seen', S);
+    if (normGame(L.world.gaming.game) !== L.world.gaming.game) L.world.gaming.game = GAME_TITLE;
     L.lastSync = Date.now(); return { L, base };
   }
 
   async view() {
     let { live: L, base } = await this.load(); if (!L) ({ L, base } = await this.sync()), await this.save(L);
+    if (L && L.world?.gaming && normGame(L.world.gaming.game) !== L.world.gaming.game) { L.world.gaming.game = GAME_TITLE; await this.save(L); }
     const bw = base.world || {}, short = [...((bw.memories && bw.memories.short) || [])];
     const have = new Set(short.map((m) => m.text)); for (const m of L.memories) if (!have.has(m.text) && m.tag !== 'seed' && m.tag !== 'chat-private') short.push({ text: m.text, date: new Date(m.at).toISOString().slice(0, 10), tag: m.tag });
     return { ...base, caps: L.caps, inventory: L.inventory, activity: L.activity, mood: L.mood, location: L.location || base.location,
@@ -118,7 +121,7 @@ export class MochiBrain extends DurableObject {
     const wish = (base.wishlist || []).filter((w) => w.status !== 'built').map((w) => w.item).slice(0, 6).join('; ');
     const goals = (base.goals || []).filter((g) => !g.done).map((g) => g.text).slice(0, 5).join('; ');
     return `you are mochi, a chubby little brown kiwi bird (corey's pet; inspired by pino by @3eyes.iii) living on a river island near darby, montana in the bitterroot valley.
-you talk casually in all lowercase, short and cute and a bit goofy. you collect bottle caps (your cap museum; caps are also your in-game money), make ai art and sell prints at your market stall, have a big crush on the girl kiwi across the river, play 'grand theft avian vi' on your ps5, have a pet cat named biscuit, and fly your floatplane 'kiwi force one'.
+you talk casually in all lowercase, short and cute and a bit goofy. you collect bottle caps (your cap museum; caps are also your in-game money), make ai art and sell prints at your market stall, have a big crush on the girl kiwi across the river, play 'grand theft avocado vi' on your ps5, have a pet cat named biscuit, and fly your floatplane 'kiwi force one'.
 you are pg and kind. you live in a little 3d world; you never claim to do real-world things (no real purchases, no posting online, no real money). never share personal info, never pretend to be a human.
 right now: ${c.when} (mountain time), ${c.season}, weather ${c.weather}${c.dark ? ', dark out' : ''}.
 your mood: ${L.mood || 'chill'}. last doing: ${L.activity || 'nothing'}.
@@ -165,6 +168,19 @@ reply as json: {"actions": ["id", ...], "mood": "a short lowercase mood", "thoug
     const did = results.filter((r) => r.ok); if (did.length) L.memories.push({ text: did.map((r) => r.text).join('; ').slice(0, 220), tag: 'tick', at: Date.now() });
     L.lastTick = { at: Date.now(), ids, results, mood: L.mood, thought: out?.thought || null, gemini: !!out, weather: c.weather };
     await this.save(L); return { ok: true, tick: L.lastTick, caps: L.caps, geminiToday: d.gemini };
+  }
+
+
+  // admin: normalize / set the live game title without running a tick
+  async admin(req) {
+    let body = {}; try { body = await req.json(); } catch {}
+    const { L } = await this.sync();
+    const was = L.world.gaming.game;
+    const next = body && body.game ? normGame(body.game) : GAME_TITLE;
+    L.world.gaming.game = next;
+    await this.save(L);
+    const g = L.world.gaming;
+    return { ok: true, game: g.game, found: g.found, hours: g.hours, was };
   }
 
   // ── chat ──

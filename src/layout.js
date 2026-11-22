@@ -151,7 +151,7 @@ export const ZONES = [
   { id: 'hottub', name: 'Hot Tub', emoji: '♨️', pos: [WISH.tub.x, WISH.tub.z], spot: [WISH.tub.x + 1.3, WISH.tub.z + 1.2], keys: ['hot tub', 'hottub', 'tub', 'soak', 'capybara', 'bath', 'steam', 'warm water'] },
   { id: 'burrow', name: 'Petrel Burrow', emoji: '🐦', pos: [WISH.burrow.x, WISH.burrow.z], spot: [WISH.burrow.x + 0.9, WISH.burrow.z - 1.6], keys: ['burrow', 'petrel', 'diving-petrel', 'guest', 'seabird', 'tunnel'] },
   { id: 'range', name: 'Shooting Range', emoji: '🎯', pos: [RANGE.x, RANGE.z], spot: [RANGE.bench + 0.55, RANGE.z], keys: ['range', 'shooting', 'target', 'gun', 'rifle', 'plinking', 'clay'] },
-  { id: 'gaming', name: 'Gaming Nook', emoji: '🎮', pos: [GAMING.x, GAMING.z], spot: [GAMING.cx, GAMING.cz], keys: ['tv', 'ps5', 'console', 'gaming', 'video game', 'gta', 'grand theft', 'controller', 'playstation'] },
+  { id: 'gaming', name: 'Gaming Nook', emoji: '🎮', pos: [GAMING.x, GAMING.z], spot: [GAMING.cx, GAMING.cz], keys: ['tv', 'ps5', 'console', 'gaming', 'video game', 'gta', 'grand theft', 'avocado', 'controller', 'playstation'] },
   { id: 'vending', name: 'Cap-O-Matic', emoji: '🎰', pos: [VEND.x, VEND.z], spot: [VEND.x + VEND.fx * 1.6, VEND.z + VEND.fz * 1.6], keys: ['vending', 'cap-o-matic', 'capomatic', 'machine', 'trinket', 'spend', 'gacha', 'capsule'] },
 ];
 

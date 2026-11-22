@@ -23,7 +23,7 @@ export const INTERESTS = [
   { id: 'swing', label: 'the tree swing', emoji: '🌳', gifts: [], topic: 'swing', hint: 'is that a swing in your big tree? i\'ve always wanted to swing over the water', ick: 'heights. nope' },
   { id: 'owls', label: 'the owl box', emoji: '🦉', gifts: [], topic: 'owls', hint: 'someone goes \'hoo\' over there every night. i want to meet them', ick: 'owls stare. it\'s rude' },
   { id: 'skate', label: 'skateboarding', emoji: '🛹', gifts: [], topic: 'skate', hint: 'i saw you do a flip on that ramp. could you teach me?', ick: 'skateboards are so LOUD' },
-  { id: 'gaming', label: 'Grand Theft Avian VI', emoji: '🎮', gifts: [], topic: 'gaming', hint: 'is it true you have a TV? what do you even play on it', ick: 'video games rot your beak' },
+  { id: 'gaming', label: 'Grand Theft Avocado VI', emoji: '🎮', gifts: [], topic: 'gaming', hint: 'is it true you have a TV? what do you even play on it', ick: 'video games rot your beak' },
   { id: 'hottub', label: 'the hot tub', emoji: '♨️', gifts: [], topic: 'hottub', hint: 'the river is SO cold. i dream about warm water', ick: 'hot water? sweaty. no' },
   { id: 'petrels', label: 'the petrel burrow', emoji: '🐦', gifts: [], topic: 'petrels', hint: 'are there seabirds nesting on your island? i heard little chirps', ick: 'other birds are so noisy' },
   { id: 'worms', label: 'worms & bugs', emoji: '🪱', gifts: ['worms'], hint: 'i dug for an hour and found ONE worm. one!', ick: 'worms? i\'m more of a berries girl' },

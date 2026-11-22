@@ -1,6 +1,12 @@
 // mochi-brain rules: the action menu, the economy and the validators. Everything that changes the live layer goes
 // through here, whether Gemini picked it (tick/chat) or the browser reported it (/event). No negative caps, ever.
 
+export const GAME_TITLE = 'Grand Theft Avocado VI';
+export function normGame(name) {
+  const t = String(name || '').trim();
+  if (!t || /^grand theft\s+(avian|avocado)(\s+vi)?$/i.test(t)) return GAME_TITLE;
+  return t.slice(0, 40);
+}
 export const TRINKETS = ['tiny rubber duck', 'glow-in-the-dark star', 'googly eye (single)', 'mini compass', 'cursed marble', 'sticker of a moose', 'whistle', 'tiny sunglasses', 'bouncy ball', 'plastic gold coin'];
 export const VEND_COST = 3;
 export const FISH = {
@@ -62,8 +68,8 @@ export const ACTIONS = {
       const d = ri(2, 7); bumpCrush(L, d, g); return { text: `rowed over and gave her ${g === 'cooked' ? 'some campfire stew' : g === 'veggies' ? 'veggies from the garden' : g}. she smiled (+${d}). i am normal about it` }; } },
   date: { life: 'date', desc: 'hang out on the dock with the girl kiwi (only once they are crushing/dating)', ok: (L) => ['crush', 'dating'].includes(L.world.crush.stage),
     run(L) { const d = ri(1, 4); bumpCrush(L, d, 'date'); return { text: `sat on the dock with her and watched the river. (+${d}) best day` }; } },
-  gaming: { life: 'gaming', desc: "play 'grand theft avian vi' on the ps5 (adds hours)", ok: (L) => !!L.world.gaming.found,
-    run(L) { const h = Math.round((0.5 + Math.random() * 1.5) * 10) / 10; L.world.gaming.hours = Math.round((N(L.world.gaming.hours) + h) * 10) / 10; return { text: `played grand theft avian vi for ${h}h. drift king of vice beak (${L.world.gaming.hours}h total)` }; } },
+  gaming: { life: 'gaming', desc: "play 'grand theft avocado vi' on the ps5 (adds hours)", ok: (L) => !!L.world.gaming.found,
+    run(L) { const h = Math.round((0.5 + Math.random() * 1.5) * 10) / 10; L.world.gaming.hours = Math.round((N(L.world.gaming.hours) + h) * 10) / 10; return { text: `played grand theft avocado vi for ${h}h. drift king of vice pit (${L.world.gaming.hours}h total)` }; } },
   disc: { life: 'disc', desc: 'hunt for the lost game disc', ok: (L) => !L.world.gaming.found,
     run(L) { if (Math.random() < 0.5) { L.world.gaming.found = true; return { text: 'FOUND THE GAME DISC. it was by the tree the whole time' }; } return { text: 'looked for the game disc. found a pinecone. not the same' }; } },
   fly: { life: 'fly', desc: 'fly the floatplane kiwi force one (not in storms or the dark)', ok: (L, c) => !!L.world.plane.owned && !c.storm && !c.dark,
