@@ -28,8 +28,8 @@ export function buildDetails(scene, { tier = 2, detail = 1, season = 'fall', sno
   const pick = (a) => a[Math.floor(R() * a.length)];
 
   // pebbles + twigs: sparse, mostly along path edges and near the shore (not confetti across the grass)
-  const edgeSpot = (pad) => { for (let k = 0; k < 14; k++) { const p = onLand(pad); if (!p) return null; const d = pathD ? pathD(p[0], p[2]) : 9; const th = Math.atan2(p[2], p[0]); if ((d > 0.45 && d < 1.3) || Math.hypot(p[0], p[2]) > islandRadius(th) * 0.86 || R() < 0.06) return p; } return null; };
-  inst(new THREE.IcosahedronGeometry(0.05, 0), M(0xffffff, { flatShading: true }), 130 * D, () => { const p = edgeSpot(0.15); if (!p) return null; const s = 0.5 + R() * 1.4; return [[p[0], p[1] + 0.01, p[2]], [R() * 3, R() * 3, R() * 3], [s, s * 0.6, s * (0.8 + R() * 0.4)], pick([0x9a958c, 0xb4ada0, 0x7f7a72, 0xc9c0ae])]; });
+  const edgeSpot = (pad) => { for (let k = 0; k < 14; k++) { const p = onLand(pad); if (!p) return null; const d = pathD ? pathD(p[0], p[2]) : 9; const th = Math.atan2(p[2], p[0]); if ((d > 0.45 && d < 1.25) || Math.hypot(p[0], p[2]) > islandRadius(th) * 0.88 || R() < 0.02) return p; } return null; };
+  inst(new THREE.IcosahedronGeometry(0.05, 0), M(0xffffff, { flatShading: true }), 55 * D, () => { const p = edgeSpot(0.15); if (!p) return null; const s = 0.5 + R() * 1.4; return [[p[0], p[1] + 0.01, p[2]], [R() * 3, R() * 3, R() * 3], [s, s * 0.6, s * (0.8 + R() * 0.4)], pick([0x9a958c, 0xb4ada0, 0x7f7a72, 0xc9c0ae])]; });
   { const tg = new THREE.CylinderGeometry(0.01, 0.016, 0.4, 4); tg.rotateZ(Math.PI / 2);
     inst(tg, M(0x6b4a33), 60 * D, () => { const p = edgeSpot(0.2); if (!p) return null; return [[p[0], p[1] + 0.015, p[2]], [0, R() * TAU, (R() - 0.5) * 0.1], [0.6 + R() * 0.9, 1, 1]]; }); }
   // fallen leaves (lots in fall, some in summer, few in spring, none under snow)

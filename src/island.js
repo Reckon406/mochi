@@ -73,7 +73,8 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
   const snowC = new THREE.Color(0xf3f6ff);
 
   // ── main island ──
-  const grassA = new THREE.Color(0x7dab4a), grassB = new THREE.Color(0xa8b84c), grassC = new THREE.Color(0x5f9440), rock = new THREE.Color(0x9a8774);
+  const grassA = new THREE.Color(0x5d8a38), grassB = new THREE.Color(0x7ea048), grassC = new THREE.Color(0x4a7330), rock = new THREE.Color(0x9a8774);
+  const grassDry = new THREE.Color(0xb7a45a), grassSage = new THREE.Color(0x7a9460);
   const sandC = new THREE.Color(0xdcc89a), gravelC = new THREE.Color(0x968c7c), cobbleC = new THREE.Color(0x857e72), wetC = new THREE.Color(0x4a4334), bedC = new THREE.Color(0x3c3c2c), dryCob = new THREE.Color(0x9a9282);
   const shoreColor = (x, y, z, c) => { // sand above the waterline, cobbles at it, wet gravel/bed below
     const n = noise(x * 0.9, z * 0.9), n2 = noise(x * 3.1 + 4, z * 3.1);
@@ -87,9 +88,12 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
     R: islandRadius, H: topH, skirtD: islandSkirtD, skirtY: islandSkirtY, rings: mobile ? 56 : 80, under: 22, seg: mobile ? 180 : 260,
     topColor: (x, y, z, f, c) => {
       const n = fbm(x * 0.15, z * 0.15, 3);
-      c.copy(grassA).lerp(grassB, clamp(0.5 + n, 0, 1)).lerp(grassC, clamp(noise(x * 0.4, z * 0.4) * 0.5, 0, 1));
+      const n2 = noise(x * 0.22 + 3, z * 0.22), n3 = noise(x * 0.08 - 2, z * 0.08);
+      c.copy(grassA).lerp(grassB, clamp(0.5 + n, 0, 1)).lerp(grassC, clamp(n2 * 0.55, 0, 1));
+      c.lerp(grassSage, clamp(0.25 + n3 * 0.5, 0, 0.45));
+      c.lerp(grassDry, clamp(smoothstep(0.35, 0.85, n3) * 0.35, 0, 0.4)); // Bitterroot dry-meadow patches
       const sl = Math.hypot(topH(x + 0.2, z) - topH(x - 0.2, z), topH(x, z + 0.2) - topH(x, z - 0.2)) / 0.4;
-      { const rk = rock.clone().lerp(new THREE.Color(0xc2ae94), 0.5 + 0.5 * Math.sin(y * 7 + noise(x, z) * 2)); c.lerp(rk, smoothstep(1.0, 1.6, sl)); }
+      { const rk = rock.clone().lerp(new THREE.Color(0xc2ae94), 0.5 + 0.5 * Math.sin(y * 7 + noise(x, z) * 2)); c.lerp(rk, smoothstep(1.25, 2.0, sl)); }
       const dp = Math.hypot(x - POND.x, z - POND.z); if (dp < POND.r + 0.3) c.lerp(new THREE.Color(0xc9b27a), smoothstep(POND.r + 0.3, POND.r - 0.2, dp));
       const path = smoothstep(0.75, 0.35, pathD(x, z) + 0.25 * noise(x * 0.7, z * 0.7)) * 0.6; c.lerp(new THREE.Color(0xb59766), path * (1 - smoothstep(0.6, 1.2, sl)));
       if (snowy) c.lerp(snowC, 0.85 * (1 - smoothstep(0.9, 1.6, sl) * 0.5));
@@ -390,34 +394,67 @@ export function buildIsland(scene, { snowy = false, mobile = false, state, detai
       add(world, new THREE.CylinderGeometry(0.04, 0.05, 0.15, 6), mat(0xf6efe0), [x, y + 0.07, z]); add(world, new THREE.SphereGeometry(0.11, 12, 6, 0, 6.29, 0, 1.6), mat(0xe8463c), [x, y + 0.14, z], [0, 0, 0], [1, 0.7, 1]); }
   }
 
-  // ── wind-swaying grass (instanced, cheap) ──
+  // ── wind-swaying meadow grass (instanced tufts, cheap; density follows quality + Grass slider) ──
   const grass = (() => {
-    const N = Math.round((mobile || lite ? 3500 : 17000 * (tier >= 3 ? 2.0 : tier >= 2 ? 1.45 : 1)) * detail); /* gfx2: denser blades at High/Ultra */ const bg = new THREE.PlaneGeometry(0.06, 0.26, 1, 3); bg.translate(0, 0.13, 0);
-    const p = bg.attributes.position; for (let i = 0; i < p.count; i++) { const yy = p.getY(i) / 0.26; p.setX(i, p.getX(i) * (1 - yy * 0.85)); }
-    const nrm = bg.attributes.normal; for (let i = 0; i < nrm.count; i++) nrm.setXYZ(i, 0, 1, 0);
-    const gm = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.9, side: THREE.DoubleSide });
+    // Low/phone stays lean; Medium+ gets a denser Bitterroot meadow. Each instance is two crossed blades.
+    const N = Math.round((mobile || lite ? 2800 : 15500 * (tier >= 3 ? 2.05 : tier >= 2 ? 1.5 : tier >= 1 ? 1.12 : 0.72)) * detail);
+    const makeBlade = (w, h) => {
+      const segs = 4; const pos = [], nor = [], uv = [];
+      const pushStrip = (yaw, outPos, outNor, outUv) => {
+        const cs = Math.cos(yaw), sn = Math.sin(yaw);
+        const pts = [];
+        for (let row = 0; row <= segs; row++) {
+          const yy = row / segs, y = yy * h, taper = 1 - yy * 0.9;
+          pts.push([(-w * 0.5 * taper) * cs, y, (-w * 0.5 * taper) * sn, 0, yy], [(w * 0.5 * taper) * cs, y, (w * 0.5 * taper) * sn, 1, yy]);
+        }
+        for (let row = 0; row < segs; row++) {
+          const i = row * 2; const quads = [pts[i], pts[i + 1], pts[i + 3], pts[i], pts[i + 3], pts[i + 2]];
+          for (const q of quads) { outPos.push(q[0], q[1], q[2]); outNor.push(0, 1, 0); outUv.push(q[3], q[4]); }
+        }
+      };
+      pushStrip(0, pos, nor, uv); pushStrip(Math.PI / 2, pos, nor, uv);
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+      g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+      return g;
+    };
+    const bg = makeBlade(0.075, 0.42);
+    const gm = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.92, side: THREE.DoubleSide });
     gm.onBeforeCompile = (sh) => { sh.uniforms.uTime = ENV.uTime; sh.uniforms.uWind = ENV.uWind;
       sh.vertexShader = 'uniform float uTime; uniform float uWind;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
         float hh = uv.y; vec4 ip = instanceMatrix[3];
-        float sway = sin(uTime * 2.2 + ip.x * 0.6 + ip.z * 0.4) * 0.5 + sin(uTime * 3.7 + ip.x * 1.3) * 0.25;
-        transformed.x += sway * hh * hh * (0.06 + uWind * 0.35);
-        transformed.z += cos(uTime * 1.9 + ip.z * 0.7) * hh * hh * (0.03 + uWind * 0.15);`);
+        float gust = 0.07 + uWind * 0.42;
+        float sway = sin(uTime * 1.7 + ip.x * 0.45 + ip.z * 0.33) * 0.55 + sin(uTime * 3.1 + ip.x * 1.1 + ip.z * 0.7) * 0.28 + sin(uTime * 5.2 + ip.z * 2.0) * 0.1;
+        transformed.x += sway * hh * hh * gust;
+        transformed.z += (cos(uTime * 1.55 + ip.z * 0.55 + ip.x * 0.2) * 0.55 + cos(uTime * 2.8 + ip.x * 0.9) * 0.2) * hh * hh * gust * 0.55;`);
       sh.vertexShader = 'varying float vGH;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n vGH = uv.y;');
-      sh.fragmentShader = 'varying float vGH;\n' + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\n diffuseColor.rgb *= mix(0.62, 1.12, vGH);').replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\n normal = normalize(vNormal);').replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance += diffuseColor.rgb * 0.1 * vGH * vGH; // soft translucent tips'); };
-    const im = new THREE.InstancedMesh(bg, gm, N); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), v = new THREE.Vector3(); const c = new THREE.Color(); let k = 0;
-    for (let i = 0; i < N * 5 && k < N; i++) {
-      const a = R0() * 6.28, rr = Math.sqrt(R0()) * (ISLAND_R + 1.2); const x = Math.cos(a) * rr, z = Math.sin(a) * rr; if (rr > islandRadius(a) - 0.7) continue; if (blocked(x, z)) continue;
-      const sl = Math.hypot(topH(x + 0.2, z) - topH(x - 0.2, z), topH(x, z + 0.2) - topH(x, z - 0.2)) / 0.4; if (sl > 0.7) continue;
-      const clump = noise(x * 0.35, z * 0.35); if (R0() > 0.45 + clump * 0.6) continue;
-      v.set(x, topH(x, z) - 0.02, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, R0() * 6.28); const sc = 0.7 + R0() * 0.9; s.set(sc, sc * (0.8 + R0() * 0.8), sc);
-      m4.compose(v, q, s); im.setMatrixAt(k, m4);
-      c.set(0x6fa040).lerp(new THREE.Color(0xc0b850), R0() * 0.6 * (0.5 + 0.5 * noise(x * 0.2, z * 0.2))); if (snowy) c.lerp(snowC, 0.75); im.setColorAt(k, c); k++;
+      sh.fragmentShader = 'varying float vGH;\n' + sh.fragmentShader.replace('#include <color_fragment>', '#include <color_fragment>\n diffuseColor.rgb *= mix(0.55, 1.14, vGH);').replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\n normal = normalize(vNormal);').replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance += diffuseColor.rgb * 0.08 * vGH * vGH;'); };
+    const im = new THREE.InstancedMesh(bg, gm, N); const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), v = new THREE.Vector3(); const c = new THREE.Color();
+    const colA = new THREE.Color(0x4f7f30), colB = new THREE.Color(0x7da044), colC = new THREE.Color(0x6b8f4a), colD = new THREE.Color(0xc2b056), colE = new THREE.Color(0x3e6a28);
+    if (season === 'fall') { colB.set(0x8a9a3c); colD.set(0xd2b24a); }
+    let k = 0;
+    for (let i = 0; i < N * 4 && k < N; i++) {
+      const a = R0() * 6.28, rr = Math.sqrt(R0()) * (ISLAND_R + 1.2); const cx = Math.cos(a) * rr, cz = Math.sin(a) * rr; if (rr > islandRadius(a) - 0.7) continue; if (blocked(cx, cz)) continue;
+      const sl = Math.hypot(topH(cx + 0.2, cz) - topH(cx - 0.2, cz), topH(cx, cz + 0.2) - topH(cx, cz - 0.2)) / 0.4; if (sl > 0.75) continue;
+      const clump = noise(cx * 0.32, cz * 0.32); if (R0() > 0.52 + clump * 0.55) continue;
+      const tuft = 3 + (R0() * 5) | 0; // 3–7 blades per tuft
+      const tuftCol = clump > 0.15 ? colB.clone().lerp(colC, R0()) : colA.clone().lerp(colE, R0() * 0.6);
+      if (noise(cx * 0.09 + 5, cz * 0.09) > 0.35) tuftCol.lerp(colD, 0.35 + R0() * 0.35);
+      for (let j = 0; j < tuft && k < N; j++) {
+        const x = cx + (R0() - 0.5) * 0.28, z = cz + (R0() - 0.5) * 0.28;
+        if (blocked(x, z)) continue;
+        v.set(x, topH(x, z) - 0.02, z); q.setFromAxisAngle(THREE.Object3D.DEFAULT_UP, R0() * 6.28);
+        const sc = 0.65 + R0() * 1.05; s.set(sc * (0.75 + R0() * 0.45), sc * (0.75 + R0() * 0.85), sc * (0.75 + R0() * 0.45));
+        m4.compose(v, q, s); im.setMatrixAt(k, m4);
+        c.copy(tuftCol).lerp(colD, R0() * 0.18); if (snowy) c.lerp(snowC, 0.75); im.setColorAt(k, c); k++;
+      }
     }
     im.count = k; im.receiveShadow = true; world.add(im); return im;
   })();
   function blocked(x, z) {
     if (Math.hypot(x - POND.x, z - POND.z) < POND.r + 0.5) return true;
-    for (const zn of ZONES) { if (zn.id === 'pond' || zn.id === 'cliff' || zn.id === 'beach') continue; if (Math.hypot(x - zn.pos[0], z - zn.pos[1]) < (zn.id === 'shop' ? 3.2 : zn.id === 'dock' ? 4 : 1.8)) return true; }
+    for (const zn of ZONES) { if (zn.id === 'pond' || zn.id === 'cliff' || zn.id === 'beach') continue; const pad = zn.id === 'shop' ? 3.2 : zn.id === 'dock' ? 4 : zn.id === 'meadow' ? 0.7 : zn.id === 'picnic' ? 1.15 : 1.8; if (Math.hypot(x - zn.pos[0], z - zn.pos[1]) < pad) return true; }
     return false;
   }
 

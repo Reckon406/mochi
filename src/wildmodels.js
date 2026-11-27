@@ -25,6 +25,11 @@ export const FIT = {
   heron: { file: 'great_blue_heron', kind: 'bird', height: 0.85, yaw: Math.PI },
   brook: { file: 'brook_trout', kind: 'fish', length: 0.95, yaw: Math.PI },
   elk: { file: 'elk', kind: 'quad', height: 2.05, yaw: Math.PI },
+  wolf: { file: 'gray_wolf', kind: 'quad', height: 0.95, yaw: Math.PI },
+  hare: { file: 'snowshoe_hare', kind: 'quad', height: 0.42, yaw: Math.PI },
+  geese: { file: 'canada_goose', kind: 'bird', height: 0.58, yaw: Math.PI },
+  mallard: { file: 'mallard', kind: 'bird', height: 0.42, yaw: Math.PI },
+  bat: { file: 'little_brown_bat', kind: 'bird', height: 0.32, yaw: Math.PI },
 };
 
 const ss = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -216,7 +221,7 @@ function bakeTemplate(scene, cfg) {
     const old = m.material;
     if (old?.map) { old.map.colorSpace = THREE.SRGBColorSpace; old.map.anisotropy = 4; }
     // keep the original material on the template (instances clone + patch)
-    if (old) { old.roughness = old.roughness ?? 0.85; old.metalness = old.metalness ?? 0; }
+    if (old) { old.roughness = old.roughness ?? 0.85; old.metalness = 0; if (old.metalnessMap) old.metalnessMap = null; }
     m.matrix.identity(); m.position.set(0, 0, 0); m.quaternion.identity(); m.scale.set(1, 1, 1); m.updateMatrix();
     if (m.parent !== scene) scene.add(m);
     m.castShadow = true; m.receiveShadow = false; m.frustumCulled = false;
@@ -292,85 +297,6 @@ export function dress(root, key, extra = {}) {
 
 export function undress(root) { dressed.delete(root); }
 
-export function tick(root, dt, t, st = {}) {
-  let w = root.userData.wild;
-  if (!w) {
-    root.traverse((o) => { if (!w && o.userData.wild) w = o.userData.wild; });
-    if (!w) return;
-  }
-  if (!w.u || !w.loaded || (w.model && !w.model.visible)) return;
-  const kind = w.kind || 'quad';
-  const speed = Math.max(0, st.speed || 0);
-  const moving = speed > 0.08;
-  const swim = !!st.swim;
-  const fly = !!st.fly;
-  const drink = !!st.drink;
-  w.cyc += dt * (fly ? 11 : swim ? 7 : moving ? Math.min(8, 3.2 + speed * 2.2) : 1);
-  const cyc = w.cyc;
-
-  // idle look / twitch
-  w.lookT -= dt;
-  if (w.lookT < 0) {
-    w.lookT = (kind === 'owl' ? 1.6 : 2.4) + Math.random() * (kind === 'owl' ? 3 : 4);
-    w.lookY0 = w.lookY; w.lookX0 = w.lookX;
-    w.lookY = st.headYaw != null ? st.headYaw : (kind === 'owl' ? (Math.random() * 2 - 1) * 1.5 : (Math.random() * 2 - 1) * 0.45);
-    w.lookX = st.headPitch != null ? st.headPitch : (Math.random() * 0.25 - 0.08);
-    if (Math.random() < 0.35) w.twitch = 1;
-  }
-  w.twitch = Math.max(0, w.twitch - dt * 3);
-  const ease = 1 - Math.exp(-dt * 4);
-  w._hy = (w._hy ?? 0) + ((st.headYaw != null ? st.headYaw : w.lookY) - (w._hy ?? 0)) * ease;
-  w._hx = (w._hx ?? 0) + ((drink ? 0.55 : (st.headPitch != null ? st.headPitch : w.lookX)) - (w._hx ?? 0)) * ease;
-
-  const u = w.u;
-  u.uLegS.value.set(0, 0, 0, 0); u.uLegL.value.set(0, 0, 0, 0);
-  u.uHead.value.set(w._hy, w._hx); u.uTail.value.set(0, 0); u.uWing.value.set(0, 0); u.uUnd.value.set(0, 0);
-
-  if (kind === 'fish' || (kind === 'quad' && swim && FIT[w.key]?.swim)) {
-    const amp = (kind === 'fish' ? 0.05 : 0.035) * (moving || swim ? 1 : 0.35);
-    u.uUnd.value.set(t * (5 + Math.min(4, speed)) + cyc, amp);
-    u.uTail.value.set(Math.sin(cyc * 1.4) * 0.25, 0);
-    if (kind === 'quad') {
-      const paddle = Math.sin(cyc * 1.6) * 0.55;
-      u.uLegS.value.set(paddle, -paddle, -paddle * 0.7, paddle * 0.7);
-    }
-  } else if (kind === 'bird') {
-    if (fly) {
-      w.glideT -= dt;
-      if (w.glideT < 0) { w.gliding = !w.gliding; w.glideT = w.gliding ? 2 + Math.random() * 4 : 1 + Math.random() * 2.2; }
-      if (st.glide || w.gliding) {
-        const hold = 0.42 + Math.sin(t * 0.8 + cyc) * 0.04;
-        u.uWing.value.set(hold, hold);
-      } else {
-        const fl = Math.sin(cyc) * 0.7;
-        u.uWing.value.set(fl, fl);
-      }
-      if (w.model) w.model.rotation.x = THREE.MathUtils.lerp(w.model.rotation.x, -0.95, 1 - Math.exp(-dt * 3));
-    } else {
-      if (w.model) w.model.rotation.x = THREE.MathUtils.lerp(w.model.rotation.x, 0, 1 - Math.exp(-dt * 4));
-      const settle = Math.sin(t * 1.1 + cyc) * 0.04 + (w.twitch ? Math.sin(t * 30) * 0.08 : 0);
-      u.uWing.value.set(settle, settle);
-    }
-    u.uTail.value.set(Math.sin(t * 1.3 + cyc) * 0.08, 0);
-    u.uHead.value.set(w._hy, w._hx + (fly ? -0.15 : 0));
-  } else {
-    // quadruped walk / idle
-    if (moving && !swim) {
-      const a = Math.sin(cyc), b = Math.sin(cyc + Math.PI);
-      const liftA = Math.max(0, Math.cos(cyc)) * 0.045;
-      const liftB = Math.max(0, Math.cos(cyc + Math.PI)) * 0.045;
-      const swing = 0.55;
-      u.uLegS.value.set(a * swing, b * swing, b * swing * 0.9, a * swing * 0.9);
-      u.uLegL.value.set(liftA, liftB, liftB, liftA);
-      u.uHead.value.set(w._hy * 0.5, w._hx + Math.sin(cyc * 2) * 0.08);
-      u.uTail.value.set(Math.sin(cyc + 0.5) * 0.4, Math.sin(cyc * 0.5) * 0.08);
-    } else {
-      u.uTail.value.set(Math.sin(t * 1.4 + cyc) * 0.16 + w.twitch * Math.sin(t * 18) * 0.25, Math.sin(t * 0.9) * 0.05);
-      u.uHead.value.set(w._hy, w._hx + Math.sin(t * 1.7) * 0.03);
-      const sh = Math.sin(t * 0.6 + cyc) * 0.015;
-      u.uLegL.value.set(sh, -sh, -sh, sh);
-    }
-  }
-}
+export { tick } from './wildanim.js';
 
 export function preload(keys = Object.keys(FIT)) { return Promise.all(keys.map((k) => loadTemplate(k).catch(() => null))); }

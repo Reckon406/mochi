@@ -108,7 +108,7 @@ export const SPECIES = {
   blackbear: { name: 'black bear', hab: 'bank', when: ['dawn', 'dusk', 'day'], months: M(3, 10), w: 4, make: () => quad({ len: 1.25, h: 1.2, body: Math.random() < 0.25 ? 0x6a4028 : 0x1f1a18, head: null, ears: 'round', tail: 'short', neck: 0.14, lf: 0.36, gf: 0.36, lt: 0.1 }) },
   grizzly: { name: 'grizzly bear', hab: 'bank', when: ['dawn', 'dusk'], months: M(3, 10), w: 0.4, make: () => quad({ len: 1.45, h: 1.4, body: 0x8a6a48, legC: 0x4a3626, ears: 'round', tail: 'short', hump: true, neck: 0.14, lf: 0.36, gf: 0.37, lt: 0.11 }) },
   lion: { name: 'mountain lion', hab: 'bank', when: ['dusk', 'night', 'dawn'], w: 1.5, make: () => quad({ len: 1.35, h: 0.85, body: 0xc49a6a, belly: 0xeadfca, ears: 'cat', feline: true, tail: 'long', tailC: 0x2a221c, neck: 0.12, lf: 0.46, gf: 0.27, lt: 0.07 }) },
-  wolf: { name: 'gray wolf', hab: 'bank', when: ['dawn', 'dusk', 'night'], w: 1.2, make: () => quad({ len: 1.05, h: 0.95, body: 0x86827c, belly: 0xd6d2ca, legC: 0x9c968c, ears: 'pointy', tail: 'bushy', tailC: 0x3a3632 }) },
+  wolf: { name: 'gray wolf', hab: 'bank', when: ['dawn', 'dusk', 'night'], w: 1.2, far: true, make: () => quad({ len: 1.05, h: 0.95, body: 0x86827c, belly: 0xd6d2ca, legC: 0x9c968c, ears: 'pointy', tail: 'bushy', tailC: 0x3a3632 }) },
   beaver: { name: 'beaver', hab: 'water', when: ['dusk', 'night', 'dawn'], w: 4, swim: true, make: () => quad({ len: 0.6, h: 0.42, body: 0x5a3a22, ears: 'round', tail: 'flat', neck: 0.1, lf: 0.3, gf: 0.32, lt: 0.08 }) },
   otter: { name: 'river otter', hab: 'water', when: ['day', 'dusk', 'dawn'], w: 4, swim: true, porpoise: true, make: () => quad({ len: 0.8, h: 0.35, body: 0x4a3222, belly: 0x8a6a4a, ears: 'round', tail: 'long', neck: 0.2, lf: 0.3, gf: 0.3, lt: 0.08 }) },
   whitefish: { name: 'mountain whitefish', hab: 'water', when: ['day', 'dawn', 'dusk'], w: 3, swim: true, fish: true, make: () => { const g = fishMesh('whitefish'); g.scale.setScalar(0.42); return g; } },
@@ -123,6 +123,7 @@ export const SPECIES = {
   mallard: { name: 'mallards', hab: 'float', when: ['day', 'dawn', 'dusk'], w: 5, bird: true, flock: 3, make: (s) => bird({ s: 0.7, body: s.i % 2 ? 0x8a6a48 : 0x9a9a92, head: s.i % 2 ? 0x8a6a48 : 0x1a6a3a, belly: s.i % 2 ? null : 0x7a4a3a, beak: 0xe0c040, tail: 0.15 }) },
   magpie: { name: 'black-billed magpie', hab: 'island', when: ['day', 'dawn', 'dusk'], w: 4, bird: true, hop: true, make: () => bird({ s: 0.55, body: 0x111418, belly: 0xf6f6f6, wing: 0x1a2a4a, beak: 0x111111, tail: 1.3, legs: 0.18 }) },
   jay: { name: "Steller's jay", hab: 'island', when: ['day', 'dawn'], w: 4, bird: true, hop: true, make: () => bird({ s: 0.5, body: 0x1e4a8a, head: 0x14161c, wing: 0x2a5aa0, beak: 0x111111, crest: 0x14161c, tail: 0.7, legs: 0.18 }) },
+  bat: { name: 'little brown bat', hab: 'sky', when: ['dusk', 'night'], w: 4, bird: true, erratic: true, make: () => bird({ s: 0.55, body: 0x5a3a28, belly: 0x7a5a3a, wing: 0x3a281c, beak: 0x2a1a12, tail: 0.12 }) },
 };
 const PRED = { blackbear: 'bear', grizzly: 'bear', lion: 'lion', wolf: 'wolf' };
 const SNEAK = { coyote: 1, fox: 1 };
@@ -164,7 +165,10 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
       if (hab === 'bank' || hab === 'edge') { const zz = z0 + i * 1.5; const far = new THREE.Vector3(sideX(zz + rnd(-15, 15), side, rnd(18, 34)), 0, zz + rnd(-15, 15)); const edge = edgePt(side, zz + rnd(-3, 3)); a.from = far; a.wp = [edge]; a.edge = edge; m.position.set(far.x, bankY(far.x, far.z), far.z); }
       else if (hab === 'slope' || hab === 'high') { const zz = rnd(-200, 120); const off = hab === 'high' ? rnd(230, 320) : rnd(120, 220); const s2 = hab === 'high' ? -1 : side; const x = sideX(zz, s2, off); a.base = new THREE.Vector3(x, terrainH(x, zz), zz); m.position.copy(a.base); a.wp = [new THREE.Vector3(x + rnd(-14, 14), 0, zz + rnd(-14, 14))]; }
       else if (hab === 'water' || hab === 'float') { const zz = z0 + i * 0.9; const x = riverX(zz) + side * (riverW(zz) - rnd(2, 6)); m.position.set(x, WATER_Y, zz); a.wp = [new THREE.Vector3(x + rnd(-3, 3) + i * 0.6, 0, zz + rnd(18, 34) * (Math.random() < 0.5 ? -1 : 1))]; }
-      else if (hab === 'sky') { a.c = new THREE.Vector3(rnd(-40, 40), rnd(16, 28), rnd(-40, 40)); a.r = rnd(14, 26); a.ang = rnd(0, 6.28); }
+      else if (hab === 'sky') {
+        if (sp.erratic) { a.c = new THREE.Vector3(rnd(-30, 30), rnd(6, 14), rnd(-30, 30)); a.r = rnd(6, 14); a.ang = rnd(0, 6.28); a.angV = (Math.random() < 0.5 ? -1 : 1) * rnd(0.9, 2.2); a.turnT = rnd(0.4, 1.2); }
+        else { a.c = new THREE.Vector3(rnd(-40, 40), rnd(16, 28), rnd(-40, 40)); a.r = rnd(14, 26); a.ang = rnd(0, 6.28); }
+      }
       else if (hab === 'island') { const zs = ZONES.filter((q) => ['garden', 'picnic', 'hut', 'campfire', 'meadow', 'squirrel'].includes(q.id)); const q = pick(zs); const x = q.pos[0] + rnd(-2.5, 2.5), z = q.pos[1] + rnd(-2.5, 2.5); m.position.set(x, groundY(x, z) + 9, z); a.land = new THREE.Vector3(x, groundY(x, z), z); a.phase = 'fly-in'; }
       m.userData.a = a; live.push(a); made.push(a);
     }
@@ -251,7 +255,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     const swimming = water || gy < WATER_Y - 0.15; a.swim = swimming;
     p.y = swimming ? WATER_Y - (a.m.userData.h || 0.5) * (a.sp.swim ? 0.35 : 0.55) * (a.sp.scale || 1) : gy;
     const L = a.m.userData.legs; if (L && !a.sp.bird) { const f = Math.sin(a.t * spd * 5); L.forEach((l, i) => (l.rotation.x = (i === 0 || i === 3 ? f : -f) * (swimming ? 0.9 : 0.5))); }
-    if (a.sp.hop && !a.sp.bird) p.y += Math.abs(Math.sin(a.t * 9)) * 0.15;
+    if (a.sp.hop && !a.sp.bird && !(a.m.userData.wild?.model && a.m.userData.wild.model.visible)) p.y += Math.abs(Math.sin(a.t * 9)) * 0.15;
     return false;
   }
   function headDown(a, v) { const u = a.m.userData; if (u.nk) u.nk.rotation.x = THREE.MathUtils.lerp(u.nk.rotation.x, v ? 1.2 : -0.5, 0.05); }
@@ -260,7 +264,26 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     a.t += dt; const u = a.m.userData; const sp = a.sp;
     if (u.eyeM) { u.eyeM.emissiveIntensity = night > 0.4 ? (a.pred || SNEAK[a.key] ? 2.2 : 1.4) : 0; if (night > 0.4 && !a.pred && !SNEAK[a.key]) u.eyeM.emissive.setHex(0xb8ff9a); } // eye shine
     if (u.glow) { u.glow.visible = night > 0.4 && a.m.position.length() > 20; if (u.glow.visible) { u.glow.material.color.setHex(a.pred || SNEAK[a.key] ? 0xffc860 : 0xc8ffa0); u.glow.material.opacity = 0.75 + 0.25 * Math.sin(a.t * 0.7 + a.i); } }
-    if (sp.hab === 'sky') { // soaring circles; osprey sometimes dives for a fish
+    if (sp.hab === 'sky') { // soaring circles; osprey sometimes dives for a fish. bats dart lower with erratic flaps.
+      if (sp.erratic) {
+        const p = a.m.position;
+        a.turnT = (a.turnT ?? rnd(0.4, 1.4)) - dt;
+        if (a.turnT < 0) {
+          a.turnT = rnd(0.35, 1.6);
+          a.angV = (Math.random() < 0.5 ? -1 : 1) * rnd(0.9, 2.4);
+          a.c.y = THREE.MathUtils.clamp(a.c.y + rnd(-3, 3), 5, 16);
+          a.r = THREE.MathUtils.clamp(a.r + rnd(-4, 4), 5, 16);
+          a.c.x += rnd(-8, 8); a.c.z += rnd(-8, 8);
+        }
+        a.ang += dt * (a.angV || 1.2);
+        const y = a.c.y + Math.sin(a.t * 3.2) * 1.4 + Math.sin(a.t * 7.1) * 0.55;
+        p.set(a.c.x + Math.cos(a.ang) * a.r, y, a.c.z + Math.sin(a.ang) * a.r);
+        a.m.rotation.y = -a.ang + ((a.angV || 0) < 0 ? Math.PI : 0);
+        a.m.rotation.z = THREE.MathUtils.clamp((a.angV || 0) * 0.08, -0.4, 0.4);
+        if (u.wings?.[0]) { const f = Math.sin(t * 28) * 0.85; u.wings[0].rotation.z = f; u.wings[1].rotation.z = -f; }
+        if (a.t > a.life) { a.c.y += dt * 4; if (a.t > a.life + 8) despawn(a); }
+        return;
+      }
       a.ang += dt * (18 / a.r) * 0.25; const p = a.m.position; let y = a.c.y + Math.sin(a.t * 0.3) * 2;
       if (sp.dive && !a.dv && Math.random() < dt * 0.03) a.dv = { t: 0 };
       if (a.dv) { a.dv.t += dt; const k = a.dv.t < 1.6 ? a.dv.t / 1.6 : Math.max(0, 1 - (a.dv.t - 1.6) / 2.5); y = THREE.MathUtils.lerp(y, WATER_Y + 0.4, k * k); if (a.dv.t > 1.55 && a.dv.t < 1.65 && !a.dv.sp) { a.dv.sp = 1; ring(p.x, p.z); } if (a.dv.t > 4.1) a.dv = null; }
@@ -276,9 +299,10 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
         if (p.distanceTo(mpos()) < 1.4 || a.t > a.life) { a.phase = 'fly-out'; a.out = p.clone().add(new THREE.Vector3(rnd(-20, 20), 14, rnd(-20, 20))); } return; }
       if (a.phase === 'fly-out') { p.lerp(a.out, dt * 0.6); const f = Math.sin(t * 20) * 0.8; u.wings[0].rotation.z = f; u.wings[1].rotation.z = -f; if (p.distanceTo(a.out) < 1) despawn(a); } return;
     }
-    if (sp.hab === 'float' || sp.hab === 'water') { // drift with the river / swim
-      const tgt = a.wp[0]; const done = walkTo(a, tgt, dt, a.sp.swim ? 0.9 : 0.35, true); a.m.position.y = WATER_Y - (sp.bird ? 0.05 : 0.12) + (sp.porpoise ? Math.max(0, Math.sin(a.t * 2.5)) * 0.3 : 0);
-      if (sp.porpoise) a.m.rotation.x = Math.cos(a.t * 2.5) * 0.3; if (sp.bird) { u.hd.rotation.x = Math.sin(a.t * 0.7 + a.i) > 0.85 ? 0.9 : 0; }
+    if (sp.hab === 'float' || sp.hab === 'water') { // drift with the river / swim; waterfowl also waddle banks and take short flights
+      if (sp.bird) { updateWaterfowl(a, dt, t, u); return; }
+      const tgt = a.wp[0]; const done = walkTo(a, tgt, dt, a.sp.swim ? 0.9 : 0.35, true); a.m.position.y = WATER_Y - 0.12 + (sp.porpoise ? Math.max(0, Math.sin(a.t * 2.5)) * 0.3 : 0);
+      if (sp.porpoise) a.m.rotation.x = Math.cos(a.t * 2.5) * 0.3;
       if (a.key === 'beaver' && Math.random() < dt * 0.05) { ring(a.m.position.x, a.m.position.z); } // tail slap
       if (done || a.t > a.life) despawn(a); return;
     }
@@ -331,14 +355,80 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     }
   }
 
+
+  function updateWaterfowl(a, dt, t, u) {
+    const p = a.m.position;
+    const side = a.side || -1;
+    if (!a.wf) a.wf = 'swim';
+    const dip = () => { p.y = WATER_Y - 0.05; a.swim = true; if (u.hd) u.hd.rotation.x = Math.sin(a.t * 0.7 + a.i) > 0.85 ? 0.9 : 0; };
+    if (a.wf === 'swim') {
+      a.phase = 'in';
+      const tgt = a.wp[0];
+      const done = walkTo(a, tgt, dt, 0.35, true);
+      dip();
+      if (Math.random() < dt * 0.05) {
+        if (Math.random() < 0.55) {
+          const z = p.z + rnd(-8, 8);
+          a.land = edgePt(side, z);
+          a.wf = 'fly-bank';
+        } else {
+          const z2 = p.z + rnd(12, 24) * (Math.random() < 0.5 ? -1 : 1);
+          const x2 = riverX(z2) + side * (riverW(z2) - rnd(2, 6));
+          a.land = new THREE.Vector3(x2, WATER_Y, z2);
+          a.wf = 'fly-water';
+        }
+        a.phase = 'fly-in'; a.flyFrom = p.clone(); a.flyT = 0; a.swim = false;
+      } else if (done) {
+        a.wp[0] = new THREE.Vector3(p.x + rnd(-3, 3), 0, p.z + rnd(14, 32) * (Math.random() < 0.5 ? -1 : 1));
+      }
+      if (a.t > a.life) { a.wf = 'leave'; a.phase = 'fly-out'; a.out = p.clone().add(new THREE.Vector3(rnd(-16, 16), 14, rnd(-16, 16))); a.swim = false; }
+      return;
+    }
+    if (a.wf === 'fly-bank' || a.wf === 'fly-water') {
+      a.flyT = (a.flyT || 0) + dt;
+      const k = Math.min(1, a.flyT / 2.2);
+      const from = a.flyFrom, to = a.land;
+      p.lerpVectors(from, to, k);
+      p.y = THREE.MathUtils.lerp(from.y, to.y, k) + Math.sin(k * Math.PI) * (a.wf === 'fly-bank' ? 4 : 5);
+      a.m.rotation.y = Math.atan2(to.x - from.x, to.z - from.z);
+      a.swim = false;
+      if (k >= 1) {
+        if (a.wf === 'fly-bank') { a.wf = 'waddle'; a.phase = 'in'; a.idle = rnd(4, 10); a.wp[0] = to.clone().add(new THREE.Vector3(rnd(-3, 3), 0, rnd(-4, 4))); }
+        else { a.wf = 'swim'; a.phase = 'in'; a.wp[0] = new THREE.Vector3(to.x + rnd(-3, 3), 0, to.z + rnd(12, 28) * (Math.random() < 0.5 ? -1 : 1)); }
+      }
+      return;
+    }
+    if (a.wf === 'waddle') {
+      a.phase = 'in'; a.swim = false;
+      const done = walkTo(a, a.wp[0], dt, 0.45, false);
+      a.idle -= dt;
+      if (done) a.wp[0] = edgePt(side, p.z + rnd(-4, 4));
+      if (a.idle < 0 || a.t > a.life) {
+        if (a.t > a.life) { a.wf = 'leave'; a.phase = 'fly-out'; a.out = p.clone().add(new THREE.Vector3(rnd(-16, 16), 14, rnd(-16, 16))); }
+        else {
+          const z2 = p.z + rnd(-6, 6);
+          a.land = new THREE.Vector3(riverX(z2) + side * (riverW(z2) - rnd(2, 6)), WATER_Y, z2);
+          a.flyFrom = p.clone(); a.flyT = 0; a.phase = 'fly-out'; a.wf = 'fly-water';
+        }
+      }
+      return;
+    }
+    if (a.wf === 'leave') {
+      a.phase = 'fly-out'; a.swim = false;
+      if (!a.out) a.out = p.clone().add(new THREE.Vector3(rnd(-16, 16), 14, rnd(-16, 16)));
+      p.lerp(a.out, dt * 0.5);
+      if (p.distanceTo(a.out) < 1 || a.t > a.life + 12) despawn(a);
+    }
+  }
+
   function poseModel(a, dt, t) {
     const p = a.m.position;
     const moved = a._lp ? p.distanceTo(a._lp) : 0;
     a._lp = p.clone();
     const speed = moved / Math.max(dt, 1e-3);
-    const fly = a.sp.hab === 'sky' || a.phase === 'fly-in' || a.phase === 'fly-out';
-    const swim = !!a.swim || a.sp.hab === 'water' || !!a.sp.swim;
-    tickModel(a.m, dt, t, { speed, swim, fly, glide: fly && a.sp.hab === 'sky' && !a.dv, drink: a.phase === 'drink' });
+    const fly = a.sp.hab === 'sky' || a.phase === 'fly-in' || a.phase === 'fly-out' || a.wf === 'fly-bank' || a.wf === 'fly-water' || a.wf === 'leave';
+    const swim = !fly && (!!a.swim || a.sp.hab === 'water' || !!a.sp.swim || a.wf === 'swim');
+    tickModel(a.m, dt, t, { speed, swim, fly, glide: fly && a.sp.hab === 'sky' && !a.dv && !a.sp.erratic, erratic: !!a.sp.erratic, drink: a.phase === 'drink', hop: !!a.sp.hop && (a.phase === 'hop' || (!fly && a.sp.hab !== 'sky')), wade: a.phase === 'wade' || (!!a.sp.wade && !!swim) });
   }
 
   function update(t, dt, night) {

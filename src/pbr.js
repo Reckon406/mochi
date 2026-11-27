@@ -34,13 +34,13 @@ const FRAG_COLOR = (mode, hq) => `
   if (pFade > 0.001) {
     float slope = 1.0 - pwn.y;
     ${mode === 'rock' ? 'float wG = 0.0, wS = 0.0, wR = 1.0;' : `float mxc = max(vc.r, max(vc.g, vc.b)), mnc = min(vc.r, min(vc.g, vc.b)); float sat = (mxc - mnc) / max(mxc, 0.001);
-    float wG = smoothstep(0.0, 0.06, vc.g - vc.r * 0.92);
-    float wR = max(smoothstep(0.4, 0.75, slope), (1.0 - smoothstep(0.12, 0.3, sat)) * (1.0 - wG));
+    float wG = smoothstep(-0.02, 0.05, vc.g - vc.r * 0.84);
+    float wR = max(smoothstep(0.5, 0.85, slope), (1.0 - smoothstep(0.12, 0.3, sat)) * (1.0 - wG) * 0.7);
     float wS = (1.0 - wG) * (1.0 - wR) * smoothstep(0.3, 0.5, mxc);`}
     float wD = max(0.0, 1.0 - wG - wR - wS); float wsum = wG + wR + wS + wD; wG /= wsum; wR /= wsum; wS /= wsum; wD /= wsum;
     vec2 uvT = vPWP.xz * 0.38; vec2 uvT2 = mat2(0.8, -0.6, 0.6, 0.8) * vPWP.xz * 0.071;
     vec3 det = vec3(0.0); vec3 nW = vec3(0.0);
-    if (wG > 0.01) { det += wG * pbrDetail(texture2D(u_grassC, uvT).rgb, u_grassAvg); ${hq || mode !== 'rock' ? 'nW += wG * topN(u_grassN, uvT, pwn);' : ''} }
+    if (wG > 0.01) { vec3 gA = pbrDetail(texture2D(u_grassC, uvT).rgb, u_grassAvg); vec3 gB = pbrDetail(texture2D(u_grassC, uvT * 0.28 + 0.17).rgb, u_grassAvg); det += wG * mix(gA, gB, 0.4); ${hq || mode !== 'rock' ? 'nW += wG * mix(topN(u_grassN, uvT, pwn), topN(u_grassN, uvT * 0.28 + 0.17, pwn), 0.4);' : ''} }
     if (wD > 0.01) { det += wD * pbrDetail(texture2D(u_dirtC, uvT).rgb, u_dirtAvg); nW += wD * topN(u_dirtN, uvT, pwn); }
     if (wS > 0.01) { det += wS * pbrDetail(texture2D(u_sandC, uvT * 1.3).rgb, u_sandAvg); nW += wS * topN(u_sandN, uvT * 1.3, pwn); }
     if (wR > 0.01) {
