@@ -3,6 +3,7 @@
 import * as THREE from 'three';
 import { islandRadius, islandSurfH, skirtD, WATER_Y, riverX, riverW } from './layout.js';
 import { fishMesh } from './fish.js';
+import { addRipple } from './water.js';
 
 export function createWaterFx(scene, { lights = [], mobile = false, music }) {
   const group = new THREE.Group(); group.name = 'water-fx'; scene.add(group); const TAU = Math.PI * 2;
@@ -30,7 +31,7 @@ export function createWaterFx(scene, { lights = [], mobile = false, music }) {
   const DN = 12; const dp = new Float32Array(DN * 3); const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(dp, 3)); const dv = [];
   const drops = new THREE.Points(dg, new THREE.PointsMaterial({ color: 0xeaf6ff, size: 0.09, transparent: true, opacity: 0.9, depthWrite: false })); drops.visible = false; drops.frustumCulled = false; group.add(drops);
   let jumpT = 6 + Math.random() * 8, jump = null, splashT = -1, sx = 0, sz = 0;
-  function splash(x, z) { sx = x; sz = z; splashT = 0; rings.forEach((r, i) => { r.position.set(x, WATER_Y + 0.03, z); r.userData.t = -i * 0.2; r.visible = true; }); for (let i = 0; i < DN; i++) { const a = Math.random() * TAU, s = 0.6 + Math.random() * 1.2; dv[i] = [Math.cos(a) * s, 2 + Math.random() * 2, Math.sin(a) * s]; dp.set([x, WATER_Y, z], i * 3); } drops.visible = true; }
+  function splash(x, z) { addRipple(x, z, 1.1); sx = x; sz = z; splashT = 0; rings.forEach((r, i) => { r.position.set(x, WATER_Y + 0.03, z); r.userData.t = -i * 0.2; r.visible = true; }); for (let i = 0; i < DN; i++) { const a = Math.random() * TAU, s = 0.6 + Math.random() * 1.2; dv[i] = [Math.cos(a) * s, 2 + Math.random() * 2, Math.sin(a) * s]; dp.set([x, WATER_Y, z], i * 3); } drops.visible = true; }
   function spot() { for (let k = 0; k < 20; k++) { const th = Math.random() * TAU; const r = islandRadius(th) + skirtD(th) + 3 + Math.random() * 10; const x = Math.cos(th) * r, z = Math.sin(th) * r; if (Math.abs(x - riverX(z)) < riverW(z) - 4 && islandSurfH(x, z) < WATER_Y - 0.6) return [x, z, th]; } return null; }
   // ── night reflections: a glow streak on the water for each light that sits near the shore ──
   const streakM = new THREE.ShaderMaterial({ uniforms: { uA: { value: 0 } }, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,

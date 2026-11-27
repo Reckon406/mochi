@@ -64,14 +64,19 @@ void main(){
   float disc = smoothstep(0.9993, 0.9997, sd);
   col += uSunColor * disc * 10.0 * (1.0 - uCloudy * 0.85);
   col += uSunColor * 0.1 * exp(-abs(y) * 9.0) * (1.0 - uNight);
-  // milky way + moon at night
+  // milky way (faint dusty band) + a soft moon disc with simple maria
   vec3 mwAxis = normalize(vec3(0.35, 0.55, 0.76));
   float mwd = dot(d, mwAxis);
-  float mw = exp(-mwd * mwd * 28.0) * smoothstep(0.0, 0.25, y) * (0.45 + 0.55 * fbm(d.xz * 9.0 / (abs(d.y) + 0.4)));
-  col += vec3(0.32, 0.36, 0.55) * mw * 0.22 * uNight * (1.0 - uCloudy);
+  float mw = exp(-mwd * mwd * 18.0) * smoothstep(0.0, 0.2, y);
+  mw *= 0.4 + 0.6 * fbm(d.xz * 7.0 / (abs(d.y) + 0.35));
+  mw += exp(-mwd * mwd * 70.0) * 0.35 * (0.5 + 0.5 * fbm(d.xz * 18.0));
+  col += vec3(0.42, 0.46, 0.68) * mw * 0.32 * uNight * (1.0 - uCloudy);
   float md = max(dot(d, uMoonDir), 0.0);
-  col += vec3(0.95, 0.95, 1.0) * smoothstep(0.99955, 0.99975, md) * 3.0 * uNight;
-  col += vec3(0.4, 0.5, 0.8) * (pow(md, 60.0) * 0.3 + pow(md, 8.0) * 0.06) * uNight;
+  float mdisc = smoothstep(0.99942, 0.99962, md);
+  vec3 ml = d - uMoonDir * dot(d, uMoonDir);
+  float maria = 0.72 + 0.28 * vn(ml.xy * 22.0 + 1.7);
+  col += vec3(0.93, 0.94, 0.90) * maria * mdisc * 2.6 * uNight * (1.0 - uCloudy * 0.45);
+  col += vec3(0.45, 0.52, 0.75) * (pow(md, 70.0) * 0.38 + pow(md, 10.0) * 0.08) * uNight;
   // soft drifting clouds (painted, low-poly friendly): lit warm from the sun side at sunset
   if (y > 0.0) {
     vec2 uv = d.xz / (y + 0.12) * 0.7 + vec2(uTime * 0.004, uTime * 0.0015);
@@ -90,8 +95,12 @@ void main(){
     #endif
     vec3 cc = mix(shade * 0.92, lit, clamp(light * (0.75 - 0.35 * dens) + 0.25 * (n - cov) + 0.2 * (1.0 - dens), 0.0, 1.2));
     cc += lit * smoothstep(0.35, 0.0, abs(n - cov - 0.05)) * pow(sd, 2.0) * 0.35; // silver lining toward the sun
-    cc = mix(cc, vec3(0.1, 0.12, 0.2), uNight * 0.85);
-    col = mix(col, cc, c * 0.85);
+    cc += lit * (1.0 - dens) * (0.12 + 0.4 * pow(sd, 5.0)); // thin parts transmit / glow
+    float mdS = pow(max(dot(d, uMoonDir), 0.0), 8.0);
+    vec3 nightC = mix(vec3(0.10, 0.13, 0.22), vec3(0.22, 0.26, 0.36), 1.0 - dens);
+    nightC += vec3(0.70, 0.78, 1.0) * (1.0 - dens) * (0.2 + 0.7 * mdS); // moonlit edges + forward scatter
+    cc = mix(cc, nightC, uNight * 0.78);
+    col = mix(col, cc, c * mix(0.85, 0.42, uNight)); // night: wispy, sky and stars show through
   }
   gl_FragColor = vec4(max(col, vec3(0.0)), 1.0);
 }`;
@@ -141,7 +150,7 @@ export function createSky(scene, { hour = null, cloudy = 0, storm = 0, hq = fals
   const hemi = new THREE.HemisphereLight(0xc4def8, 0x6b5f40, 1.0);
   scene.add(sun, sun.target, hemi);
 
-  const state = { lightDir: new THREE.Vector3(0, 1, 0), night: 0, golden: 0, alt: 0, sunDir: new THREE.Vector3(), fogColor: new THREE.Color(), dayLight: 1 };
+  const state = { lightDir: new THREE.Vector3(0, 1, 0), night: 0, golden: 0, alt: 0, dawnFog: 0, sunDir: new THREE.Vector3(), fogColor: new THREE.Color(), dayLight: 1 };
   function update(time) {
     const date = darbyInstant(hour);
     const { alt, az } = sunPosition(date);
@@ -151,10 +160,15 @@ export function createSky(scene, { hour = null, cloudy = 0, storm = 0, hq = fals
     ENV.uSunDir.value.copy(dir);
     const moonDir = dirFromAltAz(Math.max(0.35, -alt * 0.8 + 0.2), az + Math.PI * 0.85);
     uniforms.uMoonDir.value.copy(moonDir);
+    ENV.uMoonDir.value.copy(moonDir);
     const night = smoothstep(-2, -10, altDeg);
     ENV.uNight.value = night; state.night = night; state.alt = altDeg;
     state.golden = smoothstep(-3, 2, altDeg) * (1 - smoothstep(8, 18, altDeg));
     uniforms.uGolden.value = smoothstep(-8, 1, altDeg) * (1 - smoothstep(6, 16, altDeg));
+    // morning valley haze that burns off as the sun climbs (evening golden hour does not get this)
+    const nowH = hour != null && !isNaN(hour) ? hour : (new Date().getHours() + new Date().getMinutes() / 60);
+    const dawnFog = (nowH < 12 ? 1 : 0) * smoothstep(-4, 1, altDeg) * (1 - smoothstep(7, 20, altDeg));
+    state.dawnFog = dawnFog; ENV.uDawnFog.value = dawnFog;
     // weather greys things out
     const grey = new THREE.Color(0x9aa3ad).multiplyScalar(lerp(1, 0.25, night));
     const cl = clamp(cloudy * 0.75 + storm * 0.25, 0, 0.9);
@@ -173,6 +187,7 @@ export function createSky(scene, { hour = null, cloudy = 0, storm = 0, hq = fals
     hemi.color.copy(s.hs).lerp(grey, cl * 0.5); hemi.groundColor.copy(s.hg); hemi.intensity = s.hi * (1 + cl * 0.25);
     starMat.opacity = night * (1 - cl * 0.85);
     state.fogColor.copy(s.fog).lerp(grey, cl * 0.6);
+    if (dawnFog > 0.02) state.fogColor.lerp(new THREE.Color(0xd8e4ee), dawnFog * 0.55);
     state.sunDir.copy(dir);
     state.dayLight = 1 - night;
     stars.rotation.y = time * 0.002;

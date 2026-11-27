@@ -7,9 +7,63 @@ export const ENV = {
   uSunColor: { value: new THREE.Color(1, 1, 1) },
   uSkyColor: { value: new THREE.Color(0.6, 0.75, 0.9) },
   uHorizon: { value: new THREE.Color(0.8, 0.85, 0.9) },
+  uMoonDir: { value: new THREE.Vector3(-0.3, 0.5, 0.2) },
   uNight: { value: 0 },
   uWind: { value: 0.3 },
+  uWet: { value: 0 },
+  uSnowCover: { value: 0 },
+  uDawnFog: { value: 0 },
 };
+
+// Shared ripple rings (fish jumps, animals wading/swimming). All water materials read the same array.
+const RIPPLE_N = 8;
+const rippleData = Array.from({ length: RIPPLE_N }, () => new THREE.Vector4(0, 0, -99, 0));
+let rippleI = 0;
+export function addRipple(x, z, amp = 1) {
+  rippleData[rippleI++ % RIPPLE_N].set(x, z, ENV.uTime.value, Math.max(0.15, amp));
+}
+function rippleUniforms() { return { uRipples: { value: rippleData }, uMoonDir: ENV.uMoonDir }; }
+
+// Cheap procedural sky reflection (matches the sky dome: gradient, sun disc, sunset glow, moon, drifting clouds).
+const SKYREFL_GLSL = /* glsl */`
+vec3 skyRefl(vec3 rd){
+  vec3 d = normalize(rd);
+  float y = d.y;
+  vec3 col = mix(uHorizon, uSkyColor, clamp(y * 1.15 + 0.15, 0.0, 1.0));
+  col = mix(col, uHorizon * 0.32, smoothstep(0.02, -0.28, y));
+  float sd = max(dot(d, normalize(uSunDir)), 0.0);
+  float sunUp = smoothstep(-0.05, 0.12, uSunDir.y);
+  float lowSun = (1.0 - smoothstep(0.12, 0.55, uSunDir.y)) * sunUp;
+  col += uSunColor * (pow(sd, 8.0) * 0.22 + pow(sd, 48.0) * 0.35 + pow(sd, 360.0) * 1.0) * sunUp;
+  col += uSunColor * smoothstep(0.99925, 0.9997, sd) * 5.0 * sunUp;
+  col += vec3(1.0, 0.68, 0.38) * lowSun * pow(sd, 5.0) * 0.28;
+  float md = max(dot(d, normalize(uMoonDir)), 0.0);
+  col += vec3(0.92, 0.94, 1.0) * smoothstep(0.9994, 0.9997, md) * 2.2 * uNight;
+  col += vec3(0.4, 0.5, 0.8) * pow(md, 40.0) * 0.2 * uNight;
+  if (y > 0.03) {
+    vec2 uv = d.xz / (y + 0.14) * 0.6 + vec2(uTime * 0.004, uTime * 0.0015);
+    float ncl = vnoise(uv * 1.5) * 0.65 + vnoise(uv * 3.1 + 4.0) * 0.35;
+    float c = smoothstep(0.58, 0.78, ncl) * smoothstep(0.03, 0.16, y);
+    vec3 cc = mix(uHorizon * 0.92, vec3(1.0, 0.99, 0.96), 0.45);
+    cc = mix(cc, vec3(0.12, 0.14, 0.22), uNight * 0.8);
+    col = mix(col, cc, c * 0.5);
+  }
+  return col;
+}
+void applyRipples(vec2 p, inout vec3 n){
+  for (int i = 0; i < 8; i++) {
+    vec4 r = uRipples[i];
+    if (r.w <= 0.001) continue;
+    float age = uTime - r.z;
+    if (age < 0.0 || age > 2.4) continue;
+    vec2 dp = p - r.xy; float dist = length(dp);
+    float wave = dist - age * 2.6;
+    float ring = exp(-age * 1.35) * exp(-wave * wave * 22.0) * r.w;
+    n.xz += (dp / max(dist, 0.001)) * ring * 1.7;
+  }
+  n = normalize(n);
+}
+`;
 
 const vert = /* glsl */`
 uniform float uTime; uniform float uAmp; uniform float uFreq;
@@ -26,7 +80,8 @@ void main(){
 }`;
 
 const frag = /* glsl */`
-uniform float uTime; uniform vec3 uSunDir; uniform vec3 uSunColor; uniform vec3 uSkyColor; uniform vec3 uHorizon; uniform float uNight;
+uniform float uTime; uniform vec3 uSunDir; uniform vec3 uSunColor; uniform vec3 uSkyColor; uniform vec3 uHorizon; uniform vec3 uMoonDir; uniform float uNight;
+uniform vec4 uRipples[8];
 uniform vec3 uDeep; uniform vec3 uShallow; uniform float uOpacity; uniform float uSparkle; uniform float uScale;
 uniform float uFoam; uniform vec2 uShoreC; uniform float uShoreX; uniform float uRimR;
 varying vec3 vWorld;
@@ -34,6 +89,7 @@ varying vec3 vWorld;
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
 float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
   return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
+${SKYREFL_GLSL}
 void main(){
   vec2 p = vWorld.xz * uScale;
   float t = uTime;
@@ -42,6 +98,7 @@ void main(){
   #define H(q) (vnoise((q)*2.0 + vec2(t*0.35, t*0.22)) * 0.6 + vnoise((q)*4.3 - vec2(t*0.5, -t*0.31)) * 0.3 + vnoise((q)*9.1 + vec2(-t*0.9, t*0.7)) * 0.12)
   float h0 = H(p); float hx = H(p + vec2(e, 0.)); float hz = H(p + vec2(0., e));
   vec3 n = normalize(vec3(-(hx - h0) / e * 0.18, 1.0, -(hz - h0) / e * 0.18));
+  applyRipples(vWorld.xz, n);
   vec3 v = normalize(cameraPosition - vWorld);
   #ifdef HQ
   float fres = 0.02 + 0.98 * pow(1.0 - max(dot(n, v), 0.0), 5.0);
@@ -49,7 +106,7 @@ void main(){
   float fres = pow(1.0 - max(dot(n, v), 0.0), 4.0);
   #endif
   vec3 col = mix(uDeep, uShallow, 0.35 + 0.3 * h0);
-  vec3 refl = mix(uHorizon, uSkyColor, clamp(reflect(-v, n).y * 1.6, 0.0, 1.0));
+  vec3 refl = skyRefl(reflect(-v, n));
   col = mix(col, refl, 0.25 + 0.6 * fres);
   float sunUp = smoothstep(-0.05, 0.12, uSunDir.y);
   vec3 hv = normalize(uSunDir + v);
@@ -80,7 +137,7 @@ export function makeWaterMaterial({ deep = 0x1f6d8f, shallow = 0x66c9d6, amp = 0
     uOpacity: { value: opacity }, uSparkle: { value: sparkle }, uScale: { value: scale }, uFoam: { value: foam },
     uShoreC: { value: new THREE.Vector2(...shoreC) }, uShoreX: { value: shoreX }, uRimR: { value: rimR },
   }]);
-  Object.assign(uniforms, ENV); // shared (by reference) time / sun / sky
+  Object.assign(uniforms, ENV, rippleUniforms()); // shared time / sun / sky / ripples
   return new THREE.ShaderMaterial({ uniforms, vertexShader: vert, fragmentShader: frag, transparent: opacity < 1, fog: true });
 }
 
@@ -92,7 +149,8 @@ void main(){ vec4 wp = modelMatrix * vec4(position, 1.0); vWorld = wp.xyz; vec4 
   #include <fog_vertex>
 }`;
 const riverFrag = /* glsl */`
-uniform float uTime; uniform vec3 uSunDir; uniform vec3 uSunColor; uniform vec3 uSkyColor; uniform vec3 uHorizon; uniform float uNight; uniform float uWind;
+uniform float uTime; uniform vec3 uSunDir; uniform vec3 uSunColor; uniform vec3 uSkyColor; uniform vec3 uHorizon; uniform vec3 uMoonDir; uniform float uNight; uniform float uWind;
+uniform vec4 uRipples[8];
 #ifdef HQ
 uniform sampler2D uNrm; uniform sampler2D uRing; uniform float uRingOn; uniform vec3 uRLight; uniform vec3 uRFog; uniform float uRHaze;
 #endif
@@ -101,6 +159,7 @@ varying vec3 vWorld;
 #include <fog_pars_fragment>
 float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
 float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
+${SKYREFL_GLSL}
 float riverX(float z){ return 30.0*sin(z/240.0) + 12.0*sin(z/83.0); }
 float riverXd(float z){ return 30.0/240.0*cos(z/240.0) + 12.0/83.0*cos(z/83.0); }
 float riverW(float z){ return 8.0 + 50.0*exp(-pow(z/108.0, 2.0)); }
@@ -134,14 +193,15 @@ void main(){
     vec2 tg = (n1.xy * 0.55 * nf + n2.xy * 0.45) * (0.55 + uWind * 0.6) * smoothstep(0.05, 0.6, depth + 0.2);
     vec2 tw = pr * tg.x + fd * tg.y; n = normalize(n + vec3(tw.x, 0.0, tw.y) * 0.5); }
   #endif
+  applyRipples(p, n);
   float fres = pow(1.0 - max(dot(n, v), 0.0), 4.0);
   float dk = smoothstep(0.0, 1.8, depth);
   vec3 col = mix(mix(uBed, uShallow, 0.55), uShallow, smoothstep(0.0, 0.5, depth));
   col = mix(col, uDeep, dk);
   col *= 0.9 + 0.2 * h0;
-  // soft reflections: sky gradient + the dark green banks mirrored near the shore
+  // reflections: procedural sky (sun, clouds, moon) + dark green banks near the shore; HQ also mirrors the mountain ring
   vec3 rd = reflect(-v, n);
-  vec3 refl = mix(uHorizon, uSkyColor, clamp(rd.y * 1.5, 0.0, 1.0));
+  vec3 refl = skyRefl(rd);
   float shoreRefl = smoothstep(1.6, 0.25, depth) * (1.0 - uNight);
   refl = mix(refl, vec3(0.16, 0.22, 0.13), shoreRefl * 0.7);
   #ifdef HQ
@@ -171,7 +231,10 @@ void main(){
   float wake = 0.0;
   for (int k = 1; k <= 4; k++) { float fk = float(k); float du = uWaterY - bedH(p - fd * fk * 0.9); wake += smoothstep(0.25, 0.0, du) * (1.0 - fk * 0.2); }
   foam += clamp(wake, 0.0, 1.0) * smoothstep(0.55, 0.85, fn + 0.08) * smoothstep(0.45, 0.9, depth) * 0.5; // wakes only behind rocks in open water, not along every bank
-  foam += smoothstep(0.8, 0.97, vnoise(qa * vec2(0.9, 0.22) + 11.0)) * 0.14 * (0.6 + uWind) * smoothstep(0.3, 1.0, depth); // drifting current streaks
+  foam += smoothstep(0.8, 0.97, vnoise(qa * vec2(0.9, 0.22) + 11.0)) * 0.18 * (0.6 + uWind) * smoothstep(0.3, 1.0, depth); // drifting current streaks
+  foam += clamp(wake, 0.0, 1.0) * smoothstep(0.2, 0.55, depth) * 0.22; // extra whitewater tight behind rocks
+  // visible flow: faint scrolling highlight streaks along the current
+  { float str = vnoise(qa * vec2(0.35, 0.08) + vec2(0.0, t * 0.15)); col += uSunColor * 0.045 * sunUp * smoothstep(0.62, 0.9, str) * smoothstep(0.35, 1.2, depth) * (1.0 - uNight); }
   col = mix(col, vec3(0.95, 0.97, 1.0) * mix(1.0, 0.35, uNight) * (0.7 + 0.3 * sunUp), clamp(foam, 0.0, 0.9));
   col = mix(col, col * vec3(0.92, 0.84, 0.62), (1.0 - smoothstep(0.2, 1.4, depth)) * 0.6 * (1.0 - uNight)); // silty green-brown shallows, not teal
   // water's edge: fade to the wet, dark cobble/silt it's lapping over (reads as transparent shallows, no bright rim)
@@ -188,7 +251,7 @@ export function makeRiverMaterial({ depthTex, rect, snowy = false, hq = false })
     uWaterY: { value: -0.9 }, uFloorY: { value: 0.5 }, uBedY: { value: -2.8 }, uIce: { value: snowy ? 1 : 0 },
   }]);
   uniforms.uDepth.value = depthTex;
-  Object.assign(uniforms, ENV);
+  Object.assign(uniforms, ENV, rippleUniforms());
   const defines = {};
   if (hq) { defines.HQ = 1; const nt = new THREE.TextureLoader().load((import.meta.env?.BASE_URL || '/') + 'tex/water_n.webp'); nt.wrapS = nt.wrapT = THREE.RepeatWrapping; nt.anisotropy = 4;
     Object.assign(uniforms, { uNrm: { value: nt }, uRing: { value: null }, uRingOn: { value: 0 }, uRLight: { value: new THREE.Color(1, 1, 1) }, uRFog: { value: new THREE.Color(0xc6dcec) }, uRHaze: { value: 0.1 } }); }

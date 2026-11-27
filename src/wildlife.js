@@ -7,6 +7,7 @@ import { riverX, riverW, WATER_Y, groundY, islandRadius, ZONES, DOCK, mv } from 
 import { terrainH } from './landscape.js';
 import { addRim } from './gfx.js';
 import { fishMesh } from './fish.js';
+import { addRipple } from './water.js';
 import { dress, tick as tickModel, setStyle as setWildStyle, undress, FIT } from './wildmodels.js';
 
 const MATS = {}; const mat = (c, o = {}) => { const k = c + JSON.stringify(o); return MATS[k] || (MATS[k] = addRim(new THREE.MeshStandardMaterial({ color: c, roughness: 0.85, flatShading: true, ...o }))); };
@@ -302,7 +303,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
     if (sp.hab === 'float' || sp.hab === 'water') { // drift with the river / swim; waterfowl also waddle banks and take short flights
       if (sp.bird) { updateWaterfowl(a, dt, t, u); return; }
       const tgt = a.wp[0]; const done = walkTo(a, tgt, dt, a.sp.swim ? 0.9 : 0.35, true); a.m.position.y = WATER_Y - 0.12 + (sp.porpoise ? Math.max(0, Math.sin(a.t * 2.5)) * 0.3 : 0);
-      if (sp.porpoise) a.m.rotation.x = Math.cos(a.t * 2.5) * 0.3;
+      if (sp.porpoise) { a.m.rotation.x = Math.cos(a.t * 2.5) * 0.3; if (Math.random() < dt * 0.35) ring(a.m.position.x, a.m.position.z, 0.45); }
       if (a.key === 'beaver' && Math.random() < dt * 0.05) { ring(a.m.position.x, a.m.position.z); } // tail slap
       if (done || a.t > a.life) despawn(a); return;
     }
@@ -315,7 +316,7 @@ export function createWildlife(scene, { state, mochi, life, features, say, music
       if (a.idle < 0) { a.phase = 'out'; a.wp = [a.from.clone().add(new THREE.Vector3(0, 0, rnd(-20, 20)))]; } }
     else if (a.phase === 'out') { headDown(a, false); if (walkTo(a, a.wp[0], dt, 1.2 * a.speed)) despawn(a); }
   }
-  function ring(x, z) { const r = wakeM[wakeK++ % wakeM.length]; r.position.set(x, WATER_Y + 0.03, z); r.userData.t = 0; r.material.opacity = 0.7; r.scale.setScalar(0.5); }
+  function ring(x, z, amp = 0.7) { const r = wakeM[wakeK++ % wakeM.length]; r.position.set(x, WATER_Y + 0.03, z); r.userData.t = 0; r.material.opacity = 0.7; r.scale.setScalar(0.5); addRipple(x, z, amp); }
 
   function updateEvent(dt, t) {
     const e = ev; const a = e.a; e.t += dt; const p = a.m.position; const mp = mpos();

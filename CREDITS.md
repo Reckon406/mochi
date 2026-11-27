@@ -30,6 +30,8 @@ These were generated with an AI image model on Corey's request (Nov 2026) for su
 
 `public/tex/water_n.webp` (river ripple normal map) was generated procedurally by a script (a sum of periodic sine waves); it is not from any asset pack.
 
+River reflections, ripple rings, morning haze cards, wet-ground puddles and snow cover are procedural shaders in `src/water.js`, `src/sky.js`, `src/weather.js` and `src/pbr.js`. Cloud cards and their wispy alpha map are generated at runtime in `src/weather.js` — no extra third-party assets.
+
 ## HDRIs (`public/hdri/*.hdr`)
 These were downscaled to 256 px (Medium) and 512 px (High/Ultra), with the sun disc clipped, because the scene keeps its own sun.
 

@@ -3,11 +3,13 @@
 // Ground keeps its painted vertex colours; the photo layers only add grain + normals, and fade out with distance.
 import * as THREE from 'three';
 import { WATER_Y, POND } from './layout.js';
+import { ENV } from './water.js';
 
 const BASE = (import.meta.env?.BASE_URL || './') + 'tex/';
 const loader = new THREE.TextureLoader();
 const SETS = ['grass', 'dirt', 'sand', 'rock', 'bark', 'wood'];
-const U = { uPbrReady: { value: 0 }, uSunW: { value: new THREE.Vector3(0.3, 0.8, 0.2) }, uSunC: { value: new THREE.Color(1, 0.95, 0.85) } }; // shared uniforms for every patched material
+const U = { uPbrReady: { value: 0 }, uSunW: { value: new THREE.Vector3(0.3, 0.8, 0.2) }, uSunC: { value: new THREE.Color(1, 0.95, 0.85) },
+  uWet: ENV.uWet, uSnowCover: ENV.uSnowCover, uSkyColor: ENV.uSkyColor, uHorizon: ENV.uHorizon }; // shared uniforms for every patched material
 for (const n of ['grass', 'dirt', 'sand', 'rock']) { U[`u_${n}C`] = { value: null }; U[`u_${n}N`] = { value: null }; U[`u_${n}Avg`] = { value: new THREE.Vector3(0.5, 0.5, 0.5) }; }
 const blank = new THREE.DataTexture(new Uint8Array([128, 128, 255, 255]), 1, 1); blank.needsUpdate = true;
 const blankC = new THREE.DataTexture(new Uint8Array([128, 128, 128, 255]), 1, 1); blankC.needsUpdate = true;
@@ -24,6 +26,7 @@ const VERT_BODY = '\n  vPWP = (modelMatrix * vec4(transformed, 1.0)).xyz; vPWN =
 const FRAG_DECL = `varying vec3 vPWP; varying vec3 vPWN; uniform float uPbrReady;
 uniform sampler2D u_bankC; uniform vec3 u_bankAvg; uniform float uBankReady;
 uniform sampler2D u_grassC, u_grassN, u_dirtC, u_dirtN, u_sandC, u_sandN, u_rockC, u_rockN; uniform vec3 u_grassAvg, u_dirtAvg, u_sandAvg, u_rockAvg;
+uniform float uWet; uniform float uSnowCover; uniform vec3 uSkyColor; uniform vec3 uHorizon;
 vec3 pbrDetail(vec3 d, vec3 avg) { return clamp(d / max(avg, vec3(0.02)), vec3(0.45), vec3(1.7)); }
 vec3 topN(sampler2D t, vec2 uv, vec3 wn) { vec3 n = texture2D(t, uv).xyz * 2.0 - 1.0; n = vec3(n.xy + wn.xz, abs(n.z) * wn.y); return n.xzy; }
 `;
@@ -84,7 +87,25 @@ const FRAG_COLOR = (mode, hq) => `
       float keep = farB * smoothstep(0.98, 1.15, pv) * 0.85; /* far bank: grassy patches survive in the gravel band */
       diffuseColor.rgb = mix(diffuseColor.rgb, cob, sB * 0.85 * uBankReady * (1.0 - keep)); }
     pbrWet = smoothstep(min(mix(0.72, 0.8, farB) + pDist * 0.006, 1.3), 0.04, hy + wob) * smoothstep(-0.6, -0.05, hy) * notPond;
-    diffuseColor.rgb *= mix(1.0, 0.5, pbrWet * pbrWet * (3.0 - 2.0 * pbrWet)); }` : ''}`;
+    diffuseColor.rgb *= mix(1.0, 0.5, pbrWet * pbrWet * (3.0 - 2.0 * pbrWet));
+    // rain soak + puddles in low, flat spots; snow cover that builds up on the ground
+    {
+      float wSlope = 1.0 - pwn.y;
+      float wMacro = fract(sin(dot(floor(vPWP.xz * 0.35), vec2(127.1, 311.7))) * 43758.5453);
+      if (uWet > 0.01) {
+        float puddle = (1.0 - smoothstep(0.0, 0.22, wSlope)) * (1.0 - smoothstep(0.45, 0.8, wMacro)) * smoothstep(0.2, 0.7, uWet);
+        diffuseColor.rgb *= mix(vec3(1.0), vec3(0.58), uWet * 0.72 * (1.0 - puddle * 0.4));
+        vec3 pv = normalize(cameraPosition - vPWP); vec3 prd = reflect(-pv, pwn);
+        vec3 skyR = mix(uHorizon, uSkyColor, clamp(prd.y * 1.1, 0.0, 1.0));
+        diffuseColor.rgb = mix(diffuseColor.rgb, skyR * 0.5 + diffuseColor.rgb * 0.2, puddle * 0.8);
+        pbrWet = max(pbrWet, puddle * 0.85);
+      }
+      if (uSnowCover > 0.01) {
+        float sc = uSnowCover * (1.0 - smoothstep(0.28, 0.7, wSlope)) * mix(0.75, 1.0, smoothstep(0.3, 0.7, wMacro));
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.90, 0.93, 0.97), clamp(sc, 0.0, 1.0));
+      }
+    }
+    }` : ''}`;
 const FRAG_NORMAL = `
   if (pFade > 0.001) normal = normalize(mix(normal, normalize((viewMatrix * vec4(pbrNW, 0.0)).xyz), pFade));`;
 
@@ -100,7 +121,13 @@ function patchDetail(material, mode, hq) {
 
 // apply to the world: ground/terrain (marked userData.pbrGround), rocks (bumpMap kind rock), bark + wood (normal maps)
 export function applyPBR(scene, { tier = 2, renderer, onLoaded } = {}) {
-  if (tier <= 0) return null;
+  if (tier <= 0) {
+    // Low: no photo textures, but still darken in the rain and add a snow cover blend
+    const mats = new Set();
+    scene.traverse((o) => { if (!o.isMesh) return; const ms = Array.isArray(o.material) ? o.material : [o.material]; for (const m of ms) if (m?.userData?.pbrGround) mats.add(m); });
+    for (const m of mats) patchDetail(m, 'ground', false);
+    return Promise.resolve({ mats: { ground: mats.size }, size: 0 });
+  }
   const size = tier >= 2 ? 1024 : 512; const hq = tier >= 2; const aniso = Math.min(tier >= 2 ? 8 : 4, renderer?.capabilities?.getMaxAnisotropy?.() || 4);
   const mats = { ground: new Set(), rock: new Set(), bark: new Set(), wood: new Set() };
   scene.traverse((o) => { if (!o.isMesh) return; const ms = Array.isArray(o.material) ? o.material : [o.material]; for (const m of ms) { if (!m || !m.isMeshStandardMaterial || m.userData.aiTex) continue;

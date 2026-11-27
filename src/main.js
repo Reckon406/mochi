@@ -125,7 +125,7 @@ async function init() {
   const camera = new THREE.PerspectiveCamera(isMobile && innerWidth < innerHeight ? 55 : 42, innerWidth / innerHeight, 0.1, 9000);
 
   // ── world ──
-  const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0, hq: (Q.tier ?? 2) >= 2 });
+  const sky = createSky(scene, { hour, cloudy: weather.cloudiness, storm: weather.heavy ? 1 : 0, hq: (Q.tier ?? 2) >= 1 });
   const sun = sky.sun;
   const S = lite ? Math.min(512, Q.shadow) : isMobile ? Math.min((Q.tier ?? 0) >= 1 ? 2048 : 1024, Q.shadow) : Q.shadow; // phones: Medium+ get a 2048 camera-fitted map
   sun.shadow.mapSize.set(S, S); sun.shadow.radius = Q.tier >= 2 ? 5 : 3; sun.shadow.blurSamples = Q.tier >= 2 ? 16 : 8; sun.castShadow = S0.shadows;
@@ -138,14 +138,14 @@ async function init() {
   const snowy = weather.snow || season === 'winter';
   if (aiOn) try { initAITex(Q.tier ?? 2, renderer); } catch (e) { console.warn('ai textures failed', e); }
   if (aiOn && (Q.tier ?? 2) >= 1) setLowMountains(true);
-  const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite, hq: (Q.tier ?? 2) >= 2 });
+  const land = buildLandscape(scene, { snowy, mobile: isMobile, season, lite, hq: (Q.tier ?? 2) >= 1 });
   let backdrop = null; if (aiOn) try { backdrop = buildBackdrop(scene, { tier: Q.tier ?? 2, weather }); } catch (e) { console.warn('backdrop failed', e); }
   try { land.riverMat?.userData.attachRing?.(backdrop); } catch (e) { /* optional */ }
   const island = buildIsland(scene, { snowy, mobile: isMobile, state, tier: Q.tier ?? 2, detail: lite ? Math.min(S0.detail, 0.45) : S0.detail, season, lite });
   const details = buildDetails(scene, { tier: Q.tier ?? 2, detail: S0.detail, season, snowy, mobile: isMobile, pathD: island.pathD });
   let flowers = null; try { flowers = buildWildflowers(scene, { season, snowy, tier: Q.tier ?? 2, pathD: island.pathD }); } catch (e) { console.warn('wildflowers failed', e); }
   const worldState = buildWorldState(scene, state);
-  const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season });
+  const wx = createWeather(scene, weather, { mobile: isMobile, particles: S0.particles, season, tier: Q.tier ?? 2 });
   const glow = []; const features = buildFeatures(scene, { state, season, snowy, glow }); try { features.gaming = createGaming(scene, { state, glow, tier: Q.tier ?? 2 }); } catch (e) { console.warn('gaming failed', e); }
   try { features.crush = createCrush(scene, { state, tier: Q.tier ?? 2 }); } catch (e) { console.warn('crush failed', e); }
   try { features.pet = createPet(scene, { state, tier: Q.tier ?? 2 }); } catch (e) { console.warn('pet failed', e); }
@@ -493,8 +493,9 @@ async function init() {
     if (bokeh) { bokeh.enabled = !!extras?.photo; if (bokeh.enabled) bokeh.uniforms.focus.value = camera.position.distanceTo(follow ? mochi.root.position : controls.target); }
     const night = sky.state.night;
     fogCol.copy(sky.state.fogColor); scene.fog.color.copy(fogCol); backdrop?.update(sky.state, camera.position);
-    // dawn/dusk valley mist (more in the morning), a little at night, lots in foggy weather
-    scene.fog.mist = sky.state.golden * (new Date().getHours() < 12 || (hour != null && hour < 12) ? 0.75 : 0.45) + night * 0.12 + (weather.fog ? 0.35 : 0);
+    // morning valley haze (burns off with the sun), a little at night, lots in foggy weather
+    scene.fog.mist = Math.min(0.85, sky.state.dawnFog * 0.55 + night * 0.12 + (weather.fog ? 0.35 : 0));
+    scene.fog.density = fogBase * (1 + sky.state.dawnFog * 0.4);
     renderer.toneMappingExposure = EXPO * (1 + night * 0.3);
     ENV.uRim.value = night; updateSigns(night); details.update(sky);
     if (features.lanternLight) features.lanternLight.intensity = night * 2.4; { const w = 0.4 + ENV.uWind.value * 2; if (features.sock) features.sock.rotation.y = Math.sin(t * 1.7) * 0.45 * w; if (features.flag) features.flag.rotation.y = Math.sin(t * 3.1) * 0.35 * w; if (features.pulley) features.pulley.rotation.z = Math.sin(t * 1.3) * 0.06 * w; }
@@ -551,7 +552,7 @@ async function init() {
     island.update(t, dt, night); worldState.update(night); features.update(t, dt, night); features.gaming?.update(t, dt, night); features.crush?.update(t, dt, night, mochi.root.position); features.pet?.update(t, dt, night, mochi.root.position, moving); features.plane?.update(t, dt); features.wishes?.update(t, dt, night); waterFx?.update(t, dt, night, camera); adv?.update(t, dt); range?.update(t, dt, night); tempSigns?.update(t, dt); critters.update(t, dt, night, sky.state.golden || 0); wild.update(t, dt, night);
     for (const g of glow) g.m.emissiveIntensity = g.day + (g.night - g.day) * night;
     if (lifeDirty && document.querySelector('#pane-life')) { lifeDirty = 0; ui.renderLife(lifeHtml()); }
-    promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi);
+    promptT -= dt; if (promptT < 0) { promptT = 0.25; const z = walk.on ? zoneNear() : null; ui.setPrompt(z ? `E · ${life.A[life.BY_ZONE[z.id][0]]?.label || z.name}` : ''); } wx.update(t, dt, night, sun, sky.hemi, camera);
 
     // bubble
     bubbleT -= dt; if (bubbleT < 0) { randomThought(); bubbleT = 9 + Math.random() * 7; }
